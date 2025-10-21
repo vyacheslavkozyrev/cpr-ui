@@ -205,7 +205,17 @@ import { UserService } from '@/services/api';
 ## 🔧 Configuration
 
 ### Environment Variables
-Copy `.env.mock` to `.env.localapi` and update:
+See `.env.README.md` for complete setup guide. Quick start:
+
+```bash
+# For mock development (recommended)
+cp .env.example .env.mock
+
+# For local API development
+cp .env.example .env.localapi
+```
+
+Then update `.env.localapi` with:
 ```env
 VITE_API_BASE_URL=http://localhost:5000/api
 VITE_STUB_TOKEN=your-token-here
