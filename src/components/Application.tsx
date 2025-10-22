@@ -1,8 +1,8 @@
 import { Box, Card, CardContent, Container, Stack, Typography } from '@mui/material';
-import { useTheme } from './hooks/useTheme';
-import { ThemeDemo, ThemeToggle } from './theme';
+import { useTheme } from '../hooks/useTheme';
+import { ThemeDemo, ThemeToggle } from '../theme';
 
-function App() {
+function Application() {
   const { mode, resolvedTheme } = useTheme();
 
   return (
@@ -48,4 +48,4 @@ function App() {
   );
 }
 
-export default App;
+export default Application;

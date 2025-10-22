@@ -1,7 +1,7 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
+import { Application } from './components';
 import './index.css';
 import { useThemeStore } from './stores/themeStore';
 import { darkTheme, lightTheme } from './theme/index';
@@ -17,7 +17,7 @@ function ThemedApp() {
   return (
     <ThemeProvider theme={currentTheme}>
       <CssBaseline />
-      <App />
+      <Application />
     </ThemeProvider>
   );
 }

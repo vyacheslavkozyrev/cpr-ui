@@ -3,10 +3,10 @@ export { darkTheme, lightTheme, theme } from './theme/index';
 export type { Theme } from './theme/index';
 
 // Theme Toggle components
-export { ThemeMenuSelector, default as ThemeToggle, ThemeToggleButton } from './components/ThemeToggle';
+export { ThemeMenuSelector, ThemeToggle, ThemeToggleButton } from './components';
 
 // Demo component
-export { default as ThemeDemo } from './components/ThemeDemo';
+export { ThemeDemo } from './components';
 
 // Theme Hook
 export { useTheme } from './hooks/useTheme';
@@ -14,3 +14,4 @@ export { useThemeStore } from './stores/themeStore';
 
 // Theme Types
 export type { SystemTheme, ThemeMode } from './stores/themeStore';
+
