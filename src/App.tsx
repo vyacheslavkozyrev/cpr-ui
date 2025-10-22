@@ -1,34 +1,50 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
+import { Box, Card, CardContent, Container, Stack, Typography } from '@mui/material';
+import { useTheme } from './hooks/useTheme';
+import { ThemeDemo, ThemeToggle } from './theme';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const { mode, resolvedTheme } = useTheme();
 
   return (
-    <>
-      <div>
-        <a href='https://vite.dev' target='_blank'>
-          <img src={viteLogo} className='logo' alt='Vite logo' />
-        </a>
-        <a href='https://react.dev' target='_blank'>
-          <img src={reactLogo} className='logo react' alt='React logo' />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className='card'>
-        <button onClick={() => setCount(count => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className='read-the-docs'>
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Container maxWidth="lg">
+      <Box py={4}>
+        {/* Header with theme toggle */}
+        <Card elevation={1} sx={{ mb: 4 }}>
+          <CardContent>
+            <Stack 
+              direction="row" 
+              justifyContent="space-between" 
+              alignItems="center"
+              flexWrap="wrap"
+              gap={2}
+            >
+              <Box>
+                <Typography variant="h3" gutterBottom>
+                  🎯 CPR System
+                </Typography>
+                <Typography variant="subtitle1" color="text.secondary">
+                  Current Performance Review Application
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Theme: {mode} → {resolvedTheme}
+                </Typography>
+              </Box>
+              <ThemeToggle variant="menu" size="large" />
+            </Stack>
+          </CardContent>
+        </Card>
+
+        {/* Theme Demo Component */}
+        <ThemeDemo />
+        
+        {/* Footer */}
+        <Box mt={4} textAlign="center">
+          <Typography variant="body2" color="text.secondary">
+            🚀 Built with React + TypeScript + MUI v6 + Zustand
+          </Typography>
+        </Box>
+      </Box>
+    </Container>
   );
 }
 
