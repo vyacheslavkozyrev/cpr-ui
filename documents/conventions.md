@@ -49,6 +49,83 @@ API & integration conventions
 - Model Validation: Use DataAnnotations and custom validation attributes for comprehensive request validation.
 - Business Rule Validation: Implement custom validators for domain-specific rules (e.g., preventing self-feedback).
 
+TypeScript & code conventions
+- **No any type**: Never use `any` type. Always use appropriate specific types, `unknown` for truly unknown data, or create proper type definitions.
+- **Type naming**: Custom types must start with `T` (e.g., `TUser`, `TApiResponse`).
+- **Interface naming**: Interfaces must start with `I` (e.g., `IUserService`, `IAuthProvider`).
+- **Enum naming**: Enums must start with `E` (e.g., `EUserRole`, `EThemeMode`).
+- **Camel case**: Use camelCase for variables, functions, properties, and methods (`userName`, `fetchUserData`).
+- **File naming**: Use camelCase for all file names (`userService.ts`, `authHelper.ts`).
+- **Component files**: Component file names must start with capital letter (`LoginForm.tsx`, `UserProfile.tsx`).
+- **Strict typing**: Prefer explicit types over type inference when it improves code clarity.
+
+Example:
+```tsx
+// ✅ Good
+interface IUserService {
+  getUser(id: string): Promise<TUser>;
+}
+
+type TUser = {
+  id: string;
+  name: string;
+  role: EUserRole;
+};
+
+enum EUserRole {
+  Admin = 'admin',
+  Manager = 'manager',
+  Employee = 'employee',
+}
+
+// ❌ Bad
+interface userService {
+  getUser(id: any): Promise<any>;
+}
+
+type user = {
+  id: any;
+  name: any;
+  role: any;
+};
+```
+
+Component styling conventions
+- **No inline styles**: Never use inline style objects in JSX (`sx={{ prop: value }}`). This prevents style object recreation on every render and improves performance.
+- **getStyles factory**: Define a `getStyles()` function outside the component that returns a style object. If theme access is needed, accept theme as parameter: `getStyles(theme)`.
+- **useMemo for styles**: Inside the component, call `const styles = useMemo(() => getStyles(), [])` to memoize the style object. If theme is used, include it in dependencies: `useMemo(() => getStyles(theme), [theme])`.
+- **Style object structure**: Use descriptive property names like `container`, `header`, `button`, `card` rather than generic names.
+- **Theme access**: Import `useTheme` from `@mui/material` when theme tokens are needed in styles.
+
+Example:
+```tsx
+import { useMemo } from 'react';
+import { Box, Button, useTheme } from '@mui/material';
+
+// Style factory outside component
+const getStyles = (theme: Theme) => ({
+  container: {
+    display: 'flex',
+    padding: theme.spacing(2),
+    backgroundColor: theme.palette.background.paper,
+  },
+  button: {
+    marginTop: theme.spacing(1),
+  },
+});
+
+export const MyComponent = () => {
+  const theme = useTheme();
+  const styles = useMemo(() => getStyles(theme), [theme]);
+  
+  return (
+    <Box sx={styles.container}>
+      <Button sx={styles.button}>Click me</Button>
+    </Box>
+  );
+};
+```
+
 Security & secrets
 - Store secrets in secured vaults (Azure Key Vault, or equivalent). Never commit secrets to VCS.
 - Use OAuth2 / OpenID Connect for authentication and short-lived tokens for services.

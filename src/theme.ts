@@ -13,5 +13,5 @@ export { useTheme } from './hooks/useTheme';
 export { useThemeStore } from './stores/themeStore';
 
 // Theme Types
-export type { SystemTheme, ThemeMode } from './stores/themeStore';
+export type { TSystemTheme, TThemeMode } from './stores/themeStore';
 

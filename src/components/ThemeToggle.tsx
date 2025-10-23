@@ -14,7 +14,7 @@ import {
     Typography,
 } from '@mui/material';
 import React from 'react';
-import { useThemeStore, type ThemeMode } from '../stores/themeStore';
+import { useThemeStore, type TThemeMode } from '../stores/themeStore';
 
 // Theme toggle button props
 interface ThemeToggleProps {
@@ -26,7 +26,7 @@ interface ThemeToggleProps {
 
 // Theme mode options for menu
 const themeOptions: Array<{
-  mode: ThemeMode;
+  mode: TThemeMode;
   label: string;
   icon: React.ReactElement;
   description: string;
@@ -111,7 +111,7 @@ const ThemeMenuSelector: React.FC<Omit<ThemeToggleProps, 'variant'>> = ({
     setAnchorEl(null);
   };
   
-  const handleModeSelect = (selectedMode: ThemeMode) => {
+  const handleModeSelect = (selectedMode: TThemeMode) => {
     setMode(selectedMode);
     handleClose();
   };

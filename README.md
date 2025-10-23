@@ -236,10 +236,13 @@ yarn preview
 
 ## 📚 Documentation
 
-- [Project Plan](./documents/project-plan.md) - Complete implementation guide
-- [Component Hierarchy](./documents/component-hierarchy.md) - UI structure
+- [**Documentation Index**](./documents/README.md) - Complete documentation guide
+- [Project Structure](./documents/project-structure.md) - Folder organization and architecture
+- [Theme Architecture](./documents/theme-architecture.md) - MUI theming system
+- [Mock Users Guide](./documents/mock-users.md) - Testing with different user roles
 - [Quick Start Guide](./documents/quick-start.md) - Setup instructions
 - [Development Modes](./documents/dev-modes-strategy.md) - Mock/Local/Dev strategy
+- [Coding Conventions](./documents/conventions.md) - Standards and best practices
 
 ## 🤝 Contributing
 

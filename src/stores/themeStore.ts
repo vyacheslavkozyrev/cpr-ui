@@ -1,27 +1,27 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist, subscribeWithSelector } from 'zustand/middleware';
 
-// Theme mode type
-export type ThemeMode = 'light' | 'dark' | 'system';
+// Theme mode type following T prefix convention
+export type TThemeMode = 'light' | 'dark' | 'system';
 
 // Theme preference for system detection
-type SystemTheme = 'light' | 'dark';
+type TSystemTheme = 'light' | 'dark';
 
-// Theme store interface
-interface ThemeStore {
+// Theme store interface following I prefix convention
+interface IThemeStore {
   // Current theme mode (user preference)
-  mode: ThemeMode;
+  mode: TThemeMode;
   
   // Resolved theme (actual theme being used)
   resolvedTheme: 'light' | 'dark';
   
   // System theme detection
-  systemTheme: SystemTheme;
+  systemTheme: TSystemTheme;
   
   // Actions
-  setMode: (mode: ThemeMode) => void;
+  setMode: (mode: TThemeMode) => void;
   toggleTheme: () => void;
-  setSystemTheme: (theme: SystemTheme) => void;
+  setSystemTheme: (theme: TSystemTheme) => void;
   
   // Utility functions
   isDark: () => boolean;
@@ -30,7 +30,7 @@ interface ThemeStore {
 }
 
 // Create theme store with persistence
-export const useThemeStore = create<ThemeStore>()(
+export const useThemeStore = create<IThemeStore>()(
   subscribeWithSelector(
     persist(
       (set, get) => ({
@@ -38,7 +38,7 @@ export const useThemeStore = create<ThemeStore>()(
         resolvedTheme: 'light', // Default resolved theme
         systemTheme: 'light', // Default system theme
         
-        setMode: (mode: ThemeMode) => {
+        setMode: (mode: TThemeMode) => {
           set({ mode });
           // Update resolved theme based on new mode
           const { systemTheme } = get();
@@ -60,7 +60,7 @@ export const useThemeStore = create<ThemeStore>()(
           }
         },
         
-        setSystemTheme: (theme: SystemTheme) => {
+        setSystemTheme: (theme: TSystemTheme) => {
           set({ systemTheme: theme });
           // Update resolved theme if in system mode
           const { mode } = get();
@@ -99,5 +99,5 @@ export const useThemeStore = create<ThemeStore>()(
 export { useThemeStore as useTheme };
 
 // Export types
-    export type { SystemTheme, ThemeStore };
+    export type { IThemeStore, TSystemTheme };
 

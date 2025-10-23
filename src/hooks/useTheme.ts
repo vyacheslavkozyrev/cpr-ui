@@ -1,4 +1,4 @@
-import type { SystemTheme, ThemeMode } from '../stores/themeStore';
+import type { TSystemTheme, TThemeMode } from '../stores/themeStore';
 import { useThemeStore } from '../stores/themeStore';
 
 // Pure Zustand theme hook (no Context needed)
@@ -37,7 +37,7 @@ export const useTheme = () => {
 };
 
 // Export types for consumers
-export type { SystemTheme, ThemeMode };
+export type { TSystemTheme, TThemeMode };
 
 // Export the store directly for advanced use cases
     export { useThemeStore } from '../stores/themeStore';
