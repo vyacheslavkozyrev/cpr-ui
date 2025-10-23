@@ -1,14 +1,14 @@
-import { createTheme, type ThemeOptions } from '@mui/material/styles';
-import { darkPalette, lightPalette } from './palette';
-import { customTypographyVariants, typography } from './typography';
+import { createTheme, type ThemeOptions } from '@mui/material/styles'
+import { darkPalette, lightPalette } from './palette'
+import { customTypographyVariants, typography } from './typography'
 
 // Spacing configuration (8px base unit)
-const spacing = 8;
+const spacing = 8
 
 // Shape configuration for rounded corners
 const shape = {
   borderRadius: 8, // Default border radius
-};
+}
 
 // Base theme configuration
 const baseThemeOptions: ThemeOptions = {
@@ -19,7 +19,7 @@ const baseThemeOptions: ThemeOptions = {
   },
   spacing,
   shape,
-  
+
   // Component customizations
   components: {
     // Button customizations
@@ -34,7 +34,8 @@ const baseThemeOptions: ThemeOptions = {
         },
         contained: {
           '&:hover': {
-            boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16), 0px 3px 6px rgba(0, 0, 0, 0.23)',
+            boxShadow:
+              '0px 3px 6px rgba(0, 0, 0, 0.16), 0px 3px 6px rgba(0, 0, 0, 0.23)',
           },
         },
         outlined: {
@@ -53,7 +54,8 @@ const baseThemeOptions: ThemeOptions = {
           borderRadius: 12,
           transition: 'box-shadow 0.2s ease-in-out',
           '&:hover': {
-            boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16), 0px 3px 6px rgba(0, 0, 0, 0.23)',
+            boxShadow:
+              '0px 3px 6px rgba(0, 0, 0, 0.16), 0px 3px 6px rgba(0, 0, 0, 0.23)',
           },
         },
       },
@@ -119,7 +121,7 @@ const baseThemeOptions: ThemeOptions = {
       },
     },
   },
-};
+}
 
 // Create light theme
 export const lightTheme = createTheme({
@@ -128,7 +130,7 @@ export const lightTheme = createTheme({
     ...lightPalette,
     mode: 'light',
   },
-});
+})
 
 // Create dark theme
 export const darkTheme = createTheme({
@@ -137,13 +139,13 @@ export const darkTheme = createTheme({
     ...darkPalette,
     mode: 'dark',
   },
-});
+})
 
 // Default export is light theme
-export const theme = lightTheme;
+export const theme = lightTheme
 
 // Export individual themes for theme provider
-export { darkTheme as dark, lightTheme as light };
+export { darkTheme as dark, lightTheme as light }
 
 // Theme type for TypeScript
-export type Theme = typeof lightTheme;
+export type Theme = typeof lightTheme

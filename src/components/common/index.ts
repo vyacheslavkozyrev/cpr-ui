@@ -6,5 +6,4 @@
 // export { default as Loading } from './Loading';
 // Add more exports as components are created
 
-export { }; // Empty export to make this a valid module
-
+export {} // Empty export to make this a valid module

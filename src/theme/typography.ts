@@ -21,7 +21,7 @@ export const fontFamilies = {
     '"Courier New"',
     'monospace',
   ].join(','),
-};
+}
 
 // Font weights
 export const fontWeights = {
@@ -30,7 +30,7 @@ export const fontWeights = {
   medium: 500,
   semibold: 600,
   bold: 700,
-} as const;
+} as const
 
 // Typography scale following Material Design principles
 export const typography = {
@@ -39,7 +39,7 @@ export const typography = {
   fontWeightRegular: fontWeights.regular,
   fontWeightMedium: fontWeights.medium,
   fontWeightBold: fontWeights.bold,
-  
+
   // Display styles (largest text)
   h1: {
     fontSize: '2.5rem', // 40px
@@ -77,7 +77,7 @@ export const typography = {
     lineHeight: 1.4,
     letterSpacing: '0.0075em',
   },
-  
+
   // Body text styles
   body1: {
     fontSize: '1rem', // 16px
@@ -91,7 +91,7 @@ export const typography = {
     lineHeight: 1.43,
     letterSpacing: '0.01071em',
   },
-  
+
   // UI element styles
   subtitle1: {
     fontSize: '1rem', // 16px
@@ -105,7 +105,7 @@ export const typography = {
     lineHeight: 1.57,
     letterSpacing: '0.00714em',
   },
-  
+
   // Interactive elements
   button: {
     fontSize: '0.875rem', // 14px
@@ -114,7 +114,7 @@ export const typography = {
     letterSpacing: '0.02857em',
     textTransform: 'none' as const, // Override default uppercase
   },
-  
+
   // Small text
   caption: {
     fontSize: '0.75rem', // 12px
@@ -129,7 +129,7 @@ export const typography = {
     letterSpacing: '0.08333em',
     textTransform: 'uppercase' as const,
   },
-};
+}
 
 // Custom typography variants for specific use cases in the CPR app
 export const customTypographyVariants = {
@@ -158,4 +158,4 @@ export const customTypographyVariants = {
     letterSpacing: '0.03333em',
     textTransform: 'uppercase' as const,
   },
-};
+}

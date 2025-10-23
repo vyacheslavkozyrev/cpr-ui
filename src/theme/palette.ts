@@ -1,4 +1,4 @@
-import type { PaletteOptions } from '@mui/material/styles';
+import type { PaletteOptions } from '@mui/material/styles'
 
 // Brand Colors
 export const brandColors = {
@@ -74,7 +74,7 @@ export const brandColors = {
     800: '#0277bd',
     900: '#01579b',
   },
-};
+}
 
 // Neutral Colors (for text, backgrounds, borders)
 export const neutralColors = {
@@ -88,7 +88,7 @@ export const neutralColors = {
   700: '#616161',
   800: '#424242',
   900: '#212121',
-};
+}
 
 // Light Theme Palette
 export const lightPalette: PaletteOptions = {
@@ -139,7 +139,7 @@ export const lightPalette: PaletteOptions = {
     disabled: neutralColors[500],
   },
   divider: neutralColors[200],
-};
+}
 
 // Dark Theme Palette
 export const darkPalette: PaletteOptions = {
@@ -190,4 +190,4 @@ export const darkPalette: PaletteOptions = {
     disabled: 'rgba(255, 255, 255, 0.5)',
   },
   divider: 'rgba(255, 255, 255, 0.12)',
-};
+}

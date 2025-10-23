@@ -5,5 +5,4 @@
 // export { default as Sidebar } from './Sidebar';
 // Add more exports as components are created
 
-export { }; // Empty export to make this a valid module
-
+export {} // Empty export to make this a valid module

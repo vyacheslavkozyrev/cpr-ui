@@ -1,80 +1,84 @@
-import { authConfig } from '../config/auth';
-import { initializeMsal } from '../services/authService';
-import { useAuthStore } from '../stores/authStore';
+import { authConfig } from '../config/auth'
+import { initializeMsal } from '../services/authService'
+import { useAuthStore } from '../stores/authStore'
 
 // Initialize authentication system
 export const initializeAuth = async (): Promise<void> => {
   try {
-    console.log('Initializing authentication system...');
-    
+    console.log('Initializing authentication system...')
+
     // Check if we're in stub mode
     if (authConfig.enableStubAuth) {
-      console.log('Authentication running in stub mode');
-      useAuthStore.getState().setStubMode(true);
-      return;
+      console.log('Authentication running in stub mode')
+      useAuthStore.getState().setStubMode(true)
+      return
     }
-    
+
     // Initialize MSAL
-    await initializeMsal();
-    console.log('MSAL initialized successfully');
-    
+    await initializeMsal()
+    console.log('MSAL initialized successfully')
+
     // Set stub mode to false for real authentication
-    useAuthStore.getState().setStubMode(false);
-    
+    useAuthStore.getState().setStubMode(false)
   } catch (error) {
-    console.error('Failed to initialize authentication:', error);
-    
+    console.error('Failed to initialize authentication:', error)
+
     // Fallback to stub mode on initialization failure
-    console.warn('Falling back to stub authentication mode');
-    useAuthStore.getState().setStubMode(true);
-    useAuthStore.getState().setError(
-      `Authentication initialization failed: ${error instanceof Error ? error.message : 'Unknown error'}`
-    );
+    console.warn('Falling back to stub authentication mode')
+    useAuthStore.getState().setStubMode(true)
+    useAuthStore
+      .getState()
+      .setError(
+        `Authentication initialization failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      )
   }
-};
+}
 
 // Check for existing authentication on app startup
 export const checkExistingAuth = async (): Promise<void> => {
-  const authStore = useAuthStore.getState();
-  
+  const authStore = useAuthStore.getState()
+
   try {
     // Skip if in stub mode
     if (authStore.isStubMode) {
-      return;
+      return
     }
-    
+
     // Import auth service dynamically to avoid circular dependencies
-    const { authService } = await import('../services/authService');
-    
+    const { authService } = await import('../services/authService')
+
     // Check if user is already logged in
-    const account = authService.getAccount();
+    const account = authService.getAccount()
     if (account) {
-      authStore.setLoading(true);
-      
+      authStore.setLoading(true)
+
       try {
         // Get fresh access token
-        const accessToken = await authService.getAccessToken();
-        
+        const accessToken = await authService.getAccessToken()
+
         // Convert account to user object
-        const user = authService.convertToAuthUser(account, accessToken || undefined);
-        
+        const user = authService.convertToAuthUser(
+          account,
+          accessToken || undefined
+        )
+
         // Update store with existing authentication
-        authStore.setAuthenticated(true);
-        authStore.setUser(user);
-        authStore.setAccount(account);
-        authStore.setTokens(accessToken, account.idToken || null);
-        
-        console.log('Existing authentication restored');
+        authStore.setAuthenticated(true)
+        authStore.setUser(user)
+        authStore.setAccount(account)
+        authStore.setTokens(accessToken, account.idToken || null)
+
+        console.log('Existing authentication restored')
       } catch (tokenError) {
-        console.warn('Failed to get fresh token for existing user:', tokenError);
+        console.warn('Failed to get fresh token for existing user:', tokenError)
         // Clear any stale authentication state
-        authStore.reset();
+        authStore.reset()
       } finally {
-        authStore.setLoading(false);
+        authStore.setLoading(false)
       }
     }
   } catch (error) {
-    console.error('Error checking existing authentication:', error);
-    authStore.setLoading(false);
+    console.error('Error checking existing authentication:', error)
+    authStore.setLoading(false)
   }
-};
+}
