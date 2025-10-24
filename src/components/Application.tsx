@@ -41,7 +41,7 @@ const getStyles = () => ({
   },
 })
 
-function Application() {
+export const Application = () => {
   const { mode, resolvedTheme } = useAppTheme()
   const { isAuthenticated, isStubMode } = useAuth()
   const [activeTab, setActiveTab] = useState(0)
@@ -253,5 +253,3 @@ function Application() {
     </Container>
   )
 }
-
-export default Application

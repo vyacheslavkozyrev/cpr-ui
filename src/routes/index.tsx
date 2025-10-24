@@ -1,5 +1,6 @@
 import { Navigate, type RouteObject } from 'react-router-dom'
 import { ProtectedRoute, RoleGuard } from '../components/auth'
+import { NotFoundPage, RouteErrorBoundary } from '../components/errors'
 import { AppLayout } from '../components/layout'
 import { AdminPage } from '../pages/admin'
 import { LoginPage } from '../pages/auth'
@@ -9,6 +10,7 @@ import { GoalsPage } from '../pages/goals'
 import { ProfilePage } from '../pages/profile'
 import { SkillsPage } from '../pages/skills'
 import { TeamPage } from '../pages/team'
+import { TestErrorsPage } from '../pages/test-errors'
 
 /**
  * Application route configuration
@@ -19,6 +21,7 @@ export const routes: RouteObject[] = [
   {
     path: '/login',
     element: <LoginPage />,
+    errorElement: <RouteErrorBoundary />,
   },
 
   // Protected routes with layout
@@ -29,6 +32,7 @@ export const routes: RouteObject[] = [
         <AppLayout />
       </ProtectedRoute>
     ),
+    errorElement: <RouteErrorBoundary />,
     children: [
       // Default redirect to dashboard
       {
@@ -40,30 +44,35 @@ export const routes: RouteObject[] = [
       {
         path: 'dashboard',
         element: <DashboardPage />,
+        errorElement: <RouteErrorBoundary />,
       },
 
       // Profile - accessible to all authenticated users
       {
         path: 'profile',
         element: <ProfilePage />,
+        errorElement: <RouteErrorBoundary />,
       },
 
       // Goals - accessible to all authenticated users
       {
         path: 'goals',
         element: <GoalsPage />,
+        errorElement: <RouteErrorBoundary />,
       },
 
       // Skills - accessible to all authenticated users
       {
         path: 'skills',
         element: <SkillsPage />,
+        errorElement: <RouteErrorBoundary />,
       },
 
       // Feedback - accessible to all authenticated users
       {
         path: 'feedback',
         element: <FeedbackPage />,
+        errorElement: <RouteErrorBoundary />,
       },
 
       // Team management - Manager+ only
@@ -74,6 +83,7 @@ export const routes: RouteObject[] = [
             <TeamPage />
           </RoleGuard>
         ),
+        errorElement: <RouteErrorBoundary />,
       },
 
       // Admin panel - Admin only
@@ -84,13 +94,21 @@ export const routes: RouteObject[] = [
             <AdminPage />
           </RoleGuard>
         ),
+        errorElement: <RouteErrorBoundary />,
+      },
+
+      // Test error boundaries (development only)
+      {
+        path: 'test-errors',
+        element: <TestErrorsPage />,
+        errorElement: <RouteErrorBoundary />,
       },
     ],
   },
 
-  // Catch-all route
+  // 404 catch-all route
   {
     path: '*',
-    element: <Navigate to='/dashboard' replace />,
+    element: <NotFoundPage />,
   },
 ]
