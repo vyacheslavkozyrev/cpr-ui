@@ -1,5 +1,6 @@
 import {
   AdminPanelSettings,
+  BugReport,
   Dashboard,
   Feedback,
   Group,
@@ -81,6 +82,12 @@ export const Sidebar: React.FC = () => {
       path: '/admin',
       icon: <AdminPanelSettings />,
       requiredRoles: ['Admin'],
+    },
+    // Development only - Test error boundaries
+    {
+      label: 'Test Errors',
+      path: '/test-errors',
+      icon: <BugReport />,
     },
   ]
 

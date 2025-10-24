@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "start:mock": "vite --mode mock",
     "start:local": "vite --mode localapi",
     "start:dev": "vite --mode development",
+    "start:mock": "set VITE_MOCK_USER_ROLE=employee && vite --mode mock",
     "start:mock-employee": "set VITE_MOCK_USER_ROLE=employee && vite --mode mock",
     "start:mock-manager": "set VITE_MOCK_USER_ROLE=people-manager && vite --mode mock",
     "start:mock-owner": "set VITE_MOCK_USER_ROLE=solution-owner && vite --mode mock",

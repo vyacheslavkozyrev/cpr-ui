@@ -90,10 +90,12 @@ export const useAuthStore = create<IAuthState>()(
       try {
         if (isStubMode) {
           // Stub authentication - select user based on mock role
+          const mockUserRole = authConfig.mockUserRole.trim() // Fix trailing space issue
+          const mockUsers = authConfig.mockUsers
+
+          // Use direct bracket notation access (works with hyphenated keys)
           const selectedMockUser =
-            authConfig.mockUsers[
-              authConfig.mockUserRole as keyof typeof authConfig.mockUsers
-            ] || authConfig.mockUsers.employee
+            (mockUsers as any)[mockUserRole] || mockUsers.employee
 
           const stubUser: IAuthUser = {
             ...selectedMockUser,

@@ -8,7 +8,8 @@ import {
   CircularProgress,
   Typography,
 } from '@mui/material'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../stores/authStore'
 
 // Styles factory — defined outside component per agreed pattern
@@ -42,8 +43,16 @@ const getStyles = () => ({
 })
 
 export const LoginForm = () => {
-  const { login, isLoading, error, isStubMode } = useAuth()
+  const { login, isLoading, error, isStubMode, isAuthenticated } = useAuth()
   const styles = useMemo(() => getStyles(), [])
+  const navigate = useNavigate()
+
+  // Redirect to dashboard if authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard', { replace: true })
+    }
+  }, [isAuthenticated, navigate])
 
   const handleLogin = async () => {
     try {

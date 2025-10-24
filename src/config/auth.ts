@@ -75,7 +75,7 @@ export const authConfig = {
 
   // API endpoints
   apiBaseUrl:
-    import.meta.env['VITE_API_BASE_URL'] || 'https://localhost:7001/api',
+    import.meta.env['VITE_API_BASE_URL'] || 'https://localhost:5000/api',
 
   // Feature flags
   enableStubAuth: import.meta.env['VITE_ENABLE_STUB_AUTH'] === 'true',
