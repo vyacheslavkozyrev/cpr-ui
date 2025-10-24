@@ -13,5 +13,3 @@ export const useInitializeApiClient = (
     initializeApiClient(getAuthToken)
   }, [getAuthToken])
 }
-
-export default useInitializeApiClient

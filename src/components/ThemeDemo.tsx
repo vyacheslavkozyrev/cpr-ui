@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material'
 import React from 'react'
-import ThemeToggle from '../components/ThemeToggle'
+import { ThemeToggle } from '../components/ThemeToggle'
 import { useTheme } from '../hooks/useTheme'
 
 // Theme demo component to showcase the theme system
@@ -216,5 +216,3 @@ export const ThemeDemo: React.FC = () => {
     </Box>
   )
 }
-
-export default ThemeDemo

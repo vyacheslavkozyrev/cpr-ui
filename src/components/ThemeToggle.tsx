@@ -186,6 +186,3 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
 
 // Export individual components
 export { ThemeMenuSelector, ThemeToggleButton }
-
-// Export default as main component
-export default ThemeToggle

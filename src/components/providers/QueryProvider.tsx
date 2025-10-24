@@ -1,8 +1,14 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import React, { type ReactNode } from 'react'
+import React, { type ReactNode, Suspense, lazy } from 'react'
 
 import { queryClient } from '../../config/queryClient'
+
+// Lazy load devtools to avoid DOM nesting issues
+const ReactQueryDevtools = lazy(() =>
+  import('@tanstack/react-query-devtools').then(module => ({
+    default: module.ReactQueryDevtools,
+  }))
+)
 
 /**
  * Props for the QueryProvider component
@@ -25,9 +31,14 @@ export const QueryProvider: React.FC<IQueryProviderProps> = ({
   return (
     <QueryClientProvider client={client}>
       {children}
-      {showDevtools && <ReactQueryDevtools initialIsOpen={false} />}
+      {showDevtools && (
+        <Suspense fallback={null}>
+          <ReactQueryDevtools
+            initialIsOpen={false}
+            buttonPosition='bottom-left'
+          />
+        </Suspense>
+      )}
     </QueryClientProvider>
   )
 }
-
-export default QueryProvider

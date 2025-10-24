@@ -32,6 +32,13 @@ const getStyles = () => ({
   tabs: { borderBottom: 1, borderColor: 'divider' },
   devAlert: { mb: 4 },
   footer: { mt: 4, textAlign: 'center' },
+  sectionTitle: { mt: 3 },
+  codeBlock: {
+    mt: 3,
+    p: 2,
+    bgcolor: 'action.hover',
+    borderRadius: 1,
+  },
 })
 
 function Application() {
@@ -131,7 +138,7 @@ function Application() {
                 Query) and native fetch client.
               </Typography>
 
-              <Typography variant='h6' gutterBottom sx={{ mt: 3 }}>
+              <Typography variant='h6' gutterBottom sx={styles.sectionTitle}>
                 ✅ Features Implemented:
               </Typography>
 
@@ -192,8 +199,8 @@ function Application() {
                 </ListItem>
               </List>
 
-              <Typography variant='h6' gutterBottom sx={{ mt: 3 }}>
-                🎯 Next Steps:
+              <Typography variant='h6' gutterBottom sx={styles.sectionTitle}>
+                � Theme Integration:
               </Typography>
 
               <List>
@@ -223,9 +230,7 @@ function Application() {
                 </ListItem>
               </List>
 
-              <Box
-                sx={{ mt: 3, p: 2, bgcolor: 'action.hover', borderRadius: 1 }}
-              >
+              <Box sx={styles.codeBlock}>
                 <Typography variant='body2'>
                   <strong>Development Tools:</strong> React Query DevTools are
                   available in development mode. Look for the React Query icon

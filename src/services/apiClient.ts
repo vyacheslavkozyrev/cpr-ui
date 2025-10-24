@@ -497,5 +497,3 @@ export const initializeApiClient = (
 ): void => {
   apiClient.setAuthTokenGetter(tokenGetter)
 }
-
-export default apiClient

@@ -144,5 +144,3 @@ export const useUploadAvatar = () => {
     },
   })
 }
-
-export default userService

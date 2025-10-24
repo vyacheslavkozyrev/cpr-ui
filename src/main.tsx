@@ -1,10 +1,11 @@
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
-import { Application } from './components'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { QueryProvider } from './components/providers/QueryProvider'
 import { useInitializeApiClient } from './hooks/useInitializeApiClient'
 import './index.css'
+import { routes } from './routes'
 import { useAuthStore } from './stores/authStore'
 import { useThemeStore } from './stores/themeStore'
 import { darkTheme, lightTheme } from './theme/index'
@@ -26,6 +27,9 @@ function ApiClientInitializer({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }
 
+// Create router instance
+const router = createBrowserRouter(routes)
+
 // Theme-aware root component with auth initialization
 function ThemedApp() {
   const resolvedTheme = useThemeStore(state => state.resolvedTheme)
@@ -46,7 +50,7 @@ function ThemedApp() {
       <ApiClientInitializer>
         <ThemeProvider theme={currentTheme}>
           <CssBaseline />
-          <Application />
+          <RouterProvider router={router} />
         </ThemeProvider>
       </ApiClientInitializer>
     </QueryProvider>
