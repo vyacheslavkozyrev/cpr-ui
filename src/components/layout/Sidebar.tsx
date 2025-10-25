@@ -21,6 +21,7 @@ import {
 } from '@mui/material'
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { UserRole } from '../../models'
 import { useAuthStore } from '../../stores/authStore'
 
 const drawerWidth = 240
@@ -42,7 +43,7 @@ export const Sidebar: React.FC = () => {
   const { user } = useAuthStore()
 
   // Get user roles for menu filtering
-  const userRoles = user?.roles || ['Employee']
+  const userRoles = user?.roles || [UserRole.EMPLOYEE]
 
   // Navigation items with role requirements
   const navigationItems: INavigationItem[] = [
@@ -75,13 +76,18 @@ export const Sidebar: React.FC = () => {
       label: 'Team',
       path: '/team',
       icon: <Group />,
-      requiredRoles: ['Manager', 'Director', 'Admin'],
+      requiredRoles: [
+        UserRole.PEOPLE_MANAGER,
+        UserRole.SOLUTION_OWNER,
+        UserRole.DIRECTOR,
+        UserRole.ADMINISTRATOR,
+      ],
     },
     {
       label: 'Admin',
       path: '/admin',
       icon: <AdminPanelSettings />,
-      requiredRoles: ['Admin'],
+      requiredRoles: [UserRole.ADMINISTRATOR],
     },
     // Development only - Test error boundaries
     {

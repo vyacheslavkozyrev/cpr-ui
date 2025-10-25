@@ -2,6 +2,7 @@ import { Navigate, type RouteObject } from 'react-router-dom'
 import { ProtectedRoute, RoleGuard } from '../components/auth'
 import { NotFoundPage, RouteErrorBoundary } from '../components/errors'
 import { AppLayout } from '../components/layout'
+import { UserRole } from '../models'
 import { AdminPage } from '../pages/admin'
 import { LoginPage } from '../pages/auth'
 import { DashboardPage } from '../pages/dashboard'
@@ -79,7 +80,14 @@ export const routes: RouteObject[] = [
       {
         path: 'team',
         element: (
-          <RoleGuard allowedRoles={['Manager', 'Director', 'Admin']}>
+          <RoleGuard
+            allowedRoles={[
+              UserRole.PEOPLE_MANAGER,
+              UserRole.SOLUTION_OWNER,
+              UserRole.DIRECTOR,
+              UserRole.ADMINISTRATOR,
+            ]}
+          >
             <TeamPage />
           </RoleGuard>
         ),
@@ -90,7 +98,7 @@ export const routes: RouteObject[] = [
       {
         path: 'admin',
         element: (
-          <RoleGuard allowedRoles={['Admin']}>
+          <RoleGuard allowedRoles={[UserRole.ADMINISTRATOR]}>
             <AdminPage />
           </RoleGuard>
         ),

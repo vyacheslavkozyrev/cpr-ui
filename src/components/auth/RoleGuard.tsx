@@ -1,5 +1,6 @@
 import { Alert, Box } from '@mui/material'
 import React, { useMemo } from 'react'
+import { UserRole, type UserRole as UserRoleType } from '../../models'
 import { useAuthStore } from '../../stores/authStore'
 
 // Style factory outside component
@@ -9,11 +10,9 @@ const getStyles = () => ({
   },
 })
 
-type UserRole = 'Employee' | 'Manager' | 'Director' | 'Admin'
-
 interface IRoleGuardProps {
   children: React.ReactNode
-  allowedRoles: UserRole[]
+  allowedRoles: UserRoleType[]
   fallback?: React.ReactNode
 }
 
@@ -30,8 +29,8 @@ export const RoleGuard: React.FC<IRoleGuardProps> = ({
   const styles = useMemo(() => getStyles(), [])
   const { user } = useAuthStore()
 
-  // Get user roles (defaulting to ['Employee'] if not set)
-  const userRoles = user?.roles || ['Employee']
+  // Get user roles (defaulting to [UserRole.EMPLOYEE] if not set)
+  const userRoles = user?.roles || [UserRole.EMPLOYEE]
 
   // Check if user has one of the allowed roles
   const hasRequiredRole = allowedRoles.some(role => userRoles.includes(role))

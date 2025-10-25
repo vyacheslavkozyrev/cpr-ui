@@ -1,5 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { queryKeys } from '../config/queryClient'
+import type { TMeApiResponseDto } from '../dtos'
+import { mapUser } from '../mappers'
+import type { User } from '../models'
 import type { TApiResponse } from '../types/apiTypes'
 import { apiClient } from './apiClient'
 
@@ -22,7 +25,30 @@ export interface IUser {
  */
 class UserService {
   /**
-   * Get current user profile
+   * Get current user information from /me endpoint (raw DTO)
+   */
+  async getMeDto(): Promise<TApiResponse<TMeApiResponseDto>> {
+    return apiClient.get<TMeApiResponseDto>('/me')
+  }
+
+  /**
+   * Get current user information mapped to presentation model
+   */
+  async getMe(): Promise<User | null> {
+    try {
+      const response = await this.getMeDto()
+      if (response.success && response.data) {
+        return mapUser(response.data)
+      }
+      return null
+    } catch (error) {
+      console.error('Failed to get current user:', error)
+      return null
+    }
+  }
+
+  /**
+   * Get current user profile (legacy endpoint)
    */
   async getCurrentUser(): Promise<TApiResponse<IUser>> {
     return apiClient.get<IUser>('/users/me')
@@ -73,13 +99,27 @@ export const userService = new UserService()
  */
 
 /**
- * Hook to get current user data
+ * Hook to get current user with React Query caching
+ * Returns the mapped User model for presentation layer
  */
 export const useCurrentUser = () => {
   return useQuery({
-    queryKey: queryKeys.user.current(),
-    queryFn: () => userService.getCurrentUser(),
-    select: response => response.data, // Extract data from API response
+    queryKey: queryKeys.user.me(),
+    queryFn: () => userService.getMe(),
+    staleTime: 10 * 60 * 1000, // 10 minutes
+    gcTime: 15 * 60 * 1000, // 15 minutes in cache
+    retry: (failureCount, error) => {
+      // Don't retry on authentication errors (401, 403)
+      if (error && typeof error === 'object' && 'status' in error) {
+        const status = (error as any).status
+        if (status === 401 || status === 403) {
+          return false
+        }
+      }
+      // Retry up to 2 times for other errors
+      return failureCount < 2
+    },
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
   })
 }
 
@@ -138,6 +178,8 @@ export const useUploadAvatar = () => {
     onSuccess: () => {
       // Invalidate current user data to refetch with new avatar
       queryClient.invalidateQueries({ queryKey: queryKeys.user.current() })
+      // Also invalidate /me data
+      queryClient.invalidateQueries({ queryKey: queryKeys.user.me() })
     },
     onError: error => {
       console.error('Failed to upload avatar:', error)

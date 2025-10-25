@@ -68,3 +68,28 @@ export interface TApiRequestInit extends Omit<RequestInit, 'body' | 'method'> {
   timeout?: number
   data?: any
 }
+
+/**
+ * User position information from /me API
+ */
+export interface TUserPosition {
+  id: string
+  title: string
+}
+
+/**
+ * Current user information from /me API response
+ */
+export interface TCurrentUser {
+  user_id: string
+  employee_id: string
+  user_name: string
+  display_name: string
+  email: string | null
+  position: TUserPosition
+}
+
+/**
+ * /me API response structure
+ */
+export type TMeApiResponse = TCurrentUser

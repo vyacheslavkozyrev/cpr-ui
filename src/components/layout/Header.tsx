@@ -9,6 +9,7 @@ import {
   AppBar,
   Avatar,
   Box,
+  CircularProgress,
   Divider,
   IconButton,
   Menu,
@@ -19,6 +20,7 @@ import {
   type Theme,
 } from '@mui/material'
 import React, { useMemo } from 'react'
+import { useCurrentUser } from '../../services/userService'
 import { useAuthStore } from '../../stores/authStore'
 import { useThemeStore } from '../../stores/themeStore'
 
@@ -55,8 +57,9 @@ const getStyles = (theme: Theme) => ({
 export const Header: React.FC = () => {
   const theme = useTheme()
   const styles = useMemo(() => getStyles(theme), [theme])
-  const { user, logout } = useAuthStore()
+  const { logout } = useAuthStore()
   const { resolvedTheme, toggleTheme } = useThemeStore()
+  const { data: currentUser, isLoading: userLoading } = useCurrentUser()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -96,17 +99,34 @@ export const Header: React.FC = () => {
 
         {/* User Menu */}
         <Box sx={styles.userSection}>
-          <Typography variant='body2' sx={styles.userName}>
-            {user?.name || 'User'}
-          </Typography>
+          {userLoading ? (
+            <>
+              <CircularProgress size={16} color='inherit' sx={{ mr: 1 }} />
+              <Typography variant='body2' sx={styles.userName}>
+                Loading...
+              </Typography>
+            </>
+          ) : (
+            <Typography variant='body2' sx={styles.userName}>
+              {currentUser?.displayName || currentUser?.username || 'User'}
+            </Typography>
+          )}
           <IconButton
             color='inherit'
             onClick={handleMenuOpen}
             aria-label='user menu'
+            disabled={userLoading}
           >
-            <Avatar sx={styles.avatar}>
-              {user?.name?.charAt(0).toUpperCase() || 'U'}
-            </Avatar>
+            {userLoading ? (
+              <CircularProgress size={24} color='inherit' />
+            ) : (
+              <Avatar sx={styles.avatar}>
+                {currentUser?.initials ||
+                  (currentUser?.displayName || currentUser?.username || 'U')
+                    .charAt(0)
+                    .toUpperCase()}
+              </Avatar>
+            )}
           </IconButton>
         </Box>
 
