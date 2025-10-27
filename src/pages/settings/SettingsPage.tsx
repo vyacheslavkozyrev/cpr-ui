@@ -14,7 +14,8 @@ import {
   type SelectChangeEvent,
 } from '@mui/material'
 import React, { useCallback, useMemo } from 'react'
-import { useToast } from '../../stores'
+import { useTranslation } from 'react-i18next'
+import { useLanguageStore, useToast } from '../../stores'
 import { useThemeStore, type TThemeMode } from '../../stores/themeStore'
 
 // Style factory outside component
@@ -50,6 +51,7 @@ const getStyles = () => ({
  */
 export const SettingsPage: React.FC = () => {
   const styles = useMemo(() => getStyles(), [])
+  const { t } = useTranslation()
   const { showSuccess } = useToast()
 
   // Theme management
@@ -62,23 +64,42 @@ export const SettingsPage: React.FC = () => {
     isSystemMode,
   } = useThemeStore()
 
+  // Language management
+  const {
+    language: currentLanguage,
+    availableLanguages,
+    setLanguage,
+    getLanguageName,
+    getLanguageFlag,
+  } = useLanguageStore()
+
   const handleThemeChange = useCallback(
     (event: SelectChangeEvent<string>) => {
       const newTheme = event.target.value as TThemeMode
       setMode(newTheme)
-      showSuccess(
-        `Theme changed to ${newTheme === 'system' ? 'system preference' : newTheme} mode`
-      )
+      const message =
+        newTheme === 'system'
+          ? t('toast.themeChangedSystem')
+          : t('toast.themeChanged', { mode: newTheme })
+      showSuccess(message)
     },
-    [setMode, showSuccess]
+    [setMode, showSuccess, t]
+  )
+
+  const handleLanguageChange = useCallback(
+    (event: SelectChangeEvent<string>) => {
+      const newLanguage = event.target.value as typeof currentLanguage
+      setLanguage(newLanguage)
+      showSuccess(`Language changed to ${getLanguageName(newLanguage)}`)
+    },
+    [setLanguage, showSuccess, getLanguageName]
   )
 
   const handleDarkModeToggle = useCallback(() => {
     toggleTheme()
-    showSuccess(
-      `Switched to ${resolvedTheme === 'dark' ? 'light' : 'dark'} mode`
-    )
-  }, [toggleTheme, showSuccess, resolvedTheme])
+    const newMode = resolvedTheme === 'dark' ? 'light' : 'dark'
+    showSuccess(t('toast.themeSwitched', { mode: newMode }))
+  }, [toggleTheme, showSuccess, resolvedTheme, t])
 
   return (
     <Box sx={styles.container}>
@@ -86,19 +107,19 @@ export const SettingsPage: React.FC = () => {
       <Box sx={styles.header}>
         <Settings color='primary' />
         <Typography variant='h4' component='h1'>
-          Settings
+          {t('settings.title')}
         </Typography>
       </Box>
 
       <Typography variant='body1' color='textSecondary' sx={{ mb: 4 }}>
-        Customize your experience and preferences
+        {t('settings.subtitle')}
       </Typography>
 
       {/* Appearance Settings */}
       <Card sx={styles.settingsCard}>
         <CardHeader
-          title='Appearance'
-          subheader='Customize the look and feel of the application'
+          title={t('settings.appearance.title')}
+          subheader={t('settings.appearance.subtitle')}
         />
         <Divider />
         <CardContent>
@@ -107,13 +128,15 @@ export const SettingsPage: React.FC = () => {
             <Box sx={styles.settingItem}>
               <Box>
                 <Typography variant='subtitle1' gutterBottom>
-                  Theme
+                  {t('settings.appearance.theme')}
                 </Typography>
                 <Typography variant='body2' color='textSecondary'>
-                  Choose your preferred color theme
+                  {t('settings.appearance.themeDescription')}
                   {currentTheme === 'system' && (
                     <Typography variant='caption' display='block'>
-                      Currently following system preference ({systemTheme})
+                      {t('settings.appearance.systemPreference', {
+                        mode: systemTheme,
+                      })}
                     </Typography>
                   )}
                 </Typography>
@@ -124,9 +147,15 @@ export const SettingsPage: React.FC = () => {
                   onChange={handleThemeChange}
                   size='small'
                 >
-                  <MenuItem value='light'>Light</MenuItem>
-                  <MenuItem value='dark'>Dark</MenuItem>
-                  <MenuItem value='system'>System</MenuItem>
+                  <MenuItem value='light'>
+                    {t('settings.appearance.light')}
+                  </MenuItem>
+                  <MenuItem value='dark'>
+                    {t('settings.appearance.dark')}
+                  </MenuItem>
+                  <MenuItem value='system'>
+                    {t('settings.appearance.system')}
+                  </MenuItem>
                 </Select>
               </FormControl>
             </Box>
@@ -137,12 +166,12 @@ export const SettingsPage: React.FC = () => {
             <Box sx={styles.settingItem}>
               <Box>
                 <Typography variant='subtitle1' gutterBottom>
-                  Dark Mode
+                  {t('settings.appearance.darkMode')}
                 </Typography>
                 <Typography variant='body2' color='textSecondary'>
-                  Quick toggle for dark mode
+                  {t('settings.appearance.darkModeDescription')}
                   {currentTheme === 'system' &&
-                    ' (overrides system preference)'}
+                    t('settings.appearance.darkModeSystemOverride')}
                 </Typography>
               </Box>
               <Switch
@@ -158,27 +187,33 @@ export const SettingsPage: React.FC = () => {
       {/* Language & Region Settings */}
       <Card sx={styles.settingsCard}>
         <CardHeader
-          title='Language & Region'
-          subheader='Set your language and regional preferences'
+          title={t('settings.language.title')}
+          subheader={t('settings.language.subtitle')}
         />
         <Divider />
         <CardContent>
           <Stack spacing={3}>
-            {/* Language Selection - Placeholder for i18n */}
+            {/* Language Selection */}
             <Box sx={styles.settingItem}>
               <Box>
                 <Typography variant='subtitle1' gutterBottom>
-                  Language
+                  {t('settings.language.language')}
                 </Typography>
                 <Typography variant='body2' color='textSecondary'>
-                  Choose your preferred language (coming soon)
+                  Choose your preferred language
                 </Typography>
               </Box>
-              <FormControl sx={styles.settingControl} disabled>
-                <Select value='en' size='small'>
-                  <MenuItem value='en'>English</MenuItem>
-                  <MenuItem value='es'>Español</MenuItem>
-                  <MenuItem value='fr'>Français</MenuItem>
+              <FormControl sx={styles.settingControl}>
+                <Select
+                  value={currentLanguage}
+                  onChange={handleLanguageChange}
+                  size='small'
+                >
+                  {availableLanguages.map(lang => (
+                    <MenuItem key={lang.code} value={lang.code}>
+                      {getLanguageFlag(lang.code)} {lang.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Box>
@@ -189,10 +224,10 @@ export const SettingsPage: React.FC = () => {
             <Box sx={styles.settingItem}>
               <Box>
                 <Typography variant='subtitle1' gutterBottom>
-                  Date Format
+                  {t('settings.language.dateFormat')}
                 </Typography>
                 <Typography variant='body2' color='textSecondary'>
-                  How dates are displayed (coming soon)
+                  {t('settings.language.dateFormatDescription')}
                 </Typography>
               </Box>
               <FormControl sx={styles.settingControl} disabled>

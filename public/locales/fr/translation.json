@@ -1,0 +1,122 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "save": "Sauvegarder",
+    "cancel": "Annuler",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "delete": "Supprimer",
+    "confirm": "Confirmer",
+    "yes": "Oui",
+    "no": "Non",
+    "ok": "OK",
+    "error": "Erreur",
+    "success": "Succès",
+    "warning": "Avertissement",
+    "info": "Information"
+  },
+  "navigation": {
+    "dashboard": "Tableau de bord",
+    "profile": "Profil",
+    "goals": "Objectifs",
+    "skills": "Compétences",
+    "feedback": "Commentaires",
+    "settings": "Paramètres",
+    "team": "Équipe",
+    "admin": "Administration",
+    "logout": "Se déconnecter"
+  },
+  "header": {
+    "brand": "CPR Performance",
+    "userMenu": "Menu utilisateur",
+    "toggleTheme": "Changer le thème"
+  },
+  "sidebar": {
+    "navigation": "Navigation"
+  },
+  "profile": {
+    "title": "Profil",
+    "personalInfo": "Informations Personnelles",
+    "positionInfo": "Poste et Organisation",
+    "displayName": "Nom d'Affichage",
+    "username": "Nom d'Utilisateur",
+    "email": "Adresse E-mail",
+    "employeeId": "ID Employé",
+    "jobTitle": "Titre du Poste",
+    "positionId": "ID du Poste",
+    "department": "Département",
+    "reportingManager": "Responsable Hiérarchique",
+    "editProfile": "Modifier le Profil",
+    "saveChanges": "Sauvegarder les modifications",
+    "cancelEditing": "Annuler la modification",
+    "azureAdNote": "Les informations du profil sont synchronisées avec Azure Active Directory. Certains champs peuvent être gérés par votre administrateur informatique.",
+    "comingSoon": "Bientôt disponible - Disponible via l'intégration {{feature}}",
+    "departmentIntegration": "répertoire des employés",
+    "orgChartIntegration": "organigramme",
+    "loading": "Chargement du profil utilisateur...",
+    "loadError": "Erreur de Chargement du Profil",
+    "unableToLoad": "Impossible de charger les informations du profil",
+    "updateSuccess": "Profil mis à jour avec succès !",
+    "updateError": "Échec de la mise à jour du profil. Veuillez réessayer.",
+    "notProvided": "Non fourni",
+    "notAssigned": "Non assigné",
+    "notSpecified": "Non spécifié",
+    "validation": {
+      "nameRequired": "Le nom d'affichage est obligatoire",
+      "nameMinLength": "Le nom doit contenir au moins 2 caractères",
+      "emailInvalid": "Veuillez saisir une adresse email valide"
+    }
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Personnalisez votre expérience et vos préférences",
+    "appearance": {
+      "title": "Apparence",
+      "subtitle": "Personnalisez l'apparence de l'application",
+      "theme": "Thème",
+      "themeDescription": "Choisissez votre thème de couleur préféré",
+      "systemPreference": "Suit actuellement la préférence système ({{mode}})",
+      "darkMode": "Mode Sombre",
+      "darkModeDescription": "Basculement rapide vers le mode sombre",
+      "darkModeSystemOverride": " (remplace la préférence système)",
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système"
+    },
+    "language": {
+      "title": "Langue et Région",
+      "subtitle": "Définissez vos préférences de langue et de région",
+      "language": "Langue",
+      "languageDescription": "Choisissez votre langue préférée (bientôt disponible)",
+      "dateFormat": "Format de Date",
+      "dateFormatDescription": "Comment les dates sont affichées (bientôt disponible)"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "subtitle": "Configurez comment vous recevez les notifications",
+      "email": "Notifications par E-mail",
+      "emailDescription": "Recevoir des mises à jour par e-mail pour les activités importantes (bientôt disponible)",
+      "browser": "Notifications du Navigateur",
+      "browserDescription": "Afficher les notifications de bureau (bientôt disponible)",
+      "toastDuration": "Durée des Notifications",
+      "toastDurationDescription": "Combien de temps les messages de succès/erreur sont affichés (bientôt disponible)",
+      "duration3s": "3 secondes",
+      "duration6s": "6 secondes",
+      "duration10s": "10 secondes"
+    },
+    "privacy": {
+      "title": "Confidentialité et Données",
+      "subtitle": "Gérez vos données et préférences de confidentialité",
+      "analytics": "Analyses d'Utilisation",
+      "analyticsDescription": "Aidez à améliorer l'application en partageant des données d'utilisation anonymes (bientôt disponible)",
+      "dataExport": "Exportation des Données",
+      "dataExportDescription": "Téléchargez vos données dans un format portable (bientôt disponible)",
+      "exportData": "Exporter les Données"
+    }
+  },
+  "toast": {
+    "themeChanged": "Thème changé en mode {{mode}}",
+    "themeChangedSystem": "Thème changé en mode de préférence système",
+    "themeSwitched": "Basculé en mode {{mode}}"
+  }
+}

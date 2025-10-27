@@ -21,6 +21,7 @@ import {
   Typography,
 } from '@mui/material'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { UserRole } from '../../models'
 import { useAuthStore } from '../../stores/authStore'
@@ -28,7 +29,7 @@ import { useAuthStore } from '../../stores/authStore'
 const drawerWidth = 240
 
 interface INavigationItem {
-  label: string
+  labelKey: string
   path: string
   icon: React.ReactNode
   requiredRoles?: string[]
@@ -39,6 +40,7 @@ interface INavigationItem {
  * Navigation sidebar with role-based menu items
  */
 export const Sidebar: React.FC = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
   const { user } = useAuthStore()
@@ -49,37 +51,37 @@ export const Sidebar: React.FC = () => {
   // Navigation items with role requirements
   const navigationItems: INavigationItem[] = [
     {
-      label: 'Dashboard',
+      labelKey: 'navigation.dashboard',
       path: '/dashboard',
       icon: <Dashboard />,
     },
     {
-      label: 'Profile',
+      labelKey: 'navigation.profile',
       path: '/profile',
       icon: <Person />,
     },
     {
-      label: 'Goals',
+      labelKey: 'navigation.goals',
       path: '/goals',
       icon: <TrackChanges />,
     },
     {
-      label: 'Skills',
+      labelKey: 'navigation.skills',
       path: '/skills',
       icon: <Psychology />,
     },
     {
-      label: 'Feedback',
+      labelKey: 'navigation.feedback',
       path: '/feedback',
       icon: <Feedback />,
     },
     {
-      label: 'Settings',
+      labelKey: 'navigation.settings',
       path: '/settings',
       icon: <Settings />,
     },
     {
-      label: 'Team',
+      labelKey: 'navigation.team',
       path: '/team',
       icon: <Group />,
       requiredRoles: [
@@ -90,14 +92,14 @@ export const Sidebar: React.FC = () => {
       ],
     },
     {
-      label: 'Admin',
+      labelKey: 'navigation.admin',
       path: '/admin',
       icon: <AdminPanelSettings />,
       requiredRoles: [UserRole.ADMINISTRATOR],
     },
     // Development only - Test error boundaries
     {
-      label: 'Test Errors',
+      labelKey: 'Test Errors',
       path: '/test-errors',
       icon: <BugReport />,
     },
@@ -129,7 +131,7 @@ export const Sidebar: React.FC = () => {
     >
       <Box sx={{ p: 2 }}>
         <Typography variant='subtitle2' color='text.secondary'>
-          Navigation
+          {t('sidebar.navigation')}
         </Typography>
       </Box>
 
@@ -155,7 +157,13 @@ export const Sidebar: React.FC = () => {
               }}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.label} />
+              <ListItemText
+                primary={
+                  item.labelKey.startsWith('navigation.')
+                    ? t(item.labelKey)
+                    : item.labelKey
+                }
+              />
             </ListItemButton>
           </ListItem>
         ))}

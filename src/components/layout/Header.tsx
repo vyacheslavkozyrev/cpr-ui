@@ -20,6 +20,7 @@ import {
   type Theme,
 } from '@mui/material'
 import React, { useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useCurrentUser } from '../../services'
 import { useAuthStore } from '../../stores/authStore'
@@ -56,6 +57,7 @@ const getStyles = (theme: Theme) => ({
  * Application header with branding, theme toggle, and user menu
  */
 export const Header: React.FC = () => {
+  const { t } = useTranslation()
   const theme = useTheme()
   const navigate = useNavigate()
   const styles = useMemo(() => getStyles(theme), [theme])
@@ -96,14 +98,14 @@ export const Header: React.FC = () => {
       <Toolbar>
         {/* Brand/Logo */}
         <Typography variant='h6' component='div' sx={styles.brand}>
-          CPR Performance
+          {t('header.brand')}
         </Typography>
 
         {/* Theme Toggle */}
         <IconButton
           color='inherit'
           onClick={handleThemeToggle}
-          aria-label='toggle theme'
+          aria-label={t('header.toggleTheme')}
           sx={styles.themeToggle}
         >
           {resolvedTheme === 'dark' ? <LightMode /> : <DarkMode />}
@@ -115,7 +117,7 @@ export const Header: React.FC = () => {
             <>
               <CircularProgress size={16} color='inherit' sx={{ mr: 1 }} />
               <Typography variant='body2' sx={styles.userName}>
-                Loading...
+                {t('common.loading')}
               </Typography>
             </>
           ) : (
@@ -126,7 +128,7 @@ export const Header: React.FC = () => {
           <IconButton
             color='inherit'
             onClick={handleMenuOpen}
-            aria-label='user menu'
+            aria-label={t('header.userMenu')}
             disabled={userLoading}
           >
             {userLoading ? (
@@ -158,16 +160,16 @@ export const Header: React.FC = () => {
         >
           <MenuItem onClick={handleProfileClick}>
             <AccountCircle sx={styles.menuIcon} />
-            Profile
+            {t('navigation.profile')}
           </MenuItem>
           <MenuItem onClick={handleSettingsClick}>
             <Settings sx={styles.menuIcon} />
-            Settings
+            {t('navigation.settings')}
           </MenuItem>
           <Divider />
           <MenuItem onClick={handleLogout}>
             <Logout sx={styles.menuIcon} />
-            Logout
+            {t('navigation.logout')}
           </MenuItem>
         </Menu>
       </Toolbar>

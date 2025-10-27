@@ -1,0 +1,122 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "close": "Close",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Information"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "goals": "Goals",
+    "skills": "Skills",
+    "feedback": "Feedback",
+    "settings": "Settings",
+    "team": "Team",
+    "admin": "Admin",
+    "logout": "Logout"
+  },
+  "header": {
+    "brand": "CPR Performance",
+    "userMenu": "User menu",
+    "toggleTheme": "Toggle theme"
+  },
+  "sidebar": {
+    "navigation": "Navigation"
+  },
+  "profile": {
+    "title": "Profile",
+    "personalInfo": "Personal Information",
+    "positionInfo": "Position & Organization",
+    "displayName": "Display Name",
+    "username": "Username",
+    "email": "Email",
+    "employeeId": "Employee ID",
+    "jobTitle": "Job Title",
+    "positionId": "Position ID",
+    "department": "Department",
+    "reportingManager": "Reporting Manager",
+    "editProfile": "Edit Profile",
+    "saveChanges": "Save changes",
+    "cancelEditing": "Cancel editing",
+    "azureAdNote": "Profile information is synchronized with Azure Active Directory. Some fields may be managed by your IT administrator.",
+    "comingSoon": "Coming soon - Available through {{feature}} integration",
+    "departmentIntegration": "employee directory",
+    "orgChartIntegration": "organizational chart",
+    "loading": "Loading user profile...",
+    "loadError": "Profile Load Error",
+    "unableToLoad": "Unable to load profile information",
+    "updateSuccess": "Profile updated successfully!",
+    "updateError": "Failed to update profile. Please try again.",
+    "notProvided": "Not provided",
+    "notAssigned": "Not assigned",
+    "notSpecified": "Not specified",
+    "validation": {
+      "nameRequired": "Display name is required",
+      "nameMinLength": "Name must be at least 2 characters",
+      "emailInvalid": "Please enter a valid email address"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Customize your experience and preferences",
+    "appearance": {
+      "title": "Appearance",
+      "subtitle": "Customize the look and feel of the application",
+      "theme": "Theme",
+      "themeDescription": "Choose your preferred color theme",
+      "systemPreference": "Currently following system preference ({{mode}})",
+      "darkMode": "Dark Mode",
+      "darkModeDescription": "Quick toggle for dark mode",
+      "darkModeSystemOverride": " (overrides system preference)",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "language": {
+      "title": "Language & Region",
+      "subtitle": "Set your language and regional preferences",
+      "language": "Language",
+      "languageDescription": "Choose your preferred language (coming soon)",
+      "dateFormat": "Date Format",
+      "dateFormatDescription": "How dates are displayed (coming soon)"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "subtitle": "Configure how you receive notifications",
+      "email": "Email Notifications",
+      "emailDescription": "Receive email updates for important activities (coming soon)",
+      "browser": "Browser Notifications",
+      "browserDescription": "Show desktop notifications (coming soon)",
+      "toastDuration": "Toast Duration",
+      "toastDurationDescription": "How long success/error messages are shown (coming soon)",
+      "duration3s": "3 seconds",
+      "duration6s": "6 seconds",
+      "duration10s": "10 seconds"
+    },
+    "privacy": {
+      "title": "Privacy & Data",
+      "subtitle": "Manage your data and privacy preferences",
+      "analytics": "Usage Analytics",
+      "analyticsDescription": "Help improve the app by sharing anonymous usage data (coming soon)",
+      "dataExport": "Data Export",
+      "dataExportDescription": "Download your data in portable format (coming soon)",
+      "exportData": "Export Data"
+    }
+  },
+  "toast": {
+    "themeChanged": "Theme changed to {{mode}} mode",
+    "themeChangedSystem": "Theme changed to system preference mode",
+    "themeSwitched": "Switched to {{mode}} mode"
+  }
+}

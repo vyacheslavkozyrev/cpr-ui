@@ -13,6 +13,7 @@ import {
 } from '@mui/material'
 import React, { useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import type { User } from '../../models'
 import { useCurrentUser, useUpdateCurrentUser } from '../../services'
 import { useToast } from '../../stores'
@@ -87,6 +88,7 @@ const getInitials = (displayName?: string): string => {
  * User profile page displaying personal information and position details
  */
 export const ProfilePage: React.FC = () => {
+  const { t } = useTranslation()
   const styles = useMemo(() => getStyles(), [])
   const { data: user, isLoading, error } = useCurrentUser()
   const updateUserMutation = useUpdateCurrentUser()
@@ -149,10 +151,10 @@ export const ProfilePage: React.FC = () => {
 
       await updateUserMutation.mutateAsync(updateData)
       setIsEditing(false)
-      showSuccess('Profile updated successfully!')
+      showSuccess(t('profile.updateSuccess'))
     } catch (error) {
       console.error('Failed to update profile:', error)
-      showError('Failed to update profile. Please try again.')
+      showError(t('profile.updateError'))
     }
   }
 
@@ -161,7 +163,7 @@ export const ProfilePage: React.FC = () => {
       <Box sx={styles.loadingContainer}>
         <Stack alignItems='center' spacing={2}>
           <CircularProgress />
-          <Typography color='textSecondary'>Loading user profile...</Typography>
+          <Typography color='textSecondary'>{t('profile.loading')}</Typography>
         </Stack>
       </Box>
     )
@@ -172,10 +174,10 @@ export const ProfilePage: React.FC = () => {
       <Box sx={styles.container}>
         <Paper elevation={1} sx={styles.errorPaper}>
           <Typography variant='h6' gutterBottom>
-            Profile Load Error
+            {t('profile.loadError')}
           </Typography>
           <Typography variant='body2'>
-            {error.message || 'Unable to load profile information'}
+            {error.message || t('profile.unableToLoad')}
           </Typography>
         </Paper>
       </Box>
@@ -273,7 +275,7 @@ export const ProfilePage: React.FC = () => {
 
         {/* Personal Information Section */}
         <Typography variant='h6' gutterBottom sx={styles.sectionTitle}>
-          Personal Information
+          {t('profile.personalInfo')}
         </Typography>
 
         <Stack spacing={2} sx={{ mb: 3 }}>
@@ -283,16 +285,16 @@ export const ProfilePage: React.FC = () => {
                 name='name'
                 control={control}
                 rules={{
-                  required: 'Display name is required',
+                  required: t('profile.validation.nameRequired'),
                   minLength: {
                     value: 2,
-                    message: 'Name must be at least 2 characters',
+                    message: t('profile.validation.nameMinLength'),
                   },
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label='Display Name'
+                    label={t('profile.displayName')}
                     fullWidth
                     variant='outlined'
                     error={!!formErrors.name}
@@ -306,13 +308,13 @@ export const ProfilePage: React.FC = () => {
                 rules={{
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: 'Please enter a valid email address',
+                    message: t('profile.validation.emailInvalid'),
                   },
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label='Email Address'
+                    label={t('profile.email')}
                     fullWidth
                     variant='outlined'
                     type='email'
@@ -326,25 +328,25 @@ export const ProfilePage: React.FC = () => {
             <>
               <Box>
                 <Typography variant='body2' color='textSecondary' gutterBottom>
-                  Display Name
+                  {t('profile.displayName')}
                 </Typography>
                 <Typography variant='body1'>
-                  {user.displayName || 'Not provided'}
+                  {user.displayName || t('profile.notProvided')}
                 </Typography>
               </Box>
 
               <Box>
                 <Typography variant='body2' color='textSecondary' gutterBottom>
-                  Email Address
+                  {t('profile.email')}
                 </Typography>
                 <Typography variant='body1'>
-                  {user.email || 'Not provided'}
+                  {user.email || t('profile.notProvided')}
                 </Typography>
               </Box>
 
               <Box>
                 <Typography variant='body2' color='textSecondary' gutterBottom>
-                  Username
+                  {t('profile.username')}
                 </Typography>
                 <Typography variant='body1'>
                   {user.username || 'Not provided'}
@@ -365,27 +367,54 @@ export const ProfilePage: React.FC = () => {
 
         <Divider sx={{ my: 3 }} />
 
-        {/* Position Information */}
+        {/* Position & Organization Information */}
         <Typography variant='h6' gutterBottom sx={styles.sectionTitle}>
-          Position Information
+          {t('profile.positionInfo')}
         </Typography>
 
         <Stack spacing={2}>
           <Box>
             <Typography variant='body2' color='textSecondary' gutterBottom>
-              Job Title
+              {t('profile.employeeId')}
             </Typography>
-            <Typography variant='body1'>
-              {user.position.title || 'Not specified'}
+            <Typography variant='body1' sx={{ fontFamily: 'monospace' }}>
+              {user.employeeId || t('profile.notAssigned')}
             </Typography>
           </Box>
 
           <Box>
             <Typography variant='body2' color='textSecondary' gutterBottom>
-              Position ID
+              {t('profile.jobTitle')}
             </Typography>
             <Typography variant='body1'>
-              {user.position.id || 'Not assigned'}
+              {user.position.title || t('profile.notSpecified')}
+            </Typography>
+          </Box>
+
+          <Box>
+            <Typography variant='body2' color='textSecondary' gutterBottom>
+              {t('profile.positionId')}
+            </Typography>
+            <Typography variant='body1' sx={{ fontFamily: 'monospace' }}>
+              {user.position.id || t('profile.notAssigned')}
+            </Typography>
+          </Box>
+
+          <Box>
+            <Typography variant='body2' color='textSecondary' gutterBottom>
+              Department
+            </Typography>
+            <Typography variant='body1'>
+              Coming soon - Available through employee directory integration
+            </Typography>
+          </Box>
+
+          <Box>
+            <Typography variant='body2' color='textSecondary' gutterBottom>
+              Reporting Manager
+            </Typography>
+            <Typography variant='body1'>
+              Coming soon - Available through organizational chart integration
             </Typography>
           </Box>
         </Stack>

@@ -16,6 +16,9 @@ import { checkExistingAuth, initializeAuth } from './utils/authInit'
 // Initialize theme detection
 import './utils/themeInit'
 
+// Initialize i18n
+import './config/i18n'
+
 /**
  * API Client Initializer component
  * Sets up the API client with authentication token getter
