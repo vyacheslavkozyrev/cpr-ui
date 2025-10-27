@@ -6,6 +6,7 @@ import {
   Group,
   Person,
   Psychology,
+  Settings,
   TrackChanges,
 } from '@mui/icons-material'
 import {
@@ -71,6 +72,11 @@ export const Sidebar: React.FC = () => {
       label: 'Feedback',
       path: '/feedback',
       icon: <Feedback />,
+    },
+    {
+      label: 'Settings',
+      path: '/settings',
+      icon: <Settings />,
     },
     {
       label: 'Team',

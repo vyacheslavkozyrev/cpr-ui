@@ -9,6 +9,7 @@ import { DashboardPage } from '../pages/dashboard'
 import { FeedbackPage } from '../pages/feedback'
 import { GoalsPage } from '../pages/goals'
 import { ProfilePage } from '../pages/profile'
+import { SettingsPage } from '../pages/settings'
 import { SkillsPage } from '../pages/skills'
 import { TeamPage } from '../pages/team'
 import { TestErrorsPage } from '../pages/test-errors'
@@ -73,6 +74,13 @@ export const routes: RouteObject[] = [
       {
         path: 'feedback',
         element: <FeedbackPage />,
+        errorElement: <RouteErrorBoundary />,
+      },
+
+      // Settings - accessible to all authenticated users
+      {
+        path: 'settings',
+        element: <SettingsPage />,
         errorElement: <RouteErrorBoundary />,
       },
 
