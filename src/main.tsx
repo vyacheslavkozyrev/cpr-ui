@@ -2,6 +2,7 @@ import { CssBaseline, ThemeProvider } from '@mui/material'
 import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { ToastContainer } from './components'
 import { AppErrorBoundary } from './components/errors'
 import { QueryProvider } from './components/providers/QueryProvider'
 import { useInitializeApiClient } from './hooks/useInitializeApiClient'
@@ -53,6 +54,7 @@ function ThemedApp() {
           <ThemeProvider theme={currentTheme}>
             <CssBaseline />
             <RouterProvider router={router} />
+            <ToastContainer />
           </ThemeProvider>
         </ApiClientInitializer>
       </QueryProvider>

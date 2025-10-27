@@ -10,7 +10,10 @@ export { apiClient, initializeApiClient } from './apiClient'
 // Auth Service
 export { authService, initializeMsal, msal, msalInstance } from './authService'
 
-// User Service
+// API Services (return DTOs only)
+export * from './api'
+
+// Business Services (handle DTO->Model mapping and React Query hooks)
 export {
   useCurrentUser,
   userService,
@@ -18,4 +21,3 @@ export {
   useUploadAvatar,
   useUser,
 } from './userService'
-export type { IUser } from './userService'

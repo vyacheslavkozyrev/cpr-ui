@@ -1,42 +1,23 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { queryKeys } from '../config/queryClient'
-import type { TMeApiResponseDto } from '../dtos'
+import { type TCurrentUserDto } from '../dtos'
 import { mapUser } from '../mappers'
 import type { User } from '../models'
-import type { TApiResponse } from '../types/apiTypes'
-import { apiClient } from './apiClient'
+import { userApiService } from './api'
 
 /**
- * User data type
- */
-export interface IUser {
-  id: string
-  name: string
-  email: string
-  role: string
-  avatar?: string
-  bio?: string
-  createdAt: string
-  updatedAt: string
-}
-
-/**
- * User API service class
+ * User Business Service
+ * Handles business logic and maps DTOs to Models
+ * React Query hooks operate only with Models
  */
 class UserService {
   /**
-   * Get current user information from /me endpoint (raw DTO)
-   */
-  async getMeDto(): Promise<TApiResponse<TMeApiResponseDto>> {
-    return apiClient.get<TMeApiResponseDto>('/me')
-  }
-
-  /**
-   * Get current user information mapped to presentation model
+   * Get current user information from /me endpoint
+   * Maps DTO to Model for presentation layer
    */
   async getMe(): Promise<User | null> {
     try {
-      const response = await this.getMeDto()
+      const response = await userApiService.getMe()
       if (response.success && response.data) {
         return mapUser(response.data)
       }
@@ -48,26 +29,48 @@ class UserService {
   }
 
   /**
-   * Get current user profile (legacy endpoint)
-   */
-  async getCurrentUser(): Promise<TApiResponse<IUser>> {
-    return apiClient.get<IUser>('/users/me')
-  }
-
-  /**
    * Get user by ID
+   * Maps DTO to Model for presentation layer
    */
-  async getUserById(userId: string): Promise<TApiResponse<IUser>> {
-    return apiClient.get<IUser>(`/users/${userId}`)
+  async getUserById(userId: string): Promise<User | null> {
+    try {
+      const response = await userApiService.getUserById(userId)
+      if (response.success && response.data) {
+        return mapUser(response.data)
+      }
+      return null
+    } catch (error) {
+      console.error('Failed to get user by ID:', error)
+      return null
+    }
   }
 
   /**
    * Update current user profile
+   * Maps Model to DTO for API, then maps response DTO back to Model
    */
-  async updateCurrentUser(
-    userData: Partial<IUser>
-  ): Promise<TApiResponse<IUser>> {
-    return apiClient.patch<IUser>('/users/me', userData)
+  async updateCurrentUser(userData: Partial<User>): Promise<User> {
+    // Convert Model fields to DTO fields for API, filtering out undefined values
+    const dtoData: Partial<TCurrentUserDto> = {}
+
+    if (userData.displayName !== undefined) {
+      dtoData.display_name = userData.displayName
+    }
+    if (userData.username !== undefined) {
+      dtoData.user_name = userData.username
+    }
+    if (userData.email !== undefined) {
+      dtoData.email = userData.email
+    }
+    // Note: position updates might need separate handling
+
+    const response = await userApiService.updateCurrentUser(dtoData)
+    if (response.success && response.data) {
+      return mapUser(response.data)
+    }
+
+    // If we reach here, the API call failed
+    throw new Error('Failed to update user profile')
   }
 
   /**
@@ -80,12 +83,14 @@ class UserService {
       total: number
       percentage: number
     }) => void
-  ): Promise<TApiResponse<{ url: string }>> {
-    return apiClient.uploadFile<{ url: string }>(
-      '/users/me/avatar',
-      file,
-      onProgress
-    )
+  ): Promise<{ url: string } | null> {
+    try {
+      const response = await userApiService.uploadAvatar(file, onProgress)
+      return response.success ? response.data : null
+    } catch (error) {
+      console.error('Failed to upload avatar:', error)
+      return null
+    }
   }
 }
 
@@ -130,8 +135,9 @@ export const useUser = (userId: string, enabled = true) => {
   return useQuery({
     queryKey: queryKeys.user.profile(userId),
     queryFn: () => userService.getUserById(userId),
-    select: response => response.data,
     enabled: enabled && !!userId,
+    staleTime: 10 * 60 * 1000, // 10 minutes
+    gcTime: 15 * 60 * 1000, // 15 minutes in cache
   })
 }
 
@@ -142,13 +148,13 @@ export const useUpdateCurrentUser = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (userData: Partial<IUser>) =>
+    mutationFn: (userData: Partial<User>) =>
       userService.updateCurrentUser(userData),
-    onSuccess: response => {
-      // Update the current user cache
-      queryClient.setQueryData(queryKeys.user.current(), response)
+    onSuccess: updatedUser => {
+      // Update the current user cache with the returned User model
+      queryClient.setQueryData(queryKeys.user.me(), updatedUser)
 
-      // Invalidate related queries
+      // Invalidate related queries to ensure consistency
       queryClient.invalidateQueries({ queryKey: queryKeys.user.all })
     },
     onError: error => {

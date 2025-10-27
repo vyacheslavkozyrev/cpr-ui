@@ -1,15 +1,21 @@
+import { Cancel, Edit, Save } from '@mui/icons-material'
 import {
   Avatar,
   Box,
   Chip,
   CircularProgress,
   Divider,
+  IconButton,
   Paper,
   Stack,
+  TextField,
   Typography,
 } from '@mui/material'
-import React, { useMemo } from 'react'
-import { useCurrentUser } from '../../services'
+import React, { useMemo, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import type { User } from '../../models'
+import { useCurrentUser, useUpdateCurrentUser } from '../../services'
+import { useToast } from '../../stores'
 
 // Style factory outside component
 const getStyles = () => ({
@@ -49,7 +55,22 @@ const getStyles = () => ({
     border: 1,
     borderColor: 'divider',
   },
+  editButton: {
+    ml: 'auto',
+  },
+  actionButtons: {
+    display: 'flex',
+    gap: 2,
+    justifyContent: 'flex-end',
+    mt: 3,
+  },
 })
+
+// Form data interface
+interface ProfileFormData {
+  name: string
+  email: string
+}
 
 const getInitials = (displayName?: string): string => {
   if (!displayName) return '??'
@@ -68,6 +89,72 @@ const getInitials = (displayName?: string): string => {
 export const ProfilePage: React.FC = () => {
   const styles = useMemo(() => getStyles(), [])
   const { data: user, isLoading, error } = useCurrentUser()
+  const updateUserMutation = useUpdateCurrentUser()
+  const { showSuccess, showError } = useToast()
+
+  const [isEditing, setIsEditing] = useState(false)
+
+  // Form setup with validation
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors: formErrors, isValid, isDirty },
+  } = useForm<ProfileFormData>({
+    mode: 'onChange',
+    defaultValues: {
+      name: '',
+      email: '',
+    },
+  })
+
+  // Update form when user data changes
+  React.useEffect(() => {
+    if (user) {
+      reset({
+        name: user.displayName || '',
+        email: user.email || '',
+      })
+    }
+  }, [user, reset])
+
+  const handleEdit = () => {
+    setIsEditing(true)
+  }
+
+  const handleCancel = () => {
+    if (user) {
+      reset({
+        name: user.displayName || '',
+        email: user.email || '',
+      })
+    }
+    setIsEditing(false)
+  }
+
+  const onSubmit = async (data: ProfileFormData) => {
+    if (!user) return
+
+    try {
+      const updateData: Partial<User> = {
+        displayName: data.name.trim(),
+      }
+
+      if (data.email.trim()) {
+        updateData.email = data.email.trim()
+      }
+
+      // Note: bio is not available in current User model
+      // If needed, this would require extending the model
+
+      await updateUserMutation.mutateAsync(updateData)
+      setIsEditing(false)
+      showSuccess('Profile updated successfully!')
+    } catch (error) {
+      console.error('Failed to update profile:', error)
+      showError('Failed to update profile. Please try again.')
+    }
+  }
 
   if (isLoading) {
     return (
@@ -109,16 +196,65 @@ export const ProfilePage: React.FC = () => {
 
   return (
     <Box sx={styles.container}>
-      <Typography variant='h4' component='h1' gutterBottom sx={{ mb: 3 }}>
-        User Profile
-      </Typography>
+      <Stack direction='row' alignItems='center' sx={{ mb: 3 }}>
+        <Typography
+          variant='h4'
+          component='h1'
+          gutterBottom
+          sx={{ mb: 0, flex: 1 }}
+        >
+          User Profile
+        </Typography>
+        {!isEditing ? (
+          <IconButton onClick={handleEdit} color='primary'>
+            <Edit />
+          </IconButton>
+        ) : (
+          <Stack direction='row' spacing={1}>
+            <IconButton
+              onClick={handleSubmit(onSubmit)}
+              color='primary'
+              disabled={updateUserMutation.isPending || !isValid || !isDirty}
+              title='Save changes'
+            >
+              {updateUserMutation.isPending ? (
+                <CircularProgress size={20} />
+              ) : (
+                <Save />
+              )}
+            </IconButton>
+            <IconButton
+              onClick={handleCancel}
+              color='default'
+              disabled={updateUserMutation.isPending}
+              title='Cancel editing'
+            >
+              <Cancel />
+            </IconButton>
+          </Stack>
+        )}
+      </Stack>
 
       <Paper elevation={2} sx={styles.profilePaper}>
         {/* Avatar and Basic Info Section */}
-        <Stack direction='row' spacing={3} alignItems='center' sx={{ mb: 3 }}>
-          <Avatar alt={user.displayName || 'User'} sx={styles.avatar}>
-            {user.initials || getInitials(user.displayName)}
-          </Avatar>
+        <Stack
+          direction='row'
+          spacing={3}
+          alignItems='flex-start'
+          sx={{ mb: 3 }}
+        >
+          <Box textAlign='center'>
+            <Avatar alt={user.displayName || 'User'} sx={styles.avatar}>
+              {user.initials || getInitials(user.displayName)}
+            </Avatar>
+            <Typography
+              variant='caption'
+              color='textSecondary'
+              sx={{ mt: 1, display: 'block' }}
+            >
+              Synced from Azure AD
+            </Typography>
+          </Box>
 
           <Box flex={1}>
             <Typography variant='h5' gutterBottom>
@@ -141,32 +277,90 @@ export const ProfilePage: React.FC = () => {
         </Typography>
 
         <Stack spacing={2} sx={{ mb: 3 }}>
-          <Box>
-            <Typography variant='body2' color='textSecondary' gutterBottom>
-              Email Address
-            </Typography>
-            <Typography variant='body1'>
-              {user.email || 'Not provided'}
-            </Typography>
-          </Box>
+          {isEditing ? (
+            <>
+              <Controller
+                name='name'
+                control={control}
+                rules={{
+                  required: 'Display name is required',
+                  minLength: {
+                    value: 2,
+                    message: 'Name must be at least 2 characters',
+                  },
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label='Display Name'
+                    fullWidth
+                    variant='outlined'
+                    error={!!formErrors.name}
+                    helperText={formErrors.name?.message}
+                  />
+                )}
+              />
+              <Controller
+                name='email'
+                control={control}
+                rules={{
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: 'Please enter a valid email address',
+                  },
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label='Email Address'
+                    fullWidth
+                    variant='outlined'
+                    type='email'
+                    error={!!formErrors.email}
+                    helperText={formErrors.email?.message}
+                  />
+                )}
+              />
+            </>
+          ) : (
+            <>
+              <Box>
+                <Typography variant='body2' color='textSecondary' gutterBottom>
+                  Display Name
+                </Typography>
+                <Typography variant='body1'>
+                  {user.displayName || 'Not provided'}
+                </Typography>
+              </Box>
 
-          <Box>
-            <Typography variant='body2' color='textSecondary' gutterBottom>
-              Username
-            </Typography>
-            <Typography variant='body1'>
-              {user.username || 'Not provided'}
-            </Typography>
-          </Box>
+              <Box>
+                <Typography variant='body2' color='textSecondary' gutterBottom>
+                  Email Address
+                </Typography>
+                <Typography variant='body1'>
+                  {user.email || 'Not provided'}
+                </Typography>
+              </Box>
 
-          <Box>
-            <Typography variant='body2' color='textSecondary' gutterBottom>
-              Employee ID
-            </Typography>
-            <Typography variant='body1'>
-              {user.employeeId || 'Not assigned'}
-            </Typography>
-          </Box>
+              <Box>
+                <Typography variant='body2' color='textSecondary' gutterBottom>
+                  Username
+                </Typography>
+                <Typography variant='body1'>
+                  {user.username || 'Not provided'}
+                </Typography>
+              </Box>
+
+              <Box>
+                <Typography variant='body2' color='textSecondary' gutterBottom>
+                  Employee ID
+                </Typography>
+                <Typography variant='body1'>
+                  {user.employeeId || 'Not assigned'}
+                </Typography>
+              </Box>
+            </>
+          )}
         </Stack>
 
         <Divider sx={{ my: 3 }} />
