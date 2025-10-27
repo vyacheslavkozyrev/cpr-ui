@@ -20,7 +20,8 @@ import {
   type Theme,
 } from '@mui/material'
 import React, { useMemo } from 'react'
-import { useCurrentUser } from '../../services/userService'
+import { useNavigate } from 'react-router-dom'
+import { useCurrentUser } from '../../services'
 import { useAuthStore } from '../../stores/authStore'
 import { useThemeStore } from '../../stores/themeStore'
 
@@ -56,6 +57,7 @@ const getStyles = (theme: Theme) => ({
  */
 export const Header: React.FC = () => {
   const theme = useTheme()
+  const navigate = useNavigate()
   const styles = useMemo(() => getStyles(theme), [theme])
   const { logout } = useAuthStore()
   const { resolvedTheme, toggleTheme } = useThemeStore()
@@ -68,6 +70,11 @@ export const Header: React.FC = () => {
 
   const handleMenuClose = () => {
     setAnchorEl(null)
+  }
+
+  const handleProfileClick = () => {
+    navigate('/profile')
+    handleMenuClose()
   }
 
   const handleLogout = () => {
@@ -144,7 +151,7 @@ export const Header: React.FC = () => {
             horizontal: 'right',
           }}
         >
-          <MenuItem onClick={handleMenuClose}>
+          <MenuItem onClick={handleProfileClick}>
             <AccountCircle sx={styles.menuIcon} />
             Profile
           </MenuItem>

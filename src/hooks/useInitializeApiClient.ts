@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { initializeApiClient } from '../services/apiClient'
+import { initializeApiClient } from '../services'
 
 /**
  * Hook to initialize the API client with authentication token getter

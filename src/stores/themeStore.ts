@@ -88,9 +88,28 @@ export const useThemeStore = create<IThemeStore>()(
         // Rehydration callback to set up initial state
         onRehydrateStorage: () => state => {
           if (state) {
-            // Import theme initialization
+            // Get system theme detection
+            const getSystemTheme = (): 'light' | 'dark' => {
+              if (typeof window !== 'undefined' && window.matchMedia) {
+                return window.matchMedia('(prefers-color-scheme: dark)').matches
+                  ? 'dark'
+                  : 'light'
+              }
+              return 'light'
+            }
+
+            // Set system theme and resolve theme based on persisted mode
+            const systemTheme = getSystemTheme()
+            const resolvedTheme =
+              state.mode === 'system' ? systemTheme : state.mode
+
+            // Update state with proper resolved theme
+            state.systemTheme = systemTheme
+            state.resolvedTheme = resolvedTheme
+
+            // Import theme initialization for system theme change listeners
             import('../utils/themeInit').then(() => {
-              // Theme initialization will handle system detection
+              // Theme initialization will handle system detection changes
             })
           }
         },

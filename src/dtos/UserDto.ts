@@ -8,11 +8,8 @@
  * User position from API response
  */
 export interface TUserPositionDto {
-  position_id: string
-  position_title: string
-  department_name: string
-  position_level: number
-  is_manager: boolean
+  id: string
+  title: string
 }
 
 /**

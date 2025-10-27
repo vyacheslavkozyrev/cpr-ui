@@ -2,7 +2,7 @@ import type { AccountInfo } from '@azure/msal-browser'
 import { create } from 'zustand'
 import { subscribeWithSelector } from 'zustand/middleware'
 import { authConfig } from '../config/auth'
-import { authService } from '../services/authService'
+import { authService } from '../services'
 
 // Authentication types following T/I/E conventions
 export interface IAuthUser {

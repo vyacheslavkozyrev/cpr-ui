@@ -18,9 +18,6 @@ export interface User {
 export interface UserPosition {
   id: string
   title: string
-  department: string
-  level: number
-  isManager: boolean
 }
 
 /**

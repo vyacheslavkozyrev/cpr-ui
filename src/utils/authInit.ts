@@ -1,5 +1,5 @@
 import { authConfig } from '../config/auth'
-import { initializeMsal } from '../services/authService'
+import { initializeMsal } from '../services'
 import { useAuthStore } from '../stores/authStore'
 
 // Initialize authentication system

@@ -14,11 +14,8 @@ import type { AuthenticatedUser, User, UserPosition, UserRole } from '../models'
  * Transform user position DTO to model
  */
 export const mapUserPosition = (dto: TUserPositionDto): UserPosition => ({
-  id: dto.position_id,
-  title: dto.position_title,
-  department: dto.department_name,
-  level: dto.position_level,
-  isManager: dto.is_manager,
+  id: dto.id,
+  title: dto.title,
 })
 
 /**
