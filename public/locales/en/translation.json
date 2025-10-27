@@ -87,9 +87,15 @@
       "title": "Language & Region",
       "subtitle": "Set your language and regional preferences",
       "language": "Language",
-      "languageDescription": "Choose your preferred language (coming soon)",
+      "languageDescription": "Choose your preferred language",
       "dateFormat": "Date Format",
-      "dateFormatDescription": "How dates are displayed (coming soon)"
+      "dateFormatDescription": "How dates are displayed throughout the application",
+      "dateFormats": {
+        "short": "Short (04/29/2023)",
+        "medium": "Medium (Apr 29, 2023)",
+        "long": "Long (April 29, 2023)",
+        "full": "Full (Saturday, April 29, 2023)"
+      }
     },
     "notifications": {
       "title": "Notifications",
@@ -117,6 +123,7 @@
   "toast": {
     "themeChanged": "Theme changed to {{mode}} mode",
     "themeChangedSystem": "Theme changed to system preference mode",
-    "themeSwitched": "Switched to {{mode}} mode"
+    "themeSwitched": "Switched to {{mode}} mode",
+    "dateFormatChanged": "Date format changed to {{format}}"
   }
 }

@@ -89,7 +89,13 @@
       "language": "Мова",
       "languageDescription": "Выберыце пераважную мову",
       "dateFormat": "Фармат даты",
-      "dateFormatDescription": "Як адлюстроўваюцца даты (хутка будзе даступна)"
+      "dateFormatDescription": "Як адлюстроўваюцца даты ў прыкладанні",
+      "dateFormats": {
+        "short": "Кароткі (29.04.2023)",
+        "medium": "Сярэдні (29 кра 2023)",
+        "long": "Доўгі (29 красавіка 2023)",
+        "full": "Поўны (субота, 29 красавіка 2023)"
+      }
     },
     "notifications": {
       "title": "Апавяшчэнні",
@@ -117,6 +123,7 @@
   "toast": {
     "themeChanged": "Тэма зменена на {{mode}} рэжым",
     "themeChangedSystem": "Тэма зменена на сістэмны рэжым",
-    "themeSwitched": "Пераключана на {{mode}} рэжым"
+    "themeSwitched": "Пераключана на {{mode}} рэжым",
+    "dateFormatChanged": "Фармат даты зменены на {{format}}"
   }
 }

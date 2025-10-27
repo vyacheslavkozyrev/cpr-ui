@@ -15,6 +15,8 @@ import {
 } from '@mui/material'
 import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { DatePreview } from '../../components/common/DatePreview'
+import { useDateFormat } from '../../hooks/useDateFormat'
 import { useLanguageStore, useToast } from '../../stores'
 import { useThemeStore, type TThemeMode } from '../../stores/themeStore'
 
@@ -50,8 +52,9 @@ const getStyles = () => ({
  * User preferences and configuration settings
  */
 export const SettingsPage: React.FC = () => {
-  const styles = useMemo(() => getStyles(), [])
   const { t } = useTranslation()
+  const { formatDate } = useDateFormat()
+  const styles = useMemo(() => getStyles(), [])
   const { showSuccess } = useToast()
 
   // Theme management
@@ -67,10 +70,14 @@ export const SettingsPage: React.FC = () => {
   // Language management
   const {
     language: currentLanguage,
+    dateFormat: currentDateFormat,
     availableLanguages,
+    availableDateFormats,
     setLanguage,
+    setDateFormat,
     getLanguageName,
     getLanguageFlag,
+    getDateFormatLabel,
   } = useLanguageStore()
 
   const handleThemeChange = useCallback(
@@ -87,12 +94,23 @@ export const SettingsPage: React.FC = () => {
   )
 
   const handleLanguageChange = useCallback(
-    (event: SelectChangeEvent<string>) => {
+    (event: SelectChangeEvent) => {
       const newLanguage = event.target.value as typeof currentLanguage
       setLanguage(newLanguage)
       showSuccess(`Language changed to ${getLanguageName(newLanguage)}`)
     },
     [setLanguage, showSuccess, getLanguageName]
+  )
+
+  const handleDateFormatChange = useCallback(
+    (event: SelectChangeEvent) => {
+      const newFormat = event.target.value as typeof currentDateFormat
+      setDateFormat(newFormat)
+      showSuccess(
+        t('toast.dateFormatChanged', { format: getDateFormatLabel(newFormat) })
+      )
+    },
+    [setDateFormat, showSuccess, t, getDateFormatLabel]
   )
 
   const handleDarkModeToggle = useCallback(() => {
@@ -229,12 +247,27 @@ export const SettingsPage: React.FC = () => {
                 <Typography variant='body2' color='textSecondary'>
                   {t('settings.language.dateFormatDescription')}
                 </Typography>
+                <Typography
+                  variant='caption'
+                  color='textSecondary'
+                  sx={{ mt: 0.5 }}
+                >
+                  Preview: {formatDate(new Date(), currentDateFormat)}
+                </Typography>
               </Box>
-              <FormControl sx={styles.settingControl} disabled>
-                <Select value='mm-dd-yyyy' size='small'>
-                  <MenuItem value='mm-dd-yyyy'>MM/DD/YYYY</MenuItem>
-                  <MenuItem value='dd-mm-yyyy'>DD/MM/YYYY</MenuItem>
-                  <MenuItem value='yyyy-mm-dd'>YYYY-MM-DD</MenuItem>
+              <FormControl sx={styles.settingControl}>
+                <Select
+                  value={currentDateFormat}
+                  onChange={handleDateFormatChange}
+                  size='small'
+                >
+                  {availableDateFormats.map(format => (
+                    <MenuItem key={format} value={format}>
+                      {t(
+                        `settings.language.dateFormats.${format.toLowerCase()}`
+                      )}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Box>
@@ -349,6 +382,9 @@ export const SettingsPage: React.FC = () => {
           </Stack>
         </CardContent>
       </Card>
+
+      {/* Date Localization Preview (for demonstration) */}
+      <DatePreview />
     </Box>
   )
 }

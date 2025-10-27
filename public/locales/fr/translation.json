@@ -85,11 +85,17 @@
     },
     "language": {
       "title": "Langue et Région",
-      "subtitle": "Définissez vos préférences de langue et de région",
+      "subtitle": "Définissez votre langue et vos préférences régionales",
       "language": "Langue",
-      "languageDescription": "Choisissez votre langue préférée (bientôt disponible)",
+      "languageDescription": "Choisissez votre langue préférée",
       "dateFormat": "Format de Date",
-      "dateFormatDescription": "Comment les dates sont affichées (bientôt disponible)"
+      "dateFormatDescription": "Comment les dates sont affichées dans toute l'application",
+      "dateFormats": {
+        "short": "Court (29/04/2023)",
+        "medium": "Moyen (29 avr. 2023)",
+        "long": "Long (29 avril 2023)",
+        "full": "Complet (samedi 29 avril 2023)"
+      }
     },
     "notifications": {
       "title": "Notifications",
@@ -116,7 +122,8 @@
   },
   "toast": {
     "themeChanged": "Thème changé en mode {{mode}}",
-    "themeChangedSystem": "Thème changé en mode de préférence système",
-    "themeSwitched": "Basculé en mode {{mode}}"
+    "themeChangedSystem": "Thème changé en mode préférence système",
+    "themeSwitched": "Basculé en mode {{mode}}",
+    "dateFormatChanged": "Format de date changé en {{format}}"
   }
 }
