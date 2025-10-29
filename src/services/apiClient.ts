@@ -231,19 +231,26 @@ class ApiClient {
     }
 
     // Return standardized response
-    return {
+    const extractedMessage =
+      data &&
+      typeof data === 'object' &&
+      data !== null &&
+      'message' in data &&
+      typeof (data as { message: unknown }).message === 'string'
+        ? (data as { message: string }).message
+        : undefined
+
+    const apiResponse: TApiResponse<T> = {
       data: data as T,
-      message:
-        data &&
-        typeof data === 'object' &&
-        data !== null &&
-        'message' in data &&
-        typeof (data as { message: unknown }).message === 'string'
-          ? (data as { message: string }).message
-          : undefined,
       success: true,
       timestamp: new Date().toISOString(),
     }
+
+    if (extractedMessage) {
+      apiResponse.message = extractedMessage
+    }
+
+    return apiResponse
   }
 
   /**
@@ -278,7 +285,11 @@ class ApiClient {
     error.code = code
     error.status = status
     error.timestamp = new Date().toISOString()
-    error.details = details as Record<string, unknown> | undefined
+
+    if (details && typeof details === 'object') {
+      error.details = details as Record<string, unknown>
+    }
+
     return error
   }
 
@@ -286,7 +297,7 @@ class ApiClient {
    * Check if error is already a TApiError
    */
   private isApiError(error: unknown): error is TApiError {
-    return (
+    return !!(
       error &&
       typeof error === 'object' &&
       error !== null &&
