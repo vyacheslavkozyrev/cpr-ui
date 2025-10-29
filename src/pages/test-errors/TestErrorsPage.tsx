@@ -7,6 +7,7 @@ import {
   type Theme,
 } from '@mui/material'
 import React, { useMemo, useState } from 'react'
+import { logger } from '../../utils/logger'
 
 // Style factory outside component
 const getStyles = (theme: Theme) => ({
@@ -58,7 +59,7 @@ export const TestErrorsPage: React.FC = () => {
         // This won't be reached
       })
       .catch(error => {
-        console.error('Network error:', error)
+        logger.error('Network error', { error })
         // In a real app, this might trigger error boundary through state update
         throw new Error('Network request failed')
       })

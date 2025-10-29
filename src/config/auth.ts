@@ -1,5 +1,6 @@
 import type { Configuration } from '@azure/msal-browser'
 import { LogLevel } from '@azure/msal-browser'
+import { logger } from '../utils/logger'
 
 // MSAL Configuration
 export const msalConfig: Configuration = {
@@ -30,16 +31,16 @@ export const msalConfig: Configuration = {
         }
         switch (level) {
           case LogLevel.Error:
-            console.error(message)
+            logger.error(message)
             return
           case LogLevel.Info:
-            console.info(message)
+            logger.info(message)
             return
           case LogLevel.Verbose:
-            console.debug(message)
+            logger.debug(message)
             return
           case LogLevel.Warning:
-            console.warn(message)
+            logger.warn(message)
             return
           default:
             return

@@ -3,6 +3,7 @@ import { queryKeys } from '../config/queryClient'
 import { type TCurrentUserDto } from '../dtos'
 import { mapUser } from '../mappers'
 import type { User } from '../models'
+import { logger } from '../utils/logger'
 import { userApiService } from './api'
 
 /**
@@ -23,7 +24,7 @@ class UserService {
       }
       return null
     } catch (error) {
-      console.error('Failed to get current user:', error)
+      logger.error('Failed to get current user', { error })
       return null
     }
   }
@@ -40,7 +41,7 @@ class UserService {
       }
       return null
     } catch (error) {
-      console.error('Failed to get user by ID:', error)
+      logger.error('Failed to get user by ID', { error })
       return null
     }
   }
@@ -88,7 +89,7 @@ class UserService {
       const response = await userApiService.uploadAvatar(file, onProgress)
       return response.success ? response.data : null
     } catch (error) {
-      console.error('Failed to upload avatar:', error)
+      logger.error('Failed to upload avatar', { error })
       return null
     }
   }
@@ -116,7 +117,7 @@ export const useCurrentUser = () => {
     retry: (failureCount, error) => {
       // Don't retry on authentication errors (401, 403)
       if (error && typeof error === 'object' && 'status' in error) {
-        const status = (error as any).status
+        const status = (error as { status?: number }).status
         if (status === 401 || status === 403) {
           return false
         }
@@ -158,7 +159,7 @@ export const useUpdateCurrentUser = () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.user.all })
     },
     onError: error => {
-      console.error('Failed to update user profile:', error)
+      logger.error('Failed to update user profile', { error })
     },
   })
 }
@@ -188,7 +189,7 @@ export const useUploadAvatar = () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.user.me() })
     },
     onError: error => {
-      console.error('Failed to upload avatar:', error)
+      logger.error('Failed to upload avatar', { error })
     },
   })
 }

@@ -11,6 +11,7 @@ import {
 import { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../stores/authStore'
+import { logger } from '../../utils/logger'
 
 // Styles factory — defined outside component per agreed pattern
 const getStyles = () => ({
@@ -58,7 +59,7 @@ export const LoginForm = () => {
     try {
       await login()
     } catch (err) {
-      console.error('Login failed:', err)
+      logger.error('Login failed', { error: err })
     }
   }
 

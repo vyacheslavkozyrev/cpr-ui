@@ -9,6 +9,7 @@ import type {
 import { PublicClientApplication } from '@azure/msal-browser'
 import { graphScopes, loginRequest, msalConfig } from '../config/auth'
 import type { IAuthUser } from '../stores/authStore'
+import { logger } from '../utils/logger'
 
 // Type definitions following conventions
 type TMsalErrorCode =
@@ -38,10 +39,10 @@ export const initializeMsal = async (): Promise<void> => {
     // Handle redirect promise
     const response = await msalInstance.handleRedirectPromise()
     if (response) {
-      console.log('MSAL redirect response:', response)
+      logger.auth('MSAL redirect response', { response })
     }
   } catch (error) {
-    console.error('MSAL initialization failed:', error)
+    logger.error('MSAL initialization failed', { error })
     throw error
   }
 }
@@ -65,7 +66,7 @@ export class AuthService {
       const response = await this.msalInstance.loginPopup(loginRequestPopup)
       return response
     } catch (error) {
-      console.error('Login popup failed:', error)
+      logger.error('Login popup failed', { error })
       throw error
     }
   }
@@ -80,7 +81,7 @@ export class AuthService {
     try {
       await this.msalInstance.loginRedirect(loginRequestRedirect)
     } catch (error) {
-      console.error('Login redirect failed:', error)
+      logger.error('Login redirect failed', { error })
       throw error
     }
   }
@@ -97,7 +98,7 @@ export class AuthService {
     try {
       await this.msalInstance.logoutRedirect(logoutRequest)
     } catch (error) {
-      console.error('Logout failed:', error)
+      logger.error('Logout failed', { error })
       throw error
     }
   }
@@ -109,7 +110,7 @@ export class AuthService {
     const account = this.msalInstance.getActiveAccount()
 
     if (!account) {
-      console.warn('No active account found')
+      logger.warn('No active account found')
       return null
     }
 
@@ -122,7 +123,7 @@ export class AuthService {
       const response = await this.msalInstance.acquireTokenSilent(silentRequest)
       return response.accessToken
     } catch (error) {
-      console.error('Silent token acquisition failed:', error)
+      logger.error('Silent token acquisition failed', { error })
 
       // Fallback to interactive token acquisition
       try {
@@ -132,7 +133,9 @@ export class AuthService {
         })
         return response.accessToken
       } catch (interactiveError) {
-        console.error('Interactive token acquisition failed:', interactiveError)
+        logger.error('Interactive token acquisition failed', {
+          error: interactiveError,
+        })
         throw interactiveError
       }
     }
@@ -183,7 +186,7 @@ export class AuthService {
       // Fallback to default user role
       return ['CPR.User']
     } catch (error) {
-      console.warn('Failed to extract roles from account:', error)
+      logger.warn('Failed to extract roles from account', { error })
       return ['CPR.User']
     }
   }
@@ -220,7 +223,7 @@ export const authService = new AuthService(msalInstance)
 
 // Event handlers for MSAL events
 msalInstance.addEventCallback(event => {
-  console.log('MSAL Event:', event)
+  logger.auth('MSAL Event', { event })
 
   // Handle successful login
   if (event.eventType === 'msal:loginSuccess') {

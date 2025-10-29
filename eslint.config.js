@@ -32,14 +32,16 @@ export default tseslint.config(
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
       
-      // TypeScript specific rules
+      // TypeScript specific rules - STRICT TYPE SAFETY
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_' },
       ],
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': 'error', // DO NOT USE ANY TYPES - STRICT ENFORCEMENT
+      '@typescript-eslint/ban-ts-comment': 'error', // Prevent @ts-ignore/@ts-nocheck
+      '@typescript-eslint/prefer-ts-expect-error': 'error', // Use @ts-expect-error instead of @ts-ignore
       
       // General rules
       'prefer-const': 'error',

@@ -58,7 +58,12 @@ API & integration conventions
 
 TypeScript & code conventions
 
-- **No any type**: Never use `any` type. Always use appropriate specific types, `unknown` for truly unknown data, or create proper type definitions.
+- **🚫 FORBIDDEN: `any` type**: **DO NOT USE `any` TYPE** - This rule is enforced by ESLint and will cause build failures. Always use appropriate specific types:
+  - Use `unknown` for truly unknown data that needs type checking
+  - Create proper type definitions with `type` or `interface`
+  - Use generic types `<T>` for reusable components
+  - Use union types `string | number` for known alternatives
+  - Use `object` for object types, not `any`
 - **Type naming**: Custom types must start with `T` (e.g., `TUser`, `TApiResponse`).
 - **Interface naming**: Interfaces must start with `I` (e.g., `IUserService`, `IAuthProvider`).
 - **Enum naming**: Enums must start with `E` (e.g., `EUserRole`, `EThemeMode`).
@@ -66,14 +71,16 @@ TypeScript & code conventions
 - **File naming**: Use camelCase for all file names (`userService.ts`, `authHelper.ts`).
 - **Component files**: Component file names must start with capital letter (`LoginForm.tsx`, `UserProfile.tsx`).
 - **Strict typing**: Prefer explicit types over type inference when it improves code clarity.
+- **No TypeScript escape hatches**: Do not use `@ts-ignore`, use `@ts-expect-error` with explanation if absolutely necessary.
 - **Event handlers**: Use `useCallback` for all event handlers. Never use inline anonymous functions in JSX event props. Name handlers with `handle[ActionName]` pattern (e.g., `handleSubmit`, `handleSettingsClick`).
 
 Example:
 
 ```tsx
-// ✅ Good
+// ✅ Good - Proper type definitions
 interface IUserService {
   getUser(id: string): Promise<TUser>
+  updateUser<T extends Partial<TUser>>(id: string, data: T): Promise<TUser>
 }
 
 type TUser = {
@@ -88,16 +95,36 @@ enum EUserRole {
   Employee = 'employee',
 }
 
-// ❌ Bad
+// ✅ Good - Use `unknown` for truly unknown data
+function processApiResponse(response: unknown): TUser {
+  if (typeof response === 'object' && response !== null) {
+    // Type guard and validation here
+    return response as TUser
+  }
+  throw new Error('Invalid response')
+}
+
+// ✅ Good - Generic types for reusable functions
+type TApiResponse<T> = {
+  data: T
+  success: boolean
+  message?: string
+}
+
+// ❌ FORBIDDEN - Using `any` type
 interface userService {
-  getUser(id: any): Promise<any>
+  getUser(id: any): Promise<any> // ❌ BUILD WILL FAIL
 }
 
 type user = {
-  id: any
-  name: any
-  role: any
+  id: any // ❌ BUILD WILL FAIL
+  name: any // ❌ BUILD WILL FAIL
+  role: any // ❌ BUILD WILL FAIL
 }
+
+// ❌ FORBIDDEN - Using @ts-ignore
+// @ts-ignore  // ❌ BUILD WILL FAIL
+const result = someUntypedFunction()
 ```
 
 Event handler conventions

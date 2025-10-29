@@ -18,8 +18,35 @@ import './utils/themeInit'
 
 // Initialize i18n
 import './config/i18n'
+import { logger } from './utils/logger'
 
 /**
+ * Enable MSW (Mock Service Worker) if configured
+ */
+async function enableMocking() {
+  if (import.meta.env['VITE_USE_MSW'] === 'true') {
+    logger.msw('Initializing Mock Service Worker...')
+
+    try {
+      const { worker } = await import('./mocks/browser')
+
+      await worker.start({
+        onUnhandledRequest: 'warn', // Warn about unhandled requests
+        serviceWorker: {
+          url: '/mockServiceWorker.js',
+        },
+      })
+
+      logger.msw('Mock Service Worker initialized successfully')
+      logger.msw(`Mock Mode: ${import.meta.env['VITE_API_MODE']}`)
+      logger.msw(
+        `Mock User Role: ${import.meta.env['VITE_MOCK_USER_ROLE'] || 'employee'}`
+      )
+    } catch (error) {
+      logger.error('Failed to initialize Mock Service Worker', { error })
+    }
+  }
+} /**
  * API Client Initializer component
  * Sets up the API client with authentication token getter
  */
@@ -47,7 +74,9 @@ function ThemedApp() {
       await checkExistingAuth()
     }
 
-    initAuth().catch(console.error)
+    initAuth().catch(error =>
+      logger.error('Failed to initialize auth', { error })
+    )
   }, [])
 
   return (
@@ -65,8 +94,11 @@ function ThemedApp() {
   )
 }
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <ThemedApp />
-  </StrictMode>
-)
+// Initialize MSW before rendering the app
+enableMocking().then(() => {
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <ThemedApp />
+    </StrictMode>
+  )
+})

@@ -2,7 +2,7 @@
  * Standard API response wrapper
  * All API endpoints should return data in this format
  */
-export interface TApiResponse<T = any> {
+export interface TApiResponse<T = unknown> {
   data: T
   message?: string
   success: boolean
@@ -18,7 +18,7 @@ export interface TApiError extends Error {
   code: string
   status: number
   timestamp: string
-  details?: any
+  details?: Record<string, unknown>
 }
 
 /**
@@ -66,7 +66,7 @@ export type THttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
  */
 export interface TApiRequestInit extends Omit<RequestInit, 'body' | 'method'> {
   timeout?: number
-  data?: any
+  data?: Record<string, unknown> | FormData | string
 }
 
 /**

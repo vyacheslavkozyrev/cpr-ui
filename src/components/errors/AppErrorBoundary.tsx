@@ -1,5 +1,6 @@
 import { Alert, Box, Button, Container, Typography } from '@mui/material'
 import React, { type ErrorInfo, type ReactNode } from 'react'
+import { logger } from '../../utils/logger'
 
 export interface IErrorBoundaryState {
   hasError: boolean
@@ -40,9 +41,9 @@ export class AppErrorBoundary extends React.Component<
   }
 
   override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // Log error to console in development
+    // Log error in development
     if (import.meta.env.DEV) {
-      console.error('React Error Boundary caught an error:', error, errorInfo)
+      logger.error('React Error Boundary caught an error', { error, errorInfo })
     }
 
     // Update state with error info

@@ -3,6 +3,7 @@ import { create } from 'zustand'
 import { subscribeWithSelector } from 'zustand/middleware'
 import { authConfig } from '../config/auth'
 import { authService } from '../services'
+import { logger } from '../utils/logger'
 
 // Authentication types following T/I/E conventions
 export interface IAuthUser {
@@ -95,7 +96,9 @@ export const useAuthStore = create<IAuthState>()(
 
           // Use direct bracket notation access (works with hyphenated keys)
           const selectedMockUser =
-            (mockUsers as any)[mockUserRole] || mockUsers.employee
+            (mockUsers as Record<string, typeof mockUsers.employee>)[
+              mockUserRole
+            ] || mockUsers.employee
 
           const stubUser: IAuthUser = {
             ...selectedMockUser,
@@ -202,7 +205,7 @@ export const useAuthStore = create<IAuthState>()(
         }
         return token
       } catch (error) {
-        console.error('Failed to get access token:', error)
+        logger.error('Failed to get access token', { error })
         set({ error: authService.handleAuthError(error) })
         return null
       }
@@ -245,5 +248,5 @@ export const useAuthError = () => useAuthStore(state => state.error)
 
 // Initialize stub mode if enabled
 if (authConfig.enableStubAuth) {
-  console.log('Authentication running in stub mode')
+  logger.auth('Authentication running in stub mode')
 }

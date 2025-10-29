@@ -6,6 +6,7 @@ import type {
   TUploadProgressCallback,
 } from '../types/apiTypes'
 import { EApiErrorCode } from '../types/apiTypes'
+import { logger } from '../utils/logger'
 
 /**
  * API configuration constants
@@ -120,10 +121,10 @@ class ApiClient {
   /**
    * Make HTTP request with error handling and logging
    */
-  private async request<T = any>(
+  private async request<T = unknown>(
     method: THttpMethod,
     endpoint: string,
-    data?: any,
+    data?: unknown,
     config?: TRequestConfig
   ): Promise<TApiResponse<T>> {
     const url = `${this.baseUrl}${endpoint}`
@@ -145,13 +146,10 @@ class ApiClient {
       }
 
       // Log request in development
-      if (import.meta.env.DEV) {
-        console.log(`🚀 API Request [${method}]:`, {
-          url,
-          data,
-          headers: Object.fromEntries(headers.entries()),
-        })
-      }
+      logger.apiRequest(method, url, {
+        data,
+        headers: Object.fromEntries(headers.entries()),
+      })
 
       // Make request
       const requestOptions: RequestInit = {
@@ -175,23 +173,12 @@ class ApiClient {
       const responseData = await this.handleResponse<T>(response)
 
       // Log response in development
-      if (import.meta.env.DEV) {
-        console.log(`✅ API Response [${response.status}]:`, {
-          url,
-          data: responseData,
-        })
-      }
+      logger.apiResponse(response.status, url, responseData)
 
       return responseData
     } catch (error) {
       // Log error in development
-      if (import.meta.env.DEV) {
-        console.error(`❌ API Error:`, {
-          url,
-          method,
-          error,
-        })
-      }
+      logger.apiError(method, url, error)
 
       // Re-throw if already a TApiError
       if (this.isApiError(error)) {
@@ -209,7 +196,7 @@ class ApiClient {
   private async handleResponse<T>(
     response: Response
   ): Promise<TApiResponse<T>> {
-    let data: any
+    let data: unknown
 
     try {
       // Check if response has content
@@ -220,7 +207,7 @@ class ApiClient {
         data = await response.text()
       }
     } catch (error) {
-      console.error('Failed to parse response:', error)
+      logger.error('Failed to parse response', { error })
       throw this.createError(
         EApiErrorCode.PARSE_ERROR,
         'Failed to parse response data',
@@ -231,7 +218,13 @@ class ApiClient {
     // Handle HTTP error status codes
     if (!response.ok) {
       const errorMessage =
-        data?.message || `HTTP ${response.status}: ${response.statusText}`
+        data &&
+        typeof data === 'object' &&
+        data !== null &&
+        'message' in data &&
+        typeof (data as { message: unknown }).message === 'string'
+          ? (data as { message: string }).message
+          : `HTTP ${response.status}: ${response.statusText}`
       const errorCode = this.getErrorCodeByStatus(response.status)
 
       throw this.createError(errorCode, errorMessage, response.status, data)
@@ -239,8 +232,15 @@ class ApiClient {
 
     // Return standardized response
     return {
-      data,
-      message: data?.message,
+      data: data as T,
+      message:
+        data &&
+        typeof data === 'object' &&
+        data !== null &&
+        'message' in data &&
+        typeof (data as { message: unknown }).message === 'string'
+          ? (data as { message: string }).message
+          : undefined,
       success: true,
       timestamp: new Date().toISOString(),
     }
@@ -249,7 +249,7 @@ class ApiClient {
   /**
    * Transform various error types into TApiError
    */
-  private transformError(error: any): TApiError {
+  private transformError(error: unknown): TApiError {
     if (error instanceof TypeError && error.message.includes('fetch')) {
       return this.createError(
         EApiErrorCode.NETWORK_ERROR,
@@ -260,7 +260,7 @@ class ApiClient {
 
     return this.createError(
       EApiErrorCode.UNKNOWN_ERROR,
-      error.message || 'An unexpected error occurred',
+      error instanceof Error ? error.message : 'An unexpected error occurred',
       500
     )
   }
@@ -272,24 +272,28 @@ class ApiClient {
     code: string,
     message: string,
     status: number,
-    details?: any
+    details?: unknown
   ): TApiError {
     const error = new Error(message) as TApiError
     error.code = code
     error.status = status
     error.timestamp = new Date().toISOString()
-    error.details = details
+    error.details = details as Record<string, unknown> | undefined
     return error
   }
 
   /**
    * Check if error is already a TApiError
    */
-  private isApiError(error: any): error is TApiError {
+  private isApiError(error: unknown): error is TApiError {
     return (
       error &&
-      typeof error.code === 'string' &&
-      typeof error.status === 'number'
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      'status' in error &&
+      typeof (error as { code: unknown }).code === 'string' &&
+      typeof (error as { status: unknown }).status === 'number'
     )
   }
 
@@ -328,7 +332,7 @@ class ApiClient {
   /**
    * Generic GET request
    */
-  public async get<T = any>(
+  public async get<T = unknown>(
     endpoint: string,
     config?: TRequestConfig
   ): Promise<TApiResponse<T>> {
@@ -338,7 +342,7 @@ class ApiClient {
   /**
    * Generic POST request
    */
-  public async post<T = any, D = any>(
+  public async post<T = unknown, D = unknown>(
     endpoint: string,
     data?: D,
     config?: TRequestConfig
@@ -349,7 +353,7 @@ class ApiClient {
   /**
    * Generic PUT request
    */
-  public async put<T = any, D = any>(
+  public async put<T = unknown, D = unknown>(
     endpoint: string,
     data?: D,
     config?: TRequestConfig
@@ -360,7 +364,7 @@ class ApiClient {
   /**
    * Generic PATCH request
    */
-  public async patch<T = any, D = any>(
+  public async patch<T = unknown, D = unknown>(
     endpoint: string,
     data?: D,
     config?: TRequestConfig
@@ -371,7 +375,7 @@ class ApiClient {
   /**
    * Generic DELETE request
    */
-  public async delete<T = any>(
+  public async delete<T = unknown>(
     endpoint: string,
     config?: TRequestConfig
   ): Promise<TApiResponse<T>> {
@@ -381,7 +385,7 @@ class ApiClient {
   /**
    * Upload file with progress tracking (using XMLHttpRequest for progress)
    */
-  public async uploadFile<T = any>(
+  public async uploadFile<T = unknown>(
     endpoint: string,
     file: File,
     onProgress?: TUploadProgressCallback
@@ -424,7 +428,7 @@ class ApiClient {
             reject(error)
           }
         } catch (parseError) {
-          console.error('Failed to parse upload response:', parseError)
+          logger.error('Failed to parse upload response', { parseError })
           const error = this.createError(
             EApiErrorCode.PARSE_ERROR,
             'Failed to parse upload response',

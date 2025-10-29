@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next'
 import type { User } from '../../models'
 import { useCurrentUser, useUpdateCurrentUser } from '../../services'
 import { useToast } from '../../stores'
+import { logger } from '../../utils/logger'
 
 // Style factory outside component
 const getStyles = () => ({
@@ -153,7 +154,7 @@ export const ProfilePage: React.FC = () => {
       setIsEditing(false)
       showSuccess(t('profile.updateSuccess'))
     } catch (error) {
-      console.error('Failed to update profile:', error)
+      logger.error('Failed to update profile', { error })
       showError(t('profile.updateError'))
     }
   }

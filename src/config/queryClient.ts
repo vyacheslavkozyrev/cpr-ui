@@ -1,4 +1,5 @@
 import { QueryClient } from '@tanstack/react-query'
+import { logger } from '../utils/logger'
 
 /**
  * Create and configure the React Query client
@@ -12,7 +13,8 @@ export const createQueryClient = (): QueryClient => {
         gcTime: 10 * 60 * 1000, // 10 minutes - cache time (was cacheTime)
         retry: (failureCount, error) => {
           // Don't retry on 4xx errors (client errors)
-          const status = (error as any)?.response?.status
+          const status = (error as { response?: { status?: number } })?.response
+            ?.status
           if (status && status >= 400 && status < 500) {
             return false
           }
@@ -55,7 +57,7 @@ export const queryKeys = {
   goals: {
     all: ['goals'] as const,
     lists: () => [...queryKeys.goals.all, 'list'] as const,
-    list: (filters?: Record<string, any>) =>
+    list: (filters?: Record<string, string | number | boolean>) =>
       [...queryKeys.goals.lists(), { filters }] as const,
     details: () => [...queryKeys.goals.all, 'detail'] as const,
     detail: (goalId: string) => [...queryKeys.goals.details(), goalId] as const,
@@ -91,7 +93,7 @@ export const queryKeys = {
  * Error boundary handler for React Query errors
  */
 export const handleQueryError = (error: unknown): void => {
-  console.error('React Query Error:', error)
+  logger.error('React Query Error', { error })
 
   // Here you could integrate with error reporting service
   // like Sentry, LogRocket, etc.

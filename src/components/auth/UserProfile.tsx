@@ -17,6 +17,7 @@ import {
 } from '@mui/material'
 import { useMemo } from 'react'
 import { useAuth } from '../../stores/authStore'
+import { logger } from '../../utils/logger'
 
 const getStyles = () => ({
   root: { p: 3 },
@@ -43,7 +44,7 @@ export const UserProfile = () => {
     try {
       await logout()
     } catch (err) {
-      console.error('Logout failed:', err)
+      logger.error('Logout failed', { error: err })
     }
   }
 

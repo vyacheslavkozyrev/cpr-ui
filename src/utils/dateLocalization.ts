@@ -7,6 +7,7 @@ import {
 } from 'date-fns'
 import { be, enUS, es, fr } from 'date-fns/locale'
 import type { TLanguageCode } from '../config/i18n'
+import { logger } from './logger'
 
 // Date-fns locale mapping to our language codes
 const DATE_LOCALES = {
@@ -63,7 +64,7 @@ export const formatDate = (
 
     // Validate date
     if (!isValid(dateObj)) {
-      console.warn('Invalid date provided to formatDate:', date)
+      logger.warn('Invalid date provided to formatDate', { date })
       return 'Invalid Date'
     }
 
@@ -76,7 +77,7 @@ export const formatDate = (
     // Format the date
     return format(dateObj, formatStr, { locale })
   } catch (error) {
-    console.error('Error formatting date:', error)
+    logger.error('Error formatting date', { error })
     return 'Invalid Date'
   }
 }
@@ -96,7 +97,7 @@ export const formatDateDistance = (
     const dateObj = typeof date === 'string' ? parseISO(date) : new Date(date)
 
     if (!isValid(dateObj)) {
-      console.warn('Invalid date provided to formatDateDistance:', date)
+      logger.warn('Invalid date provided to formatDateDistance', { date })
       return 'Invalid Date'
     }
 
@@ -107,7 +108,7 @@ export const formatDateDistance = (
       locale,
     })
   } catch (error) {
-    console.error('Error formatting date distance:', error)
+    logger.error('Error formatting date distance', { error })
     return 'Invalid Date'
   }
 }
@@ -124,7 +125,7 @@ export const formatDateRelative = (
     const dateObj = typeof date === 'string' ? parseISO(date) : new Date(date)
 
     if (!isValid(dateObj)) {
-      console.warn('Invalid date provided to formatDateRelative:', date)
+      logger.warn('Invalid date provided to formatDateRelative', { date })
       return 'Invalid Date'
     }
 
@@ -132,7 +133,7 @@ export const formatDateRelative = (
 
     return formatRelative(dateObj, baseDate, { locale })
   } catch (error) {
-    console.error('Error formatting relative date:', error)
+    logger.error('Error formatting relative date', { error })
     return 'Invalid Date'
   }
 }
