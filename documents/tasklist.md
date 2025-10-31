@@ -246,38 +246,93 @@ Main dashboard implementation and enhanced user experience features - **FOCUS: T
 
 ---
 
+## **Phase 4.5: AI-Powered Goal Enhancement** (Future Implementation)
+
+### Goal
+
+AI services integration for intelligent goal creation and management assistance
+
+### Implementation Tasks
+
+- [ ] **AI Goal Template Generation**: Dynamic SMART goal templates based on user role, department, and skills
+- [ ] **Goal Description Assistant**: AI-powered goal description improvement and SMART criteria validation
+- [ ] **Goal Suggestions**: Intelligent goal recommendations based on skill gaps and career development
+- [ ] **Progress Insights**: AI analysis of goal completion patterns and productivity recommendations
+- [ ] **Deadline Optimization**: Smart deadline suggestions based on historical data and workload
+- [ ] **Skill Gap Analysis**: AI-powered analysis connecting goals to skill development opportunities
+- [ ] **Goal Refinement**: Natural language processing to improve goal clarity and measurability
+- [ ] **Performance Predictions**: AI insights on goal achievability and success likelihood
+
+### Acceptance Criteria
+
+- AI services integrated with goal creation workflow
+- Smart goal suggestions working accurately
+- Progress analysis providing actionable insights
+- User experience enhanced with AI assistance
+
+---
+
 ## **Phase 4: Goals Management** (Week 5-6)
 
 ### Goal
 
-Complete CRUD for goals, tasks, and progress tracking
+Complete individual employee goal CRUD with task management and progress tracking
 
 ### Implementation Tasks
 
-- [ ] Create GoalsPage with list view and filtering options
-- [ ] Build GoalCard component with status indicators
-- [ ] Implement GoalForm for create/edit with SMART goal validation
-- [ ] Create GoalDetailPage with tasks and progress visualization
-- [ ] Build task management (add, edit, complete, delete tasks)
-- [ ] Implement goal progress calculation and visualization (progress bars, charts)
-- [ ] Add goal filtering (status: active/completed/archived, deadline, skill category)
-- [ ] Create goal search functionality
-- [ ] Build goal archive/unarchive functionality
-- [ ] Implement goal deadline notifications and overdue indicators
-- [ ] Create useGoals hook with React Query (CRUD operations)
-- [ ] Add goal templates and SMART goal suggestions
-- [ ] Build goal hierarchy support (parent/child goals)
-- [ ] Implement goal sharing and collaboration features
-- [ ] Add goal analytics (completion rates, time tracking)
-- [ ] Write comprehensive tests for all goal components
-- [ ] Add bulk operations (archive multiple, assign to team)
+**🏛️ Foundation & Data Layer:**
+
+- [ ] Create Goal and Task TypeScript interfaces matching database schema (goals, goal_tasks tables)
+- [ ] Build Goal DTOs for API communication with proper validation
+- [ ] Implement Goal mappers for DTO ↔ Model transformation
+- [ ] Create MSW goal handlers for development and testing
+- [ ] Build useGoals and useGoalTasks hooks with React Query
+- [ ] Create Goal API services matching backend endpoints
+
+**🧩 Core Components:**
+
+- [ ] GoalCard component with status, progress, deadline, and priority indicators
+- [ ] GoalForm component with SMART goal validation (title, description, deadline, priority)
+- [ ] TaskList component for goal task management (add, edit, complete, delete)
+- [ ] GoalProgress component with visual progress tracking and completion percentage
+- [ ] GoalFilters component (status: active/completed, deadline ranges, priority, skill-related)
+- [ ] GoalSearch component with debounced search functionality
+
+**📄 Pages & Navigation:**
+
+- [ ] Enhanced GoalsPage with list view, filtering, search, and create actions
+- [ ] GoalDetailPage showing goal details, task list, progress, and edit capabilities
+- [ ] GoalCreatePage with guided goal creation form
+- [ ] Update navigation (sidebar, breadcrumbs) for goals section
+
+**🔧 Features & UX:**
+
+- [ ] Goal status management (active → completed) with proper state transitions
+- [ ] Deadline notifications and overdue indicators
+- [ ] Goal progress calculation based on completed tasks
+- [ ] Export functionality for individual goals (PDF/print view)
+- [ ] Skill-related goal linking (optional skill and target level association)
+- [ ] Goal analytics and progress visualization with Chart.js
+
+**🧪 Testing & Quality:**
+
+- [ ] Comprehensive component tests for all goal components
+- [ ] Goal page integration tests with full user workflows
+- [ ] API service tests with MSW mock integration
+- [ ] React Query hook tests for goal operations
+- [ ] Accessibility testing (WCAG 2.1 AA compliance)
+- [ ] Responsive design testing (mobile-first approach)
 
 ### Acceptance Criteria
 
-- Full CRUD operations working
-- Progress tracking functional
-- Filtering and search working
-- Test coverage ≥80%
+- **Individual Goal Management**: Employees can create, edit, view, and complete their personal goals
+- **Task-Based Progress**: Goals broken down into tasks with completion tracking
+- **Status Lifecycle**: Proper goal states (active → completed) with audit trail
+- **Skill Integration**: Goals can be linked to skill development (optional)
+- **Search & Filter**: Fast goal discovery with persistent filter preferences
+- **Mobile-Responsive**: Seamless experience across all device types
+- **Test Coverage**: ≥80% test coverage with quality, meaningful tests
+- **Performance**: Optimized loading and interactions with React Query caching
 
 ---
 
