@@ -87,7 +87,7 @@ All endpoints require Bearer JWT authentication via `Authorization: Bearer {toke
 - **Request Body**: `UpdateGoalTaskDto`
 - **Response**: 200 OK with updated task object
 
-### 3. Delete Task (Missing - To be implemented)
+### 3. Delete Task
 
 **DELETE** `/Goals/{id}/tasks/{taskId}`
 
@@ -97,7 +97,7 @@ All endpoints require Bearer JWT authentication via `Authorization: Bearer {toke
   - `id` (uuid, required) - Goal identifier
   - `taskId` (uuid, required) - Task identifier
 - **Response**: 204 No Content
-- **Status**: ⚠️ **Missing Endpoint** - Needs backend implementation
+- **Status**: ✅ **Implemented**
 
 ## Dashboard Integration Endpoints
 

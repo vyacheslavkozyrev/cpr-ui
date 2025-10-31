@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom'
 import { cleanup } from '@testing-library/react'
-import { afterEach, beforeAll, vi } from 'vitest'
+import { afterAll, afterEach, beforeAll, vi } from 'vitest'
+import i18n from '../config/i18n'
 import { server } from '../mocks/server'
 
 // Setup MSW server
@@ -11,6 +12,21 @@ afterEach(() => {
   cleanup()
   server.resetHandlers()
   vi.clearAllMocks()
+})
+
+// Cleanup i18n after all tests to prevent unhandled promise rejection
+afterAll(() => {
+  // Wait for any pending i18n operations to complete
+  return new Promise(resolve => {
+    if (i18n.isInitialized) {
+      // Allow time for any pending async operations
+      setTimeout(() => {
+        resolve(undefined)
+      }, 100)
+    } else {
+      resolve(undefined)
+    }
+  })
 })
 
 // Mock window.matchMedia (used by MUI components)
