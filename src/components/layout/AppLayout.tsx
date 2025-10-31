@@ -1,6 +1,7 @@
 import { Box } from '@mui/material'
 import React, { useMemo } from 'react'
 import { Outlet } from 'react-router-dom'
+import { BreadcrumbNavigation } from './BreadcrumbNavigation'
 import { Footer } from './Footer'
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
@@ -19,6 +20,7 @@ const getStyles = () => ({
   mainContent: {
     flex: 1,
     p: 3,
+    pt: 2, // Reduced top padding since breadcrumbs provide spacing
     backgroundColor: 'background.default',
     minHeight: 'calc(100vh - 64px)', // Account for header height
   },
@@ -43,6 +45,10 @@ export const AppLayout: React.FC = () => {
 
         {/* Main Content Area */}
         <Box component='main' sx={styles.mainContent}>
+          {/* Breadcrumb Navigation */}
+          <BreadcrumbNavigation />
+
+          {/* Page Content */}
           <Outlet />
         </Box>
       </Box>

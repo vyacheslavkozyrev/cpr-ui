@@ -12,7 +12,6 @@ import {
   GoalSummaryWidget,
   SkillProgressWidget,
 } from '../../components/dashboard/widgets'
-import { BreadcrumbNavigation } from '../../components/layout'
 
 /**
  * DashboardPage Component
@@ -53,9 +52,6 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <Box>
-      {/* Breadcrumb Navigation */}
-      <BreadcrumbNavigation />
-
       {/* Page Header with Settings */}
       <Box
         display='flex'
