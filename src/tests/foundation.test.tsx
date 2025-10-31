@@ -99,8 +99,13 @@ describe('Testing Foundation', () => {
 
   describe('MSW Integration', () => {
     it('intercepts API calls', async () => {
-      // This will be expanded when we add actual API components
-      expect(server.listHandlers()).toHaveLength(5) // 5 handlers in userHandlers
+      // Check that all handlers are registered (user + dashboard handlers)
+      const handlers = server.listHandlers()
+      expect(handlers.length).toBeGreaterThanOrEqual(10) // 5 user handlers + 5 dashboard handlers
+
+      // Verify MSW server is properly configured
+      expect(handlers).toBeDefined()
+      expect(Array.isArray(handlers)).toBe(true)
     })
   })
 

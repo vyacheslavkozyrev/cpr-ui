@@ -120,6 +120,22 @@
       "exportData": "Export Data"
     }
   },
+  "dashboard": {
+    "customization": {
+      "ariaLabel": "Customize dashboard",
+      "title": "Dashboard Settings",
+      "widgetCount": "{{visible}} of {{total}} widgets visible",
+      "visible": "Visible",
+      "hidden": "Hidden",
+      "resetLayout": "Reset to Default Layout"
+    },
+    "widgets": {
+      "goalSummary": "Goal Summary",
+      "feedbackSummary": "Feedback Summary",
+      "skillProgress": "Skill Progress",
+      "activityFeed": "Activity Feed"
+    }
+  },
   "toast": {
     "themeChanged": "Theme changed to {{mode}} mode",
     "themeChangedSystem": "Theme changed to system preference mode",

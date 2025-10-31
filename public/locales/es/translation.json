@@ -120,6 +120,22 @@
       "exportData": "Exportar Datos"
     }
   },
+  "dashboard": {
+    "customization": {
+      "ariaLabel": "Personalizar tablero",
+      "title": "Configuración del Tablero",
+      "widgetCount": "{{visible}} de {{total}} widgets visibles",
+      "visible": "Visible",
+      "hidden": "Oculto",
+      "resetLayout": "Restablecer al Diseño Predeterminado"
+    },
+    "widgets": {
+      "goalSummary": "Resumen de Objetivos",
+      "feedbackSummary": "Resumen de Comentarios",
+      "skillProgress": "Progreso de Habilidades",
+      "activityFeed": "Actividad Reciente"
+    }
+  },
   "toast": {
     "themeChanged": "Tema cambiado al modo {{mode}}",
     "themeChangedSystem": "Tema cambiado al modo de preferencia del sistema",

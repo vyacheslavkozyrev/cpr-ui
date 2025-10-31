@@ -120,6 +120,22 @@
       "exportData": "Экспартаваць дадзеныя"
     }
   },
+  "dashboard": {
+    "customization": {
+      "ariaLabel": "Наладзіць панэль кіравання",
+      "title": "Налады Панэлі Кіравання",
+      "widgetCount": "{{visible}} з {{total}} віджэтаў бачныя",
+      "visible": "Бачны",
+      "hidden": "Схаваны",
+      "resetLayout": "Скінуць да Стандартнага Макета"
+    },
+    "widgets": {
+      "goalSummary": "Зводка Мэтаў",
+      "feedbackSummary": "Зводка Водгукаў",
+      "skillProgress": "Прагрэс Навыкаў",
+      "activityFeed": "Стужка Актыўнасці"
+    }
+  },
   "toast": {
     "themeChanged": "Тэма зменена на {{mode}} рэжым",
     "themeChangedSystem": "Тэма зменена на сістэмны рэжым",

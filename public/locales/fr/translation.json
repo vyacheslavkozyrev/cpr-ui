@@ -120,6 +120,22 @@
       "exportData": "Exporter les Données"
     }
   },
+  "dashboard": {
+    "customization": {
+      "ariaLabel": "Personnaliser le tableau de bord",
+      "title": "Paramètres du Tableau de Bord",
+      "widgetCount": "{{visible}} sur {{total}} widgets visibles",
+      "visible": "Visible",
+      "hidden": "Masqué",
+      "resetLayout": "Réinitialiser à la Disposition par Défaut"
+    },
+    "widgets": {
+      "goalSummary": "Résumé des Objectifs",
+      "feedbackSummary": "Résumé des Commentaires",
+      "skillProgress": "Progression des Compétences",
+      "activityFeed": "Flux d'Activité"
+    }
+  },
   "toast": {
     "themeChanged": "Thème changé en mode {{mode}}",
     "themeChangedSystem": "Thème changé en mode préférence système",
