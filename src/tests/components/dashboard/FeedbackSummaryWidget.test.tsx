@@ -12,6 +12,7 @@ import {
   vi,
 } from 'vitest'
 import { FeedbackSummaryWidget } from '../../../components/dashboard/widgets/FeedbackSummaryWidget'
+import { dashboardHandlers } from '../../../mocks/handlers/dashboardHandlers'
 import { renderWithRouter } from '../../utils'
 
 // Mock react-chartjs-2 with proper types
@@ -42,65 +43,8 @@ vi.mock('react-chartjs-2', () => ({
   ),
 }))
 
-// Mock data matching IFeedbackSummary interface
-const mockFeedbackSummary = {
-  statistics: {
-    totalReceived: 15,
-    pendingRequests: 3,
-    averageRating: 4.2,
-    ratingDistribution: {
-      excellent: 5,
-      good: 4,
-      fair: 2,
-      poor: 1,
-    },
-  },
-  recentFeedback: [
-    {
-      id: '1',
-      fromUser: 'John Doe',
-      toUser: 'Current User',
-      type: 'peer_review',
-      rating: 5,
-      summary: 'Excellent collaboration on the project',
-      date: new Date('2024-01-15').toISOString(),
-      status: 'completed',
-    },
-    {
-      id: '2',
-      fromUser: 'Current User',
-      toUser: 'Jane Smith',
-      type: 'peer_review',
-      rating: 4,
-      summary: 'Good technical skills, room for improvement in communication',
-      date: new Date('2024-01-10').toISOString(),
-      status: 'completed',
-    },
-    {
-      id: '3',
-      fromUser: 'Manager',
-      toUser: 'Current User',
-      type: 'performance_review',
-      rating: 4,
-      summary: 'Strong performance this quarter',
-      date: new Date('2024-01-05').toISOString(),
-      status: 'pending',
-    },
-  ],
-  ratingTrend: [
-    { period: 'Jan', avgRating: 4.1 },
-    { period: 'Feb', avgRating: 4.3 },
-    { period: 'Mar', avgRating: 4.2 },
-    { period: 'Apr', avgRating: 4.5 },
-  ],
-}
-
 // MSW server setup
-const server = setupServer(
-  http.get('*/api/dashboard/feedback-summary', () => {
-    return HttpResponse.json(mockFeedbackSummary)
-  })
-)
+const server = setupServer(...dashboardHandlers)
 
 describe('FeedbackSummaryWidget', () => {
   beforeAll(() => server.listen())

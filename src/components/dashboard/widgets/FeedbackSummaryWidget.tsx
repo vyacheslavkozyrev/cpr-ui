@@ -24,8 +24,8 @@ import {
 import React, { useState } from 'react'
 import { Line } from 'react-chartjs-2'
 import { useNavigate } from 'react-router-dom'
+import type { DashboardPeriod } from '../../../models/Dashboard'
 import { useFeedbackSummary } from '../../../services/api/dashboardService'
-import type { DashboardPeriod } from '../../../types/dashboard'
 import { DashboardWidget } from '../layout'
 
 interface ITabPanelProps {
@@ -137,7 +137,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant='h4' color='primary'>
-            {feedbackSummary.statistics.totalReceived}
+            {feedbackSummary.summary.totalReceived}
           </Typography>
           <Typography variant='caption' color='text.secondary'>
             Received
@@ -145,7 +145,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
         </Box>
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant='h4' color='warning.main'>
-            {feedbackSummary.statistics.pendingRequests}
+            {feedbackSummary.summary.pendingRequests}
           </Typography>
           <Typography variant='caption' color='text.secondary'>
             Pending
@@ -160,7 +160,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
           }}
         >
           <Rating
-            value={feedbackSummary.statistics.averageRating}
+            value={feedbackSummary.summary.averageRating}
             precision={0.1}
             readOnly
             size='small'
@@ -187,14 +187,14 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
           <ListItem key={feedback.id} disablePadding sx={{ mb: 1 }}>
             <ListItemAvatar>
               <Avatar sx={{ width: 32, height: 32, fontSize: '0.75rem' }}>
-                {getInitials(feedback.fromEmployeeName)}
+                {getInitials(feedback.fromUser.name)}
               </Avatar>
             </ListItemAvatar>
             <ListItemText
               primary={
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <Typography variant='body2' sx={{ flex: 1 }}>
-                    {feedback.fromEmployeeName}
+                    {feedback.fromUser.name}
                   </Typography>
                   <Rating value={feedback.rating} readOnly size='small' />
                 </Box>
@@ -202,7 +202,8 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
               secondary={
                 <Typography variant='caption' color='text.secondary'>
                   {new Date(feedback.createdAt).toLocaleDateString()} •{' '}
-                  {feedback.goalTitle}
+                  {/* Note: goalTitle not available in new model, using placeholder */}
+                  General Feedback
                 </Typography>
               }
             />

@@ -13,23 +13,23 @@ const generateMockSummary = () => ({
     active: 8,
     completed: 3,
     overdue: 1,
-    completionRate: 75.0,
+    completion_rate: 75.0,
   },
   feedback: {
-    totalReceived: 15,
-    pendingRequests: 3,
-    averageRating: 4.2,
-    recentCount: 5,
+    total_received: 15,
+    pending_requests: 3,
+    average_rating: 4.2,
+    recent_count: 5,
   },
   skills: {
-    totalSkills: 20,
-    assessedSkills: 16,
-    assessmentProgress: 80.0,
-    averageLevel: 3.2,
+    total_skills: 20,
+    assessed_skills: 16,
+    assessment_progress: 80.0,
+    average_level: 3.2,
   },
   activity: {
-    totalActivities: 25,
-    recentActivities: 8,
+    total_activities: 25,
+    recent_activities: 8,
   },
 })
 
@@ -142,45 +142,45 @@ const generateMockActivity = (days: number, page: number, perPage: number) => {
 
 const generateMockGoalsSummary = () => ({
   statistics: {
-    total: 12,
-    active: 8,
+    total: 9,
+    active: 5,
     completed: 3,
     overdue: 1,
-    completionRate: 75.0,
-    averageProgress: 65.5,
+    completionRate: 0.75, // API uses camelCase and decimal instead of percentage
+    averageProgress: 0.65, // Required field
   },
   recentGoals: [
     {
       id: '550e8400-e29b-41d4-a716-446655440010',
       title: 'Improve API Design Skills',
       status: 'completed',
-      progress: 100,
-      deadline: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-      isOverdue: false,
+      progress: 1.0, // API uses 0-1 range
+      deadline: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // API uses 'deadline'
+      isOverdue: false, // Required field
     },
     {
       id: '550e8400-e29b-41d4-a716-446655440011',
-      title: 'Master TypeScript Advanced Features',
-      status: 'in_progress',
-      progress: 65,
+      title: 'Learn Advanced React Patterns',
+      status: 'active',
+      progress: 0.65, // API uses 0-1 range
       deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
       isOverdue: false,
     },
     {
       id: '550e8400-e29b-41d4-a716-446655440012',
       title: 'Learn Docker Containerization',
-      status: 'in_progress',
-      progress: 40,
+      status: 'active',
+      progress: 0.4,
       deadline: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
       isOverdue: false,
     },
     {
       id: '550e8400-e29b-41d4-a716-446655440013',
       title: 'Mentor Junior Developers',
-      status: 'open',
-      progress: 20,
+      status: 'on_hold',
+      progress: 0.2,
       deadline: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-      isOverdue: true,
+      isOverdue: true, // This is overdue since deadline is in the past
     },
   ],
   progressTrend: [
@@ -209,31 +209,24 @@ const generateMockGoalsSummary = () => ({
 
 const generateMockFeedbackSummary = () => ({
   statistics: {
-    totalReceived: 15,
+    totalReceived: 15, // API uses camelCase
     pendingRequests: 3,
     averageRating: 4.2,
-    ratingDistribution: {
-      '1': 0,
-      '2': 1,
-      '3': 2,
-      '4': 7,
-      '5': 5,
-    },
   },
   recentFeedback: [
     {
       id: '550e8400-e29b-41d4-a716-446655440020',
-      fromEmployeeId: '550e8400-e29b-41d4-a716-446655440030',
+      fromEmployeeId: '550e8400-e29b-41d4-a716-446655440030', // API uses camelCase field names
       fromEmployeeName: 'Sarah Johnson',
-      goalTitle: 'Improve API Design Skills',
+      goalTitle: 'Great collaboration on the API design project!',
       rating: 5,
-      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // API uses camelCase
     },
     {
       id: '550e8400-e29b-41d4-a716-446655440021',
       fromEmployeeId: '550e8400-e29b-41d4-a716-446655440031',
       fromEmployeeName: 'Michael Chen',
-      goalTitle: 'Code Review Excellence',
+      goalTitle: 'Excellent code review skills, very thorough!',
       rating: 4,
       createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
     },
@@ -241,7 +234,7 @@ const generateMockFeedbackSummary = () => ({
       id: '550e8400-e29b-41d4-a716-446655440022',
       fromEmployeeId: '550e8400-e29b-41d4-a716-446655440032',
       fromEmployeeName: 'Emma Davis',
-      goalTitle: 'Team Collaboration',
+      goalTitle: 'Strong team collaboration and communication.',
       rating: 4,
       createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
     },
@@ -249,7 +242,7 @@ const generateMockFeedbackSummary = () => ({
   ratingTrend: [
     {
       period: '2025-10-01',
-      averageRating: 4.0,
+      averageRating: 4.0, // API uses camelCase
       count: 2,
     },
     {
@@ -272,66 +265,93 @@ const generateMockFeedbackSummary = () => ({
 
 const generateMockSkillsSummary = () => ({
   statistics: {
-    totalSkills: 20,
+    // Real API uses 'statistics' instead of 'summary'
+    totalSkills: 22, // Real API uses camelCase
     assessedSkills: 16,
     assessmentProgress: 80.0,
     averageLevel: 3.2,
-    skillGaps: 4,
+    skillGaps: 6, // Additional field in real API
   },
   skillCategories: [
+    // Real API uses 'skillCategories' instead of 'categories'
     {
-      categoryId: '550e8400-e29b-41d4-a716-446655440050',
-      categoryName: 'Technical Skills',
-      totalSkills: 8,
-      assessedSkills: 7,
-      averageLevel: 3.5,
+      categoryId: '550e8400-e29b-41d4-a716-446655440050', // Real API uses categoryId
+      categoryName: 'Technical Skills', // Real API uses categoryName
+      totalSkills: 8, // Real API uses totalSkills
+      assessedSkills: 6, // Real API uses assessedSkills
+      averageLevel: 3.5, // Real API uses camelCase
+      color: '#3B82F6',
     },
     {
       categoryId: '550e8400-e29b-41d4-a716-446655440051',
       categoryName: 'Leadership',
       totalSkills: 5,
-      assessedSkills: 4,
-      averageLevel: 2.8,
+      assessedSkills: 3,
+      averageLevel: 2.2,
+      color: '#10B981',
     },
     {
       categoryId: '550e8400-e29b-41d4-a716-446655440052',
       categoryName: 'Communication',
       totalSkills: 4,
       assessedSkills: 3,
-      averageLevel: 3.0,
+      averageLevel: 2.0,
+      color: '#F59E0B',
     },
     {
       categoryId: '550e8400-e29b-41d4-a716-446655440053',
       categoryName: 'Business Skills',
       totalSkills: 3,
       assessedSkills: 2,
-      averageLevel: 3.5,
+      averageLevel: 2.3,
+      color: '#EF4444',
+    },
+    {
+      categoryId: '550e8400-e29b-41d4-a716-446655440054',
+      categoryName: 'Project Management',
+      totalSkills: 2,
+      assessedSkills: 1,
+      averageLevel: 2.1,
+      color: '#8B5CF6',
     },
   ],
   recentAssessments: [
+    // Real API uses 'recentAssessments' instead of 'recent_assessments'
     {
-      skillId: '550e8400-e29b-41d4-a716-446655440040',
-      skillName: 'React',
+      skillId: '550e8400-e29b-41d4-a716-446655440040', // Real API uses skillId
+      skillName: 'React', // Real API uses skillName
       level: 4,
-      assessedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+      assessedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), // Real API uses assessedAt
+      assessorName: 'John Smith', // Real API uses camelCase
+      category: 'Technical Skills',
+      categoryId: '550e8400-e29b-41d4-a716-446655440050',
     },
     {
       skillId: '550e8400-e29b-41d4-a716-446655440041',
       skillName: 'Node.js',
       level: 4,
       assessedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
+      assessorName: 'Sarah Johnson',
+      category: 'Technical Skills',
+      categoryId: '550e8400-e29b-41d4-a716-446655440050',
     },
     {
       skillId: '550e8400-e29b-41d4-a716-446655440042',
       skillName: 'TypeScript',
       level: 3,
       assessedAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
+      assessorName: 'Mike Wilson',
+      category: 'Technical Skills',
+      categoryId: '550e8400-e29b-41d4-a716-446655440050',
     },
     {
       skillId: '550e8400-e29b-41d4-a716-446655440043',
       skillName: 'Team Leadership',
       level: 3,
       assessedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+      assessorName: 'Lisa Brown',
+      category: 'Leadership',
+      categoryId: '550e8400-e29b-41d4-a716-446655440051',
     },
   ],
 })

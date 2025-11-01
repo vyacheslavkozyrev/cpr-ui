@@ -1,9 +1,9 @@
 import { http, HttpResponse } from 'msw'
+import type { IGoalsSummaryDto } from '../../dtos/DashboardDto'
 import type {
   TCreateGoalDto,
   TCreateGoalTaskDto,
   TGoalDto,
-  TGoalsSummaryDto,
   TGoalTaskDto,
   TPaginatedGoalsResponseDto,
   TTeamGoalsDto,
@@ -445,15 +445,22 @@ export const goalsHandlers = [
       averageProgress: 0.65, // Simulated average progress
     }
 
-    const response: TGoalsSummaryDto = {
-      statistics: goalsStatistics,
+    const response: IGoalsSummaryDto = {
+      statistics: {
+        total: goalsStatistics.total,
+        active: goalsStatistics.active,
+        completed: goalsStatistics.completed,
+        overdue: 1, // Add overdue count
+        completionRate: goalsStatistics.completionRate, // API uses camelCase
+        averageProgress: 0.65, // Required field for average progress
+      },
       recentGoals: filteredGoals.slice(0, 5).map(goal => ({
         id: goal.id,
         title: goal.title,
         status: goal.status,
         progress: Math.random(),
-        ...(goal.deadline && { deadline: goal.deadline }),
-        isOverdue: false,
+        deadline: goal.deadline || null, // Always include deadline field (can be null)
+        isOverdue: false, // Add required isOverdue field
       })),
       progressTrend: [
         { period: '2024-10', completed: 5, created: 8 },

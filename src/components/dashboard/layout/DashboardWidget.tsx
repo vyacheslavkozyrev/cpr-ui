@@ -46,6 +46,16 @@ export const DashboardWidget: React.FC<IDashboardWidgetProps> = ({
             <Alert severity='error' sx={{ mt: 1 }}>
               Failed to load {title ? title.toLowerCase() : 'widget'}. Please
               try again later.
+              {/* Temporary debug info - remove in production */}
+              {import.meta.env.DEV && (
+                <Typography
+                  variant='caption'
+                  component='div'
+                  sx={{ mt: 1, fontSize: '0.7rem', opacity: 0.7 }}
+                >
+                  Debug: {error.message}
+                </Typography>
+              )}
             </Alert>
           ) : isLoading ? (
             <WidgetSkeleton />

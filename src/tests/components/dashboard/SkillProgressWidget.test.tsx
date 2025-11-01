@@ -12,6 +12,7 @@ import {
   vi,
 } from 'vitest'
 import { SkillProgressWidget } from '../../../components/dashboard/widgets/SkillProgressWidget'
+import { dashboardHandlers } from '../../../mocks/handlers/dashboardHandlers'
 import { renderWithRouter } from '../../utils'
 
 // Mock react-chartjs-2 with proper types
@@ -47,59 +48,8 @@ vi.mock('react-chartjs-2', () => ({
   ),
 }))
 
-// Mock data matching ISkillsSummary interface
-const mockSkillProgress = {
-  statistics: {
-    totalSkills: 20,
-    assessedSkills: 16,
-    assessmentProgress: 80,
-    averageLevel: 3.2,
-    skillGaps: 4,
-  },
-  skillCategories: [
-    {
-      categoryId: '1',
-      categoryName: 'Technical',
-      totalSkills: 8,
-      assessedSkills: 6,
-      averageLevel: 3.4,
-    },
-    {
-      categoryId: '2',
-      categoryName: 'Leadership',
-      totalSkills: 5,
-      assessedSkills: 3,
-      averageLevel: 2.8,
-    },
-  ],
-  recentAssessments: [
-    {
-      skillId: '1',
-      skillName: 'React Development',
-      level: 4,
-      assessedAt: new Date('2024-01-20').toISOString(),
-    },
-    {
-      skillId: '2',
-      skillName: 'TypeScript',
-      level: 3,
-      assessedAt: new Date('2024-01-18').toISOString(),
-    },
-    {
-      skillId: '3',
-      skillName: 'Team Management',
-      level: 2,
-      assessedAt: new Date('2024-01-15').toISOString(),
-    },
-  ],
-}
-
 // MSW server setup
-const server = setupServer(
-  http.get('*/api/dashboard/skill-progress', () => {
-    return HttpResponse.json(mockSkillProgress)
-  })
-)
+const server = setupServer(...dashboardHandlers)
 
 describe('SkillProgressWidget', () => {
   beforeAll(() => server.listen())

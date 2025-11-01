@@ -22,8 +22,8 @@ import {
   Typography,
 } from '@mui/material'
 import React, { useState } from 'react'
+import type { ActivityType } from '../../../models/Dashboard'
 import { useActivityFeed } from '../../../services/api/dashboardService'
-import type { ActivityType } from '../../../types/dashboard'
 import { DashboardWidget } from '../layout'
 
 interface ITabPanelProps {
@@ -53,7 +53,7 @@ export const ActivityFeedWidget: React.FC = () => {
     error,
   } = useActivityFeed({
     days,
-    per_page: 10,
+    perPage: 10,
   })
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {

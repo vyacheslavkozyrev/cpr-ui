@@ -105,8 +105,10 @@ export interface TGoalTaskDto {
 /**
  * Goals Summary for Dashboard (API Response)
  * Provides comprehensive goal statistics and recent activity
+ * NOTE: TGoalsSummaryDto is now defined in DashboardDto.ts for dashboard refactoring
+ * This interface can be removed once migration is complete
  */
-export interface TGoalsSummaryDto {
+export interface TLegacyGoalsSummaryDto {
   statistics: TGoalsStatisticsDto
   recentGoals?: TRecentGoalDto[]
   progressTrend?: TProgressTrendDto[]

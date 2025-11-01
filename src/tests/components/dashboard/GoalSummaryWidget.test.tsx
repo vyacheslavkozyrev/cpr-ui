@@ -6,9 +6,9 @@ import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { http, HttpResponse } from 'msw'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { GoalSummaryWidget } from '../../../components/dashboard/widgets/GoalSummaryWidget'
+import { dashboardHandlers } from '../../../mocks/handlers/dashboardHandlers'
 import { server } from '../../../mocks/server'
 import { renderWithRouter } from '../../utils'
-import { mockGoalsSummary } from './test-utils'
 
 // Mock Chart.js to avoid canvas rendering issues
 interface ChartProps {
@@ -36,11 +36,7 @@ vi.mock('react-router-dom', async () => {
 // Setup MSW handlers for this test suite
 beforeEach(() => {
   vi.clearAllMocks()
-  server.use(
-    http.get('*/api/dashboard/goals-summary', () => {
-      return HttpResponse.json(mockGoalsSummary)
-    })
-  )
+  server.use(...dashboardHandlers)
 })
 
 describe('GoalSummaryWidget', () => {
@@ -81,9 +77,16 @@ describe('GoalSummaryWidget', () => {
     // Switch to Goals tab
     fireEvent.click(screen.getByRole('tab', { name: 'Goals' }))
 
-    // Should show more goals in the list view
+    // Should show goals in the list view
     await waitFor(() => {
-      expect(screen.getByText('Created: 11/1/2024')).toBeInTheDocument()
+      expect(screen.getByText('Improve API Design Skills')).toBeInTheDocument()
+      expect(
+        screen.getByText('Learn Advanced React Patterns')
+      ).toBeInTheDocument()
+      expect(
+        screen.getByText('Learn Docker Containerization')
+      ).toBeInTheDocument()
+      expect(screen.getByText('Mentor Junior Developers')).toBeInTheDocument()
     })
   })
 

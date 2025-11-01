@@ -1,16 +1,30 @@
 import { useQuery } from '@tanstack/react-query'
 import type {
-  IActivityFeed,
-  IActivityFeedParams,
-  IDashboardSummary,
-  IDashboardSummaryParams,
-  IFeedbackSummary,
-  IFeedbackSummaryParams,
-  IGoalsSummary,
-  IGoalsSummaryParams,
-  ISkillsSummary,
-} from '../../types/dashboard'
+  IActivityFeedDto,
+  IDashboardSummaryDto,
+  IFeedbackSummaryDto,
+  IGoalsSummaryDto,
+  ISkillsSummaryDto,
+} from '../../dtos/DashboardDto'
+import type {
+  ActivityFeed,
+  ActivityFeedParams,
+  DashboardSummary,
+  DashboardSummaryParams,
+  FeedbackSummary,
+  FeedbackSummaryParams,
+  GoalsSummary,
+  GoalsSummaryParams,
+  SkillsSummary,
+} from '../../models/Dashboard'
 import { apiClient } from '../apiClient'
+import {
+  transformActivityFeed,
+  transformDashboardSummary,
+  transformFeedbackSummary,
+  transformGoalsSummary,
+  transformSkillsSummary,
+} from '../transformations/dashboardTransformations'
 
 /**
  * Dashboard API Service
@@ -29,13 +43,13 @@ const DASHBOARD_ENDPOINTS = {
 // Query keys
 export const DASHBOARD_QUERY_KEYS = {
   all: ['dashboard'] as const,
-  summary: (params?: IDashboardSummaryParams) =>
+  summary: (params?: DashboardSummaryParams) =>
     [...DASHBOARD_QUERY_KEYS.all, 'summary', params] as const,
-  activity: (params?: IActivityFeedParams) =>
+  activity: (params?: ActivityFeedParams) =>
     [...DASHBOARD_QUERY_KEYS.all, 'activity', params] as const,
-  goals: (params?: IGoalsSummaryParams) =>
+  goals: (params?: GoalsSummaryParams) =>
     [...DASHBOARD_QUERY_KEYS.all, 'goals', params] as const,
-  feedback: (params?: IFeedbackSummaryParams) =>
+  feedback: (params?: FeedbackSummaryParams) =>
     [...DASHBOARD_QUERY_KEYS.all, 'feedback', params] as const,
   skills: () => [...DASHBOARD_QUERY_KEYS.all, 'skills'] as const,
 }
@@ -46,22 +60,22 @@ export const dashboardApi = {
    * Get dashboard summary statistics
    */
   getSummary: async (
-    params?: IDashboardSummaryParams
-  ): Promise<IDashboardSummary> => {
+    params?: DashboardSummaryParams
+  ): Promise<DashboardSummary> => {
     const searchParams = new URLSearchParams()
     if (params?.period) {
       searchParams.append('period', params.period)
     }
 
     const url = `${DASHBOARD_ENDPOINTS.summary}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`
-    const response = await apiClient.get<IDashboardSummary>(url)
-    return response.data
+    const response = await apiClient.get<IDashboardSummaryDto>(url)
+    return transformDashboardSummary(response.data)
   },
 
   /**
    * Get activity feed
    */
-  getActivity: async (params?: IActivityFeedParams): Promise<IActivityFeed> => {
+  getActivity: async (params?: ActivityFeedParams): Promise<ActivityFeed> => {
     const searchParams = new URLSearchParams()
     if (params?.days) {
       searchParams.append('days', params.days.toString())
@@ -69,55 +83,55 @@ export const dashboardApi = {
     if (params?.page) {
       searchParams.append('page', params.page.toString())
     }
-    if (params?.per_page) {
-      searchParams.append('per_page', params.per_page.toString())
+    if (params?.perPage) {
+      searchParams.append('per_page', params.perPage.toString())
     }
 
     const url = `${DASHBOARD_ENDPOINTS.activity}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`
-    const response = await apiClient.get<IActivityFeed>(url)
-    return response.data
+    const response = await apiClient.get<IActivityFeedDto>(url)
+    return transformActivityFeed(response.data)
   },
 
   /**
    * Get goals summary statistics
    */
   getGoalsSummary: async (
-    params?: IGoalsSummaryParams
-  ): Promise<IGoalsSummary> => {
+    params?: GoalsSummaryParams
+  ): Promise<GoalsSummary> => {
     const searchParams = new URLSearchParams()
     if (params?.period) {
       searchParams.append('period', params.period)
     }
 
     const url = `${DASHBOARD_ENDPOINTS.goalsSummary}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`
-    const response = await apiClient.get<IGoalsSummary>(url)
-    return response.data
+    const response = await apiClient.get<IGoalsSummaryDto>(url)
+    return transformGoalsSummary(response.data)
   },
 
   /**
    * Get feedback summary statistics
    */
   getFeedbackSummary: async (
-    params?: IFeedbackSummaryParams
-  ): Promise<IFeedbackSummary> => {
+    params?: FeedbackSummaryParams
+  ): Promise<FeedbackSummary> => {
     const searchParams = new URLSearchParams()
     if (params?.period) {
       searchParams.append('period', params.period)
     }
 
     const url = `${DASHBOARD_ENDPOINTS.feedbackSummary}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`
-    const response = await apiClient.get<IFeedbackSummary>(url)
-    return response.data
+    const response = await apiClient.get<IFeedbackSummaryDto>(url)
+    return transformFeedbackSummary(response.data)
   },
 
   /**
    * Get skills summary statistics
    */
-  getSkillsSummary: async (): Promise<ISkillsSummary> => {
-    const response = await apiClient.get<ISkillsSummary>(
+  getSkillsSummary: async (): Promise<SkillsSummary> => {
+    const response = await apiClient.get<ISkillsSummaryDto>(
       DASHBOARD_ENDPOINTS.skillsSummary
     )
-    return response.data
+    return transformSkillsSummary(response.data)
   },
 }
 
@@ -126,7 +140,7 @@ export const dashboardApi = {
 /**
  * Hook for fetching dashboard summary
  */
-export const useDashboardSummary = (params?: IDashboardSummaryParams) => {
+export const useDashboardSummary = (params?: DashboardSummaryParams) => {
   return useQuery({
     queryKey: DASHBOARD_QUERY_KEYS.summary(params),
     queryFn: () => dashboardApi.getSummary(params),
@@ -138,7 +152,7 @@ export const useDashboardSummary = (params?: IDashboardSummaryParams) => {
 /**
  * Hook for fetching activity feed
  */
-export const useActivityFeed = (params?: IActivityFeedParams) => {
+export const useActivityFeed = (params?: ActivityFeedParams) => {
   return useQuery({
     queryKey: DASHBOARD_QUERY_KEYS.activity(params),
     queryFn: () => dashboardApi.getActivity(params),
@@ -150,7 +164,7 @@ export const useActivityFeed = (params?: IActivityFeedParams) => {
 /**
  * Hook for fetching goals summary
  */
-export const useGoalsSummary = (params?: IGoalsSummaryParams) => {
+export const useGoalsSummary = (params?: GoalsSummaryParams) => {
   return useQuery({
     queryKey: DASHBOARD_QUERY_KEYS.goals(params),
     queryFn: () => dashboardApi.getGoalsSummary(params),
@@ -162,7 +176,7 @@ export const useGoalsSummary = (params?: IGoalsSummaryParams) => {
 /**
  * Hook for fetching feedback summary
  */
-export const useFeedbackSummary = (params?: IFeedbackSummaryParams) => {
+export const useFeedbackSummary = (params?: FeedbackSummaryParams) => {
   return useQuery({
     queryKey: DASHBOARD_QUERY_KEYS.feedback(params),
     queryFn: () => dashboardApi.getFeedbackSummary(params),

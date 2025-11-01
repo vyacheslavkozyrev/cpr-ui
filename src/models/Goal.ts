@@ -131,13 +131,9 @@ export interface PaginatedGoals {
 /**
  * Goal Summary Model (Client-side)
  * Complete summary data for dashboard integration
+ * NOTE: GoalsSummary is now defined in Dashboard.ts for dashboard refactoring
+ * This interface can be removed once migration is complete
  */
-export interface GoalsSummary {
-  statistics: GoalsStatistics
-  recentGoals: RecentGoal[]
-  progressTrend: ProgressTrend[]
-  insights: GoalInsights
-}
 
 /**
  * Goal Insights Model (Client-side)

@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { subscribeWithSelector } from 'zustand/middleware'
+import type { IGoalsSummaryDto } from '../dtos/DashboardDto'
 import type {
   TGoalDto,
-  TGoalsSummaryDto,
   TPaginatedGoalsResponseDto,
   TTeamGoalsDto,
 } from '../dtos/GoalDto'
@@ -37,7 +37,7 @@ export interface IGoalsStore {
   // Goals data
   goals: Goal[]
   selectedGoal: Goal | null
-  goalsSummary: TGoalsSummaryDto | null
+  goalsSummary: IGoalsSummaryDto | null
   teamGoals: TTeamGoalsDto | null
 
   // Loading states
@@ -88,7 +88,7 @@ export interface IGoalsStore {
   removeTaskFromGoal: (goalId: string, taskId: string) => void
 
   // Summary and team data
-  setGoalsSummary: (summary: TGoalsSummaryDto) => void
+  setGoalsSummary: (summary: IGoalsSummaryDto) => void
   setTeamGoals: (teamGoals: TTeamGoalsDto) => void
 
   // ========================================
@@ -327,8 +327,8 @@ export const useGoalsStore = create<IGoalsStore>()(
 
     setGoalsSummary: summary => {
       logger.debug('Goals store: Setting goals summary', {
-        totalGoals: summary.statistics.total,
-        completed: summary.statistics.completed,
+        totalGoals: summary.statistics?.total || 0, // Access DTO statistics property
+        completed: summary.statistics?.completed || 0,
       })
       set({ goalsSummary: summary })
     },

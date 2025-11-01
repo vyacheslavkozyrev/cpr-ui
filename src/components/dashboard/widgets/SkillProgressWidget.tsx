@@ -48,10 +48,10 @@ export const SkillProgressWidget: React.FC = () => {
 
   // Chart configuration for skill categories breakdown
   const chartData = {
-    labels: skillsSummary?.skillCategories.map(cat => cat.categoryName) || [],
+    labels: skillsSummary?.categories.map(cat => cat.name) || [],
     datasets: [
       {
-        data: skillsSummary?.skillCategories.map(cat => cat.averageLevel) || [],
+        data: skillsSummary?.categories.map(cat => cat.averageLevel) || [],
         backgroundColor: [
           'rgba(99, 102, 241, 0.8)',
           'rgba(34, 197, 94, 0.8)',
@@ -113,7 +113,7 @@ export const SkillProgressWidget: React.FC = () => {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant='h4' color='primary'>
-            {skillsSummary.statistics.assessedSkills}
+            {skillsSummary.summary.assessedSkills}
           </Typography>
           <Typography variant='caption' color='text.secondary'>
             Assessed
@@ -121,15 +121,15 @@ export const SkillProgressWidget: React.FC = () => {
         </Box>
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant='h4' color='warning.main'>
-            {skillsSummary.statistics.skillGaps}
+            {skillsSummary.improvementAreas.length}
           </Typography>
           <Typography variant='caption' color='text.secondary'>
-            Gaps
+            Skill Gaps
           </Typography>
         </Box>
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant='h4' color='success.main'>
-            {skillsSummary.statistics.averageLevel.toFixed(1)}
+            {skillsSummary.summary.averageLevel.toFixed(1)}
           </Typography>
           <Typography variant='caption' color='text.secondary'>
             Avg Level
@@ -144,12 +144,12 @@ export const SkillProgressWidget: React.FC = () => {
             Assessment Progress
           </Typography>
           <Typography variant='caption' color='text.secondary'>
-            {skillsSummary.statistics.assessmentProgress.toFixed(0)}%
+            {skillsSummary.summary.assessmentProgress.toFixed(0)}%
           </Typography>
         </Box>
         <LinearProgress
           variant='determinate'
-          value={skillsSummary.statistics.assessmentProgress}
+          value={skillsSummary.summary.assessmentProgress}
           sx={{ height: 6, borderRadius: 3 }}
         />
       </Box>
@@ -167,7 +167,7 @@ export const SkillProgressWidget: React.FC = () => {
       {/* All Recent Assessments List */}
       <List dense sx={{ maxHeight: 280, overflow: 'auto' }}>
         {skillsSummary.recentAssessments.map(assessment => (
-          <ListItem key={assessment.skillId} disablePadding sx={{ mb: 1 }}>
+          <ListItem key={assessment.id} disablePadding sx={{ mb: 1 }}>
             <ListItemText
               primary={
                 <Box

@@ -22,8 +22,8 @@ import {
 import React, { useState } from 'react'
 import { Line } from 'react-chartjs-2'
 import { useNavigate } from 'react-router-dom'
+import type { DashboardPeriod } from '../../../models/Dashboard'
 import { useGoalsSummary } from '../../../services/api/dashboardService'
-import type { DashboardPeriod } from '../../../types/dashboard'
 import { DashboardWidget } from '../layout'
 
 interface ITabPanelProps {
@@ -73,7 +73,7 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
   // Chart configuration for progress trend
   const chartData = {
     labels:
-      goalsSummary?.progressTrend.map(trend => {
+      goalsSummary?.trendData.map(trend => {
         const date = new Date(trend.period)
         return date.toLocaleDateString('en-US', {
           month: 'short',
@@ -83,14 +83,14 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
     datasets: [
       {
         label: 'Created',
-        data: goalsSummary?.progressTrend.map(trend => trend.created) || [],
+        data: goalsSummary?.trendData.map(trend => trend.created) || [],
         borderColor: 'rgb(99, 102, 241)',
         backgroundColor: 'rgba(99, 102, 241, 0.1)',
         tension: 0.4,
       },
       {
         label: 'Completed',
-        data: goalsSummary?.progressTrend.map(trend => trend.completed) || [],
+        data: goalsSummary?.trendData.map(trend => trend.completed) || [],
         borderColor: 'rgb(34, 197, 94)',
         backgroundColor: 'rgba(34, 197, 94, 0.1)',
         tension: 0.4,
@@ -128,10 +128,10 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
     switch (status) {
       case 'completed':
         return 'success'
-      case 'in_progress':
+      case 'active':
         return 'primary'
-      case 'open':
-        return 'default'
+      case 'on_hold':
+        return 'warning'
       default:
         return 'default'
     }
@@ -144,7 +144,7 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant='h4' color='primary'>
-            {goalsSummary.statistics.active}
+            {goalsSummary.summary.active}
           </Typography>
           <Typography variant='caption' color='text.secondary'>
             Active
@@ -152,7 +152,7 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
         </Box>
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant='h4' color='success.main'>
-            {goalsSummary.statistics.completed}
+            {goalsSummary.summary.completed}
           </Typography>
           <Typography variant='caption' color='text.secondary'>
             Completed
@@ -160,7 +160,7 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
         </Box>
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant='h4' color='error.main'>
-            {goalsSummary.statistics.overdue}
+            {goalsSummary.summary.overdue}
           </Typography>
           <Typography variant='caption' color='text.secondary'>
             Overdue
@@ -216,13 +216,19 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
                       variant='filled'
                     />
                   )}
-                  <Typography
-                    variant='caption'
-                    color='text.secondary'
-                    sx={{ ml: 'auto' }}
-                  >
-                    Created: {new Date(goal.createdAt).toLocaleDateString()}
-                  </Typography>
+                  <Box sx={{ display: 'flex', gap: 2, ml: 'auto' }}>
+                    {goal.createdDate && (
+                      <Typography variant='caption' color='text.secondary'>
+                        Created:{' '}
+                        {new Date(goal.createdDate).toLocaleDateString()}
+                      </Typography>
+                    )}
+                    {goal.dueDate && (
+                      <Typography variant='caption' color='text.secondary'>
+                        Due: {new Date(goal.dueDate).toLocaleDateString()}
+                      </Typography>
+                    )}
+                  </Box>
                 </Box>
               }
             />
