@@ -9,9 +9,42 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { ThemeToggle } from '../components/ThemeToggle'
 import { useTheme } from '../hooks/useTheme'
+
+const getStyles = () => ({
+  primaryPaper: {
+    p: 2,
+    bgcolor: 'primary.main',
+    color: 'primary.contrastText',
+  },
+  secondaryPaper: {
+    p: 2,
+    bgcolor: 'secondary.main',
+    color: 'secondary.contrastText',
+  },
+  errorPaper: {
+    p: 2,
+    bgcolor: 'error.main',
+    color: 'error.contrastText',
+  },
+  warningPaper: {
+    p: 2,
+    bgcolor: 'warning.main',
+    color: 'warning.contrastText',
+  },
+  infoPaper: {
+    p: 2,
+    bgcolor: 'info.main',
+    color: 'info.contrastText',
+  },
+  successPaper: {
+    p: 2,
+    bgcolor: 'success.main',
+    color: 'success.contrastText',
+  },
+})
 
 // Theme demo component to showcase the theme system
 export const ThemeDemo: React.FC = () => {
@@ -26,6 +59,7 @@ export const ThemeDemo: React.FC = () => {
     setDark,
     setSystem,
   } = useTheme()
+  const styles = useMemo(() => getStyles(), [])
 
   return (
     <Box p={3} maxWidth={800} mx='auto'>
@@ -124,49 +158,19 @@ export const ThemeDemo: React.FC = () => {
                 Color Palette Demo
               </Typography>
               <Stack direction='row' spacing={2} flexWrap='wrap'>
-                <Paper
-                  sx={{
-                    p: 2,
-                    bgcolor: 'primary.main',
-                    color: 'primary.contrastText',
-                  }}
-                >
+                <Paper sx={styles.primaryPaper}>
                   <Typography variant='body2'>Primary</Typography>
                 </Paper>
-                <Paper
-                  sx={{
-                    p: 2,
-                    bgcolor: 'secondary.main',
-                    color: 'secondary.contrastText',
-                  }}
-                >
+                <Paper sx={styles.secondaryPaper}>
                   <Typography variant='body2'>Secondary</Typography>
                 </Paper>
-                <Paper
-                  sx={{
-                    p: 2,
-                    bgcolor: 'success.main',
-                    color: 'success.contrastText',
-                  }}
-                >
+                <Paper sx={styles.successPaper}>
                   <Typography variant='body2'>Success</Typography>
                 </Paper>
-                <Paper
-                  sx={{
-                    p: 2,
-                    bgcolor: 'warning.main',
-                    color: 'warning.contrastText',
-                  }}
-                >
+                <Paper sx={styles.warningPaper}>
                   <Typography variant='body2'>Warning</Typography>
                 </Paper>
-                <Paper
-                  sx={{
-                    p: 2,
-                    bgcolor: 'error.main',
-                    color: 'error.contrastText',
-                  }}
-                >
+                <Paper sx={styles.errorPaper}>
                   <Typography variant='body2'>Error</Typography>
                 </Paper>
               </Stack>

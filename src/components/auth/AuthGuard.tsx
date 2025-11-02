@@ -71,7 +71,11 @@ export const AuthGuard = ({
         <Typography variant='body1' color='text.secondary'>
           You don't have the required permissions to access this area.
         </Typography>
-        <Typography variant='body2' color='text.secondary' sx={{ mt: 2 }}>
+        <Typography
+          variant='body2'
+          color='text.secondary'
+          sx={styles.requiredRoles}
+        >
           Required roles: {requireRoles.join(', ')}
         </Typography>
         <Typography variant='body2' color='text.secondary'>

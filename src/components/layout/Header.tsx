@@ -50,6 +50,7 @@ const getStyles = (theme: Theme) => ({
   menuIcon: {
     mr: 2,
   },
+  loadingSpinner: { mr: 1 },
 })
 
 /**
@@ -115,7 +116,11 @@ export const Header: React.FC = () => {
         <Box sx={styles.userSection}>
           {userLoading ? (
             <>
-              <CircularProgress size={16} color='inherit' sx={{ mr: 1 }} />
+              <CircularProgress
+                size={16}
+                color='inherit'
+                sx={styles.loadingSpinner}
+              />
               <Typography variant='body2' sx={styles.userName}>
                 {t('common.loading')}
               </Typography>

@@ -45,6 +45,9 @@ const getStyles = () => ({
   settingControl: {
     minWidth: '120px',
   },
+  description: { mb: 4 },
+  selectHelperText: { mt: 0.5 },
+  languageFlag: { cursor: 'pointer', opacity: 0.5 },
 })
 
 /**
@@ -129,7 +132,7 @@ export const SettingsPage: React.FC = () => {
         </Typography>
       </Box>
 
-      <Typography variant='body1' color='textSecondary' sx={{ mb: 4 }}>
+      <Typography variant='body1' color='textSecondary' sx={styles.description}>
         {t('settings.subtitle')}
       </Typography>
 
@@ -250,7 +253,7 @@ export const SettingsPage: React.FC = () => {
                 <Typography
                   variant='caption'
                   color='textSecondary'
-                  sx={{ mt: 0.5 }}
+                  sx={styles.selectHelperText}
                 >
                   Preview: {formatDate(new Date(), currentDateFormat)}
                 </Typography>
@@ -374,7 +377,7 @@ export const SettingsPage: React.FC = () => {
               <Typography
                 variant='body2'
                 color='primary'
-                sx={{ cursor: 'pointer', opacity: 0.5 }}
+                sx={styles.languageFlag}
               >
                 Export Data
               </Typography>

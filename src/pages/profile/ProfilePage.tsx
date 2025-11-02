@@ -66,6 +66,13 @@ const getStyles = () => ({
     justifyContent: 'flex-end',
     mt: 3,
   },
+  headerSection: { mb: 3 },
+  titleContainer: { mb: 0, flex: 1 },
+  personalInfoSection: { mb: 3 },
+  fieldHelperText: { mt: 1, display: 'block' },
+  divider: { my: 3 },
+  skillsSection: { mb: 3 },
+  monospaceText: { fontFamily: 'monospace' },
 })
 
 // Form data interface
@@ -199,12 +206,12 @@ export const ProfilePage: React.FC = () => {
 
   return (
     <Box sx={styles.container}>
-      <Stack direction='row' alignItems='center' sx={{ mb: 3 }}>
+      <Stack direction='row' alignItems='center' sx={styles.headerSection}>
         <Typography
           variant='h4'
           component='h1'
           gutterBottom
-          sx={{ mb: 0, flex: 1 }}
+          sx={styles.titleContainer}
         >
           User Profile
         </Typography>
@@ -244,7 +251,7 @@ export const ProfilePage: React.FC = () => {
           direction='row'
           spacing={3}
           alignItems='flex-start'
-          sx={{ mb: 3 }}
+          sx={styles.personalInfoSection}
         >
           <Box textAlign='center'>
             <Avatar alt={user.displayName || 'User'} sx={styles.avatar}>
@@ -253,7 +260,7 @@ export const ProfilePage: React.FC = () => {
             <Typography
               variant='caption'
               color='textSecondary'
-              sx={{ mt: 1, display: 'block' }}
+              sx={styles.fieldHelperText}
             >
               Synced from Azure AD
             </Typography>
@@ -272,14 +279,14 @@ export const ProfilePage: React.FC = () => {
           </Box>
         </Stack>
 
-        <Divider sx={{ my: 3 }} />
+        <Divider sx={styles.divider} />
 
         {/* Personal Information Section */}
         <Typography variant='h6' gutterBottom sx={styles.sectionTitle}>
           {t('profile.personalInfo')}
         </Typography>
 
-        <Stack spacing={2} sx={{ mb: 3 }}>
+        <Stack spacing={2} sx={styles.skillsSection}>
           {isEditing ? (
             <>
               <Controller
@@ -366,7 +373,7 @@ export const ProfilePage: React.FC = () => {
           )}
         </Stack>
 
-        <Divider sx={{ my: 3 }} />
+        <Divider sx={styles.divider} />
 
         {/* Position & Organization Information */}
         <Typography variant='h6' gutterBottom sx={styles.sectionTitle}>
@@ -378,7 +385,7 @@ export const ProfilePage: React.FC = () => {
             <Typography variant='body2' color='textSecondary' gutterBottom>
               {t('profile.employeeId')}
             </Typography>
-            <Typography variant='body1' sx={{ fontFamily: 'monospace' }}>
+            <Typography variant='body1' sx={styles.monospaceText}>
               {user.employeeId || t('profile.notAssigned')}
             </Typography>
           </Box>
@@ -396,7 +403,7 @@ export const ProfilePage: React.FC = () => {
             <Typography variant='body2' color='textSecondary' gutterBottom>
               {t('profile.positionId')}
             </Typography>
-            <Typography variant='body1' sx={{ fontFamily: 'monospace' }}>
+            <Typography variant='body1' sx={styles.monospaceText}>
               {user.position.id || t('profile.notAssigned')}
             </Typography>
           </Box>

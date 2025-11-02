@@ -13,7 +13,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useThemeStore, type TThemeMode } from '../stores/themeStore'
 
 // Theme toggle button props
@@ -115,10 +115,13 @@ const ThemeMenuSelector: React.FC<Omit<ThemeToggleProps, 'variant'>> = ({
     setAnchorEl(null)
   }
 
-  const handleModeSelect = (selectedMode: TThemeMode) => {
-    setMode(selectedMode)
-    handleClose()
-  }
+  const handleModeSelect = useCallback(
+    (selectedMode: TThemeMode) => {
+      setMode(selectedMode)
+      handleClose()
+    },
+    [setMode]
+  )
 
   const getCurrentIcon = () => {
     if (mode === 'system') return <SystemIcon />
@@ -151,19 +154,25 @@ const ThemeMenuSelector: React.FC<Omit<ThemeToggleProps, 'variant'>> = ({
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {themeOptions.map(option => (
-          <MenuItem
-            key={option.mode}
-            onClick={() => handleModeSelect(option.mode)}
-            selected={mode === option.mode}
-          >
-            <ListItemIcon>{option.icon}</ListItemIcon>
-            <ListItemText
-              primary={option.label}
-              secondary={option.description}
-            />
-          </MenuItem>
-        ))}
+        {themeOptions.map(option => {
+          const handleOptionClick = () => {
+            handleModeSelect(option.mode)
+          }
+
+          return (
+            <MenuItem
+              key={option.mode}
+              onClick={handleOptionClick}
+              selected={mode === option.mode}
+            >
+              <ListItemIcon>{option.icon}</ListItemIcon>
+              <ListItemText
+                primary={option.label}
+                secondary={option.description}
+              />
+            </MenuItem>
+          )
+        })}
       </Menu>
     </Box>
   )

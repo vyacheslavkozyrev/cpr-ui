@@ -21,7 +21,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Line } from 'react-chartjs-2'
 import { useNavigate } from 'react-router-dom'
 import type { DashboardPeriod } from '../../../models/Dashboard'
@@ -35,9 +35,11 @@ interface ITabPanelProps {
 }
 
 function TabPanel({ children, value, index }: ITabPanelProps) {
+  const styles = useMemo(() => getStyles(), [])
+
   return (
     <div role='tabpanel' hidden={value !== index}>
-      {value === index && <Box sx={{ pt: 2 }}>{children}</Box>}
+      {value === index && <Box sx={styles.tabPanel}>{children}</Box>}
     </div>
   )
 }
@@ -57,6 +59,65 @@ interface IFeedbackSummaryWidgetProps {
   period?: DashboardPeriod
 }
 
+const getStyles = () => ({
+  tabPanel: { pt: 2 },
+  summaryContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+  },
+  statisticsContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    mb: 2,
+  },
+  statItem: {
+    textAlign: 'center',
+  },
+  ratingContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    gap: 0.5,
+  },
+  chartWrapper: { height: 200 },
+  feedbackListContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+  },
+  feedbackList: {
+    maxHeight: 280,
+    overflow: 'auto',
+  },
+  listItem: { mb: 1 },
+  avatar: {
+    width: 32,
+    height: 32,
+    fontSize: '0.75rem',
+  },
+  feedbackContent: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 1,
+  },
+  feedbackText: { flex: 1 },
+  viewButton: { alignSelf: 'flex-start' },
+  headerContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    mb: 1,
+  },
+  tabs: { minHeight: 'auto' },
+  tab: {
+    minWidth: 0,
+    px: 2,
+    minHeight: 32,
+    py: 1,
+  },
+})
+
 /**
  * FeedbackSummaryWidget Component
  * Displays feedback statistics, recent feedback, and rating trends
@@ -71,6 +132,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
     error,
   } = useFeedbackSummary({ period })
   const [tabValue, setTabValue] = useState(0)
+  const styles = useMemo(() => getStyles(), [])
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue)
@@ -132,10 +194,10 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
 
   // Chart Tab Content
   const chartContent = feedbackSummary && (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={styles.summaryContainer}>
       {/* Statistics Overview */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-        <Box sx={{ textAlign: 'center' }}>
+      <Box sx={styles.statisticsContainer}>
+        <Box sx={styles.statItem}>
           <Typography variant='h4' color='primary'>
             {feedbackSummary.summary.totalReceived}
           </Typography>
@@ -143,7 +205,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
             Received
           </Typography>
         </Box>
-        <Box sx={{ textAlign: 'center' }}>
+        <Box sx={styles.statItem}>
           <Typography variant='h4' color='warning.main'>
             {feedbackSummary.summary.pendingRequests}
           </Typography>
@@ -151,14 +213,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
             Pending
           </Typography>
         </Box>
-        <Box
-          sx={{
-            textAlign: 'center',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
+        <Box sx={styles.ratingContainer}>
           <Rating
             value={feedbackSummary.summary.averageRating}
             precision={0.1}
@@ -172,7 +227,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
       </Box>
 
       {/* Rating Trend Chart */}
-      <Box sx={{ height: 200 }}>
+      <Box sx={styles.chartWrapper}>
         <Line data={chartData} options={chartOptions} />
       </Box>
     </Box>
@@ -180,20 +235,20 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
 
   // Feedback List Tab Content
   const feedbackListContent = feedbackSummary && (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={styles.feedbackListContainer}>
       {/* All Recent Feedback List */}
-      <List dense sx={{ maxHeight: 280, overflow: 'auto' }}>
+      <List dense sx={styles.feedbackList}>
         {feedbackSummary.recentFeedback.map(feedback => (
-          <ListItem key={feedback.id} disablePadding sx={{ mb: 1 }}>
+          <ListItem key={feedback.id} disablePadding sx={styles.listItem}>
             <ListItemAvatar>
-              <Avatar sx={{ width: 32, height: 32, fontSize: '0.75rem' }}>
+              <Avatar sx={styles.avatar}>
                 {getInitials(feedback.fromUser.name)}
               </Avatar>
             </ListItemAvatar>
             <ListItemText
               primary={
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Typography variant='body2' sx={{ flex: 1 }}>
+                <Box sx={styles.feedbackContent}>
+                  <Typography variant='body2' sx={styles.feedbackText}>
                     {feedback.fromUser.name}
                   </Typography>
                   <Rating value={feedback.rating} readOnly size='small' />
@@ -216,7 +271,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
         variant='outlined'
         size='small'
         onClick={handleViewAllFeedback}
-        sx={{ alignSelf: 'flex-start' }}
+        sx={styles.viewButton}
       >
         View All Feedback
       </Button>
@@ -226,30 +281,13 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
   const widgetContent = feedbackSummary && (
     <Box>
       {/* Header with Title and Tabs */}
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          mb: 1,
-        }}
-      >
+      <Box sx={styles.headerContainer}>
         <Typography variant='h6' component='h3'>
           Feedback Summary
         </Typography>
-        <Tabs
-          value={tabValue}
-          onChange={handleTabChange}
-          sx={{ minHeight: 'auto' }}
-        >
-          <Tab
-            label='Chart'
-            sx={{ minWidth: 0, px: 2, minHeight: 32, py: 1 }}
-          />
-          <Tab
-            label='Feedback'
-            sx={{ minWidth: 0, px: 2, minHeight: 32, py: 1 }}
-          />
+        <Tabs value={tabValue} onChange={handleTabChange} sx={styles.tabs}>
+          <Tab label='Chart' sx={styles.tab} />
+          <Tab label='Feedback' sx={styles.tab} />
         </Tabs>
       </Box>
 

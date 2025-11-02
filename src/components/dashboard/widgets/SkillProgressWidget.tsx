@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material'
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Doughnut } from 'react-chartjs-2'
 import { useNavigate } from 'react-router-dom'
 import { useSkillsSummary } from '../../../services/api/dashboardService'
@@ -23,15 +23,85 @@ interface ITabPanelProps {
 }
 
 function TabPanel({ children, value, index }: ITabPanelProps) {
+  const styles = useMemo(() => getStyles(), [])
+
   return (
     <div role='tabpanel' hidden={value !== index}>
-      {value === index && <Box sx={{ pt: 2 }}>{children}</Box>}
+      {value === index && <Box sx={styles.tabPanel}>{children}</Box>}
     </div>
   )
 }
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend)
+
+const getStyles = () => ({
+  tabPanel: { pt: 2 },
+  chartContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+  },
+  statisticsContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    mb: 2,
+  },
+  statItem: {
+    textAlign: 'center',
+  },
+  progressSection: { mb: 2 },
+  progressHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    mb: 0.5,
+  },
+  progressBar: {
+    height: 6,
+    borderRadius: 3,
+  },
+  chartWrapper: { height: 160 },
+  skillsListContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+  },
+  skillsList: {
+    maxHeight: 280,
+    overflow: 'auto',
+  },
+  listItem: {
+    mb: 1,
+  },
+  skillItemContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  skillLevelBadge: {
+    px: 1,
+    py: 0.25,
+    borderRadius: 1,
+    color: 'white',
+    fontWeight: 'medium',
+  },
+  viewButton: {
+    alignSelf: 'flex-start',
+  },
+  headerContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    mb: 1,
+  },
+  tabs: { minHeight: 'auto' },
+  tab: {
+    minWidth: 0,
+    px: 2,
+    minHeight: 32,
+    py: 1,
+  },
+})
 
 /**
  * SkillProgressWidget Component
@@ -41,6 +111,7 @@ export const SkillProgressWidget: React.FC = () => {
   const navigate = useNavigate()
   const { data: skillsSummary, isLoading, error } = useSkillsSummary()
   const [tabValue, setTabValue] = useState(0)
+  const styles = useMemo(() => getStyles(), [])
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue)
@@ -108,10 +179,10 @@ export const SkillProgressWidget: React.FC = () => {
 
   // Chart Tab Content
   const chartContent = skillsSummary && (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={styles.chartContainer}>
       {/* Statistics Overview */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-        <Box sx={{ textAlign: 'center' }}>
+      <Box sx={styles.statisticsContainer}>
+        <Box sx={styles.statItem}>
           <Typography variant='h4' color='primary'>
             {skillsSummary.summary.assessedSkills}
           </Typography>
@@ -119,7 +190,7 @@ export const SkillProgressWidget: React.FC = () => {
             Assessed
           </Typography>
         </Box>
-        <Box sx={{ textAlign: 'center' }}>
+        <Box sx={styles.statItem}>
           <Typography variant='h4' color='warning.main'>
             {skillsSummary.improvementAreas.length}
           </Typography>
@@ -127,7 +198,7 @@ export const SkillProgressWidget: React.FC = () => {
             Skill Gaps
           </Typography>
         </Box>
-        <Box sx={{ textAlign: 'center' }}>
+        <Box sx={styles.statItem}>
           <Typography variant='h4' color='success.main'>
             {skillsSummary.summary.averageLevel.toFixed(1)}
           </Typography>
@@ -138,8 +209,8 @@ export const SkillProgressWidget: React.FC = () => {
       </Box>
 
       {/* Progress Bar */}
-      <Box sx={{ mb: 2 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+      <Box sx={styles.progressSection}>
+        <Box sx={styles.progressHeader}>
           <Typography variant='caption' color='text.secondary'>
             Assessment Progress
           </Typography>
@@ -150,12 +221,12 @@ export const SkillProgressWidget: React.FC = () => {
         <LinearProgress
           variant='determinate'
           value={skillsSummary.summary.assessmentProgress}
-          sx={{ height: 6, borderRadius: 3 }}
+          sx={styles.progressBar}
         />
       </Box>
 
       {/* Skills Categories Chart */}
-      <Box sx={{ height: 160 }}>
+      <Box sx={styles.chartWrapper}>
         <Doughnut data={chartData} options={chartOptions} />
       </Box>
     </Box>
@@ -163,32 +234,22 @@ export const SkillProgressWidget: React.FC = () => {
 
   // Skills List Tab Content
   const skillsListContent = skillsSummary && (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={styles.skillsListContainer}>
       {/* All Recent Assessments List */}
-      <List dense sx={{ maxHeight: 280, overflow: 'auto' }}>
+      <List dense sx={styles.skillsList}>
         {skillsSummary.recentAssessments.map(assessment => (
-          <ListItem key={assessment.id} disablePadding sx={{ mb: 1 }}>
+          <ListItem key={assessment.id} disablePadding sx={styles.listItem}>
             <ListItemText
               primary={
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}
-                >
+                <Box sx={styles.skillItemContainer}>
                   <Typography variant='body2'>
                     {assessment.skillName}
                   </Typography>
                   <Typography
                     variant='caption'
                     sx={{
-                      px: 1,
-                      py: 0.25,
-                      borderRadius: 1,
+                      ...styles.skillLevelBadge,
                       bgcolor: `${getSkillLevelColor(assessment.level)}.main`,
-                      color: 'white',
-                      fontWeight: 'medium',
                     }}
                   >
                     {getSkillLevelLabel(assessment.level)}
@@ -211,7 +272,7 @@ export const SkillProgressWidget: React.FC = () => {
         variant='outlined'
         size='small'
         onClick={handleViewSkills}
-        sx={{ alignSelf: 'flex-start' }}
+        sx={styles.viewButton}
       >
         View Skills Assessment
       </Button>
@@ -221,30 +282,13 @@ export const SkillProgressWidget: React.FC = () => {
   const widgetContent = skillsSummary && (
     <Box>
       {/* Header with Title and Tabs */}
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          mb: 1,
-        }}
-      >
+      <Box sx={styles.headerContainer}>
         <Typography variant='h6' component='h3'>
           Skills Progress
         </Typography>
-        <Tabs
-          value={tabValue}
-          onChange={handleTabChange}
-          sx={{ minHeight: 'auto' }}
-        >
-          <Tab
-            label='Chart'
-            sx={{ minWidth: 0, px: 2, minHeight: 32, py: 1 }}
-          />
-          <Tab
-            label='Skills'
-            sx={{ minWidth: 0, px: 2, minHeight: 32, py: 1 }}
-          />
+        <Tabs value={tabValue} onChange={handleTabChange} sx={styles.tabs}>
+          <Tab label='Chart' sx={styles.tab} />
+          <Tab label='Skills' sx={styles.tab} />
         </Tabs>
       </Box>
 

@@ -1,6 +1,16 @@
 import { Box, Card, CardContent, Typography } from '@mui/material'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useDateFormat } from '../../hooks/useDateFormat'
+
+const getStyles = () => ({
+  dateGrid: {
+    mt: 2,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 1,
+  },
+  dateItem: { mt: 1 },
+})
 
 /**
  * DatePreview Component
@@ -10,6 +20,7 @@ import { useDateFormat } from '../../hooks/useDateFormat'
 export const DatePreview: React.FC = () => {
   const { formatDate, formatDateDistance, formatDateRelative, language } =
     useDateFormat()
+  const styles = useMemo(() => getStyles(), [])
 
   // Sample dates for demonstration
   const now = new Date()
@@ -27,7 +38,7 @@ export const DatePreview: React.FC = () => {
           Current locale: {language}
         </Typography>
 
-        <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+        <Box sx={styles.dateGrid}>
           <Box>
             <Typography variant='body2' color='textSecondary'>
               Today (Different formats):
@@ -46,7 +57,7 @@ export const DatePreview: React.FC = () => {
             </Typography>
           </Box>
 
-          <Box sx={{ mt: 1 }}>
+          <Box sx={styles.dateItem}>
             <Typography variant='body2' color='textSecondary'>
               Relative dates:
             </Typography>
@@ -61,7 +72,7 @@ export const DatePreview: React.FC = () => {
             </Typography>
           </Box>
 
-          <Box sx={{ mt: 1 }}>
+          <Box sx={styles.dateItem}>
             <Typography variant='body2' color='textSecondary'>
               Fixed date (April 15, 1990):
             </Typography>

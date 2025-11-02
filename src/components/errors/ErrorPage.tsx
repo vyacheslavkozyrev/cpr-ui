@@ -38,6 +38,7 @@ const getStyles = (theme: Theme) => ({
     color: 'text.secondary',
     mb: 2,
   },
+  alert: { mb: 3 },
 })
 
 interface IErrorPageProps {
@@ -136,7 +137,7 @@ export const ErrorPage: React.FC<IErrorPageProps> = ({
           </Typography>
         )}
 
-        <Alert severity={defaultContent.severity} sx={{ mb: 3 }}>
+        <Alert severity={defaultContent.severity} sx={styles.alert}>
           <Typography variant='h4' component='h1' gutterBottom>
             {finalTitle}
           </Typography>

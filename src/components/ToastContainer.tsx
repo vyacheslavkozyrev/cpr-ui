@@ -1,6 +1,19 @@
 import { Alert, Snackbar } from '@mui/material'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useToastStore } from '../stores/toastStore'
+
+const getStyles = () => ({
+  snackbar: (index: number) => ({
+    // Stack multiple toasts vertically
+    position: 'fixed',
+    top: `${80 + index * 70}px`,
+    right: '16px',
+    zIndex: 9999,
+  }),
+  alert: {
+    minWidth: '300px',
+  },
+})
 
 /**
  * ToastContainer Component
@@ -10,6 +23,7 @@ import { useToastStore } from '../stores/toastStore'
 export const ToastContainer: React.FC = () => {
   const toasts = useToastStore(state => state.toasts)
   const removeToast = useToastStore(state => state.removeToast)
+  const styles = useMemo(() => getStyles(), [])
 
   const handleClose = React.useCallback(
     (id: string) => {
@@ -27,21 +41,13 @@ export const ToastContainer: React.FC = () => {
           autoHideDuration={toast.duration || null}
           onClose={() => handleClose(toast.id)}
           anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-          sx={{
-            // Stack multiple toasts vertically
-            position: 'fixed',
-            top: `${80 + index * 70}px`,
-            right: '16px',
-            zIndex: 9999,
-          }}
+          sx={styles.snackbar(index)}
         >
           <Alert
             severity={toast.severity}
             onClose={() => handleClose(toast.id)}
             variant='filled'
-            sx={{
-              minWidth: '300px',
-            }}
+            sx={styles.alert}
           >
             {toast.message}
           </Alert>

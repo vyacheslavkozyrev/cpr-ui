@@ -28,6 +28,8 @@ const getStyles = (theme: Theme) => ({
     flexWrap: 'wrap',
     mt: 2,
   },
+  warningAlert: { mb: 3 },
+  infoAlert: { mt: 3 },
 })
 
 /**
@@ -78,7 +80,7 @@ export const TestErrorsPage: React.FC = () => {
         Error Boundary Testing
       </Typography>
 
-      <Alert severity='warning' sx={{ mb: 3 }}>
+      <Alert severity='warning' sx={styles.warningAlert}>
         This page is for testing error boundary functionality. Use the buttons
         below to trigger different types of errors.
       </Alert>
@@ -136,7 +138,7 @@ export const TestErrorsPage: React.FC = () => {
         </Box>
       </Box>
 
-      <Alert severity='info' sx={{ mt: 3 }}>
+      <Alert severity='info' sx={styles.infoAlert}>
         <strong>Expected Behavior:</strong>
         <ul>
           <li>

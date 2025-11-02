@@ -1,6 +1,27 @@
 import { Alert, Box, Card, CardContent, Typography } from '@mui/material'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { WidgetSkeleton } from './WidgetSkeleton'
+
+const getStyles = () => ({
+  card: (height: number | string) => ({
+    height,
+    display: 'flex',
+    flexDirection: 'column',
+  }),
+  cardContent: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  titleContainer: { mb: 2 },
+  contentContainer: { flex: 1 },
+  errorAlert: { mt: 1 },
+  errorDetails: {
+    mt: 1,
+    fontSize: '0.7rem',
+    opacity: 0.7,
+  },
+})
 
 interface IDashboardWidgetProps {
   title?: string
@@ -21,19 +42,13 @@ export const DashboardWidget: React.FC<IDashboardWidgetProps> = ({
   error = null,
   height = 'auto',
 }) => {
+  const styles = useMemo(() => getStyles(), [])
   return (
-    <Card
-      elevation={1}
-      sx={{
-        height,
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+    <Card elevation={1} sx={styles.card(height)}>
+      <CardContent sx={styles.cardContent}>
         {/* Widget Header */}
         {title && (
-          <Box sx={{ mb: 2 }}>
+          <Box sx={styles.titleContainer}>
             <Typography variant='h6' component='h3' gutterBottom>
               {title}
             </Typography>
@@ -41,9 +56,9 @@ export const DashboardWidget: React.FC<IDashboardWidgetProps> = ({
         )}
 
         {/* Widget Content */}
-        <Box sx={{ flex: 1 }}>
+        <Box sx={styles.contentContainer}>
           {error ? (
-            <Alert severity='error' sx={{ mt: 1 }}>
+            <Alert severity='error' sx={styles.errorAlert}>
               Failed to load {title ? title.toLowerCase() : 'widget'}. Please
               try again later.
               {/* Temporary debug info - remove in production */}
@@ -51,7 +66,7 @@ export const DashboardWidget: React.FC<IDashboardWidgetProps> = ({
                 <Typography
                   variant='caption'
                   component='div'
-                  sx={{ mt: 1, fontSize: '0.7rem', opacity: 0.7 }}
+                  sx={styles.errorDetails}
                 >
                   Debug: {error.message}
                 </Typography>

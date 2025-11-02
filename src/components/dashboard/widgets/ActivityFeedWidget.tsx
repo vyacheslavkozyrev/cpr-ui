@@ -21,10 +21,105 @@ import {
   Tabs,
   Typography,
 } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import type { ActivityType } from '../../../models/Dashboard'
 import { useActivityFeed } from '../../../services/api/dashboardService'
 import { DashboardWidget } from '../layout'
+
+// Style factory outside component
+const getStyles = () => ({
+  tabPanel: {
+    pt: 2,
+  },
+  summaryContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+  },
+  headerRow: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    mb: 2,
+  },
+  formControl: {
+    minWidth: 80,
+  },
+  statisticsRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    mb: 2,
+  },
+  statisticBox: {
+    textAlign: 'center',
+  },
+  emptyState: {
+    textAlign: 'center',
+    py: 8,
+  },
+  recentActivitiesTitle: {
+    mb: 1,
+  },
+  listItem: {
+    mb: 1,
+  },
+  avatar: {
+    width: 32,
+    height: 32,
+  },
+  activitiesContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+  },
+  activitiesListContainer: {
+    flex: 1,
+  },
+  activitiesEmptyState: {
+    textAlign: 'center',
+    py: 4,
+  },
+  activitiesList: {
+    maxHeight: 280,
+    overflow: 'auto',
+  },
+  activityTitleRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 1,
+  },
+  activityTitleText: {
+    flex: 1,
+  },
+  activityChip: {
+    fontSize: '0.6rem',
+    height: 20,
+  },
+  activitySecondary: {
+    mt: 0.5,
+  },
+  timestampSpacing: {
+    ml: 1,
+  },
+  viewMoreButton: {
+    alignSelf: 'flex-start',
+  },
+  widgetHeaderRow: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    mb: 1,
+  },
+  tabs: {
+    minHeight: 'auto',
+  },
+  tab: {
+    minWidth: 0,
+    px: 2,
+    minHeight: 32,
+    py: 1,
+  },
+})
 
 interface ITabPanelProps {
   children?: React.ReactNode
@@ -33,9 +128,11 @@ interface ITabPanelProps {
 }
 
 function TabPanel({ children, value, index }: ITabPanelProps) {
+  const styles = useMemo(() => getStyles(), [])
+
   return (
     <div role='tabpanel' hidden={value !== index}>
-      {value === index && <Box sx={{ pt: 2 }}>{children}</Box>}
+      {value === index && <Box sx={styles.tabPanel}>{children}</Box>}
     </div>
   )
 }
@@ -45,6 +142,8 @@ function TabPanel({ children, value, index }: ITabPanelProps) {
  * Displays recent user activities with configurable timeline
  */
 export const ActivityFeedWidget: React.FC = () => {
+  const styles = useMemo(() => getStyles(), [])
+
   const [days, setDays] = useState(10) // Configurable days (default 10)
   const [tabValue, setTabValue] = useState(0)
   const {
@@ -123,18 +222,11 @@ export const ActivityFeedWidget: React.FC = () => {
 
   // Summary Tab Content
   const summaryContent = activityFeed && (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={styles.summaryContainer}>
       {/* Timeline Filter */}
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          mb: 2,
-        }}
-      >
+      <Box sx={styles.headerRow}>
         <Typography variant='subtitle2'>Activity Overview</Typography>
-        <FormControl size='small' sx={{ minWidth: 80 }}>
+        <FormControl size='small' sx={styles.formControl}>
           <InputLabel id='days-select-label'>Days</InputLabel>
           <Select
             labelId='days-select-label'
@@ -152,8 +244,8 @@ export const ActivityFeedWidget: React.FC = () => {
 
       {/* Activity Statistics */}
       {activityFeed.total > 0 ? (
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-          <Box sx={{ textAlign: 'center' }}>
+        <Box sx={styles.statisticsRow}>
+          <Box sx={styles.statisticBox}>
             <Typography variant='h4' color='primary'>
               {activityFeed.total}
             </Typography>
@@ -161,7 +253,7 @@ export const ActivityFeedWidget: React.FC = () => {
               Total Activities
             </Typography>
           </Box>
-          <Box sx={{ textAlign: 'center' }}>
+          <Box sx={styles.statisticBox}>
             <Typography variant='h4' color='success.main'>
               {
                 activityFeed.items.filter(item =>
@@ -173,7 +265,7 @@ export const ActivityFeedWidget: React.FC = () => {
               Completed
             </Typography>
           </Box>
-          <Box sx={{ textAlign: 'center' }}>
+          <Box sx={styles.statisticBox}>
             <Typography variant='h4' color='info.main'>
               {
                 activityFeed.items.filter(item => item.type.includes('created'))
@@ -186,7 +278,7 @@ export const ActivityFeedWidget: React.FC = () => {
           </Box>
         </Box>
       ) : (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
+        <Box sx={styles.emptyState}>
           <Typography variant='body2' color='text.secondary'>
             No activities in the last {days} days
           </Typography>
@@ -196,17 +288,16 @@ export const ActivityFeedWidget: React.FC = () => {
       {/* Recent Activities Preview (Top 3) */}
       {activityFeed.items.length > 0 && (
         <Box>
-          <Typography variant='subtitle2' sx={{ mb: 1 }}>
+          <Typography variant='subtitle2' sx={styles.recentActivitiesTitle}>
             Latest Activities
           </Typography>
           <List dense>
             {activityFeed.items.slice(0, 3).map(activity => (
-              <ListItem key={activity.id} disablePadding sx={{ mb: 1 }}>
+              <ListItem key={activity.id} disablePadding sx={styles.listItem}>
                 <ListItemAvatar>
                   <Avatar
                     sx={{
-                      width: 32,
-                      height: 32,
+                      ...styles.avatar,
                       bgcolor: `${getActivityColor(activity.type)}.main`,
                     }}
                   >
@@ -233,24 +324,23 @@ export const ActivityFeedWidget: React.FC = () => {
 
   // Activities List Tab Content
   const activitiesListContent = activityFeed && (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={styles.activitiesContainer}>
       {/* All Activities List */}
-      <Box sx={{ flex: 1 }}>
+      <Box sx={styles.activitiesListContainer}>
         {activityFeed.items.length === 0 ? (
-          <Box sx={{ textAlign: 'center', py: 4 }}>
+          <Box sx={styles.activitiesEmptyState}>
             <Typography variant='body2' color='text.secondary'>
               No activities in the last {days} days
             </Typography>
           </Box>
         ) : (
-          <List dense sx={{ maxHeight: 280, overflow: 'auto' }}>
+          <List dense sx={styles.activitiesList}>
             {activityFeed.items.map(activity => (
-              <ListItem key={activity.id} disablePadding sx={{ mb: 1 }}>
+              <ListItem key={activity.id} disablePadding sx={styles.listItem}>
                 <ListItemAvatar>
                   <Avatar
                     sx={{
-                      width: 32,
-                      height: 32,
+                      ...styles.avatar,
                       bgcolor: `${getActivityColor(activity.type)}.main`,
                     }}
                   >
@@ -259,27 +349,27 @@ export const ActivityFeedWidget: React.FC = () => {
                 </ListItemAvatar>
                 <ListItemText
                   primary={
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Typography variant='body2' sx={{ flex: 1 }}>
+                    <Box sx={styles.activityTitleRow}>
+                      <Typography variant='body2' sx={styles.activityTitleText}>
                         {activity.title}
                       </Typography>
                       <Chip
                         label={getActivityTypeLabel(activity.type)}
                         size='small'
                         variant='outlined'
-                        sx={{ fontSize: '0.6rem', height: 20 }}
+                        sx={styles.activityChip}
                       />
                     </Box>
                   }
                   secondary={
-                    <Box sx={{ mt: 0.5 }}>
+                    <Box sx={styles.activitySecondary}>
                       <Typography variant='caption' color='text.secondary'>
                         {activity.description}
                       </Typography>
                       <Typography
                         variant='caption'
                         color='text.secondary'
-                        sx={{ ml: 1 }}
+                        sx={styles.timestampSpacing}
                       >
                         • {formatTimeAgo(activity.timestamp)}
                       </Typography>
@@ -294,11 +384,7 @@ export const ActivityFeedWidget: React.FC = () => {
 
       {/* View More Button */}
       {activityFeed.total > activityFeed.items.length && (
-        <Button
-          variant='outlined'
-          size='small'
-          sx={{ alignSelf: 'flex-start' }}
-        >
+        <Button variant='outlined' size='small' sx={styles.viewMoreButton}>
           View More Activities
         </Button>
       )}
@@ -308,30 +394,13 @@ export const ActivityFeedWidget: React.FC = () => {
   const widgetContent = activityFeed && (
     <Box>
       {/* Header with Title and Tabs */}
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          mb: 1,
-        }}
-      >
+      <Box sx={styles.widgetHeaderRow}>
         <Typography variant='h6' component='h3'>
           Activity Feed
         </Typography>
-        <Tabs
-          value={tabValue}
-          onChange={handleTabChange}
-          sx={{ minHeight: 'auto' }}
-        >
-          <Tab
-            label='Summary'
-            sx={{ minWidth: 0, px: 2, minHeight: 32, py: 1 }}
-          />
-          <Tab
-            label='Activities'
-            sx={{ minWidth: 0, px: 2, minHeight: 32, py: 1 }}
-          />
+        <Tabs value={tabValue} onChange={handleTabChange} sx={styles.tabs}>
+          <Tab label='Summary' sx={styles.tab} />
+          <Tab label='Activities' sx={styles.tab} />
         </Tabs>
       </Box>
 

@@ -19,12 +19,84 @@ import {
   Title,
   Tooltip,
 } from 'chart.js'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Line } from 'react-chartjs-2'
 import { useNavigate } from 'react-router-dom'
 import type { DashboardPeriod } from '../../../models/Dashboard'
 import { useGoalsSummary } from '../../../services/api/dashboardService'
 import { DashboardWidget } from '../layout'
+
+// Style factory outside component
+const getStyles = () => ({
+  tabPanel: {
+    pt: 2,
+  },
+  chartContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+  },
+  statisticsRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    mb: 2,
+  },
+  statisticBox: {
+    textAlign: 'center',
+  },
+  chartBox: {
+    height: 200,
+  },
+  goalsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+  },
+  goalsList: {
+    maxHeight: 280,
+    overflow: 'auto',
+  },
+  listItem: {
+    mb: 1,
+  },
+  goalTitleRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 1,
+  },
+  goalTitleText: {
+    flex: 1,
+  },
+  goalSecondary: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 1,
+    mt: 0.5,
+  },
+  goalActions: {
+    display: 'flex',
+    gap: 2,
+    ml: 'auto',
+  },
+  viewMoreButton: {
+    alignSelf: 'flex-start',
+  },
+  widgetHeaderRow: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    mb: 1,
+  },
+  tabs: {
+    minHeight: 'auto',
+  },
+  tab: {
+    minWidth: 0,
+    px: 2,
+    minHeight: 32,
+    py: 1,
+  },
+})
 
 interface ITabPanelProps {
   children?: React.ReactNode
@@ -33,9 +105,11 @@ interface ITabPanelProps {
 }
 
 function TabPanel({ children, value, index }: ITabPanelProps) {
+  const styles = useMemo(() => getStyles(), [])
+
   return (
     <div role='tabpanel' hidden={value !== index}>
-      {value === index && <Box sx={{ pt: 2 }}>{children}</Box>}
+      {value === index && <Box sx={styles.tabPanel}>{children}</Box>}
     </div>
   )
 }
@@ -62,6 +136,7 @@ interface IGoalSummaryWidgetProps {
 export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
   period = 'month',
 }) => {
+  const styles = useMemo(() => getStyles(), [])
   const navigate = useNavigate()
   const { data: goalsSummary, isLoading, error } = useGoalsSummary({ period })
   const [tabValue, setTabValue] = useState(0)
@@ -139,10 +214,10 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
 
   // Chart Tab Content
   const chartContent = goalsSummary && (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={styles.chartContainer}>
       {/* Statistics Overview */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-        <Box sx={{ textAlign: 'center' }}>
+      <Box sx={styles.statisticsRow}>
+        <Box sx={styles.statisticBox}>
           <Typography variant='h4' color='primary'>
             {goalsSummary.summary.active}
           </Typography>
@@ -150,7 +225,7 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
             Active
           </Typography>
         </Box>
-        <Box sx={{ textAlign: 'center' }}>
+        <Box sx={styles.statisticBox}>
           <Typography variant='h4' color='success.main'>
             {goalsSummary.summary.completed}
           </Typography>
@@ -158,7 +233,7 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
             Completed
           </Typography>
         </Box>
-        <Box sx={{ textAlign: 'center' }}>
+        <Box sx={styles.statisticBox}>
           <Typography variant='h4' color='error.main'>
             {goalsSummary.summary.overdue}
           </Typography>
@@ -169,7 +244,7 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
       </Box>
 
       {/* Progress Chart */}
-      <Box sx={{ height: 200 }}>
+      <Box sx={styles.chartBox}>
         <Line data={chartData} options={chartOptions} />
       </Box>
     </Box>
@@ -177,15 +252,15 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
 
   // Goals List Tab Content
   const goalsListContent = goalsSummary && (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={styles.goalsContainer}>
       {/* All Recent Goals List */}
-      <List dense sx={{ maxHeight: 280, overflow: 'auto' }}>
+      <List dense sx={styles.goalsList}>
         {goalsSummary.recentGoals.map(goal => (
-          <ListItem key={goal.id} disablePadding sx={{ mb: 1 }}>
+          <ListItem key={goal.id} disablePadding sx={styles.listItem}>
             <ListItemText
               primary={
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Typography variant='body2' sx={{ flex: 1 }}>
+                <Box sx={styles.goalTitleRow}>
+                  <Typography variant='body2' sx={styles.goalTitleText}>
                     {goal.title}
                   </Typography>
                   <Chip
@@ -197,14 +272,7 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
                 </Box>
               }
               secondary={
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1,
-                    mt: 0.5,
-                  }}
-                >
+                <Box sx={styles.goalSecondary}>
                   <Typography variant='caption'>
                     {goal.progress}% complete
                   </Typography>
@@ -216,7 +284,7 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
                       variant='filled'
                     />
                   )}
-                  <Box sx={{ display: 'flex', gap: 2, ml: 'auto' }}>
+                  <Box sx={styles.goalActions}>
                     {goal.createdDate && (
                       <Typography variant='caption' color='text.secondary'>
                         Created:{' '}
@@ -241,7 +309,7 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
         variant='outlined'
         size='small'
         onClick={handleViewAllGoals}
-        sx={{ alignSelf: 'flex-start' }}
+        sx={styles.viewMoreButton}
       >
         View All Goals
       </Button>
@@ -251,30 +319,13 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
   const widgetContent = goalsSummary && (
     <Box>
       {/* Header with Title and Tabs */}
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          mb: 1,
-        }}
-      >
+      <Box sx={styles.widgetHeaderRow}>
         <Typography variant='h6' component='h3'>
           Goals Summary
         </Typography>
-        <Tabs
-          value={tabValue}
-          onChange={handleTabChange}
-          sx={{ minHeight: 'auto' }}
-        >
-          <Tab
-            label='Chart'
-            sx={{ minWidth: 0, px: 2, minHeight: 32, py: 1 }}
-          />
-          <Tab
-            label='Goals'
-            sx={{ minWidth: 0, px: 2, minHeight: 32, py: 1 }}
-          />
+        <Tabs value={tabValue} onChange={handleTabChange} sx={styles.tabs}>
+          <Tab label='Chart' sx={styles.tab} />
+          <Tab label='Goals' sx={styles.tab} />
         </Tabs>
       </Box>
 

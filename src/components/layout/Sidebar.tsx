@@ -20,13 +20,39 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material'
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { UserRole } from '../../models'
 import { useAuthStore } from '../../stores/authStore'
 
 const drawerWidth = 240
+
+const getStyles = () => ({
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+    '& .MuiDrawer-paper': {
+      width: drawerWidth,
+      boxSizing: 'border-box',
+      position: 'relative',
+      height: 'auto',
+    },
+  },
+  navigationHeader: { p: 2 },
+  listItemButton: {
+    '&.Mui-selected': {
+      backgroundColor: 'primary.main',
+      color: 'primary.contrastText',
+      '&:hover': {
+        backgroundColor: 'primary.dark',
+      },
+      '& .MuiListItemIcon-root': {
+        color: 'primary.contrastText',
+      },
+    },
+  },
+})
 
 interface INavigationItem {
   labelKey: string
@@ -44,6 +70,7 @@ export const Sidebar: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { user } = useAuthStore()
+  const styles = useMemo(() => getStyles(), [])
 
   // Get user roles for menu filtering
   const userRoles = user?.roles || [UserRole.EMPLOYEE]
@@ -111,25 +138,16 @@ export const Sidebar: React.FC = () => {
     return item.requiredRoles.some(role => userRoles.includes(role))
   })
 
-  const handleNavigation = (path: string) => {
-    navigate(path)
-  }
+  const handleNavigation = useCallback(
+    (path: string) => {
+      navigate(path)
+    },
+    [navigate]
+  )
 
   return (
-    <Drawer
-      variant='permanent'
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          width: drawerWidth,
-          boxSizing: 'border-box',
-          position: 'relative',
-          height: 'auto',
-        },
-      }}
-    >
-      <Box sx={{ p: 2 }}>
+    <Drawer variant='permanent' sx={styles.drawer}>
+      <Box sx={styles.navigationHeader}>
         <Typography variant='subtitle2' color='text.secondary'>
           {t('sidebar.navigation')}
         </Typography>
@@ -138,35 +156,30 @@ export const Sidebar: React.FC = () => {
       <Divider />
 
       <List>
-        {visibleItems.map(item => (
-          <ListItem key={item.path} disablePadding>
-            <ListItemButton
-              selected={location.pathname === item.path}
-              onClick={() => handleNavigation(item.path)}
-              sx={{
-                '&.Mui-selected': {
-                  backgroundColor: 'primary.main',
-                  color: 'primary.contrastText',
-                  '&:hover': {
-                    backgroundColor: 'primary.dark',
-                  },
-                  '& .MuiListItemIcon-root': {
-                    color: 'primary.contrastText',
-                  },
-                },
-              }}
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText
-                primary={
-                  item.labelKey.startsWith('navigation.')
-                    ? t(item.labelKey)
-                    : item.labelKey
-                }
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {visibleItems.map(item => {
+          const handleItemClick = () => {
+            handleNavigation(item.path)
+          }
+
+          return (
+            <ListItem key={item.path} disablePadding>
+              <ListItemButton
+                selected={location.pathname === item.path}
+                onClick={handleItemClick}
+                sx={styles.listItemButton}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText
+                  primary={
+                    item.labelKey.startsWith('navigation.')
+                      ? t(item.labelKey)
+                      : item.labelKey
+                  }
+                />
+              </ListItemButton>
+            </ListItem>
+          )
+        })}
       </List>
     </Drawer>
   )
