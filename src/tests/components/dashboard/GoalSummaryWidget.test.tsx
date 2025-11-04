@@ -75,7 +75,7 @@ describe('GoalSummaryWidget', () => {
     expect(screen.getByTestId('line-chart')).toBeInTheDocument()
 
     // Switch to Goals tab
-    fireEvent.click(screen.getByRole('tab', { name: 'Goals' }))
+    fireEvent.click(screen.getByRole('tab', { name: 'dashboard.tabs.goals' }))
 
     // Should show goals in the list view
     await waitFor(() => {
@@ -113,7 +113,7 @@ describe('GoalSummaryWidget', () => {
     })
 
     // Switch to Goals tab
-    fireEvent.click(screen.getByRole('tab', { name: 'Goals' }))
+    fireEvent.click(screen.getByRole('tab', { name: 'dashboard.tabs.goals' }))
 
     // Should show goals in the list view
     await waitFor(() => {

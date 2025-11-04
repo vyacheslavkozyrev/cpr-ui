@@ -10,6 +10,7 @@ import {
   Typography,
 } from '@mui/material'
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ThemeToggle } from '../components/ThemeToggle'
 import { useTheme } from '../hooks/useTheme'
 
@@ -48,6 +49,7 @@ const getStyles = () => ({
 
 // Theme demo component to showcase the theme system
 export const ThemeDemo: React.FC = () => {
+  const { t } = useTranslation()
   const {
     mode,
     resolvedTheme,
@@ -159,19 +161,29 @@ export const ThemeDemo: React.FC = () => {
               </Typography>
               <Stack direction='row' spacing={2} flexWrap='wrap'>
                 <Paper sx={styles.primaryPaper}>
-                  <Typography variant='body2'>Primary</Typography>
+                  <Typography variant='body2'>
+                    {t('theme.demo.colors.primary')}
+                  </Typography>
                 </Paper>
                 <Paper sx={styles.secondaryPaper}>
-                  <Typography variant='body2'>Secondary</Typography>
+                  <Typography variant='body2'>
+                    {t('theme.demo.colors.secondary')}
+                  </Typography>
                 </Paper>
                 <Paper sx={styles.successPaper}>
-                  <Typography variant='body2'>Success</Typography>
+                  <Typography variant='body2'>
+                    {t('theme.demo.colors.success')}
+                  </Typography>
                 </Paper>
                 <Paper sx={styles.warningPaper}>
-                  <Typography variant='body2'>Warning</Typography>
+                  <Typography variant='body2'>
+                    {t('theme.demo.colors.warning')}
+                  </Typography>
                 </Paper>
                 <Paper sx={styles.errorPaper}>
-                  <Typography variant='body2'>Error</Typography>
+                  <Typography variant='body2'>
+                    {t('theme.demo.colors.error')}
+                  </Typography>
                 </Paper>
               </Stack>
             </Box>
@@ -207,11 +219,18 @@ export const ThemeDemo: React.FC = () => {
                 Component Demo
               </Typography>
               <Stack direction='row' spacing={2} flexWrap='wrap'>
-                <Button variant='contained'>Contained Button</Button>
-                <Button variant='outlined'>Outlined Button</Button>
-                <Button variant='text'>Text Button</Button>
-                <Chip label='Chip Component' />
-                <Chip label='Deletable Chip' onDelete={() => {}} />
+                <Button variant='contained'>
+                  {t('theme.demo.buttons.contained')}
+                </Button>
+                <Button variant='outlined'>
+                  {t('theme.demo.buttons.outlined')}
+                </Button>
+                <Button variant='text'>{t('theme.demo.buttons.text')}</Button>
+                <Chip label={t('theme.demo.components.chip')} />
+                <Chip
+                  label={t('theme.demo.components.deletableChip')}
+                  onDelete={() => {}}
+                />
               </Stack>
             </Box>
           </Stack>

@@ -93,9 +93,15 @@ describe('UserStatisticsCards', () => {
   it('renders all statistics cards with default values', () => {
     renderWithRouter(<UserStatisticsCards />)
 
-    expect(screen.getByText('Goals Completed')).toBeInTheDocument()
-    expect(screen.getByText('Feedback Received')).toBeInTheDocument()
-    expect(screen.getByText('Skills Assessed')).toBeInTheDocument()
+    expect(
+      screen.getByText('dashboard.labels.goalsCompleted')
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText('dashboard.labels.feedbackReceived')
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText('dashboard.labels.skillsAssessed')
+    ).toBeInTheDocument()
 
     // Check for default values (there are multiple "0" values, so use getAllByText)
     const zeroValues = screen.getAllByText('0')

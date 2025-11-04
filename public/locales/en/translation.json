@@ -134,7 +134,52 @@
       "feedbackSummary": "Feedback Summary",
       "skillProgress": "Skill Progress",
       "activityFeed": "Activity Feed"
+    },
+    "tabs": {
+      "chart": "Chart",
+      "summary": "Summary",
+      "goals": "Goals",
+      "skills": "Skills",
+      "feedback": "Feedback",
+      "activities": "Activities"
+    },
+    "labels": {
+      "days": "Days",
+      "totalActivities": "Total Activities",
+      "latestActivities": "Latest Activities",
+      "activityOverview": "Activity Overview",
+      "viewMore": "View More Activities",
+      "noActivities": "No activities in the last {{days}} days",
+      "overdue": "Overdue",
+      "goalsCompleted": "Goals Completed",
+      "feedbackReceived": "Feedback Received",
+      "skillsAssessed": "Skills Assessed"
     }
+  },
+  "theme": {
+    "demo": {
+      "colors": {
+        "primary": "Primary",
+        "secondary": "Secondary",
+        "success": "Success",
+        "warning": "Warning",
+        "error": "Error",
+        "info": "Info"
+      },
+      "buttons": {
+        "contained": "Contained Button",
+        "outlined": "Outlined Button",
+        "text": "Text Button"
+      },
+      "components": {
+        "chip": "Chip Component",
+        "deletableChip": "Deletable Chip"
+      }
+    }
+  },
+  "auth": {
+    "accountDetails": "Account Details",
+    "permissions": "Permissions"
   },
   "toast": {
     "themeChanged": "Theme changed to {{mode}} mode",

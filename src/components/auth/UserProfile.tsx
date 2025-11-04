@@ -16,6 +16,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../stores/authStore'
 import { logger } from '../../utils/logger'
 
@@ -36,6 +37,7 @@ const getStyles = () => ({
 })
 
 export const UserProfile = () => {
+  const { t } = useTranslation()
   const { user, logout, isLoading, error, isStubMode, isAdmin, hasRole } =
     useAuth()
   const styles = useMemo(() => getStyles(), [])
@@ -84,7 +86,7 @@ export const UserProfile = () => {
 
             {/* User Details */}
             <Stack spacing={2}>
-              <Typography variant='h6'>Account Details</Typography>
+              <Typography variant='h6'>{t('auth.accountDetails')}</Typography>
 
               <Box>
                 <Typography variant='body2' color='text.secondary'>
@@ -143,7 +145,7 @@ export const UserProfile = () => {
 
             {/* Permission Checks */}
             <Stack spacing={2}>
-              <Typography variant='h6'>Permissions</Typography>
+              <Typography variant='h6'>{t('auth.permissions')}</Typography>
 
               <Stack spacing={1}>
                 <Box sx={styles.flexRow}>

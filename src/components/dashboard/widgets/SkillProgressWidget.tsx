@@ -12,6 +12,7 @@ import {
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js'
 import React, { useMemo, useState } from 'react'
 import { Doughnut } from 'react-chartjs-2'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useSkillsSummary } from '../../../services/api/dashboardService'
 import { DashboardWidget } from '../layout'
@@ -108,6 +109,7 @@ const getStyles = () => ({
  * Displays skills assessment progress, skill categories, and recent assessments
  */
 export const SkillProgressWidget: React.FC = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { data: skillsSummary, isLoading, error } = useSkillsSummary()
   const [tabValue, setTabValue] = useState(0)
@@ -287,8 +289,8 @@ export const SkillProgressWidget: React.FC = () => {
           Skills Progress
         </Typography>
         <Tabs value={tabValue} onChange={handleTabChange} sx={styles.tabs}>
-          <Tab label='Chart' sx={styles.tab} />
-          <Tab label='Skills' sx={styles.tab} />
+          <Tab label={t('dashboard.tabs.chart')} sx={styles.tab} />
+          <Tab label={t('dashboard.tabs.skills')} sx={styles.tab} />
         </Tabs>
       </Box>
 

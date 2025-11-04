@@ -23,6 +23,7 @@ import {
 } from 'chart.js'
 import React, { useMemo, useState } from 'react'
 import { Line } from 'react-chartjs-2'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import type { DashboardPeriod } from '../../../models/Dashboard'
 import { useFeedbackSummary } from '../../../services/api/dashboardService'
@@ -125,6 +126,7 @@ const getStyles = () => ({
 export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
   period = 'month',
 }) => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const {
     data: feedbackSummary,
@@ -286,8 +288,8 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
           Feedback Summary
         </Typography>
         <Tabs value={tabValue} onChange={handleTabChange} sx={styles.tabs}>
-          <Tab label='Chart' sx={styles.tab} />
-          <Tab label='Feedback' sx={styles.tab} />
+          <Tab label={t('dashboard.tabs.chart')} sx={styles.tab} />
+          <Tab label={t('dashboard.tabs.feedback')} sx={styles.tab} />
         </Tabs>
       </Box>
 

@@ -10,6 +10,7 @@ import {
   type Theme,
 } from '@mui/material'
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 // Style factory outside component
 const getStyles = (theme: Theme) => ({
@@ -164,6 +165,8 @@ export const UserStatisticsCards: React.FC<IUserStatisticsCardsProps> = ({
   skillsAssessed = 0,
   isLoading = false,
 }) => {
+  const { t } = useTranslation()
+
   return (
     <Box
       sx={{
@@ -177,21 +180,21 @@ export const UserStatisticsCards: React.FC<IUserStatisticsCardsProps> = ({
       }}
     >
       <UserStatCard
-        label='Goals Completed'
+        label={t('dashboard.labels.goalsCompleted')}
         value={goalsCompleted}
         trend={{ direction: 'up', value: '+2 this month' }}
         isLoading={isLoading}
         color='success'
       />
       <UserStatCard
-        label='Feedback Received'
+        label={t('dashboard.labels.feedbackReceived')}
         value={feedbackReceived}
         trend={{ direction: 'neutral', value: 'same as last month' }}
         isLoading={isLoading}
         color='info'
       />
       <UserStatCard
-        label='Skills Assessed'
+        label={t('dashboard.labels.skillsAssessed')}
         value={skillsAssessed}
         trend={{ direction: 'up', value: '+3 this quarter' }}
         isLoading={isLoading}

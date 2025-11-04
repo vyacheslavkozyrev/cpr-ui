@@ -22,6 +22,7 @@ import {
   Typography,
 } from '@mui/material'
 import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { ActivityType } from '../../../models/Dashboard'
 import { useActivityFeed } from '../../../services/api/dashboardService'
 import { DashboardWidget } from '../layout'
@@ -143,6 +144,7 @@ function TabPanel({ children, value, index }: ITabPanelProps) {
  */
 export const ActivityFeedWidget: React.FC = () => {
   const styles = useMemo(() => getStyles(), [])
+  const { t } = useTranslation()
 
   const [days, setDays] = useState(10) // Configurable days (default 10)
   const [tabValue, setTabValue] = useState(0)
@@ -225,13 +227,17 @@ export const ActivityFeedWidget: React.FC = () => {
     <Box sx={styles.summaryContainer}>
       {/* Timeline Filter */}
       <Box sx={styles.headerRow}>
-        <Typography variant='subtitle2'>Activity Overview</Typography>
+        <Typography variant='subtitle2'>
+          {t('dashboard.labels.activityOverview')}
+        </Typography>
         <FormControl size='small' sx={styles.formControl}>
-          <InputLabel id='days-select-label'>Days</InputLabel>
+          <InputLabel id='days-select-label'>
+            {t('dashboard.labels.days')}
+          </InputLabel>
           <Select
             labelId='days-select-label'
             value={days}
-            label='Days'
+            label={t('dashboard.labels.days')}
             onChange={e => handleDaysChange(Number(e.target.value))}
           >
             <MenuItem value={7}>7 days</MenuItem>
@@ -250,7 +256,7 @@ export const ActivityFeedWidget: React.FC = () => {
               {activityFeed.total}
             </Typography>
             <Typography variant='caption' color='text.secondary'>
-              Total Activities
+              {t('dashboard.labels.totalActivities')}
             </Typography>
           </Box>
           <Box sx={styles.statisticBox}>
@@ -280,7 +286,7 @@ export const ActivityFeedWidget: React.FC = () => {
       ) : (
         <Box sx={styles.emptyState}>
           <Typography variant='body2' color='text.secondary'>
-            No activities in the last {days} days
+            {t('dashboard.labels.noActivities', { days })}
           </Typography>
         </Box>
       )}
@@ -289,7 +295,7 @@ export const ActivityFeedWidget: React.FC = () => {
       {activityFeed.items.length > 0 && (
         <Box>
           <Typography variant='subtitle2' sx={styles.recentActivitiesTitle}>
-            Latest Activities
+            {t('dashboard.labels.latestActivities')}
           </Typography>
           <List dense>
             {activityFeed.items.slice(0, 3).map(activity => (
@@ -330,7 +336,7 @@ export const ActivityFeedWidget: React.FC = () => {
         {activityFeed.items.length === 0 ? (
           <Box sx={styles.activitiesEmptyState}>
             <Typography variant='body2' color='text.secondary'>
-              No activities in the last {days} days
+              {t('dashboard.labels.noActivities', { days })}
             </Typography>
           </Box>
         ) : (
@@ -385,7 +391,7 @@ export const ActivityFeedWidget: React.FC = () => {
       {/* View More Button */}
       {activityFeed.total > activityFeed.items.length && (
         <Button variant='outlined' size='small' sx={styles.viewMoreButton}>
-          View More Activities
+          {t('dashboard.labels.viewMore')}
         </Button>
       )}
     </Box>
@@ -399,8 +405,8 @@ export const ActivityFeedWidget: React.FC = () => {
           Activity Feed
         </Typography>
         <Tabs value={tabValue} onChange={handleTabChange} sx={styles.tabs}>
-          <Tab label='Summary' sx={styles.tab} />
-          <Tab label='Activities' sx={styles.tab} />
+          <Tab label={t('dashboard.tabs.summary')} sx={styles.tab} />
+          <Tab label={t('dashboard.tabs.activities')} sx={styles.tab} />
         </Tabs>
       </Box>
 

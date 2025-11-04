@@ -21,6 +21,7 @@ import {
 } from 'chart.js'
 import React, { useMemo, useState } from 'react'
 import { Line } from 'react-chartjs-2'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import type { DashboardPeriod } from '../../../models/Dashboard'
 import { useGoalsSummary } from '../../../services/api/dashboardService'
@@ -137,6 +138,7 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
   period = 'month',
 }) => {
   const styles = useMemo(() => getStyles(), [])
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { data: goalsSummary, isLoading, error } = useGoalsSummary({ period })
   const [tabValue, setTabValue] = useState(0)
@@ -278,7 +280,7 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
                   </Typography>
                   {goal.isOverdue && (
                     <Chip
-                      label='Overdue'
+                      label={t('dashboard.labels.overdue')}
                       size='small'
                       color='error'
                       variant='filled'
@@ -324,8 +326,8 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
           Goals Summary
         </Typography>
         <Tabs value={tabValue} onChange={handleTabChange} sx={styles.tabs}>
-          <Tab label='Chart' sx={styles.tab} />
-          <Tab label='Goals' sx={styles.tab} />
+          <Tab label={t('dashboard.tabs.chart')} sx={styles.tab} />
+          <Tab label={t('dashboard.tabs.goals')} sx={styles.tab} />
         </Tabs>
       </Box>
 
