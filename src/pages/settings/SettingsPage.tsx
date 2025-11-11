@@ -100,9 +100,11 @@ export const SettingsPage: React.FC = () => {
     (event: SelectChangeEvent) => {
       const newLanguage = event.target.value as typeof currentLanguage
       setLanguage(newLanguage)
-      showSuccess(`Language changed to ${getLanguageName(newLanguage)}`)
+      showSuccess(
+        t('toast.languageChanged', { language: getLanguageName(newLanguage) })
+      )
     },
-    [setLanguage, showSuccess, getLanguageName]
+    [setLanguage, showSuccess, getLanguageName, t]
   )
 
   const handleDateFormatChange = useCallback(

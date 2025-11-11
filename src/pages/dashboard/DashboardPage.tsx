@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { UserStatisticsCards } from '../../components/dashboard/cards'
 import {
   DashboardCustomization,
@@ -19,6 +20,7 @@ import {
  * Features: responsive grid layout, user statistics, widget customization, breadcrumb navigation
  */
 export const DashboardPage: React.FC = () => {
+  const { t } = useTranslation()
   const { widgets, toggleWidget, resetLayout, getVisibleWidgets } =
     useDashboardCustomization()
 
@@ -60,7 +62,7 @@ export const DashboardPage: React.FC = () => {
         mb={2}
       >
         <Typography variant='h4' component='h1'>
-          Dashboard
+          {t('navigation.dashboard')}
         </Typography>
         <DashboardCustomization
           widgets={widgets}

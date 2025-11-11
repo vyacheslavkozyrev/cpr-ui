@@ -61,6 +61,10 @@
     "notProvided": "No proporcionado",
     "notAssigned": "No asignado",
     "notSpecified": "No especificado",
+    "noDataAvailable": "No hay datos de perfil disponibles",
+    "userProfile": "Perfil de Usuario",
+    "syncedFromAzure": "Sincronizado desde Azure AD",
+    "unknownUser": "Usuario Desconocido",
     "validation": {
       "nameRequired": "El nombre para mostrar es obligatorio",
       "nameMinLength": "El nombre debe tener al menos 2 caracteres",
@@ -140,6 +144,60 @@
     "themeChanged": "Tema cambiado al modo {{mode}}",
     "themeChangedSystem": "Tema cambiado al modo de preferencia del sistema",
     "themeSwitched": "Cambiado al modo {{mode}}",
-    "dateFormatChanged": "Formato de fecha cambiado a {{format}}"
+    "dateFormatChanged": "Formato de fecha cambiado a {{format}}",
+    "languageChanged": "Idioma cambiado a {{language}}"
+  },
+  "auth": {
+    "accountDetails": "Detalles de la Cuenta",
+    "permissions": "Permisos",
+    "devMode": "Ejecutando en modo de desarrollo con datos de usuario de prueba",
+    "userId": "ID de Usuario",
+    "tenantId": "ID de Inquilino",
+    "roles": "Roles",
+    "accessToken": "Token de Acceso",
+    "notAvailable": "No disponible",
+    "stubToken": "(token de prueba)",
+    "userAccess": "Acceso de Usuario:",
+    "adminAccess": "Acceso de Administrador:",
+    "granted": "Concedido",
+    "denied": "Denegado",
+    "signingOut": "Cerrando sesión...",
+    "signOut": "Cerrar Sesión",
+    "login": {
+      "title": "Sistema CPR",
+      "subtitle": "Revisión Continua del Rendimiento",
+      "devModeAlert": "Ejecutando en modo de desarrollo con autenticación de prueba",
+      "signingIn": "Iniciando sesión...",
+      "signIn": "Iniciar Sesión",
+      "devModeNote": "Modo de desarrollo - no se requiere autenticación real",
+      "microsoftNote": "Inicie sesión con su cuenta de Microsoft"
+    }
+  },
+  "errors": {
+    "404": {
+      "title": "Página No Encontrada",
+      "message": "La página que busca no existe o ha sido movida."
+    },
+    "401": {
+      "title": "No Autorizado",
+      "message": "Necesita iniciar sesión para acceder a esta página."
+    },
+    "403": {
+      "title": "Acceso Denegado",
+      "message": "No tiene permiso para acceder a este recurso."
+    },
+    "500": {
+      "title": "Error del Servidor",
+      "message": "Se produjo un error interno del servidor. Por favor intente más tarde."
+    },
+    "default": {
+      "title": "Algo salió mal",
+      "message": "Se produjo un error inesperado."
+    },
+    "actions": {
+      "goHome": "Ir al Inicio",
+      "goBack": "Volver",
+      "reloadPage": "Recargar Página"
+    }
   }
 }

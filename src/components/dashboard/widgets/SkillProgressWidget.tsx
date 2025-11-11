@@ -166,10 +166,10 @@ export const SkillProgressWidget: React.FC = () => {
   }
 
   const getSkillLevelLabel = (level: number) => {
-    if (level >= 4) return 'Expert'
-    if (level >= 3) return 'Advanced'
-    if (level >= 2) return 'Intermediate'
-    return 'Beginner'
+    if (level >= 4) return t('dashboard.skillLevels.expert')
+    if (level >= 3) return t('dashboard.skillLevels.advanced')
+    if (level >= 2) return t('dashboard.skillLevels.intermediate')
+    return t('dashboard.skillLevels.beginner')
   }
 
   const getSkillLevelColor = (level: number) => {
@@ -189,7 +189,7 @@ export const SkillProgressWidget: React.FC = () => {
             {skillsSummary.summary.assessedSkills}
           </Typography>
           <Typography variant='caption' color='text.secondary'>
-            Assessed
+            {t('dashboard.labels.assessed')}
           </Typography>
         </Box>
         <Box sx={styles.statItem}>
@@ -197,7 +197,7 @@ export const SkillProgressWidget: React.FC = () => {
             {skillsSummary.improvementAreas.length}
           </Typography>
           <Typography variant='caption' color='text.secondary'>
-            Skill Gaps
+            {t('dashboard.labels.skillGaps')}
           </Typography>
         </Box>
         <Box sx={styles.statItem}>
@@ -205,7 +205,7 @@ export const SkillProgressWidget: React.FC = () => {
             {skillsSummary.summary.averageLevel.toFixed(1)}
           </Typography>
           <Typography variant='caption' color='text.secondary'>
-            Avg Level
+            {t('dashboard.labels.avgLevel')}
           </Typography>
         </Box>
       </Box>
@@ -214,7 +214,7 @@ export const SkillProgressWidget: React.FC = () => {
       <Box sx={styles.progressSection}>
         <Box sx={styles.progressHeader}>
           <Typography variant='caption' color='text.secondary'>
-            Assessment Progress
+            {t('dashboard.labels.assessmentProgress')}
           </Typography>
           <Typography variant='caption' color='text.secondary'>
             {skillsSummary.summary.assessmentProgress.toFixed(0)}%
@@ -260,7 +260,8 @@ export const SkillProgressWidget: React.FC = () => {
               }
               secondary={
                 <Typography variant='caption' color='text.secondary'>
-                  Level {assessment.level}/5 • Assessed:{' '}
+                  {t('dashboard.labels.level')} {assessment.level}/5 •{' '}
+                  {t('dashboard.labels.assessedLabel')}{' '}
                   {new Date(assessment.assessedAt).toLocaleDateString()}
                 </Typography>
               }
@@ -276,7 +277,7 @@ export const SkillProgressWidget: React.FC = () => {
         onClick={handleViewSkills}
         sx={styles.viewButton}
       >
-        View Skills Assessment
+        {t('dashboard.labels.viewSkillsAssessment')}
       </Button>
     </Box>
   )
@@ -286,7 +287,7 @@ export const SkillProgressWidget: React.FC = () => {
       {/* Header with Title and Tabs */}
       <Box sx={styles.headerContainer}>
         <Typography variant='h6' component='h3'>
-          Skills Progress
+          {t('dashboard.widgets.skillProgress')}
         </Typography>
         <Tabs value={tabValue} onChange={handleTabChange} sx={styles.tabs}>
           <Tab label={t('dashboard.tabs.chart')} sx={styles.tab} />

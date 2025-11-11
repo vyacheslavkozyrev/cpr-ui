@@ -56,17 +56,17 @@ describe('Header Component - Basic Tests', () => {
 
   it('displays the application brand/title', () => {
     renderWithUser(<Header />, 'employee')
-    expect(screen.getByText('header.brand')).toBeInTheDocument()
+    expect(screen.getByText('CPR Performance')).toBeInTheDocument()
   })
 
   it('displays user avatar area', () => {
     renderWithUser(<Header />, 'employee')
-    expect(screen.getByText('common.loading')).toBeInTheDocument()
+    expect(screen.getByText('Loading...')).toBeInTheDocument()
   })
 
   it('shows theme toggle button', () => {
     renderWithUser(<Header />, 'employee')
-    const themeButton = screen.getByLabelText('header.toggleTheme')
+    const themeButton = screen.getByLabelText('Toggle theme')
     expect(themeButton).toBeInTheDocument()
   })
 

@@ -74,11 +74,7 @@ export const UserProfile = () => {
               </Box>
             </Box>
 
-            {isStubMode && (
-              <Alert severity='info'>
-                Running in development mode with stub user data
-              </Alert>
-            )}
+            {isStubMode && <Alert severity='info'>{t('auth.devMode')}</Alert>}
 
             {error && <Alert severity='error'>{error}</Alert>}
 
@@ -90,7 +86,7 @@ export const UserProfile = () => {
 
               <Box>
                 <Typography variant='body2' color='text.secondary'>
-                  User ID
+                  {t('auth.userId')}
                 </Typography>
                 <Typography variant='body1' sx={styles.monospace}>
                   {user.id}
@@ -99,7 +95,7 @@ export const UserProfile = () => {
 
               <Box>
                 <Typography variant='body2' color='text.secondary'>
-                  Tenant ID
+                  {t('auth.tenantId')}
                 </Typography>
                 <Typography variant='body1' sx={styles.monospace}>
                   {user.tenantId}
@@ -112,7 +108,7 @@ export const UserProfile = () => {
                   color='text.secondary'
                   sx={styles.rolesLabel}
                 >
-                  Roles
+                  {t('auth.roles')}
                 </Typography>
                 <Stack direction='row' spacing={1} flexWrap='wrap'>
                   {user.roles.map(role => (
@@ -131,11 +127,13 @@ export const UserProfile = () => {
               {(isStubMode || user.accessToken) && (
                 <Box>
                   <Typography variant='body2' color='text.secondary'>
-                    Access Token
+                    {t('auth.accessToken')}
                   </Typography>
                   <Typography variant='body2' sx={styles.accessToken}>
-                    {user.accessToken ? '●●●●●●●●●●●●●●●●' : 'Not available'}
-                    {isStubMode && ' (stub token)'}
+                    {user.accessToken
+                      ? '●●●●●●●●●●●●●●●●'
+                      : t('auth.notAvailable')}
+                    {isStubMode && ` ${t('auth.stubToken')}`}
                   </Typography>
                 </Box>
               )}
@@ -149,18 +147,24 @@ export const UserProfile = () => {
 
               <Stack spacing={1}>
                 <Box sx={styles.flexRow}>
-                  <Typography variant='body2'>User Access:</Typography>
+                  <Typography variant='body2'>
+                    {t('auth.userAccess')}
+                  </Typography>
                   <Chip
-                    label={hasRole('CPR.User') ? 'Granted' : 'Denied'}
+                    label={
+                      hasRole('CPR.User') ? t('auth.granted') : t('auth.denied')
+                    }
                     color={hasRole('CPR.User') ? 'success' : 'error'}
                     size='small'
                   />
                 </Box>
 
                 <Box sx={styles.flexRow}>
-                  <Typography variant='body2'>Admin Access:</Typography>
+                  <Typography variant='body2'>
+                    {t('auth.adminAccess')}
+                  </Typography>
                   <Chip
-                    label={isAdmin() ? 'Granted' : 'Denied'}
+                    label={isAdmin() ? t('auth.granted') : t('auth.denied')}
                     color={isAdmin() ? 'success' : 'error'}
                     size='small'
                   />
@@ -179,7 +183,7 @@ export const UserProfile = () => {
               startIcon={<LogoutIcon />}
               fullWidth
             >
-              {isLoading ? 'Signing out...' : 'Sign Out'}
+              {isLoading ? t('auth.signingOut') : t('auth.signOut')}
             </Button>
           </Stack>
         </CardContent>

@@ -197,7 +197,7 @@ export const ProfilePage: React.FC = () => {
       <Box sx={styles.container}>
         <Paper elevation={1} sx={styles.profilePaper}>
           <Typography variant='h6' color='textSecondary'>
-            No profile data available
+            {t('profile.noDataAvailable')}
           </Typography>
         </Paper>
       </Box>
@@ -213,7 +213,7 @@ export const ProfilePage: React.FC = () => {
           gutterBottom
           sx={styles.titleContainer}
         >
-          User Profile
+          {t('profile.userProfile')}
         </Typography>
         {!isEditing ? (
           <IconButton onClick={handleEdit} color='primary'>
@@ -225,7 +225,7 @@ export const ProfilePage: React.FC = () => {
               onClick={handleSubmit(onSubmit)}
               color='primary'
               disabled={updateUserMutation.isPending || !isValid || !isDirty}
-              title='Save changes'
+              title={t('profile.saveChanges')}
             >
               {updateUserMutation.isPending ? (
                 <CircularProgress size={20} />
@@ -237,7 +237,7 @@ export const ProfilePage: React.FC = () => {
               onClick={handleCancel}
               color='default'
               disabled={updateUserMutation.isPending}
-              title='Cancel editing'
+              title={t('profile.cancelEditing')}
             >
               <Cancel />
             </IconButton>
@@ -262,13 +262,13 @@ export const ProfilePage: React.FC = () => {
               color='textSecondary'
               sx={styles.fieldHelperText}
             >
-              Synced from Azure AD
+              {t('profile.syncedFromAzure')}
             </Typography>
           </Box>
 
           <Box flex={1}>
             <Typography variant='h5' gutterBottom>
-              {user.displayName || 'Unknown User'}
+              {user.displayName || t('profile.unknownUser')}
             </Typography>
             <Chip
               label={user.position.title}
@@ -357,16 +357,16 @@ export const ProfilePage: React.FC = () => {
                   {t('profile.username')}
                 </Typography>
                 <Typography variant='body1'>
-                  {user.username || 'Not provided'}
+                  {user.username || t('profile.notProvided')}
                 </Typography>
               </Box>
 
               <Box>
                 <Typography variant='body2' color='textSecondary' gutterBottom>
-                  Employee ID
+                  {t('profile.employeeId')}
                 </Typography>
                 <Typography variant='body1'>
-                  {user.employeeId || 'Not assigned'}
+                  {user.employeeId || t('profile.notAssigned')}
                 </Typography>
               </Box>
             </>
@@ -410,19 +410,23 @@ export const ProfilePage: React.FC = () => {
 
           <Box>
             <Typography variant='body2' color='textSecondary' gutterBottom>
-              Department
+              {t('profile.department')}
             </Typography>
             <Typography variant='body1'>
-              Coming soon - Available through employee directory integration
+              {t('profile.comingSoon', {
+                feature: t('profile.departmentIntegration'),
+              })}
             </Typography>
           </Box>
 
           <Box>
             <Typography variant='body2' color='textSecondary' gutterBottom>
-              Reporting Manager
+              {t('profile.reportingManager')}
             </Typography>
             <Typography variant='body1'>
-              Coming soon - Available through organizational chart integration
+              {t('profile.comingSoon', {
+                feature: t('profile.orgChartIntegration'),
+              })}
             </Typography>
           </Box>
         </Stack>
@@ -431,8 +435,7 @@ export const ProfilePage: React.FC = () => {
       {/* Additional Information Panel */}
       <Paper elevation={1} sx={styles.infoPaper}>
         <Typography variant='body2' color='textSecondary' align='center'>
-          Profile information is synchronized with Azure Active Directory. Some
-          fields may be managed by your IT administrator.
+          {t('profile.azureAdNote')}
         </Typography>
       </Paper>
     </Box>

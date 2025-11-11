@@ -126,7 +126,7 @@ export const Sidebar: React.FC = () => {
     },
     // Development only - Test error boundaries
     {
-      labelKey: 'Test Errors',
+      labelKey: 'sidebar.testErrors',
       path: '/test-errors',
       icon: <BugReport />,
     },
@@ -171,7 +171,8 @@ export const Sidebar: React.FC = () => {
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText
                   primary={
-                    item.labelKey.startsWith('navigation.')
+                    item.labelKey.startsWith('navigation.') ||
+                    item.labelKey.startsWith('sidebar.')
                       ? t(item.labelKey)
                       : item.labelKey
                   }

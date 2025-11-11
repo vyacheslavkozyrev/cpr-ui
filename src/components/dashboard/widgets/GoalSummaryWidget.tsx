@@ -18,6 +18,7 @@ import {
   PointElement,
   Title,
   Tooltip,
+  type ChartData,
 } from 'chart.js'
 import React, { useMemo, useState } from 'react'
 import { Line } from 'react-chartjs-2'
@@ -148,25 +149,18 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
   }
 
   // Chart configuration for progress trend
-  const chartData = {
-    labels:
-      goalsSummary?.trendData.map(trend => {
-        const date = new Date(trend.period)
-        return date.toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-        })
-      }) || [],
+  const chartData: ChartData<'line'> = {
+    labels: goalsSummary?.trendData.map(trend => trend.period) || [],
     datasets: [
       {
-        label: 'Created',
+        label: t('dashboard.labels.created'),
         data: goalsSummary?.trendData.map(trend => trend.created) || [],
         borderColor: 'rgb(99, 102, 241)',
         backgroundColor: 'rgba(99, 102, 241, 0.1)',
         tension: 0.4,
       },
       {
-        label: 'Completed',
+        label: t('dashboard.labels.completed'),
         data: goalsSummary?.trendData.map(trend => trend.completed) || [],
         borderColor: 'rgb(34, 197, 94)',
         backgroundColor: 'rgba(34, 197, 94, 0.1)',
@@ -224,7 +218,7 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
             {goalsSummary.summary.active}
           </Typography>
           <Typography variant='caption' color='text.secondary'>
-            Active
+            {t('dashboard.labels.active')}
           </Typography>
         </Box>
         <Box sx={styles.statisticBox}>
@@ -232,7 +226,7 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
             {goalsSummary.summary.completed}
           </Typography>
           <Typography variant='caption' color='text.secondary'>
-            Completed
+            {t('dashboard.labels.completed')}
           </Typography>
         </Box>
         <Box sx={styles.statisticBox}>
@@ -240,7 +234,7 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
             {goalsSummary.summary.overdue}
           </Typography>
           <Typography variant='caption' color='text.secondary'>
-            Overdue
+            {t('dashboard.labels.overdue')}
           </Typography>
         </Box>
       </Box>
@@ -276,7 +270,8 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
               secondary={
                 <Box sx={styles.goalSecondary}>
                   <Typography variant='caption'>
-                    {goal.progress}% complete
+                    {goal.progress}
+                    {t('dashboard.labels.percentComplete')}
                   </Typography>
                   {goal.isOverdue && (
                     <Chip
@@ -289,13 +284,14 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
                   <Box sx={styles.goalActions}>
                     {goal.createdDate && (
                       <Typography variant='caption' color='text.secondary'>
-                        Created:{' '}
+                        {t('dashboard.labels.createdLabel')}{' '}
                         {new Date(goal.createdDate).toLocaleDateString()}
                       </Typography>
                     )}
                     {goal.dueDate && (
                       <Typography variant='caption' color='text.secondary'>
-                        Due: {new Date(goal.dueDate).toLocaleDateString()}
+                        {t('dashboard.labels.dueLabel')}{' '}
+                        {new Date(goal.dueDate).toLocaleDateString()}
                       </Typography>
                     )}
                   </Box>
@@ -313,7 +309,7 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
         onClick={handleViewAllGoals}
         sx={styles.viewMoreButton}
       >
-        View All Goals
+        {t('dashboard.labels.viewAllGoals')}
       </Button>
     </Box>
   )
@@ -323,7 +319,7 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
       {/* Header with Title and Tabs */}
       <Box sx={styles.widgetHeaderRow}>
         <Typography variant='h6' component='h3'>
-          Goals Summary
+          {t('dashboard.widgets.goalSummary')}
         </Typography>
         <Tabs value={tabValue} onChange={handleTabChange} sx={styles.tabs}>
           <Tab label={t('dashboard.tabs.chart')} sx={styles.tab} />

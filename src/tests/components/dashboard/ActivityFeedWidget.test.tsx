@@ -122,7 +122,7 @@ describe('ActivityFeedWidget', () => {
     // Wait for component to load - check for elements that are always displayed
     await waitFor(() => {
       expect(screen.getByText('Activity Overview')).toBeInTheDocument()
-      expect(screen.getByText('10 days')).toBeInTheDocument() // Days selector default value
+      expect(screen.getByText('10 days')).toBeInTheDocument() // Days selector default value (translated)
     })
   })
 
@@ -159,7 +159,7 @@ describe('ActivityFeedWidget', () => {
     })
 
     // Check that activity overview elements are displayed
-    expect(screen.getByText('10 days')).toBeInTheDocument() // Days selector display text
+    expect(screen.getByText('10 days')).toBeInTheDocument() // Days selector display text (translated)
     expect(screen.getByDisplayValue('10')).toBeInTheDocument() // Days selector value
   })
 

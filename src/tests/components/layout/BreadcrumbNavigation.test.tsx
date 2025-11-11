@@ -3,9 +3,6 @@ import { describe, expect, it } from 'vitest'
 import { BreadcrumbNavigation } from '../../../components/layout/BreadcrumbNavigation'
 import { renderWithProviders } from '../../utils'
 
-// Since the BreadcrumbNavigation is rendering translation keys instead of actual text,
-// we need to look for the actual text that appears in the DOM
-
 describe('BreadcrumbNavigation', () => {
   it('does not render on root dashboard path', () => {
     const { container } = renderWithProviders(<BreadcrumbNavigation />, {
@@ -31,10 +28,9 @@ describe('BreadcrumbNavigation', () => {
     })
 
     // Should show Home (Dashboard) and current page
-    // In tests, translations show as keys, not translated text
     // Use aria-label to get the home dashboard link specifically
     expect(screen.getByLabelText('Navigate to dashboard')).toBeInTheDocument()
-    expect(screen.getByText('navigation.goals')).toBeInTheDocument()
+    expect(screen.getByText('Goals')).toBeInTheDocument()
   })
 
   it('renders multiple levels of breadcrumbs', () => {
@@ -47,7 +43,7 @@ describe('BreadcrumbNavigation', () => {
 
     // Use aria-label for home dashboard link, getAllByText for others
     expect(screen.getByLabelText('Navigate to dashboard')).toBeInTheDocument()
-    expect(screen.getByText('navigation.team')).toBeInTheDocument()
+    expect(screen.getByText('Team')).toBeInTheDocument()
     expect(screen.getByText('Members')).toBeInTheDocument()
   })
 
@@ -77,7 +73,7 @@ describe('BreadcrumbNavigation', () => {
     expect(dashboardLink).toHaveAttribute('href', '/dashboard')
 
     // Team link should be clickable
-    const teamLink = screen.getByRole('link', { name: /navigation.team/i })
+    const teamLink = screen.getByRole('link', { name: /team/i })
     expect(teamLink).toBeInTheDocument()
     expect(teamLink).toHaveAttribute('href', '/dashboard/team')
   })
@@ -88,7 +84,7 @@ describe('BreadcrumbNavigation', () => {
     })
 
     // Current page should not be a link
-    const currentPage = screen.getByText('navigation.goals')
+    const currentPage = screen.getByText('Goals')
     expect(currentPage.closest('a')).toBeNull()
   })
 
@@ -100,10 +96,10 @@ describe('BreadcrumbNavigation', () => {
       },
     })
 
-    // Should use translated labels (showing as keys in tests)
+    // Should use translated labels
     // Use aria-label for home dashboard link
     expect(screen.getByLabelText('Navigate to dashboard')).toBeInTheDocument()
-    expect(screen.getByText('navigation.skills')).toBeInTheDocument()
+    expect(screen.getByText('Skills')).toBeInTheDocument()
   })
 
   it('handles unknown path segments with capitalization', () => {
@@ -130,12 +126,12 @@ describe('BreadcrumbNavigation', () => {
 
     // Use aria-label for home dashboard link
     expect(screen.getByLabelText('Navigate to dashboard')).toBeInTheDocument()
-    expect(screen.getByText('navigation.admin')).toBeInTheDocument()
+    expect(screen.getByText('Admin')).toBeInTheDocument()
     expect(screen.getByText('Users')).toBeInTheDocument()
-    expect(screen.getByText('navigation.profile')).toBeInTheDocument()
+    expect(screen.getByText('Profile')).toBeInTheDocument()
 
     // Check that intermediate links have correct paths
-    const adminLink = screen.getByRole('link', { name: /navigation.admin/i })
+    const adminLink = screen.getByRole('link', { name: /admin/i })
     expect(adminLink).toHaveAttribute('href', '/dashboard/admin')
 
     const usersLink = screen.getByRole('link', { name: /Users/i })
@@ -185,9 +181,9 @@ describe('BreadcrumbNavigation', () => {
     // All breadcrumb items should be present
     // Use aria-label for home dashboard link
     expect(screen.getByLabelText('Navigate to dashboard')).toBeInTheDocument()
-    expect(screen.getByText('navigation.team')).toBeInTheDocument()
+    expect(screen.getByText('Team')).toBeInTheDocument()
     expect(screen.getByText('Members')).toBeInTheDocument()
-    expect(screen.getByText('navigation.profile')).toBeInTheDocument()
+    expect(screen.getByText('Profile')).toBeInTheDocument()
   })
 
   it('handles single letter path segments', () => {
@@ -210,7 +206,7 @@ describe('BreadcrumbNavigation', () => {
 
     // Use aria-label for home dashboard link
     expect(screen.getByLabelText('Navigate to dashboard')).toBeInTheDocument()
-    expect(screen.getByText('navigation.goals')).toBeInTheDocument()
+    expect(screen.getByText('Goals')).toBeInTheDocument()
     // Should filter out empty segments
   })
 

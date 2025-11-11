@@ -14,6 +14,7 @@ import {
   Typography,
 } from '@mui/material'
 import React, { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useThemeStore, type TThemeMode } from '../stores/themeStore'
 
 // Theme toggle button props
@@ -24,30 +25,32 @@ interface ThemeToggleProps {
   className?: string
 }
 
-// Theme mode options for menu
-const themeOptions: Array<{
+// Theme mode options for menu - using keys that will be translated
+const getThemeOptions = (
+  t: (key: string) => string
+): Array<{
   mode: TThemeMode
   label: string
   icon: React.ReactElement
   description: string
-}> = [
+}> => [
   {
     mode: 'light',
-    label: 'Light',
+    label: t('theme.modes.light'),
     icon: <LightIcon />,
-    description: 'Light mode',
+    description: t('theme.descriptions.light'),
   },
   {
     mode: 'dark',
-    label: 'Dark',
+    label: t('theme.modes.dark'),
     icon: <DarkIcon />,
-    description: 'Dark mode',
+    description: t('theme.descriptions.dark'),
   },
   {
     mode: 'system',
-    label: 'System',
+    label: t('theme.modes.system'),
     icon: <SystemIcon />,
-    description: 'Follow system preference',
+    description: t('theme.descriptions.system'),
   },
 ]
 
@@ -57,6 +60,7 @@ const ThemeToggleButton: React.FC<Omit<ThemeToggleProps, 'variant'>> = ({
   showLabel = false,
   className,
 }) => {
+  const { t } = useTranslation()
   const { mode, toggleTheme, resolvedTheme } = useThemeStore()
 
   const getCurrentIcon = () => {
@@ -67,13 +71,13 @@ const ThemeToggleButton: React.FC<Omit<ThemeToggleProps, 'variant'>> = ({
   const getTooltipText = () => {
     switch (mode) {
       case 'light':
-        return 'Switch to dark mode'
+        return t('theme.tooltips.switchToDark')
       case 'dark':
-        return 'Switch to system mode'
+        return t('theme.tooltips.switchToSystem')
       case 'system':
-        return 'Switch to light mode'
+        return t('theme.tooltips.switchToLight')
       default:
-        return 'Toggle theme'
+        return t('theme.tooltips.toggle')
     }
   }
 
@@ -84,28 +88,32 @@ const ThemeToggleButton: React.FC<Omit<ThemeToggleProps, 'variant'>> = ({
           onClick={toggleTheme}
           size={size}
           color='inherit'
-          aria-label='Toggle theme'
+          aria-label={t('theme.tooltips.toggle')}
         >
           {getCurrentIcon()}
         </IconButton>
       </Tooltip>
       {showLabel && (
         <Typography variant='body2' color='text.secondary'>
-          {mode === 'system' ? `System (${resolvedTheme})` : mode}
+          {mode === 'system'
+            ? t('theme.labels.systemMode', { mode: resolvedTheme })
+            : mode}
         </Typography>
       )}
     </Box>
   )
 }
 
-// Menu-based theme selector
+// Menu-based selector
 const ThemeMenuSelector: React.FC<Omit<ThemeToggleProps, 'variant'>> = ({
   size = 'medium',
   className,
 }) => {
+  const { t } = useTranslation()
   const { mode, setMode, resolvedTheme } = useThemeStore()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+  const themeOptions = getThemeOptions(t)
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -130,12 +138,12 @@ const ThemeMenuSelector: React.FC<Omit<ThemeToggleProps, 'variant'>> = ({
 
   return (
     <Box className={className}>
-      <Tooltip title='Change theme'>
+      <Tooltip title={t('theme.tooltips.change')}>
         <IconButton
           onClick={handleClick}
           size={size}
           color='inherit'
-          aria-label='Change theme'
+          aria-label={t('theme.tooltips.change')}
           aria-controls={open ? 'theme-menu' : undefined}
           aria-haspopup='true'
           aria-expanded={open ? 'true' : undefined}

@@ -93,15 +93,9 @@ describe('UserStatisticsCards', () => {
   it('renders all statistics cards with default values', () => {
     renderWithRouter(<UserStatisticsCards />)
 
-    expect(
-      screen.getByText('dashboard.labels.goalsCompleted')
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText('dashboard.labels.feedbackReceived')
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText('dashboard.labels.skillsAssessed')
-    ).toBeInTheDocument()
+    expect(screen.getByText('Goals Completed')).toBeInTheDocument()
+    expect(screen.getByText('Feedback Received')).toBeInTheDocument()
+    expect(screen.getByText('Skills Assessed')).toBeInTheDocument()
 
     // Check for default values (there are multiple "0" values, so use getAllByText)
     const zeroValues = screen.getAllByText('0')
@@ -146,7 +140,7 @@ describe('UserStatisticsCards', () => {
       />
     )
 
-    // Check for trend text (these are hardcoded in the component)
+    // Check for trend text (translated)
     expect(screen.getByText('+2 this month')).toBeInTheDocument()
     expect(screen.getByText('same as last month')).toBeInTheDocument()
     expect(screen.getByText('+3 this quarter')).toBeInTheDocument()

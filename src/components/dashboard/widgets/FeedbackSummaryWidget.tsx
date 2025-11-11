@@ -126,7 +126,7 @@ const getStyles = () => ({
 export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
   period = 'month',
 }) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const {
     data: feedbackSummary,
@@ -145,14 +145,14 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
     labels:
       feedbackSummary?.ratingTrend.map(trend => {
         const date = new Date(trend.period)
-        return date.toLocaleDateString('en-US', {
+        return date.toLocaleDateString(i18n.language, {
           month: 'short',
           day: 'numeric',
         })
       }) || [],
     datasets: [
       {
-        label: 'Average Rating',
+        label: t('dashboard.labels.averageRating'),
         data:
           feedbackSummary?.ratingTrend.map(trend => trend.averageRating) || [],
         borderColor: 'rgb(245, 158, 11)',
@@ -204,7 +204,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
             {feedbackSummary.summary.totalReceived}
           </Typography>
           <Typography variant='caption' color='text.secondary'>
-            Received
+            {t('dashboard.labels.received')}
           </Typography>
         </Box>
         <Box sx={styles.statItem}>
@@ -212,7 +212,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
             {feedbackSummary.summary.pendingRequests}
           </Typography>
           <Typography variant='caption' color='text.secondary'>
-            Pending
+            {t('dashboard.labels.pending')}
           </Typography>
         </Box>
         <Box sx={styles.ratingContainer}>
@@ -223,7 +223,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
             size='small'
           />
           <Typography variant='caption' color='text.secondary'>
-            Avg Rating
+            {t('dashboard.labels.avgRating')}
           </Typography>
         </Box>
       </Box>
@@ -260,7 +260,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
                 <Typography variant='caption' color='text.secondary'>
                   {new Date(feedback.createdAt).toLocaleDateString()} •{' '}
                   {/* Note: goalTitle not available in new model, using placeholder */}
-                  General Feedback
+                  {t('dashboard.labels.generalFeedback')}
                 </Typography>
               }
             />
@@ -275,7 +275,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
         onClick={handleViewAllFeedback}
         sx={styles.viewButton}
       >
-        View All Feedback
+        {t('dashboard.labels.viewAllFeedback')}
       </Button>
     </Box>
   )
@@ -285,7 +285,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
       {/* Header with Title and Tabs */}
       <Box sx={styles.headerContainer}>
         <Typography variant='h6' component='h3'>
-          Feedback Summary
+          {t('dashboard.widgets.feedbackSummary')}
         </Typography>
         <Tabs value={tabValue} onChange={handleTabChange} sx={styles.tabs}>
           <Tab label={t('dashboard.tabs.chart')} sx={styles.tab} />

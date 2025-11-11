@@ -1,11 +1,17 @@
 import '@testing-library/jest-dom'
 import { cleanup } from '@testing-library/react'
 import { afterAll, afterEach, beforeAll, vi } from 'vitest'
+import translationEN from '../../public/locales/en/translation.json'
 import i18n from '../config/i18n'
 import { server } from '../mocks/server'
 
 // Setup MSW server
-beforeAll(() => server.listen({ onUnhandledRequest: 'warn' }))
+beforeAll(() => {
+  server.listen({ onUnhandledRequest: 'warn' })
+
+  // Add translation resources for testing
+  i18n.addResourceBundle('en', 'translation', translationEN, true, true)
+})
 
 // Cleanup after each test
 afterEach(() => {

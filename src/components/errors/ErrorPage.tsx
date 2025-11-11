@@ -8,6 +8,7 @@ import {
   type Theme,
 } from '@mui/material'
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 // Style factory outside component
@@ -67,6 +68,7 @@ export const ErrorPage: React.FC<IErrorPageProps> = ({
   onCustomAction,
   customActionText,
 }) => {
+  const { t } = useTranslation()
   const theme = useTheme()
   const styles = useMemo(() => getStyles(theme), [theme])
   const navigate = useNavigate()
@@ -92,33 +94,32 @@ export const ErrorPage: React.FC<IErrorPageProps> = ({
     switch (code) {
       case 404:
         return {
-          title: 'Page Not Found',
-          message:
-            'The page you are looking for does not exist or has been moved.',
+          title: t('errors.404.title'),
+          message: t('errors.404.message'),
           severity: 'warning' as const,
         }
       case 401:
         return {
-          title: 'Unauthorized',
-          message: 'You need to log in to access this page.',
+          title: t('errors.401.title'),
+          message: t('errors.401.message'),
           severity: 'error' as const,
         }
       case 403:
         return {
-          title: 'Access Denied',
-          message: 'You do not have permission to access this resource.',
+          title: t('errors.403.title'),
+          message: t('errors.403.message'),
           severity: 'error' as const,
         }
       case 500:
         return {
-          title: 'Server Error',
-          message: 'An internal server error occurred. Please try again later.',
+          title: t('errors.500.title'),
+          message: t('errors.500.message'),
           severity: 'error' as const,
         }
       default:
         return {
-          title: 'Something went wrong',
-          message: 'An unexpected error occurred.',
+          title: t('errors.default.title'),
+          message: t('errors.default.message'),
           severity: 'error' as const,
         }
     }
@@ -147,17 +148,17 @@ export const ErrorPage: React.FC<IErrorPageProps> = ({
         <Box sx={styles.actions}>
           {showHomeButton && (
             <Button variant='contained' onClick={handleGoHome}>
-              Go Home
+              {t('errors.actions.goHome')}
             </Button>
           )}
           {showBackButton && (
             <Button variant='outlined' onClick={handleGoBack}>
-              Go Back
+              {t('errors.actions.goBack')}
             </Button>
           )}
           {showReloadButton && (
             <Button variant='outlined' onClick={handleReload}>
-              Reload Page
+              {t('errors.actions.reloadPage')}
             </Button>
           )}
           {onCustomAction && customActionText && (

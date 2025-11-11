@@ -32,7 +32,8 @@
     "toggleTheme": "Toggle theme"
   },
   "sidebar": {
-    "navigation": "Navigation"
+    "navigation": "Navigation",
+    "testErrors": "Test Errors"
   },
   "profile": {
     "title": "Profile",
@@ -61,6 +62,10 @@
     "notProvided": "Not provided",
     "notAssigned": "Not assigned",
     "notSpecified": "Not specified",
+    "noDataAvailable": "No profile data available",
+    "userProfile": "User Profile",
+    "syncedFromAzure": "Synced from Azure AD",
+    "unknownUser": "Unknown User",
     "validation": {
       "nameRequired": "Display name is required",
       "nameMinLength": "Name must be at least 2 characters",
@@ -153,7 +158,40 @@
       "overdue": "Overdue",
       "goalsCompleted": "Goals Completed",
       "feedbackReceived": "Feedback Received",
-      "skillsAssessed": "Skills Assessed"
+      "skillsAssessed": "Skills Assessed",
+      "active": "Active",
+      "completed": "Completed",
+      "created": "Created",
+      "percentComplete": "% complete",
+      "createdLabel": "Created:",
+      "dueLabel": "Due:",
+      "viewAllGoals": "View All Goals",
+      "assessed": "Assessed",
+      "avgLevel": "Avg Level",
+      "level": "Level",
+      "assessedLabel": "Assessed:",
+      "viewSkillsAssessment": "View Skills Assessment",
+      "received": "Received",
+      "pending": "Pending",
+      "avgRating": "Avg Rating",
+      "averageRating": "Average Rating",
+      "generalFeedback": "General Feedback",
+      "viewAllFeedback": "View All Feedback",
+      "skillGaps": "Skill Gaps",
+      "assessmentProgress": "Assessment Progress",
+      "sevenDays": "7 days",
+      "tenDays": "10 days",
+      "fourteenDays": "14 days",
+      "thirtyDays": "30 days",
+      "thisMonth": "this month",
+      "sameAsLastMonth": "same as last month",
+      "thisQuarter": "this quarter"
+    },
+    "skillLevels": {
+      "expert": "Expert",
+      "advanced": "Advanced",
+      "intermediate": "Intermediate",
+      "beginner": "Beginner"
     }
   },
   "theme": {
@@ -175,16 +213,111 @@
         "chip": "Chip Component",
         "deletableChip": "Deletable Chip"
       }
+    },
+    "modes": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "descriptions": {
+      "light": "Light mode",
+      "dark": "Dark mode",
+      "system": "Follow system preference"
+    },
+    "tooltips": {
+      "switchToDark": "Switch to dark mode",
+      "switchToSystem": "Switch to system mode",
+      "switchToLight": "Switch to light mode",
+      "toggle": "Toggle theme",
+      "change": "Change theme"
+    },
+    "labels": {
+      "systemMode": "System ({{mode}})"
     }
   },
   "auth": {
     "accountDetails": "Account Details",
-    "permissions": "Permissions"
+    "permissions": "Permissions",
+    "devMode": "Running in development mode with stub user data",
+    "userId": "User ID",
+    "tenantId": "Tenant ID",
+    "roles": "Roles",
+    "accessToken": "Access Token",
+    "notAvailable": "Not available",
+    "stubToken": "(stub token)",
+    "userAccess": "User Access:",
+    "adminAccess": "Admin Access:",
+    "granted": "Granted",
+    "denied": "Denied",
+    "signingOut": "Signing out...",
+    "signOut": "Sign Out",
+    "login": {
+      "title": "CPR System",
+      "subtitle": "Continuous Performance Review",
+      "devModeAlert": "Running in development mode with stub authentication",
+      "signingIn": "Signing in...",
+      "signIn": "Sign In",
+      "devModeNote": "Development mode - no real authentication required",
+      "microsoftNote": "Sign in with your Microsoft account"
+    }
   },
   "toast": {
     "themeChanged": "Theme changed to {{mode}} mode",
     "themeChangedSystem": "Theme changed to system preference mode",
     "themeSwitched": "Switched to {{mode}} mode",
-    "dateFormatChanged": "Date format changed to {{format}}"
+    "dateFormatChanged": "Date format changed to {{format}}",
+    "languageChanged": "Language changed to {{language}}"
+  },
+  "footer": {
+    "copyright": "© {{year}} CPR Performance Management System. All rights reserved."
+  },
+  "pages": {
+    "team": {
+      "title": "Team Management",
+      "comingSoon": "Team management features coming soon..."
+    },
+    "skills": {
+      "title": "Skills",
+      "comingSoon": "Skills assessment coming soon..."
+    },
+    "goals": {
+      "title": "Goals",
+      "comingSoon": "Goals management coming soon..."
+    },
+    "feedback": {
+      "title": "Feedback",
+      "comingSoon": "Feedback features coming soon..."
+    },
+    "admin": {
+      "title": "Admin",
+      "comingSoon": "Admin features coming soon..."
+    }
+  },
+  "errors": {
+    "404": {
+      "title": "Page Not Found",
+      "message": "The page you are looking for does not exist or has been moved."
+    },
+    "401": {
+      "title": "Unauthorized",
+      "message": "You need to log in to access this page."
+    },
+    "403": {
+      "title": "Access Denied",
+      "message": "You do not have permission to access this resource."
+    },
+    "500": {
+      "title": "Server Error",
+      "message": "An internal server error occurred. Please try again later."
+    },
+    "default": {
+      "title": "Something went wrong",
+      "message": "An unexpected error occurred."
+    },
+    "actions": {
+      "goHome": "Go Home",
+      "goBack": "Go Back",
+      "reloadPage": "Reload Page"
+    }
   }
 }

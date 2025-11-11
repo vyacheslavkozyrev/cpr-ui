@@ -56,7 +56,7 @@ describe('DashboardCustomization', () => {
     renderWithProviders(<DashboardCustomization {...mockProps} />)
 
     const settingsButton = screen.getByRole('button', {
-      name: 'dashboard.customization.ariaLabel',
+      name: 'Customize dashboard',
     })
     expect(settingsButton).toBeInTheDocument()
   })
@@ -66,7 +66,7 @@ describe('DashboardCustomization', () => {
     renderWithProviders(<DashboardCustomization {...mockProps} />)
 
     const settingsButton = screen.getByRole('button', {
-      name: 'dashboard.customization.ariaLabel',
+      name: 'Customize dashboard',
     })
     await user.click(settingsButton)
 

@@ -1,5 +1,6 @@
 import { Box, Container, Typography } from '@mui/material'
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const getStyles = () => ({
   footer: {
@@ -17,6 +18,7 @@ const getStyles = () => ({
  * Simple application footer
  */
 export const Footer: React.FC = () => {
+  const { t } = useTranslation()
   const currentYear = new Date().getFullYear()
   const styles = useMemo(() => getStyles(), [])
 
@@ -24,8 +26,7 @@ export const Footer: React.FC = () => {
     <Box component='footer' sx={styles.footer}>
       <Container maxWidth='xl'>
         <Typography variant='body2' color='text.secondary' align='center'>
-          © {currentYear} CPR Performance Management System. All rights
-          reserved.
+          {t('footer.copyright', { year: currentYear })}
         </Typography>
       </Container>
     </Box>

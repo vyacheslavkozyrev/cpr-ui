@@ -32,7 +32,97 @@
     "toggleTheme": "Змяніць тэму"
   },
   "sidebar": {
-    "navigation": "Навігацыя"
+    "navigation": "Навігацыя",
+    "testErrors": "Тэставыя Памылкі"
+  },
+  "theme": {
+    "demo": {
+      "colors": {
+        "primary": "Асноўны",
+        "secondary": "Другасны",
+        "success": "Паспех",
+        "warning": "Папярэджанне",
+        "error": "Памылка",
+        "info": "Інфармацыя"
+      },
+      "buttons": {
+        "contained": "Запоўнены Кнопка",
+        "outlined": "Абведзены Кнопка",
+        "text": "Тэкставая Кнопка"
+      },
+      "components": {
+        "chip": "Кампанент Чып",
+        "deletableChip": "Чып з Выдаленнем"
+      }
+    },
+    "modes": {
+      "light": "Светлы",
+      "dark": "Цёмны",
+      "system": "Сістэмны"
+    },
+    "descriptions": {
+      "light": "Светлы рэжым",
+      "dark": "Цёмны рэжым",
+      "system": "Сістэмная перавага"
+    },
+    "tooltips": {
+      "switchToDark": "Пераключыць на цёмны рэжым",
+      "switchToSystem": "Пераключыць на сістэмны рэжым",
+      "switchToLight": "Пераключыць на светлы рэжым",
+      "toggle": "Змяніць тэму",
+      "change": "Змяніць тэму"
+    },
+    "labels": {
+      "systemMode": "Сістэмны ({{mode}})"
+    }
+  },
+  "auth": {
+    "accountDetails": "Дэталі Уліковага Запісу",
+    "permissions": "Дазволы",
+    "devMode": "Рэжым распрацоўкі з тэставымі данымі карыстальніка",
+    "userId": "ID Карыстальніка",
+    "tenantId": "ID Арандатара",
+    "roles": "Ролі",
+    "accessToken": "Токен Доступу",
+    "notAvailable": "Недаступна",
+    "stubToken": "(тэставы токен)",
+    "userAccess": "Доступ Карыстальніка:",
+    "adminAccess": "Доступ Адміністратара:",
+    "granted": "Дазволена",
+    "denied": "Адмоўлена",
+    "signingOut": "Выхад...",
+    "signOut": "Выйсці",
+    "login": {
+      "title": "Сістэма CPR",
+      "subtitle": "Пастаянны Прагляд Прадукцыйнасці",
+      "devModeAlert": "Рэжым распрацоўкі: Аўтэнтыфікацыя адключана",
+      "signingIn": "Уваход...",
+      "signIn": "Увайсці з Microsoft",
+      "devModeNote": "У рэжыме распрацоўкі вам будзе прызначаны тэставы ўліковы запіс",
+      "microsoftNote": "Выкарыстоўвайце свой карпаратыўны ўліковы запіс Microsoft"
+    }
+  },
+  "pages": {
+    "team": {
+      "title": "Каманда",
+      "comingSoon": "Хутка будзе даступна"
+    },
+    "skills": {
+      "title": "Навыкі",
+      "comingSoon": "Хутка будзе даступна"
+    },
+    "goals": {
+      "title": "Мэты",
+      "comingSoon": "Хутка будзе даступна"
+    },
+    "feedback": {
+      "title": "Водгукі",
+      "comingSoon": "Хутка будзе даступна"
+    },
+    "admin": {
+      "title": "Адміністрацыя",
+      "comingSoon": "Хутка будзе даступна"
+    }
   },
   "profile": {
     "title": "Профіль",
@@ -61,6 +151,10 @@
     "notProvided": "Не пазначана",
     "notAssigned": "Не прызначана",
     "notSpecified": "Не ўказана",
+    "noDataAvailable": "Няма даступных даных профілю",
+    "userProfile": "Профіль Карыстальніка",
+    "syncedFromAzure": "Сінхранізавана з Azure AD",
+    "unknownUser": "Невядомы Карыстальнік",
     "validation": {
       "nameRequired": "Імя для адлюстравання абавязкова",
       "nameMinLength": "Імя павінна змяшчаць не менш за 2 сімвалы",
@@ -134,12 +228,96 @@
       "feedbackSummary": "Зводка Водгукаў",
       "skillProgress": "Прагрэс Навыкаў",
       "activityFeed": "Стужка Актыўнасці"
+    },
+    "tabs": {
+      "chart": "Дыяграма",
+      "summary": "Зводка",
+      "goals": "Мэты",
+      "skills": "Навыкі",
+      "feedback": "Водгукі",
+      "activities": "Актыўнасць"
+    },
+    "labels": {
+      "days": "Дні",
+      "totalActivities": "Усяго Актыўнасцей",
+      "activityOverview": "Агляд Актыўнасці",
+      "goalsCompleted": "Мэты Выкананы",
+      "feedbackReceived": "Водгукі Атрыманы",
+      "skillsAssessed": "Навыкі Ацэнены",
+      "active": "Актыўны",
+      "completed": "Выканана",
+      "created": "Створана",
+      "percentComplete": "% выканана",
+      "createdLabel": "Створана:",
+      "dueLabel": "Тэрмін:",
+      "viewAllGoals": "Праглядзець усе мэты",
+      "assessed": "Ацэнена",
+      "avgLevel": "Сярэдні ўзровень",
+      "level": "Узровень",
+      "assessedLabel": "Ацэнена:",
+      "viewSkillsAssessment": "Праглядзець ацэнку навыкаў",
+      "received": "Атрымана",
+      "pending": "У чаканні",
+      "avgRating": "Сярэдні рэйтынг",
+      "averageRating": "Сярэдні Рэйтынг",
+      "generalFeedback": "Агульны Водгук",
+      "viewAllFeedback": "Праглядзець усе водгукі",
+      "overdue": "Пратэрмінавана",
+      "latestActivities": "Апошнія Актыўнасці",
+      "viewMore": "Праглядзець больш",
+      "noActivities": "Няма актыўнасцей",
+      "skillGaps": "Прабелы ў Навыках",
+      "assessmentProgress": "Прагрэс Ацэнкі",
+      "sevenDays": "7 дзён",
+      "tenDays": "10 дзён",
+      "fourteenDays": "14 дзён",
+      "thirtyDays": "30 дзён",
+      "thisMonth": "у гэтым месяцы",
+      "sameAsLastMonth": "як у мінулым месяцы",
+      "thisQuarter": "у гэтым квартале"
+    },
+    "skillLevels": {
+      "expert": "Эксперт",
+      "advanced": "Прасунуты",
+      "intermediate": "Сярэдні",
+      "beginner": "Пачатковы"
     }
   },
   "toast": {
     "themeChanged": "Тэма зменена на {{mode}} рэжым",
     "themeChangedSystem": "Тэма зменена на сістэмны рэжым",
     "themeSwitched": "Пераключана на {{mode}} рэжым",
-    "dateFormatChanged": "Фармат даты зменены на {{format}}"
+    "dateFormatChanged": "Фармат даты зменены на {{format}}",
+    "languageChanged": "Мова зменена на {{language}}"
+  },
+  "footer": {
+    "copyright": "© {{year}} Сістэма Кіравання Прадукцыйнасцю CPR. Усе правы абаронены."
+  },
+  "errors": {
+    "404": {
+      "title": "Старонка Не Знойдзена",
+      "message": "Старонка, якую вы шукаеце, не існуе або была перамешчана."
+    },
+    "401": {
+      "title": "Не Аўтарызавана",
+      "message": "Вам трэба ўвайсці, каб атрымаць доступ да гэтай старонкі."
+    },
+    "403": {
+      "title": "Доступ Забаронены",
+      "message": "У вас няма дазволу на доступ да гэтага рэсурсу."
+    },
+    "500": {
+      "title": "Памылка Сервера",
+      "message": "Адбылася ўнутраная памылка сервера. Калі ласка, паспрабуйце пазней."
+    },
+    "default": {
+      "title": "Нешта пайшло не так",
+      "message": "Адбылася нечаканая памылка."
+    },
+    "actions": {
+      "goHome": "На Галоўную",
+      "goBack": "Вярнуцца",
+      "reloadPage": "Перазагрузіць Старонку"
+    }
   }
 }

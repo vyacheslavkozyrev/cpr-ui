@@ -9,6 +9,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../stores/authStore'
 import { logger } from '../../utils/logger'
@@ -44,6 +45,7 @@ const getStyles = () => ({
 })
 
 export const LoginForm = () => {
+  const { t } = useTranslation()
   const { login, isLoading, error, isStubMode, isAuthenticated } = useAuth()
   const styles = useMemo(() => getStyles(), [])
   const navigate = useNavigate()
@@ -70,7 +72,7 @@ export const LoginForm = () => {
           <PersonIcon sx={styles.heroIcon} />
 
           <Typography variant='h4' component='h1' gutterBottom>
-            CPR System
+            {t('auth.login.title')}
           </Typography>
 
           <Typography
@@ -78,12 +80,12 @@ export const LoginForm = () => {
             color='text.secondary'
             sx={styles.paragraph}
           >
-            Continuous Performance Review
+            {t('auth.login.subtitle')}
           </Typography>
 
           {isStubMode && (
             <Alert severity='info' sx={styles.paragraph}>
-              Running in development mode with stub authentication
+              {t('auth.login.devModeAlert')}
             </Alert>
           )}
 
@@ -108,13 +110,13 @@ export const LoginForm = () => {
             }
             sx={styles.button}
           >
-            {isLoading ? 'Signing in...' : 'Sign In'}
+            {isLoading ? t('auth.login.signingIn') : t('auth.login.signIn')}
           </Button>
 
           <Typography variant='caption' color='text.secondary'>
             {isStubMode
-              ? 'Development mode - no real authentication required'
-              : 'Sign in with your Microsoft account'}
+              ? t('auth.login.devModeNote')
+              : t('auth.login.microsoftNote')}
           </Typography>
         </CardContent>
       </Card>

@@ -182,21 +182,30 @@ export const UserStatisticsCards: React.FC<IUserStatisticsCardsProps> = ({
       <UserStatCard
         label={t('dashboard.labels.goalsCompleted')}
         value={goalsCompleted}
-        trend={{ direction: 'up', value: '+2 this month' }}
+        trend={{
+          direction: 'up',
+          value: `+2 ${t('dashboard.labels.thisMonth')}`,
+        }}
         isLoading={isLoading}
         color='success'
       />
       <UserStatCard
         label={t('dashboard.labels.feedbackReceived')}
         value={feedbackReceived}
-        trend={{ direction: 'neutral', value: 'same as last month' }}
+        trend={{
+          direction: 'neutral',
+          value: t('dashboard.labels.sameAsLastMonth'),
+        }}
         isLoading={isLoading}
         color='info'
       />
       <UserStatCard
         label={t('dashboard.labels.skillsAssessed')}
         value={skillsAssessed}
-        trend={{ direction: 'up', value: '+3 this quarter' }}
+        trend={{
+          direction: 'up',
+          value: `+3 ${t('dashboard.labels.thisQuarter')}`,
+        }}
         isLoading={isLoading}
         color='primary'
       />

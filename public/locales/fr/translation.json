@@ -61,6 +61,10 @@
     "notProvided": "Non fourni",
     "notAssigned": "Non assigné",
     "notSpecified": "Non spécifié",
+    "noDataAvailable": "Aucune donnée de profil disponible",
+    "userProfile": "Profil Utilisateur",
+    "syncedFromAzure": "Synchronisé depuis Azure AD",
+    "unknownUser": "Utilisateur Inconnu",
     "validation": {
       "nameRequired": "Le nom d'affichage est obligatoire",
       "nameMinLength": "Le nom doit contenir au moins 2 caractères",
@@ -140,6 +144,60 @@
     "themeChanged": "Thème changé en mode {{mode}}",
     "themeChangedSystem": "Thème changé en mode préférence système",
     "themeSwitched": "Basculé en mode {{mode}}",
-    "dateFormatChanged": "Format de date changé en {{format}}"
+    "dateFormatChanged": "Format de date changé en {{format}}",
+    "languageChanged": "Langue changée en {{language}}"
+  },
+  "auth": {
+    "accountDetails": "Détails du Compte",
+    "permissions": "Autorisations",
+    "devMode": "Exécution en mode développement avec des données utilisateur de test",
+    "userId": "ID Utilisateur",
+    "tenantId": "ID Locataire",
+    "roles": "Rôles",
+    "accessToken": "Jeton d'Accès",
+    "notAvailable": "Non disponible",
+    "stubToken": "(jeton de test)",
+    "userAccess": "Accès Utilisateur:",
+    "adminAccess": "Accès Administrateur:",
+    "granted": "Accordé",
+    "denied": "Refusé",
+    "signingOut": "Déconnexion...",
+    "signOut": "Se Déconnecter",
+    "login": {
+      "title": "Système CPR",
+      "subtitle": "Revue Continue des Performances",
+      "devModeAlert": "Exécution en mode développement avec authentification de test",
+      "signingIn": "Connexion...",
+      "signIn": "Se Connecter",
+      "devModeNote": "Mode développement - aucune authentification réelle requise",
+      "microsoftNote": "Connectez-vous avec votre compte Microsoft"
+    }
+  },
+  "errors": {
+    "404": {
+      "title": "Page Non Trouvée",
+      "message": "La page que vous recherchez n'existe pas ou a été déplacée."
+    },
+    "401": {
+      "title": "Non Autorisé",
+      "message": "Vous devez vous connecter pour accéder à cette page."
+    },
+    "403": {
+      "title": "Accès Refusé",
+      "message": "Vous n'avez pas la permission d'accéder à cette ressource."
+    },
+    "500": {
+      "title": "Erreur Serveur",
+      "message": "Une erreur interne du serveur s'est produite. Veuillez réessayer plus tard."
+    },
+    "default": {
+      "title": "Quelque chose s'est mal passé",
+      "message": "Une erreur inattendue s'est produite."
+    },
+    "actions": {
+      "goHome": "Aller à l'Accueil",
+      "goBack": "Retour",
+      "reloadPage": "Recharger la Page"
+    }
   }
 }

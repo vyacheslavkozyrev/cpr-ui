@@ -52,7 +52,7 @@ describe('GoalSummaryWidget', () => {
     renderWithRouter(<GoalSummaryWidget />)
 
     await waitFor(() => {
-      expect(screen.getByText('Goals Summary')).toBeInTheDocument()
+      expect(screen.getByText('Goal Summary')).toBeInTheDocument()
     })
 
     // Check statistics on the Chart tab
@@ -68,14 +68,14 @@ describe('GoalSummaryWidget', () => {
     renderWithRouter(<GoalSummaryWidget />)
 
     await waitFor(() => {
-      expect(screen.getByText('Goals Summary')).toBeInTheDocument()
+      expect(screen.getByText('Goal Summary')).toBeInTheDocument()
     })
 
     // Initially on Chart tab
     expect(screen.getByTestId('line-chart')).toBeInTheDocument()
 
     // Switch to Goals tab
-    fireEvent.click(screen.getByRole('tab', { name: 'dashboard.tabs.goals' }))
+    fireEvent.click(screen.getByRole('tab', { name: 'Goals' }))
 
     // Should show goals in the list view
     await waitFor(() => {
@@ -109,11 +109,11 @@ describe('GoalSummaryWidget', () => {
     renderWithRouter(<GoalSummaryWidget />)
 
     await waitFor(() => {
-      expect(screen.getByText('Goals Summary')).toBeInTheDocument()
+      expect(screen.getByText('Goal Summary')).toBeInTheDocument()
     })
 
     // Switch to Goals tab
-    fireEvent.click(screen.getByRole('tab', { name: 'dashboard.tabs.goals' }))
+    fireEvent.click(screen.getByRole('tab', { name: 'Goals' }))
 
     // Should show goals in the list view
     await waitFor(() => {

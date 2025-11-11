@@ -240,10 +240,10 @@ export const ActivityFeedWidget: React.FC = () => {
             label={t('dashboard.labels.days')}
             onChange={e => handleDaysChange(Number(e.target.value))}
           >
-            <MenuItem value={7}>7 days</MenuItem>
-            <MenuItem value={10}>10 days</MenuItem>
-            <MenuItem value={14}>14 days</MenuItem>
-            <MenuItem value={30}>30 days</MenuItem>
+            <MenuItem value={7}>{t('dashboard.labels.sevenDays')}</MenuItem>
+            <MenuItem value={10}>{t('dashboard.labels.tenDays')}</MenuItem>
+            <MenuItem value={14}>{t('dashboard.labels.fourteenDays')}</MenuItem>
+            <MenuItem value={30}>{t('dashboard.labels.thirtyDays')}</MenuItem>
           </Select>
         </FormControl>
       </Box>
