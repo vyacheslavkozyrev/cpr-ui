@@ -1,0 +1,6 @@
+export { GoalCard } from './GoalCard'
+export { GoalFiltersPanel } from './GoalFiltersPanel'
+export { GoalTableView } from './GoalTableView'
+export { TaskForm } from './TaskForm'
+export { TaskItem } from './TaskItem'
+export { TaskList } from './TaskList'

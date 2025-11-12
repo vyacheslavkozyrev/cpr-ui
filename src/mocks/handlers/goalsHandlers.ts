@@ -5,7 +5,6 @@ import type {
   TCreateGoalTaskDto,
   TGoalDto,
   TGoalTaskDto,
-  TPaginatedGoalsResponseDto,
   TTeamGoalsDto,
   TUpdateGoalDto,
   TUpdateGoalTaskDto,
@@ -15,13 +14,13 @@ const DEFAULT_API_BASE_URL = 'http://localhost:3000/api'
 
 // Get API base URL from environment variable with fallback
 const getApiBaseUrl = () => {
-  // In Node.js environment (tests)
-  if (typeof process !== 'undefined' && process.env) {
-    return process.env['VITE_API_BASE_URL'] || DEFAULT_API_BASE_URL
+  // In Node.js environment (tests) - Vitest sets VITE_ vars in import.meta.env
+  if (typeof import.meta !== 'undefined' && import.meta.env) {
+    return import.meta.env['VITE_API_BASE_URL'] || DEFAULT_API_BASE_URL
   }
 
-  // In browser environment (Vite)
-  return import.meta.env?.['VITE_API_BASE_URL'] || DEFAULT_API_BASE_URL
+  // Fallback to default
+  return DEFAULT_API_BASE_URL
 }
 
 const API_BASE_URL = getApiBaseUrl()
@@ -63,13 +62,15 @@ const generateMockGoal = (index: number): TGoalDto => {
     relatedSkillLevelId: `skill-level-${index % 3}`,
     priority: Math.floor(Math.random() * 100),
     visibility: (['private', 'team', 'org'] as const)[index % 3],
+    isCompleted: status === 'completed',
+    completedAt: status === 'completed' ? new Date().toISOString() : '',
+    progressPercent: status === 'completed' ? 100 : Math.random() * 80,
     createdAt: new Date(
       Date.now() - (30 - index) * 24 * 60 * 60 * 1000
     ).toISOString(),
-    updatedAt: new Date(
+    modifiedAt: new Date(
       Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000
     ).toISOString(),
-    createdBy: 'test-employee-id',
     tasks: Array.from({ length: taskCount }, (_, i) =>
       generateMockGoalTask(goalId, i)
     ),
@@ -123,8 +124,9 @@ export const goalsHandlers = [
         }),
         ...(goalData.priority !== undefined && { priority: goalData.priority }),
         ...(goalData.visibility && { visibility: goalData.visibility }),
+        isCompleted: false,
+        progressPercent: 0,
         createdAt: new Date().toISOString(),
-        createdBy: 'test-employee-id',
         tasks: [],
       }
 
@@ -169,20 +171,15 @@ export const goalsHandlers = [
       )
     }
 
+    // Backend currently returns TGoalDto[] (not paginated response)
+    // Service layer handles pagination wrapping
     // Calculate pagination
-    const total = filteredGoals.length
     const startIndex = (page - 1) * perPage
     const endIndex = startIndex + perPage
     const paginatedGoals = filteredGoals.slice(startIndex, endIndex)
 
-    const response: TPaginatedGoalsResponseDto = {
-      items: paginatedGoals,
-      total,
-      page,
-      per_page: perPage,
-    }
-
-    return HttpResponse.json(response)
+    // Return plain array - service will wrap it in paginated format
+    return HttpResponse.json(paginatedGoals)
   }),
 
   // Get Goal by ID - GET /api/Goals/{id}
@@ -302,8 +299,11 @@ export const goalsHandlers = [
       }
 
       // Add task to goal
+      if (!goal.tasks) {
+        goal.tasks = []
+      }
       goal.tasks.push(newTask)
-      goal.updatedAt = new Date().toISOString()
+      goal.modifiedAt = new Date().toISOString()
 
       return HttpResponse.json(newTask)
     } catch {
@@ -327,6 +327,17 @@ export const goalsHandlers = [
       const goal = mockGoals.find(g => g.id === goalId)
 
       if (!goal) {
+        return HttpResponse.json(
+          {
+            type: 'https://tools.ietf.org/html/rfc7231#section-6.5.4',
+            title: 'Not Found',
+            status: 404,
+          },
+          { status: 404 }
+        )
+      }
+
+      if (!goal.tasks) {
         return HttpResponse.json(
           {
             type: 'https://tools.ietf.org/html/rfc7231#section-6.5.4',
@@ -362,7 +373,7 @@ export const goalsHandlers = [
         }
 
         goal.tasks[taskIndex] = updatedTask
-        goal.updatedAt = new Date().toISOString()
+        goal.modifiedAt = new Date().toISOString()
 
         return HttpResponse.json(updatedTask)
       } catch {
@@ -395,6 +406,17 @@ export const goalsHandlers = [
       )
     }
 
+    if (!goal.tasks) {
+      return HttpResponse.json(
+        {
+          type: 'https://tools.ietf.org/html/rfc7231#section-6.5.4',
+          title: 'Not Found',
+          status: 404,
+        },
+        { status: 404 }
+      )
+    }
+
     const taskIndex = goal.tasks.findIndex(t => t.id === taskId)
     if (taskIndex === -1) {
       return HttpResponse.json(
@@ -409,7 +431,7 @@ export const goalsHandlers = [
 
     // Remove task
     goal.tasks.splice(taskIndex, 1)
-    goal.updatedAt = new Date().toISOString()
+    goal.modifiedAt = new Date().toISOString()
 
     return new HttpResponse(null, { status: 204 })
   }),

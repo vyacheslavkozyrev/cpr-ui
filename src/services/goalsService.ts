@@ -1,8 +1,8 @@
+import type { IGoalsSummaryDto } from '../dtos/DashboardDto'
 import type {
   TCreateGoalDto,
   TCreateGoalTaskDto,
   TGoalDto,
-  TGoalsSummaryDto,
   TGoalTaskDto,
   TPaginatedGoalsResponseDto,
   TTeamGoalsDto,
@@ -70,7 +70,33 @@ export class GoalsApiService {
     const query = queryParams.toString()
     const url = query ? `/me/goals?${query}` : '/me/goals'
 
-    return apiClient.get<TPaginatedGoalsResponseDto>(url)
+    // Backend currently returns GoalDto[] instead of paginated response
+    // Transform the response to match expected format
+    const response = await apiClient.get<TGoalDto[]>(url)
+
+    const items = response.data || []
+    const page = params?.page || 1
+    const perPage = params?.per_page || 20
+
+    // Transform plain array to paginated response
+    const paginatedResponse: TPaginatedGoalsResponseDto = {
+      items,
+      total: items.length, // Backend doesn't return total, using items.length as approximation
+      page,
+      per_page: perPage,
+    }
+
+    const result: TApiResponse<TPaginatedGoalsResponseDto> = {
+      success: response.success,
+      data: paginatedResponse,
+      timestamp: response.timestamp,
+    }
+
+    if (response.message) {
+      result.message = response.message
+    }
+
+    return result
   }
 
   /**
@@ -151,9 +177,9 @@ export class GoalsApiService {
    */
   async getGoalsSummary(
     period: string = 'month'
-  ): Promise<TApiResponse<TGoalsSummaryDto>> {
+  ): Promise<TApiResponse<IGoalsSummaryDto>> {
     const queryParams = new URLSearchParams({ period })
-    return apiClient.get<TGoalsSummaryDto>(
+    return apiClient.get<IGoalsSummaryDto>(
       `/dashboard/goals-summary?${queryParams.toString()}`
     )
   }

@@ -16,8 +16,20 @@ export * from './api'
 // Business Services (handle DTO->Model mapping and React Query hooks)
 export {
   useCurrentUser,
-  userService,
   useUpdateCurrentUser,
   useUploadAvatar,
   useUser,
+  userService,
 } from './userService'
+
+// Goals Query Service (React Query hooks for Feature 0001)
+export {
+  useCreateGoal,
+  useCreateTask,
+  useDeleteGoal,
+  useDeleteTask,
+  useGoal,
+  useGoals,
+  useUpdateGoal,
+  useUpdateTask,
+} from './goalsQueryService'

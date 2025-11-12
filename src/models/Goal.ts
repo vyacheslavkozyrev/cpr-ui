@@ -206,8 +206,9 @@ export interface TaskUpdateInput extends Partial<TaskCreationInput> {
  * Helper function to convert Goal DTO to Goal Model
  */
 export function convertGoalDtoToGoal(goalDto: TGoalDto): Goal {
-  const completedTasks = goalDto.tasks.filter(task => task.isCompleted).length
-  const totalTasks = goalDto.tasks.length
+  const tasks = goalDto.tasks || []
+  const completedTasks = tasks.filter(task => task.isCompleted).length
+  const totalTasks = tasks.length
   const progress = totalTasks > 0 ? completedTasks / totalTasks : 0
 
   const now = new Date()
@@ -222,7 +223,7 @@ export function convertGoalDtoToGoal(goalDto: TGoalDto): Goal {
 
   return {
     ...goalDto,
-    tasks: goalDto.tasks.map(convertGoalTaskDtoToGoalTask),
+    tasks: tasks.map(convertGoalTaskDtoToGoalTask),
     progress,
     isOverdue,
     tasksCompleted: completedTasks,

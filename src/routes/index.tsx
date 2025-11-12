@@ -7,7 +7,7 @@ import { AdminPage } from '../pages/admin'
 import { LoginPage } from '../pages/auth'
 import { DashboardPage } from '../pages/dashboard'
 import { FeedbackPage } from '../pages/feedback'
-import { GoalsPage } from '../pages/goals'
+import { GoalDetailPage, GoalFormPage, GoalsPage } from '../pages/goals'
 import { ProfilePage } from '../pages/profile'
 import { SettingsPage } from '../pages/settings'
 import { SkillsPage } from '../pages/skills'
@@ -59,8 +59,25 @@ export const routes: RouteObject[] = [
       // Goals - accessible to all authenticated users
       {
         path: 'goals',
-        element: <GoalsPage />,
         errorElement: <RouteErrorBoundary />,
+        children: [
+          {
+            index: true,
+            element: <GoalsPage />,
+          },
+          {
+            path: 'new',
+            element: <GoalFormPage />,
+          },
+          {
+            path: ':goalId',
+            element: <GoalDetailPage />,
+          },
+          {
+            path: ':goalId/edit',
+            element: <GoalFormPage />,
+          },
+        ],
       },
 
       // Skills - accessible to all authenticated users

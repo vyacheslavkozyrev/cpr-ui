@@ -56,10 +56,12 @@ export interface TGoalDto {
   relatedSkillLevelId?: string // UUID format
   priority?: number // 0-100 integer
   visibility?: string // Visibility level
+  isCompleted: boolean // Completion status
+  completedAt?: string // ISO datetime format
+  progressPercent: number // Progress percentage (0.00-100.00)
   createdAt: string // ISO datetime format
-  updatedAt?: string // ISO datetime format
-  createdBy: string // UUID format
-  tasks: TGoalTaskDto[] // Array of associated tasks
+  modifiedAt?: string // ISO datetime format (Constitutional Principle 11)
+  tasks?: TGoalTaskDto[] // Array of associated tasks (optional in list responses)
 }
 
 // Goal Task DTOs
@@ -98,6 +100,7 @@ export interface TGoalTaskDto {
   isCompleted: boolean // Completion status
   completedAt?: string // ISO datetime format
   createdAt: string // ISO datetime format
+  modifiedAt?: string // ISO datetime format (Constitutional Principle 11)
 }
 
 // Dashboard Integration DTOs
