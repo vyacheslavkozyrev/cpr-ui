@@ -60,8 +60,8 @@ describe('GoalCard Component Tests', () => {
 
     it('should display status chip', () => {
       renderWithProviders(<GoalCard goal={mockGoal} />, renderOptions)
-      // Status should be displayed (in_progress)
-      const statusElement = screen.getByText(/in_progress/i)
+      // Status should be displayed as translated text "In Progress"
+      const statusElement = screen.getByText(/In Progress/i)
       expect(statusElement).toBeInTheDocument()
     })
 
@@ -79,8 +79,8 @@ describe('GoalCard Component Tests', () => {
 
     it('should display deadline when present', () => {
       renderWithProviders(<GoalCard goal={mockGoal} />, renderOptions)
-      // Deadline should be formatted and displayed
-      const deadlineText = screen.getByText(/12\/31\/2025/)
+      // Deadline should be formatted as "Dec 31, 2025" (MEDIUM format)
+      const deadlineText = screen.getByText(/Dec 31, 2025/i)
       expect(deadlineText).toBeInTheDocument()
     })
 

@@ -6,7 +6,6 @@ import {
   Alert,
   Box,
   Button,
-  CircularProgress,
   Container,
   Fab,
   Pagination,
@@ -17,17 +16,24 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useGoals } from '../../services'
-import type { IGoalsQueryParams } from '../../types/goalFilters'
-import { GoalCard, GoalFiltersPanel, GoalTableView } from './components'
+import { usePreferencesStore } from '../../stores'
+import type { IGoalsQueryParams, TGoalSortField } from '../../types/goalFilters'
+import {
+  GoalCard,
+  GoalCardSkeleton,
+  GoalFiltersPanel,
+  GoalTableSkeleton,
+  GoalTableView,
+} from './components'
 
 /**
  * Goals List Page
  * Feature 0001 - Personal Goal Management
- * Phase 3 - UI Implementation
+ * Phase 5A - Enhanced UI Implementation
  */
 
 type ViewMode = 'grid' | 'list'
@@ -36,21 +42,46 @@ export const GoalsPage: React.FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
-  // View mode state
-  const [viewMode, setViewMode] = useState<ViewMode>('grid')
+  // Get preferences from store
+  const {
+    goals: preferences,
+    setViewMode: saveViewMode,
+    setPerPage: savePerPage,
+    setSortPreferences,
+    resetGoalsPreferences,
+  } = usePreferencesStore()
+
+  // View mode state (initialized from preferences)
+  // Note: preferences uses 'table' but ViewMode uses 'list'
+  const [viewMode, setViewMode] = useState<ViewMode>(
+    preferences.viewMode === 'table' ? 'list' : 'grid'
+  )
   const [showFilters, setShowFilters] = useState(false)
 
-  // Filter and pagination state
+  // Filter and pagination state (initialized from preferences)
   const [filters, setFilters] = useState<Partial<IGoalsQueryParams>>({
     page: 1,
-    per_page: 12,
+    per_page: preferences.perPage,
     status: 'all',
     visibility: 'all',
     priority: 'all',
     deadline: 'all',
-    sortBy: 'createdAt',
-    sortDirection: 'desc',
+    sortBy: preferences.sortBy,
+    sortDirection: preferences.sortDirection,
   })
+
+  // Sync preferences when they change
+  useEffect(() => {
+    if (filters.sortBy && filters.sortDirection) {
+      setSortPreferences(filters.sortBy, filters.sortDirection)
+    }
+  }, [filters.sortBy, filters.sortDirection, setSortPreferences])
+
+  useEffect(() => {
+    if (filters.per_page) {
+      savePerPage(filters.per_page)
+    }
+  }, [filters.per_page, savePerPage])
 
   // Fetch goals using React Query hook
   const { data, isLoading, isError, error } = useGoals(filters)
@@ -82,7 +113,39 @@ export const GoalsPage: React.FC = () => {
   ) => {
     if (newMode !== null) {
       setViewMode(newMode)
+      // Save to preferences (convert 'list' to 'table')
+      saveViewMode(newMode === 'list' ? 'table' : 'grid')
     }
+  }
+
+  const handleSortChange = (field: TGoalSortField) => {
+    setFilters(prev => {
+      // Toggle direction if clicking same field, otherwise default to desc
+      const newDirection =
+        prev.sortBy === field && prev.sortDirection === 'desc' ? 'asc' : 'desc'
+      return {
+        ...prev,
+        sortBy: field,
+        sortDirection: newDirection,
+      }
+    })
+  }
+
+  const handleResetPreferences = () => {
+    // Reset preferences in store
+    resetGoalsPreferences()
+    // Reset local state to defaults
+    setViewMode('grid')
+    setFilters({
+      page: 1,
+      per_page: 12,
+      status: 'all',
+      visibility: 'all',
+      priority: 'all',
+      deadline: 'all',
+      sortBy: 'createdAt',
+      sortDirection: 'desc',
+    })
   }
 
   // Calculate pagination
@@ -112,6 +175,21 @@ export const GoalsPage: React.FC = () => {
                 })
               : t('pages.goals.loading', 'Loading...')}
           </Typography>
+          {/* Active filters indicator */}
+          {!isLoading &&
+            (filters.status !== 'all' ||
+              filters.visibility !== 'all' ||
+              filters.priority !== 'all' ||
+              filters.deadline !== 'all' ||
+              Boolean(filters.search)) && (
+              <Typography
+                variant='caption'
+                color='primary'
+                sx={{ display: 'block', mt: 0.5 }}
+              >
+                {t('pages.goals.filtersActive', 'Filters active')}
+              </Typography>
+            )}
         </Box>
 
         <Stack direction='row' spacing={2}>
@@ -121,14 +199,20 @@ export const GoalsPage: React.FC = () => {
             exclusive
             onChange={handleViewModeChange}
             size='small'
-            aria-label='view mode'
+            aria-label={t('pages.goals.viewMode', 'view mode')}
           >
-            <ToggleButton value='grid' aria-label='grid view'>
+            <ToggleButton
+              value='grid'
+              aria-label={t('pages.goals.gridView', 'Grid View')}
+            >
               <Tooltip title={t('pages.goals.gridView', 'Grid View')}>
                 <GridViewIcon />
               </Tooltip>
             </ToggleButton>
-            <ToggleButton value='list' aria-label='list view'>
+            <ToggleButton
+              value='list'
+              aria-label={t('pages.goals.listView', 'List View')}
+            >
               <Tooltip title={t('pages.goals.listView', 'List View')}>
                 <ViewListIcon />
               </Tooltip>
@@ -141,8 +225,24 @@ export const GoalsPage: React.FC = () => {
             startIcon={<FilterListIcon />}
             onClick={() => setShowFilters(!showFilters)}
           >
-            {t('pages.goals.filters', 'Filters')}
+            {t('pages.goals.filtersButton', 'Filters')}
           </Button>
+
+          {/* Reset preferences button */}
+          <Tooltip
+            title={t(
+              'pages.goals.resetPreferences',
+              'Reset filters and view to defaults'
+            )}
+          >
+            <Button
+              variant='text'
+              size='small'
+              onClick={handleResetPreferences}
+            >
+              {t('pages.goals.reset', 'Reset')}
+            </Button>
+          </Tooltip>
 
           {/* Create goal button */}
           <Button
@@ -162,16 +262,31 @@ export const GoalsPage: React.FC = () => {
         </Paper>
       )}
 
-      {/* Loading State */}
+      {/* Loading State - Skeleton Grid or Table */}
       {isLoading && (
-        <Box
-          display='flex'
-          justifyContent='center'
-          alignItems='center'
-          minHeight='400px'
-        >
-          <CircularProgress />
-        </Box>
+        <>
+          {viewMode === 'grid' ? (
+            <Box
+              display='grid'
+              gridTemplateColumns={{
+                xs: '1fr',
+                sm: 'repeat(2, 1fr)',
+                md: 'repeat(3, 1fr)',
+                lg: 'repeat(4, 1fr)',
+              }}
+              gap={2}
+              mb={4}
+            >
+              {Array.from({ length: filters.per_page || 12 }).map(
+                (_, index) => (
+                  <GoalCardSkeleton key={index} />
+                )
+              )}
+            </Box>
+          ) : (
+            <GoalTableSkeleton rows={filters.per_page || 12} />
+          )}
+        </>
       )}
 
       {/* Error State */}
@@ -182,31 +297,76 @@ export const GoalsPage: React.FC = () => {
         </Alert>
       )}
 
-      {/* Empty State */}
+      {/* Empty State - Different variations based on context */}
       {!isLoading &&
         !isError &&
         data &&
         data.items &&
         data.items.length === 0 && (
           <Paper sx={{ p: 6, textAlign: 'center' }}>
-            <Typography variant='h6' gutterBottom color='text.secondary'>
-              {filters.search || filters.status !== 'all'
-                ? t('pages.goals.noResults', 'No goals match your filters')
-                : t('pages.goals.noGoals', 'No goals yet')}
-            </Typography>
-            <Typography variant='body2' color='text.secondary' mb={3}>
-              {t(
-                'pages.goals.getStarted',
-                'Create your first goal to start tracking your career progress'
+            {/* No results due to filters */}
+            {(filters.search ||
+              filters.status !== 'all' ||
+              filters.visibility !== 'all' ||
+              filters.priority !== 'all' ||
+              filters.deadline !== 'all') && (
+              <>
+                <Typography variant='h6' gutterBottom color='text.secondary'>
+                  {t('pages.goals.noResults', 'No goals match your filters')}
+                </Typography>
+                <Typography variant='body2' color='text.secondary' mb={3}>
+                  {t(
+                    'pages.goals.tryDifferentFilters',
+                    'Try adjusting your filters or search criteria'
+                  )}
+                </Typography>
+                <Button
+                  variant='outlined'
+                  onClick={() => {
+                    setFilters({
+                      page: 1,
+                      per_page: filters.per_page || 12,
+                      status: 'all',
+                      visibility: 'all',
+                      priority: 'all',
+                      deadline: 'all',
+                      search: '',
+                      sortBy: 'createdAt',
+                      sortDirection: 'desc',
+                    })
+                  }}
+                >
+                  {t('pages.goals.clearFilters', 'Clear All Filters')}
+                </Button>
+              </>
+            )}
+
+            {/* All goals completed */}
+            {!filters.search &&
+              filters.status === 'all' &&
+              filters.visibility === 'all' &&
+              filters.priority === 'all' &&
+              filters.deadline === 'all' &&
+              data.total === 0 && (
+                <>
+                  <Typography variant='h6' gutterBottom color='text.secondary'>
+                    {t('pages.goals.noGoals', 'No goals yet')}
+                  </Typography>
+                  <Typography variant='body2' color='text.secondary' mb={3}>
+                    {t(
+                      'pages.goals.getStarted',
+                      'Create your first goal to start tracking your career progress'
+                    )}
+                  </Typography>
+                  <Button
+                    variant='contained'
+                    startIcon={<AddIcon />}
+                    onClick={handleCreateGoal}
+                  >
+                    {t('pages.goals.createFirstGoal', 'Create Your First Goal')}
+                  </Button>
+                </>
               )}
-            </Typography>
-            <Button
-              variant='contained'
-              startIcon={<AddIcon />}
-              onClick={handleCreateGoal}
-            >
-              {t('pages.goals.createFirstGoal', 'Create Your First Goal')}
-            </Button>
           </Paper>
         )}
 
@@ -235,7 +395,12 @@ export const GoalsPage: React.FC = () => {
               </Box>
             ) : (
               <Box mb={4}>
-                <GoalTableView goals={data.items} />
+                <GoalTableView
+                  goals={data.items}
+                  sortBy={filters.sortBy}
+                  sortDirection={filters.sortDirection}
+                  onSortChange={handleSortChange}
+                />
               </Box>
             )}
 
@@ -259,7 +424,7 @@ export const GoalsPage: React.FC = () => {
       {/* Floating Action Button for mobile */}
       <Fab
         color='primary'
-        aria-label='create goal'
+        aria-label={t('pages.goals.createGoal', 'Create Goal')}
         onClick={handleCreateGoal}
         sx={{
           position: 'fixed',

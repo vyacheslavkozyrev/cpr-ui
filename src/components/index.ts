@@ -15,6 +15,9 @@ export * from './auth'
 // Layout components
 export * from './layout'
 
+// Utility components
+export { OfflineIndicator } from './OfflineIndicator'
+
 // Provider components
 export { QueryProvider } from './providers/QueryProvider'
 

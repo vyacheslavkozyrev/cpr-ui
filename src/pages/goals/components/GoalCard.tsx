@@ -14,10 +14,11 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import React, { useState } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import type { TGoalDto } from '../../../dtos/GoalDto'
+import { useDateFormat } from '../../../hooks'
 
 interface GoalCardProps {
   goal: TGoalDto
@@ -26,30 +27,33 @@ interface GoalCardProps {
 /**
  * Goal Card Component
  * Displays goal summary in card format
- * Feature 0001 - Phase 3
+ * Memoized for performance optimization
+ * Feature 0001 - Phase 3 & 5B
  */
-export const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
+export const GoalCard: React.FC<GoalCardProps> = memo(({ goal }) => {
   const { t } = useTranslation()
+  const { formatDate } = useDateFormat()
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
-  const handleCardClick = () => {
+  const handleCardClick = useCallback(() => {
     navigate(`/goals/${goal.id}`)
-  }
+  }, [navigate, goal.id])
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleMenuOpen = useCallback((event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation()
     setAnchorEl(event.currentTarget)
-  }
+  }, [])
 
-  const handleMenuClose = () => {
+  const handleMenuClose = useCallback(() => {
     setAnchorEl(null)
-  }
+  }, [])
 
-  const handleEdit = () => {
+  const handleEdit = useCallback(() => {
     handleMenuClose()
     navigate(`/goals/${goal.id}/edit`)
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigate, goal.id])
 
   // Calculate task completion
   const completedTasks = goal.tasks
@@ -72,9 +76,20 @@ export const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
   // Priority label
   const getPriorityLabel = (priority?: number) => {
     if (!priority) return null
-    if (priority >= 75) return { label: 'High', color: 'error' as const }
-    if (priority >= 50) return { label: 'Medium', color: 'warning' as const }
-    return { label: 'Low', color: 'info' as const }
+    if (priority >= 75)
+      return {
+        label: t('pages.goals.priority.high', 'High'),
+        color: 'error' as const,
+      }
+    if (priority >= 50)
+      return {
+        label: t('pages.goals.priority.medium', 'Medium'),
+        color: 'warning' as const,
+      }
+    return {
+      label: t('pages.goals.priority.low', 'Low'),
+      color: 'info' as const,
+    }
   }
 
   const priorityInfo = getPriorityLabel(goal.priority)
@@ -112,7 +127,7 @@ export const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
           >
             <Stack direction='row' spacing={1} flexWrap='wrap' gap={0.5}>
               <Chip
-                label={t(`goals.status.${goal.status}`, goal.status)}
+                label={t(`pages.goals.status.${goal.status}`, goal.status)}
                 color={getStatusColor(goal.status)}
                 size='small'
               />
@@ -127,7 +142,7 @@ export const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
               {goal.isCompleted && (
                 <Chip
                   icon={<CheckCircleIcon />}
-                  label={t('goals.completed', 'Completed')}
+                  label={t('pages.goals.completed', 'Completed')}
                   color='success'
                   size='small'
                 />
@@ -183,7 +198,7 @@ export const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
               mb={0.5}
             >
               <Typography variant='caption' color='text.secondary'>
-                {t('goals.progress', 'Progress')}
+                {t('pages.goals.progress', 'Progress')}
               </Typography>
               <Typography variant='caption' fontWeight='medium'>
                 {goal.progressPercent.toFixed(0)}%
@@ -199,7 +214,7 @@ export const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
           {/* Tasks count */}
           {totalTasks > 0 && (
             <Typography variant='caption' color='text.secondary'>
-              {t('goals.tasksCompleted', {
+              {t('pages.goals.tasksCompleted', {
                 completed: completedTasks,
                 total: totalTasks,
                 defaultValue: `${completedTasks} / ${totalTasks} tasks completed`,
@@ -209,15 +224,26 @@ export const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
 
           {/* Deadline */}
           {goal.deadline && (
-            <Typography
-              variant='caption'
-              color='text.secondary'
-              display='block'
-              mt={1}
-            >
-              {t('goals.deadline', 'Deadline')}:{' '}
-              {new Date(goal.deadline).toLocaleDateString()}
-            </Typography>
+            <Box mt={1}>
+              <Typography
+                variant='caption'
+                color={
+                  new Date(goal.deadline) < new Date() && !goal.isCompleted
+                    ? 'error.main'
+                    : 'text.secondary'
+                }
+                fontWeight={
+                  new Date(goal.deadline) < new Date() && !goal.isCompleted
+                    ? 'bold'
+                    : 'normal'
+                }
+              >
+                {new Date(goal.deadline) < new Date() && !goal.isCompleted
+                  ? t('pages.goals.overdue', 'Overdue')
+                  : t('pages.goals.deadline', 'Deadline')}
+                : {formatDate(goal.deadline, 'MEDIUM')}
+              </Typography>
+            </Box>
           )}
         </CardContent>
       </CardActionArea>
@@ -236,4 +262,4 @@ export const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
       </Menu>
     </Card>
   )
-}
+})

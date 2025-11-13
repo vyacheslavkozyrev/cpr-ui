@@ -1,6 +1,7 @@
 import { Box } from '@mui/material'
 import React, { useMemo } from 'react'
 import { Outlet } from 'react-router-dom'
+import { OfflineIndicator } from '../OfflineIndicator'
 import { BreadcrumbNavigation } from './BreadcrumbNavigation'
 import { Footer } from './Footer'
 import { Header } from './Header'
@@ -28,7 +29,7 @@ const getStyles = () => ({
 
 /**
  * AppLayout Component
- * Main layout wrapper with header, sidebar, and footer
+ * Main layout wrapper with header, sidebar, footer, and offline indicator
  * Uses Outlet for nested route rendering
  */
 export const AppLayout: React.FC = () => {
@@ -36,6 +37,9 @@ export const AppLayout: React.FC = () => {
 
   return (
     <Box sx={styles.root}>
+      {/* Offline Indicator */}
+      <OfflineIndicator />
+
       {/* Header */}
       <Header />
 

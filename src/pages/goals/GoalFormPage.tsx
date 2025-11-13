@@ -26,12 +26,13 @@ import type {
   TGoalVisibility,
   TUpdateGoalDto,
 } from '../../dtos/GoalDto'
+import { useAutoSave, useDebounce } from '../../hooks'
 import { useCreateGoal, useGoal, useUpdateGoal } from '../../services'
 
 /**
  * Goal Form Page
- * Create or edit a goal
- * Feature 0001 - Phase 3
+ * Create or edit a goal with auto-save
+ * Feature 0001 - Phase 3 & 5B
  */
 export const GoalFormPage: React.FC = () => {
   const { t } = useTranslation()
@@ -58,11 +59,33 @@ export const GoalFormPage: React.FC = () => {
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isDirty, setIsDirty] = useState(false)
+  const [initialFormData, setInitialFormData] = useState(formData)
+
+  // Auto-save form data to localStorage
+  const { clearDraft } = useAutoSave({
+    storageKey: isEdit ? `goal-form-draft-${goalId}` : 'goal-form-draft-new',
+    data: formData,
+    isDirty: isDirty && !isEdit, // Only auto-save for new goals, not edits
+    delay: 2000,
+    onRestore: restored => {
+      if (!isEdit && !goal) {
+        setFormData(restored)
+        setInitialFormData(restored)
+      }
+    },
+  })
+
+  // Debounce form values for real-time validation
+  const debouncedTitle = useDebounce(formData.title, 500)
+  const debouncedDescription = useDebounce(formData.description, 500)
+  const debouncedDeadline = useDebounce(formData.deadline, 500)
+  const debouncedPriority = useDebounce(formData.priority, 500)
 
   // Populate form when editing
   useEffect(() => {
     if (goal) {
-      setFormData({
+      const loadedData = {
         title: goal.title,
         description: goal.description || '',
         deadline: goal.deadline ? goal.deadline.split('T')[0] : '',
@@ -70,19 +93,113 @@ export const GoalFormPage: React.FC = () => {
         relatedSkillLevelId: goal.relatedSkillLevelId || '',
         priority: (goal.priority || 50).toString(),
         visibility: (goal.visibility as TGoalVisibility) || 'private',
-      })
+      }
+      setFormData(loadedData)
+      setInitialFormData(loadedData)
     }
   }, [goal])
+
+  // Track form changes
+  useEffect(() => {
+    const hasChanges =
+      JSON.stringify(formData) !== JSON.stringify(initialFormData)
+    setIsDirty(hasChanges)
+  }, [formData, initialFormData])
+
+  // Warn on navigation if unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [isDirty])
 
   const createGoalMutation = useCreateGoal()
   const updateGoalMutation = useUpdateGoal()
 
+  // Validate individual field
+  const validateField = (field: string, value: string): string => {
+    switch (field) {
+      case 'title':
+        if (!value.trim()) {
+          return t('validation.required', 'This field is required')
+        }
+        if (value.length > 250) {
+          return t('validation.maxLength', {
+            max: 250,
+            defaultValue: 'Maximum 250 characters',
+          })
+        }
+        break
+      case 'description':
+        if (value && value.length > 2000) {
+          return t('validation.maxLength', {
+            max: 2000,
+            defaultValue: 'Maximum 2000 characters',
+          })
+        }
+        break
+      case 'deadline':
+        if (value) {
+          const deadlineDate = new Date(value)
+          const today = new Date()
+          today.setHours(0, 0, 0, 0)
+          if (deadlineDate < today) {
+            return t('validation.futureDateRequired', {
+              defaultValue: 'Deadline must be a future date',
+            })
+          }
+        }
+        break
+      case 'priority': {
+        const priority = parseInt(value, 10)
+        if (isNaN(priority) || priority < 0 || priority > 100) {
+          return t('validation.priorityRange', {
+            defaultValue: 'Priority must be between 0 and 100',
+          })
+        }
+        break
+      }
+    }
+    return ''
+  }
+
+  // Real-time validation with debounce
+  useEffect(() => {
+    if (!isDirty) return // Skip validation on initial load
+    const error = validateField('title', debouncedTitle)
+    setErrors(prev => ({ ...prev, title: error }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedTitle, isDirty, t])
+
+  useEffect(() => {
+    if (!isDirty) return
+    const error = validateField('description', debouncedDescription)
+    setErrors(prev => ({ ...prev, description: error }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedDescription, isDirty, t])
+
+  useEffect(() => {
+    if (!isDirty) return
+    const error = validateField('deadline', debouncedDeadline)
+    setErrors(prev => ({ ...prev, deadline: error }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedDeadline, isDirty, t])
+
+  useEffect(() => {
+    if (!isDirty) return
+    const error = validateField('priority', debouncedPriority)
+    setErrors(prev => ({ ...prev, priority: error }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedPriority, isDirty, t])
+
   const handleChange = (field: keyof typeof formData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }))
-    }
   }
 
   const validate = (): boolean => {
@@ -167,6 +284,8 @@ export const GoalFormPage: React.FC = () => {
           goalData: updateData,
         })
 
+        clearDraft() // Clear auto-saved draft
+        setIsDirty(false) // Clear dirty flag before navigation
         navigate(`/goals/${goalId}`)
       } else {
         // Create new goal
@@ -194,6 +313,8 @@ export const GoalFormPage: React.FC = () => {
         createData.visibility = formData.visibility
 
         const newGoal = await createGoalMutation.mutateAsync(createData)
+        clearDraft() // Clear auto-saved draft
+        setIsDirty(false) // Clear dirty flag before navigation
         navigate(`/goals/${newGoal.id}`)
       }
     } catch {
@@ -202,6 +323,18 @@ export const GoalFormPage: React.FC = () => {
   }
 
   const handleCancel = () => {
+    if (isDirty) {
+      const confirmLeave = window.confirm(
+        t(
+          'pages.goalForm.unsavedChanges',
+          'You have unsaved changes. Are you sure you want to leave?'
+        )
+      )
+      if (!confirmLeave) return
+    }
+
+    clearDraft() // Clear auto-saved draft on cancel
+
     if (isEdit && goalId) {
       navigate(`/goals/${goalId}`)
     } else {
@@ -288,13 +421,16 @@ export const GoalFormPage: React.FC = () => {
             {/* Title */}
             <TextField
               fullWidth
-              label={t('goals.title', 'Goal Title')}
+              label={t('pages.goals.goalTitle', 'Goal Title')}
               value={formData.title}
               onChange={e => handleChange('title', e.target.value)}
               error={Boolean(errors['title'])}
               helperText={
                 errors['title'] ||
-                t('goals.titleHelp', 'Clear, specific goal (1-250 characters)')
+                t(
+                  'pages.goals.titleHelp',
+                  'Clear, specific goal (1-250 characters)'
+                )
               }
               required
               disabled={isPending}
@@ -304,14 +440,14 @@ export const GoalFormPage: React.FC = () => {
             {/* Description */}
             <TextField
               fullWidth
-              label={t('goals.description', 'Description')}
+              label={t('pages.goals.description', 'Description')}
               value={formData.description}
               onChange={e => handleChange('description', e.target.value)}
               error={Boolean(errors['description'])}
               helperText={
                 errors['description'] ||
                 t(
-                  'goals.descriptionHelp',
+                  'pages.goals.descriptionHelp',
                   'Detailed explanation (optional, max 2000 characters)'
                 )
               }
@@ -324,14 +460,14 @@ export const GoalFormPage: React.FC = () => {
             <TextField
               fullWidth
               type='date'
-              label={t('goals.deadline', 'Deadline')}
+              label={t('pages.goals.deadlineLabel', 'Deadline')}
               value={formData.deadline}
               onChange={e => handleChange('deadline', e.target.value)}
               error={Boolean(errors['deadline'])}
               helperText={
                 errors['deadline'] ||
                 t(
-                  'goals.deadlineHelp',
+                  'pages.goals.deadlineHelp',
                   'Target completion date (optional, must be future date)'
                 )
               }
@@ -346,13 +482,16 @@ export const GoalFormPage: React.FC = () => {
             <TextField
               fullWidth
               type='number'
-              label={t('goals.priority', 'Priority')}
+              label={t('pages.goals.priorityLabel', 'Priority')}
               value={formData.priority}
               onChange={e => handleChange('priority', e.target.value)}
               error={Boolean(errors['priority'])}
               helperText={
                 errors['priority'] ||
-                t('goals.priorityHelp', 'Priority level (0-100, default: 50)')
+                t(
+                  'pages.goals.priorityHelp',
+                  'Priority level (0-100, default: 50)'
+                )
               }
               inputProps={{ min: 0, max: 100, step: 1 }}
               disabled={isPending}
@@ -361,26 +500,26 @@ export const GoalFormPage: React.FC = () => {
             {/* Visibility */}
             <FormControl fullWidth disabled={isPending}>
               <InputLabel id='visibility-label'>
-                {t('goals.visibility', 'Visibility')}
+                {t('pages.goals.visibilityLabel', 'Visibility')}
               </InputLabel>
               <Select
                 labelId='visibility-label'
                 value={formData.visibility}
                 onChange={e => handleChange('visibility', e.target.value)}
-                label={t('goals.visibility', 'Visibility')}
+                label={t('pages.goals.visibilityLabel', 'Visibility')}
               >
                 <MenuItem value='private'>
-                  {t('goals.visibilityPrivate', 'Private')}
+                  {t('pages.goals.visibility.private', 'Private')}
                 </MenuItem>
                 <MenuItem value='team'>
-                  {t('goals.visibilityTeam', 'Team')}
+                  {t('pages.goals.visibility.team', 'Team')}
                 </MenuItem>
                 <MenuItem value='org'>
-                  {t('goals.visibilityOrg', 'Organization')}
+                  {t('pages.goals.visibility.org', 'Organization')}
                 </MenuItem>
               </Select>
               <FormHelperText>
-                {t('goals.visibilityHelp', 'Who can see this goal')}
+                {t('pages.goals.visibilityHelp', 'Who can see this goal')}
               </FormHelperText>
             </FormControl>
 

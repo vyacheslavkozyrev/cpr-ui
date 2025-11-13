@@ -66,7 +66,7 @@ export const GoalFiltersPanel: React.FC<GoalFiltersPanelProps> = ({
         <TextField
           fullWidth
           size='small'
-          label={t('goals.filters.search', 'Search')}
+          label={t('pages.goals.filters.search', 'Search')}
           placeholder={t(
             'goals.filters.searchPlaceholder',
             'Search by title or description'
@@ -86,21 +86,23 @@ export const GoalFiltersPanel: React.FC<GoalFiltersPanelProps> = ({
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           {/* Status Filter */}
           <FormControl fullWidth size='small' sx={{ minWidth: { sm: 150 } }}>
-            <InputLabel>{t('goals.filters.status', 'Status')}</InputLabel>
+            <InputLabel>{t('pages.goals.filters.status', 'Status')}</InputLabel>
             <Select
               value={filters.status || 'all'}
-              label={t('goals.filters.status', 'Status')}
+              label={t('pages.goals.filters.status', 'Status')}
               onChange={e => handleChange('status', e.target.value)}
             >
               <MenuItem value='all'>
-                {t('goals.filters.allStatus', 'All Status')}
+                {t('pages.goals.filters.allStatus', 'All Status')}
               </MenuItem>
-              <MenuItem value='open'>{t('goals.status.open', 'Open')}</MenuItem>
+              <MenuItem value='open'>
+                {t('pages.goals.status.open', 'Open')}
+              </MenuItem>
               <MenuItem value='in_progress'>
-                {t('goals.status.in_progress', 'In Progress')}
+                {t('pages.goals.status.in_progress', 'In Progress')}
               </MenuItem>
               <MenuItem value='completed'>
-                {t('goals.status.completed', 'Completed')}
+                {t('pages.goals.status.completed', 'Completed')}
               </MenuItem>
             </Select>
           </FormControl>
@@ -108,72 +110,156 @@ export const GoalFiltersPanel: React.FC<GoalFiltersPanelProps> = ({
           {/* Visibility Filter */}
           <FormControl fullWidth size='small' sx={{ minWidth: { sm: 150 } }}>
             <InputLabel>
-              {t('goals.filters.visibility', 'Visibility')}
+              {t('pages.goals.filters.visibility', 'Visibility')}
             </InputLabel>
             <Select
               value={filters.visibility || 'all'}
-              label={t('goals.filters.visibility', 'Visibility')}
+              label={t('pages.goals.filters.visibility', 'Visibility')}
               onChange={e => handleChange('visibility', e.target.value)}
             >
               <MenuItem value='all'>
-                {t('goals.filters.allVisibility', 'All')}
+                {t('pages.goals.filters.allVisibility', 'All')}
               </MenuItem>
               <MenuItem value='private'>
-                {t('goals.visibility.private', 'Private')}
+                {t('pages.goals.visibility.private', 'Private')}
               </MenuItem>
               <MenuItem value='team'>
-                {t('goals.visibility.team', 'Team')}
+                {t('pages.goals.visibility.team', 'Team')}
               </MenuItem>
               <MenuItem value='org'>
-                {t('goals.visibility.org', 'Organization')}
+                {t('pages.goals.visibility.org', 'Organization')}
               </MenuItem>
             </Select>
           </FormControl>
 
           {/* Priority Filter */}
           <FormControl fullWidth size='small' sx={{ minWidth: { sm: 150 } }}>
-            <InputLabel>{t('goals.filters.priority', 'Priority')}</InputLabel>
+            <InputLabel>
+              {t('pages.goals.filters.priority', 'Priority')}
+            </InputLabel>
             <Select
               value={filters.priority || 'all'}
-              label={t('goals.filters.priority', 'Priority')}
+              label={t('pages.goals.filters.priority', 'Priority')}
               onChange={e => handleChange('priority', e.target.value)}
             >
               <MenuItem value='all'>
-                {t('goals.filters.allPriority', 'All')}
+                {t('pages.goals.filters.allPriority', 'All')}
               </MenuItem>
               <MenuItem value='high'>
-                {t('goals.priority.high', 'High')}
+                {t('pages.goals.priority.high', 'High')}
               </MenuItem>
               <MenuItem value='medium'>
-                {t('goals.priority.medium', 'Medium')}
+                {t('pages.goals.priority.medium', 'Medium')}
               </MenuItem>
-              <MenuItem value='low'>{t('goals.priority.low', 'Low')}</MenuItem>
+              <MenuItem value='low'>
+                {t('pages.goals.priority.low', 'Low')}
+              </MenuItem>
+            </Select>
+          </FormControl>
+
+          {/* Deadline Filter */}
+          <FormControl fullWidth size='small' sx={{ minWidth: { sm: 150 } }}>
+            <InputLabel>
+              {t('pages.goals.filters.deadline', 'Deadline')}
+            </InputLabel>
+            <Select
+              value={filters.deadline || 'all'}
+              label={t('pages.goals.filters.deadline', 'Deadline')}
+              onChange={e => handleChange('deadline', e.target.value)}
+            >
+              <MenuItem value='all'>
+                {t('pages.goals.filters.allDeadlines', 'All')}
+              </MenuItem>
+              <MenuItem value='overdue'>
+                {t('pages.goals.filters.overdue', 'Overdue')}
+              </MenuItem>
+              <MenuItem value='this_week'>
+                {t('pages.goals.filters.thisWeek', 'This Week')}
+              </MenuItem>
+              <MenuItem value='this_month'>
+                {t('pages.goals.filters.thisMonth', 'This Month')}
+              </MenuItem>
+              <MenuItem value='this_quarter'>
+                {t('pages.goals.filters.thisQuarter', 'This Quarter')}
+              </MenuItem>
+              <MenuItem value='no_deadline'>
+                {t('pages.goals.filters.noDeadline', 'No Deadline')}
+              </MenuItem>
             </Select>
           </FormControl>
 
           {/* Sort By */}
           <FormControl fullWidth size='small' sx={{ minWidth: { sm: 150 } }}>
-            <InputLabel>{t('goals.filters.sortBy', 'Sort By')}</InputLabel>
+            <InputLabel>
+              {t('pages.goals.filters.sortBy', 'Sort By')}
+            </InputLabel>
             <Select
               value={filters.sortBy || 'createdAt'}
-              label={t('goals.filters.sortBy', 'Sort By')}
+              label={t('pages.goals.filters.sortBy', 'Sort By')}
               onChange={e => handleChange('sortBy', e.target.value)}
             >
               <MenuItem value='createdAt'>
-                {t('goals.sort.createdAt', 'Created Date')}
+                {t('pages.goals.sort.createdAt', 'Created Date')}
               </MenuItem>
               <MenuItem value='title'>
-                {t('goals.sort.title', 'Title')}
+                {t('pages.goals.sort.title', 'Title')}
               </MenuItem>
               <MenuItem value='deadline'>
-                {t('goals.sort.deadline', 'Deadline')}
+                {t('pages.goals.sort.deadline', 'Deadline')}
               </MenuItem>
               <MenuItem value='progress'>
-                {t('goals.sort.progress', 'Progress')}
+                {t('pages.goals.sort.progress', 'Progress')}
               </MenuItem>
               <MenuItem value='priority'>
-                {t('goals.sort.priority', 'Priority')}
+                {t('pages.goals.sort.priority', 'Priority')}
               </MenuItem>
+              <MenuItem value='status'>
+                {t('pages.goals.sort.status', 'Status')}
+              </MenuItem>
+            </Select>
+          </FormControl>
+
+          {/* Sort Direction */}
+          <FormControl fullWidth size='small' sx={{ minWidth: { sm: 120 } }}>
+            <InputLabel>
+              {t('pages.goals.filters.sortDirection', 'Order')}
+            </InputLabel>
+            <Select
+              value={filters.sortDirection || 'desc'}
+              label={t('pages.goals.filters.sortDirection', 'Order')}
+              onChange={e => handleChange('sortDirection', e.target.value)}
+            >
+              <MenuItem value='asc'>
+                {t('pages.goals.sort.asc', 'Ascending')}
+              </MenuItem>
+              <MenuItem value='desc'>
+                {t('pages.goals.sort.desc', 'Descending')}
+              </MenuItem>
+            </Select>
+          </FormControl>
+        </Stack>
+
+        {/* Results per page */}
+        <Stack direction='row' spacing={2} alignItems='center'>
+          <FormControl size='small' sx={{ minWidth: 120 }}>
+            <InputLabel>
+              {t('pages.goals.filters.perPage', 'Per Page')}
+            </InputLabel>
+            <Select
+              value={filters.per_page || 12}
+              label={t('pages.goals.filters.perPage', 'Per Page')}
+              onChange={e => {
+                const value =
+                  typeof e.target.value === 'number'
+                    ? e.target.value
+                    : parseInt(e.target.value, 10)
+                handleChange('per_page', value)
+              }}
+            >
+              <MenuItem value={12}>12</MenuItem>
+              <MenuItem value={24}>24</MenuItem>
+              <MenuItem value={48}>48</MenuItem>
+              <MenuItem value={96}>96</MenuItem>
             </Select>
           </FormControl>
         </Stack>
@@ -187,7 +273,7 @@ export const GoalFiltersPanel: React.FC<GoalFiltersPanelProps> = ({
               startIcon={<ClearIcon />}
               onClick={handleClearFilters}
             >
-              {t('goals.filters.clear', 'Clear Filters')}
+              {t('pages.goals.filters.clear', 'Clear Filters')}
             </Button>
           </Box>
         )}

@@ -26,16 +26,18 @@ import {
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { useDeleteGoal, useGoal } from '../../services'
+import { useDateFormat } from '../../hooks'
+import { useDeleteGoal, useGoal, useUpdateGoal } from '../../services'
 import { TaskList } from './components/TaskList'
 
 /**
  * Goal Detail Page
  * Displays full goal information with tasks
- * Feature 0001 - Phase 3
+ * Feature 0001 - Phase 5A
  */
 export const GoalDetailPage: React.FC = () => {
   const { t } = useTranslation()
+  const { formatDate } = useDateFormat()
   const { goalId } = useParams<{ goalId: string }>()
   const navigate = useNavigate()
 
@@ -44,9 +46,28 @@ export const GoalDetailPage: React.FC = () => {
   // Fetch goal data
   const { data: goal, isLoading, isError, error } = useGoal(goalId!)
   const deleteGoalMutation = useDeleteGoal()
+  const updateGoalMutation = useUpdateGoal()
 
   const handleEdit = () => {
     navigate(`/goals/${goalId}/edit`)
+  }
+
+  const handleToggleComplete = async () => {
+    if (!goalId || !goal) return
+
+    try {
+      const newStatus: 'completed' | 'open' = goal.isCompleted
+        ? 'open'
+        : 'completed'
+      await updateGoalMutation.mutateAsync({
+        goalId,
+        goalData: {
+          status: newStatus,
+        },
+      })
+    } catch {
+      // Error is handled by mutation
+    }
   }
 
   const handleDelete = async () => {
@@ -73,9 +94,20 @@ export const GoalDetailPage: React.FC = () => {
 
   const getPriorityLabel = (priority?: number) => {
     if (!priority) return null
-    if (priority >= 75) return { label: 'High', color: 'error' as const }
-    if (priority >= 50) return { label: 'Medium', color: 'warning' as const }
-    return { label: 'Low', color: 'info' as const }
+    if (priority >= 75)
+      return {
+        label: t('pages.goals.priority.high', 'High'),
+        color: 'error' as const,
+      }
+    if (priority >= 50)
+      return {
+        label: t('pages.goals.priority.medium', 'Medium'),
+        color: 'warning' as const,
+      }
+    return {
+      label: t('pages.goals.priority.low', 'Low'),
+      color: 'info' as const,
+    }
   }
 
   // Loading state
@@ -146,7 +178,7 @@ export const GoalDetailPage: React.FC = () => {
             {/* Status chips */}
             <Stack direction='row' spacing={1} flexWrap='wrap' gap={0.5}>
               <Chip
-                label={t(`goals.status.${goal.status}`, goal.status)}
+                label={t(`pages.goals.status.${goal.status}`, goal.status)}
                 color={getStatusColor(goal.status)}
                 size='medium'
               />
@@ -160,7 +192,7 @@ export const GoalDetailPage: React.FC = () => {
               {goal.isCompleted && (
                 <Chip
                   icon={<CheckCircleIcon />}
-                  label={t('goals.completed', 'Completed')}
+                  label={t('pages.goals.completed', 'Completed')}
                   color='success'
                   size='medium'
                 />
@@ -180,6 +212,18 @@ export const GoalDetailPage: React.FC = () => {
 
           {/* Action buttons */}
           <Stack direction='row' spacing={1}>
+            <Button
+              variant={goal.isCompleted ? 'outlined' : 'contained'}
+              startIcon={<CheckCircleIcon />}
+              onClick={handleToggleComplete}
+              disabled={updateGoalMutation.isPending}
+            >
+              {updateGoalMutation.isPending
+                ? t('common.saving', 'Saving...')
+                : goal.isCompleted
+                  ? t('pages.goals.markIncomplete', 'Reopen')
+                  : t('pages.goals.markComplete', 'Complete')}
+            </Button>
             <Button
               variant='outlined'
               startIcon={<EditIcon />}
@@ -214,7 +258,7 @@ export const GoalDetailPage: React.FC = () => {
               color='text.secondary'
               display='block'
             >
-              {t('goals.progress', 'Progress')}
+              {t('pages.goals.progress', 'Progress')}
             </Typography>
             <Box mt={1}>
               <LinearProgress
@@ -234,7 +278,7 @@ export const GoalDetailPage: React.FC = () => {
               color='text.secondary'
               display='block'
             >
-              {t('goals.tasks', 'Tasks')}
+              {t('pages.goals.tasks', 'Tasks')}
             </Typography>
             <Typography variant='h6' mt={1}>
               {completedTasks} / {totalTasks}
@@ -248,10 +292,21 @@ export const GoalDetailPage: React.FC = () => {
                 color='text.secondary'
                 display='block'
               >
-                {t('goals.deadline', 'Deadline')}
+                {t('pages.goals.deadline', 'Deadline')}
               </Typography>
-              <Typography variant='h6' mt={1}>
-                {new Date(goal.deadline).toLocaleDateString()}
+              <Typography
+                variant='h6'
+                mt={1}
+                color={
+                  new Date(goal.deadline) < new Date() && !goal.isCompleted
+                    ? 'error.main'
+                    : 'inherit'
+                }
+              >
+                {formatDate(goal.deadline, 'LONG')}
+                {new Date(goal.deadline) < new Date() &&
+                  !goal.isCompleted &&
+                  ` (${t('pages.goals.overdue', 'Overdue')})`}
               </Typography>
             </Box>
           )}
@@ -262,10 +317,10 @@ export const GoalDetailPage: React.FC = () => {
               color='text.secondary'
               display='block'
             >
-              {t('goals.createdAt', 'Created')}
+              {t('pages.goals.createdAt', 'Created')}
             </Typography>
             <Typography variant='h6' mt={1}>
-              {new Date(goal.createdAt).toLocaleDateString()}
+              {formatDate(goal.createdAt, 'LONG')}
             </Typography>
           </Box>
         </Stack>

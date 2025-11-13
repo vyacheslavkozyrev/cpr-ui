@@ -1,12 +1,13 @@
 import SaveIcon from '@mui/icons-material/Save'
 import { Box, Button, Stack, TextField } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type {
   TCreateGoalTaskDto,
   TGoalTaskDto,
   TUpdateGoalTaskDto,
 } from '../../../dtos/GoalDto'
+import { useAutoSave } from '../../../hooks'
 import { useCreateTask, useUpdateTask } from '../../../services'
 
 interface TaskFormProps {
@@ -18,8 +19,8 @@ interface TaskFormProps {
 
 /**
  * Task Form Component
- * Create or edit task
- * Feature 0001 - Phase 3
+ * Create or edit task with auto-save
+ * Feature 0001 - Phase 3 & 5B
  */
 export const TaskForm: React.FC<TaskFormProps> = ({
   goalId,
@@ -37,6 +38,31 @@ export const TaskForm: React.FC<TaskFormProps> = ({
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isDirty, setIsDirty] = useState(false)
+
+  // Track if form has changes
+  useEffect(() => {
+    const hasChanges =
+      formData.title !== (task?.title || '') ||
+      formData.description !== (task?.description || '') ||
+      formData.deadline !== (task?.deadline ? task.deadline.split('T')[0] : '')
+    setIsDirty(hasChanges)
+  }, [formData, task])
+
+  // Auto-save form data to localStorage (only for new tasks)
+  const { clearDraft } = useAutoSave({
+    storageKey: isEdit
+      ? `task-form-draft-${goalId}-${task?.id}`
+      : `task-form-draft-${goalId}-new`,
+    data: formData,
+    isDirty: isDirty && !isEdit, // Only auto-save for new tasks
+    delay: 2000,
+    onRestore: restored => {
+      if (!isEdit && !task) {
+        setFormData(restored)
+      }
+    },
+  })
 
   const createTaskMutation = useCreateTask()
   const updateTaskMutation = useUpdateTask()
@@ -128,10 +154,16 @@ export const TaskForm: React.FC<TaskFormProps> = ({
         })
       }
 
+      clearDraft() // Clear auto-saved draft on success
       onSuccess()
     } catch {
       // Error handled by mutation
     }
+  }
+
+  const handleCancel = () => {
+    clearDraft() // Clear auto-saved draft on cancel
+    onCancel()
   }
 
   const isPending = createTaskMutation.isPending || updateTaskMutation.isPending
@@ -185,7 +217,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
         />
 
         <Stack direction='row' spacing={2} justifyContent='flex-end'>
-          <Button onClick={onCancel} disabled={isPending}>
+          <Button onClick={handleCancel} disabled={isPending}>
             {t('common.cancel', 'Cancel')}
           </Button>
           <Button

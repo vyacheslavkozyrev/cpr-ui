@@ -14,24 +14,36 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TableSortLabel,
   Typography,
 } from '@mui/material'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import type { TGoalDto } from '../../../dtos/GoalDto'
+import { useDateFormat } from '../../../hooks'
+import type { TGoalSortField, TSortDirection } from '../../../types/goalFilters'
 
 interface GoalTableViewProps {
   goals: TGoalDto[]
+  sortBy?: TGoalSortField | undefined
+  sortDirection?: TSortDirection | undefined
+  onSortChange?: (field: TGoalSortField) => void
 }
 
 /**
  * Goal Table View Component
- * Displays goals in table format
- * Feature 0001 - Phase 3
+ * Displays goals in table format with sortable columns
+ * Feature 0001 - Phase 5A
  */
-export const GoalTableView: React.FC<GoalTableViewProps> = ({ goals }) => {
+export const GoalTableView: React.FC<GoalTableViewProps> = ({
+  goals,
+  sortBy = 'createdAt',
+  sortDirection = 'desc',
+  onSortChange,
+}) => {
   const { t } = useTranslation()
+  const { formatDate } = useDateFormat()
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [selectedGoalId, setSelectedGoalId] = useState<string | null>(null)
@@ -72,19 +84,69 @@ export const GoalTableView: React.FC<GoalTableViewProps> = ({ goals }) => {
     }
   }
 
+  const handleSort = (field: TGoalSortField) => {
+    if (onSortChange) {
+      onSortChange(field)
+    }
+  }
+
+  const createSortHandler = (field: TGoalSortField) => () => {
+    handleSort(field)
+  }
+
   return (
     <>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>{t('goals.table.title', 'Title')}</TableCell>
-              <TableCell>{t('goals.table.status', 'Status')}</TableCell>
-              <TableCell>{t('goals.table.progress', 'Progress')}</TableCell>
-              <TableCell>{t('goals.table.tasks', 'Tasks')}</TableCell>
-              <TableCell>{t('goals.table.deadline', 'Deadline')}</TableCell>
+              <TableCell
+                sortDirection={sortBy === 'title' ? sortDirection : false}
+              >
+                <TableSortLabel
+                  active={sortBy === 'title'}
+                  direction={sortBy === 'title' ? sortDirection : 'asc'}
+                  onClick={createSortHandler('title')}
+                >
+                  {t('pages.goals.table.title', 'Title')}
+                </TableSortLabel>
+              </TableCell>
+              <TableCell
+                sortDirection={sortBy === 'status' ? sortDirection : false}
+              >
+                <TableSortLabel
+                  active={sortBy === 'status'}
+                  direction={sortBy === 'status' ? sortDirection : 'asc'}
+                  onClick={createSortHandler('status')}
+                >
+                  {t('pages.goals.table.status', 'Status')}
+                </TableSortLabel>
+              </TableCell>
+              <TableCell
+                sortDirection={sortBy === 'progress' ? sortDirection : false}
+              >
+                <TableSortLabel
+                  active={sortBy === 'progress'}
+                  direction={sortBy === 'progress' ? sortDirection : 'asc'}
+                  onClick={createSortHandler('progress')}
+                >
+                  {t('pages.goals.table.progress', 'Progress')}
+                </TableSortLabel>
+              </TableCell>
+              <TableCell>{t('pages.goals.table.tasks', 'Tasks')}</TableCell>
+              <TableCell
+                sortDirection={sortBy === 'deadline' ? sortDirection : false}
+              >
+                <TableSortLabel
+                  active={sortBy === 'deadline'}
+                  direction={sortBy === 'deadline' ? sortDirection : 'asc'}
+                  onClick={createSortHandler('deadline')}
+                >
+                  {t('pages.goals.table.deadline', 'Deadline')}
+                </TableSortLabel>
+              </TableCell>
               <TableCell align='right'>
-                {t('goals.table.actions', 'Actions')}
+                {t('pages.goals.table.actions', 'Actions')}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -127,7 +189,10 @@ export const GoalTableView: React.FC<GoalTableViewProps> = ({ goals }) => {
 
                   <TableCell>
                     <Chip
-                      label={t(`goals.status.${goal.status}`, goal.status)}
+                      label={t(
+                        `pages.goals.status.${goal.status}`,
+                        goal.status
+                      )}
                       color={getStatusColor(goal.status)}
                       size='small'
                       {...(goal.isCompleted && { icon: <CheckCircleIcon /> })}
@@ -158,11 +223,11 @@ export const GoalTableView: React.FC<GoalTableViewProps> = ({ goals }) => {
                   <TableCell>
                     {goal.deadline ? (
                       <Typography variant='body2'>
-                        {new Date(goal.deadline).toLocaleDateString()}
+                        {formatDate(goal.deadline, 'MEDIUM')}
                       </Typography>
                     ) : (
                       <Typography variant='body2' color='text.secondary'>
-                        {t('goals.noDeadline', 'No deadline')}
+                        {t('pages.goals.noDeadline', 'No deadline')}
                       </Typography>
                     )}
                   </TableCell>

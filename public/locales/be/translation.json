@@ -2,18 +2,25 @@
   "common": {
     "loading": "Загрузка...",
     "save": "Захаваць",
+    "saving": "Захаванне...",
     "cancel": "Скасаваць",
     "edit": "Рэдагаваць",
     "close": "Зачыніць",
     "delete": "Выдаліць",
+    "deleting": "Выдаленне...",
+    "add": "Дадаць",
+    "view": "Праглядзець Падрабязнасці",
+    "create": "Стварыць",
     "confirm": "Пацвердзіць",
     "yes": "Так",
     "no": "Не",
     "ok": "Добра",
+    "back": "Назад",
     "error": "Памылка",
     "success": "Паспяхова",
     "warning": "Папярэджанне",
-    "info": "Інфармацыя"
+    "info": "Інфармацыя",
+    "offline": "Вы зараз афлайн. Некаторыя функцыі могуць быць абмежаваныя."
   },
   "navigation": {
     "dashboard": "Панэль кіравання",
@@ -104,24 +111,124 @@
   },
   "pages": {
     "team": {
-      "title": "Каманда",
-      "comingSoon": "Хутка будзе даступна"
+      "title": "Кіраванне Камандай",
+      "comingSoon": "Функцыі кіравання камандай будуць хутка..."
     },
     "skills": {
       "title": "Навыкі",
-      "comingSoon": "Хутка будзе даступна"
+      "comingSoon": "Ацэнка навыкаў будзе хутка..."
     },
     "goals": {
       "title": "Мэты",
-      "comingSoon": "Хутка будзе даступна"
+      "comingSoon": "Кіраванне мэтамі будзе хутка...",
+      "viewMode": "Рэжым прагляду",
+      "gridView": "Сетка",
+      "listView": "Спіс",
+      "filtersButton": "Фільтры",
+      "reset": "Скід",
+      "resetPreferences": "Скінуць фільтры і від да стандартных",
+      "createGoal": "Стварыць Мэту",
+      "totalCount": "{{count}} мэта",
+      "totalCount_other": "{{count}} мэт",
+      "loading": "Загрузка...",
+      "filtersActive": "Фільтры актыўныя",
+      "noGoals": "Няма мэт",
+      "noGoalsDescription": "Стварыце сваю першую мэту, каб пачаць",
+      "noResults": "Ні адной мэты не адпавядае вашым фільтрам",
+      "noResultsDescription": "Паспрабуйце змяніць фільтры",
+      "clearFilters": "Ачысціць Фільтры",
+      "status": {
+        "open": "Адкрыта",
+        "in_progress": "У працэсе",
+        "completed": "Завершана"
+      },
+      "visibility": {
+        "private": "Прыватная",
+        "team": "Каманда",
+        "org": "Арганізацыя"
+      },
+      "priority": {
+        "high": "Высокі",
+        "medium": "Сярэдні",
+        "low": "Нізкі"
+      },
+      "filters": {
+        "search": "Пошук",
+        "status": "Статус",
+        "allStatus": "Усе Статусы",
+        "visibility": "Бачнасць",
+        "allVisibility": "Усе",
+        "priority": "Прыярытэт",
+        "allPriority": "Усе",
+        "deadline": "Тэрмін",
+        "allDeadlines": "Усе",
+        "overdue": "Пратэрмінавана",
+        "thisWeek": "Гэты Тыдзень",
+        "thisMonth": "Гэты Месяц",
+        "thisQuarter": "Гэты Квартал",
+        "noDeadline": "Без Тэрміну",
+        "sortBy": "Сартаваць па",
+        "sortDirection": "Парадак",
+        "perPage": "На старонку",
+        "clear": "Ачысціць Фільтры"
+      },
+      "sort": {
+        "createdAt": "Дата стварэння",
+        "title": "Назва",
+        "deadline": "Тэрмін",
+        "progress": "Прагрэс",
+        "priority": "Прыярытэт",
+        "status": "Статус",
+        "asc": "Па ўзрастанні",
+        "desc": "Па спаданні"
+      },
+      "table": {
+        "title": "Назва",
+        "status": "Статус",
+        "progress": "Прагрэс",
+        "priority": "Прыярытэт",
+        "deadline": "Тэрмін",
+        "actions": "Дзеянні"
+      },
+      "goalTitle": "Назва Мэты",
+      "titleHelp": "Ясная, канкрэтная мэта (1-250 сімвалаў)",
+      "description": "Апісанне",
+      "descriptionHelp": "Падрабязнае тлумачэнне (неабавязкова, макс. 2000 сімвалаў)",
+      "deadlineLabel": "Тэрмін",
+      "deadlineHelp": "Мэтавая дата завяршэння (неабавязкова, павінна быць у будучыні)",
+      "priorityLabel": "Прыярытэт",
+      "priorityHelp": "Узровень прыярытэту (0-100, стандарт: 50)",
+      "visibilityLabel": "Бачнасць",
+      "visibilityHelp": "Хто можа бачыць гэту мэту",
+      "progress": "Прагрэс",
+      "tasks": "Задачы",
+      "tasksCompleted": "{{completed}} / {{total}} задач выканана",
+      "createdAt": "Створана",
+      "deadline": "Тэрмін",
+      "overdue": "Пратэрмінавана",
+      "completed": "Завершана",
+      "markComplete": "Завяршыць",
+      "markIncomplete": "Адкрыць зноў"
+    },
+    "goalDetail": {
+      "tasks": "Задачы",
+      "addTask": "Дадаць Задачу",
+      "noTasks": "Задач яшчэ няма. Дадайце сваю першую задачу, каб пачаць.",
+      "deleteTaskConfirmTitle": "Выдаліць Задачу?",
+      "deleteTaskConfirmMessage": "Вы ўпэўнены, што хочаце выдаліць гэту задачу? Гэта дзеянне нельга адмяніць."
+    },
+    "goalForm": {
+      "createTitle": "Стварыць Мэту",
+      "editTitle": "Рэдагаваць Мэту",
+      "unsavedChanges": "У вас ёсць незахаваныя змены. Вы ўпэўнены, што хочаце выйсці?"
     },
     "feedback": {
       "title": "Водгукі",
-      "comingSoon": "Хутка будзе даступна"
+      "comingSoon": "Функцыі водгукаў будуць хутка..."
     },
     "admin": {
       "title": "Адміністрацыя",
-      "comingSoon": "Хутка будзе даступна"
+      "comingSoon": "Функцыі адміністрацыі будуць хутка..."
     }
   },
   "profile": {
@@ -292,6 +399,18 @@
   },
   "footer": {
     "copyright": "© {{year}} Сістэма Кіравання Прадукцыйнасцю CPR. Усе правы абаронены."
+  },
+  "validation": {
+    "required": "Гэтае поле абавязковае",
+    "maxLength": "Максімум {{max}} сімвалаў",
+    "futureDateRequired": "Тэрмін павінен быць у будучыні",
+    "priorityRange": "Прыярытэт павінен быць ад 0 да 100"
+  },
+  "tasks": {
+    "title": "Назва задачы",
+    "description": "Апісанне",
+    "deadline": "Тэрмін",
+    "deadlineHelp": "Дата завяршэння (неабавязкова, павінна быць у будучыні)"
   },
   "errors": {
     "404": {
