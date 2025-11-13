@@ -14,7 +14,7 @@ import {
 } from '@dnd-kit/sortable'
 import AddIcon from '@mui/icons-material/Add'
 import { Box, Button, List, Typography } from '@mui/material'
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { TGoalTaskDto } from '../../../dtos/GoalDto'
 import { useTaskOrderStore } from '../../../stores'
