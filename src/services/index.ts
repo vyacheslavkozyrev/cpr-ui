@@ -36,8 +36,8 @@ export {
 
 // Feedback Request Service (Feature 0004)
 export {
-  feedbackRequestApiService,
   FeedbackRequestApiService,
+  feedbackRequestApiService,
   type FeedbackRequestListParams,
 } from './feedbackRequestService'
 

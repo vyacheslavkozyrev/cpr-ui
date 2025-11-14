@@ -1,11 +1,11 @@
+import type { TApiResponse } from '../types/apiTypes'
 import type {
   CreateFeedbackRequestDto,
   FeedbackRequestDto,
   PaginatedFeedbackRequestsDto,
-  UpdateFeedbackRequestDto,
   SendReminderResponseDto,
+  UpdateFeedbackRequestDto,
 } from '../types/feedbackRequest'
-import type { TApiResponse } from '../types/apiTypes'
 import { apiClient } from './apiClient'
 
 /**
