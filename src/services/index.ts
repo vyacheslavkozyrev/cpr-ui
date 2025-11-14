@@ -33,3 +33,10 @@ export {
   useUpdateGoal,
   useUpdateTask,
 } from './goalsQueryService'
+
+// Feedback Request Service (Feature 0004)
+export {
+  feedbackRequestApiService,
+  FeedbackRequestApiService,
+  type FeedbackRequestListParams,
+} from './feedbackRequestService'

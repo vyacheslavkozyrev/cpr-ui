@@ -1,0 +1,336 @@
+import type {
+  CreateFeedbackRequestDto,
+  FeedbackRequestDto,
+  PaginatedFeedbackRequestsDto,
+  UpdateFeedbackRequestDto,
+  SendReminderResponseDto,
+} from '../types/feedbackRequest'
+import type { TApiResponse } from '../types/apiTypes'
+import { apiClient } from './apiClient'
+
+/**
+ * Query parameters for listing feedback requests
+ */
+export interface FeedbackRequestListParams {
+  /** Page number (1-based) */
+  page?: number
+  /** Items per page (default: 20) */
+  page_size?: number
+  /** Sort field (created_at, due_date, updated_at) */
+  sort_by?: string
+  /** Sort order (asc, desc) */
+  sort_order?: 'asc' | 'desc'
+  /** Filter by status (pending, partial, complete, cancelled) */
+  status?: string
+  /** Search query (message, requestor name, recipient name) */
+  search?: string
+}
+
+/**
+ * Feedback Request API Service
+ * Handles all feedback request-related API calls
+ * Feature 0004 - Feedback Request Management
+ */
+export class FeedbackRequestApiService {
+  // ========================================
+  // Create Feedback Request
+  // ========================================
+
+  /**
+   * Create a new multi-recipient feedback request
+   * POST /api/feedback/request
+   *
+   * @param requestData - Feedback request data with 1-20 recipient employee IDs
+   * @returns Created feedback request with recipients
+   *
+   * Error cases:
+   * - 400: Validation errors (employee_ids 1-20, message <=500 chars, etc.)
+   * - 403: Self-request (requestor in employee_ids)
+   * - 409: Duplicate request (same recipients + project/goal combination)
+   * - 429: Rate limit exceeded (>50 requests in 24 hours)
+   */
+  async createFeedbackRequest(
+    requestData: CreateFeedbackRequestDto
+  ): Promise<TApiResponse<FeedbackRequestDto>> {
+    return apiClient.post<FeedbackRequestDto>('/feedback/request', requestData)
+  }
+
+  // ========================================
+  // Get Feedback Requests
+  // ========================================
+
+  /**
+   * Get feedback request by ID
+   * GET /api/feedback/request/{id}
+   *
+   * @param id - Feedback request ID
+   * @returns Feedback request details with recipients
+   *
+   * Error cases:
+   * - 404: Request not found or user not authorized (not requestor)
+   */
+  async getFeedbackRequestById(
+    id: string
+  ): Promise<TApiResponse<FeedbackRequestDto>> {
+    return apiClient.get<FeedbackRequestDto>(`/feedback/request/${id}`)
+  }
+
+  /**
+   * Get sent feedback requests for current user
+   * GET /api/me/feedback/request
+   *
+   * @param params - Query parameters for pagination, filtering, sorting
+   * @returns Paginated list of sent requests with per-recipient status
+   */
+  async getSentRequests(
+    params?: FeedbackRequestListParams
+  ): Promise<TApiResponse<PaginatedFeedbackRequestsDto>> {
+    const queryParams = new URLSearchParams()
+
+    if (params) {
+      if (params.page) queryParams.set('page', params.page.toString())
+      if (params.page_size)
+        queryParams.set('page_size', params.page_size.toString())
+      if (params.sort_by) queryParams.set('sort_by', params.sort_by)
+      if (params.sort_order) queryParams.set('sort_order', params.sort_order)
+      if (params.status) queryParams.set('status', params.status)
+      if (params.search) queryParams.set('search', params.search)
+    }
+
+    const query = queryParams.toString()
+    const url = query ? `/me/feedback/request?${query}` : '/me/feedback/request'
+
+    return apiClient.get<PaginatedFeedbackRequestsDto>(url)
+  }
+
+  /**
+   * Get todo feedback requests for current user (as recipient)
+   * GET /api/me/feedback/request/todo
+   *
+   * @param params - Query parameters for pagination, filtering, sorting
+   * @returns Paginated list of requests where user is recipient
+   */
+  async getTodoRequests(
+    params?: FeedbackRequestListParams
+  ): Promise<TApiResponse<PaginatedFeedbackRequestsDto>> {
+    const queryParams = new URLSearchParams()
+
+    if (params) {
+      if (params.page) queryParams.set('page', params.page.toString())
+      if (params.page_size)
+        queryParams.set('page_size', params.page_size.toString())
+      if (params.sort_by) queryParams.set('sort_by', params.sort_by)
+      if (params.sort_order) queryParams.set('sort_order', params.sort_order)
+      if (params.status) queryParams.set('status', params.status)
+      if (params.search) queryParams.set('search', params.search)
+    }
+
+    const query = queryParams.toString()
+    const url = query
+      ? `/me/feedback/request/todo?${query}`
+      : '/me/feedback/request/todo'
+
+    return apiClient.get<PaginatedFeedbackRequestsDto>(url)
+  }
+
+  /**
+   * Get team sent feedback requests (manager view)
+   * GET /api/team/feedback/request/sent
+   *
+   * Requires: People Manager, Solution Owner, Director, or Administrator role
+   *
+   * @param params - Query parameters for pagination, filtering, sorting
+   * @returns Paginated list of team members' sent requests
+   *
+   * Error cases:
+   * - 403: Not a manager or insufficient permissions
+   */
+  async getTeamSentRequests(
+    params?: FeedbackRequestListParams
+  ): Promise<TApiResponse<PaginatedFeedbackRequestsDto>> {
+    const queryParams = new URLSearchParams()
+
+    if (params) {
+      if (params.page) queryParams.set('page', params.page.toString())
+      if (params.page_size)
+        queryParams.set('page_size', params.page_size.toString())
+      if (params.sort_by) queryParams.set('sort_by', params.sort_by)
+      if (params.sort_order) queryParams.set('sort_order', params.sort_order)
+      if (params.status) queryParams.set('status', params.status)
+      if (params.search) queryParams.set('search', params.search)
+    }
+
+    const query = queryParams.toString()
+    const url = query
+      ? `/team/feedback/request/sent?${query}`
+      : '/team/feedback/request/sent'
+
+    return apiClient.get<PaginatedFeedbackRequestsDto>(url)
+  }
+
+  /**
+   * Get team received feedback requests (manager view)
+   * GET /api/team/feedback/request/received
+   *
+   * Requires: People Manager, Solution Owner, Director, or Administrator role
+   *
+   * @param params - Query parameters for pagination, filtering, sorting
+   * @returns Paginated list of requests addressed to team members
+   *
+   * Error cases:
+   * - 403: Not a manager or insufficient permissions
+   */
+  async getTeamReceivedRequests(
+    params?: FeedbackRequestListParams
+  ): Promise<TApiResponse<PaginatedFeedbackRequestsDto>> {
+    const queryParams = new URLSearchParams()
+
+    if (params) {
+      if (params.page) queryParams.set('page', params.page.toString())
+      if (params.page_size)
+        queryParams.set('page_size', params.page_size.toString())
+      if (params.sort_by) queryParams.set('sort_by', params.sort_by)
+      if (params.sort_order) queryParams.set('sort_order', params.sort_order)
+      if (params.status) queryParams.set('status', params.status)
+      if (params.search) queryParams.set('search', params.search)
+    }
+
+    const query = queryParams.toString()
+    const url = query
+      ? `/team/feedback/request/received?${query}`
+      : '/team/feedback/request/received'
+
+    return apiClient.get<PaginatedFeedbackRequestsDto>(url)
+  }
+
+  // ========================================
+  // Update Feedback Request
+  // ========================================
+
+  /**
+   * Update feedback request (due_date only)
+   * PATCH /api/feedback/request/{id}
+   *
+   * @param id - Feedback request ID
+   * @param updateData - Update data (due_date field)
+   * @returns Updated feedback request
+   *
+   * Error cases:
+   * - 400: Invalid due_date (past date)
+   * - 403: Not the requestor
+   * - 404: Request not found
+   */
+  async updateFeedbackRequest(
+    id: string,
+    updateData: UpdateFeedbackRequestDto
+  ): Promise<TApiResponse<FeedbackRequestDto>> {
+    return apiClient.patch<FeedbackRequestDto>(
+      `/feedback/request/${id}`,
+      updateData
+    )
+  }
+
+  // ========================================
+  // Cancel Feedback Request
+  // ========================================
+
+  /**
+   * Cancel entire feedback request (soft delete)
+   * DELETE /api/feedback/request/{id}
+   *
+   * Marks all recipients as cancelled (is_completed=true, no responded_at)
+   *
+   * @param id - Feedback request ID
+   *
+   * Error cases:
+   * - 403: Not the requestor
+   * - 404: Request not found
+   */
+  async cancelFeedbackRequest(id: string): Promise<TApiResponse<void>> {
+    return apiClient.delete<void>(`/feedback/request/${id}`)
+  }
+
+  /**
+   * Cancel specific recipient from feedback request
+   * DELETE /api/feedback/request/{id}/recipient/{recipientId}
+   *
+   * Marks individual recipient as cancelled, preserves other recipients
+   *
+   * @param id - Feedback request ID
+   * @param recipientId - Recipient ID to cancel
+   *
+   * Error cases:
+   * - 400: Cannot cancel if recipient already responded
+   * - 400: Must have at least 1 remaining recipient
+   * - 403: Not the requestor
+   * - 404: Request or recipient not found
+   */
+  async cancelRecipient(
+    id: string,
+    recipientId: string
+  ): Promise<TApiResponse<void>> {
+    return apiClient.delete<void>(
+      `/feedback/request/${id}/recipient/${recipientId}`
+    )
+  }
+
+  // ========================================
+  // Send Reminders
+  // ========================================
+
+  /**
+   * Send reminder to specific recipient
+   * POST /api/feedback/request/{id}/recipient/{recipientId}/remind
+   *
+   * Enforces 48-hour throttling per recipient
+   *
+   * @param id - Feedback request ID
+   * @param recipientId - Recipient ID to remind
+   *
+   * Error cases:
+   * - 400: Recipient already responded
+   * - 400: Recipient already completed/cancelled
+   * - 403: Not the requestor
+   * - 404: Request or recipient not found
+   * - 429: Reminder sent within last 48 hours
+   */
+  async sendReminder(
+    id: string,
+    recipientId: string
+  ): Promise<TApiResponse<void>> {
+    return apiClient.post<void>(
+      `/feedback/request/${id}/recipient/${recipientId}/remind`,
+      {}
+    )
+  }
+
+  /**
+   * Send reminders to all eligible recipients
+   * POST /api/feedback/request/{id}/remind-all
+   *
+   * Sends reminders to recipients who:
+   * - Have not responded
+   * - Not cancelled/completed
+   * - Last reminder >48 hours ago (or never reminded)
+   *
+   * @param id - Feedback request ID
+   * @returns Number of reminders sent
+   *
+   * Error cases:
+   * - 403: Not the requestor
+   * - 404: Request not found
+   */
+  async sendAllReminders(
+    id: string
+  ): Promise<TApiResponse<SendReminderResponseDto>> {
+    return apiClient.post<SendReminderResponseDto>(
+      `/feedback/request/${id}/remind-all`,
+      {}
+    )
+  }
+}
+
+/**
+ * Singleton instance of FeedbackRequestApiService
+ */
+export const feedbackRequestApiService = new FeedbackRequestApiService()

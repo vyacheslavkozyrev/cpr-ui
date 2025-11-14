@@ -228,3 +228,11 @@ export interface FeedbackRequestListQuery {
   /** Search in message content */
   search?: string
 }
+
+/**
+ * DTO for send reminder response (remind-all endpoint)
+ */
+export interface SendReminderResponseDto {
+  /** Number of reminders successfully sent */
+  reminders_sent: number
+}
