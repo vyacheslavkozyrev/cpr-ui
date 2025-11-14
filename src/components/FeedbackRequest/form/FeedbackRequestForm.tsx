@@ -9,7 +9,6 @@ import {
   Chip,
   CircularProgress,
   FormControl,
-  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
@@ -28,6 +27,7 @@ import { useCreateFeedbackRequest } from '../../../services'
 import { useFeedbackRequestDraftStore } from '../../../stores'
 import { useToastStore } from '../../../stores/toastStore'
 import { logger } from '../../../utils/logger'
+import { EmployeeMultiSelect } from './EmployeeMultiSelect'
 
 /**
  * Form data interface (camelCase for form, will convert to snake_case for API)
@@ -342,26 +342,18 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
                       },
                     }}
                     render={({ field }) => (
-                      <Box>
-                        {/* TODO: Replace with EmployeeMultiSelect component */}
-                        <TextField
-                          {...field}
-                          placeholder={t(
-                            'feedbackRequest.form.employees.placeholder'
-                          )}
-                          fullWidth
-                          multiline
-                          rows={2}
-                          helperText={`${employeeIds.length} / 20 recipients selected`}
-                        />
-                      </Box>
+                      <EmployeeMultiSelect
+                        value={field.value || []}
+                        onChange={field.onChange}
+                        {...(errors.employeeIds?.message && {
+                          error: errors.employeeIds.message,
+                        })}
+                        required
+                        maxSelection={20}
+                        disabled={isSubmitting}
+                      />
                     )}
                   />
-                  {errors.employeeIds && (
-                    <FormHelperText>
-                      {errors.employeeIds.message}
-                    </FormHelperText>
-                  )}
                 </FormControl>
 
                 {/* Project Dropdown */}

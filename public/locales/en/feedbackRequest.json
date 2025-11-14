@@ -4,14 +4,21 @@
     "employees": {
       "label": "Select Employees",
       "placeholder": "Search employees by name, role, or department...",
+      "searchPlaceholder": "Search by name, email, or job title...",
       "required": "Please select at least one employee",
       "maxExceeded": "Maximum 20 recipients allowed per request",
+      "maxReached": "Maximum {{max}} recipients reached. Remove recipients to add more.",
       "searchEmpty": "No employees found matching your search",
+      "noResults": "No employees found",
+      "selected": "{{count}} of {{max}} recipients selected",
+      "clearAll": "Clear All",
       "filterLabel": "Filter by:",
       "filters": {
         "department": "Department",
         "location": "Location",
-        "role": "Role"
+        "role": "Role",
+        "all": "All",
+        "clear": "Clear Filters"
       }
     },
     "project": {
