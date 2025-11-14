@@ -7,6 +7,7 @@ import { AdminPage } from '../pages/admin'
 import { LoginPage } from '../pages/auth'
 import { DashboardPage } from '../pages/dashboard'
 import { FeedbackPage } from '../pages/feedback'
+import { FeedbackRequestForm } from '../components/FeedbackRequest/form'
 import { GoalDetailPage, GoalFormPage, GoalsPage } from '../pages/goals'
 import { ProfilePage } from '../pages/profile'
 import { SettingsPage } from '../pages/settings'
@@ -90,8 +91,17 @@ export const routes: RouteObject[] = [
       // Feedback - accessible to all authenticated users
       {
         path: 'feedback',
-        element: <FeedbackPage />,
         errorElement: <RouteErrorBoundary />,
+        children: [
+          {
+            index: true,
+            element: <FeedbackPage />,
+          },
+          {
+            path: 'request/new',
+            element: <FeedbackRequestForm />,
+          },
+        ],
       },
 
       // Settings - accessible to all authenticated users

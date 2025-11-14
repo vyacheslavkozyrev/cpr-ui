@@ -1,5 +1,6 @@
 import {
   AdminPanelSettings,
+  AddComment,
   BugReport,
   Dashboard,
   Feedback,
@@ -101,6 +102,11 @@ export const Sidebar: React.FC = () => {
       labelKey: 'navigation.feedback',
       path: '/feedback',
       icon: <Feedback />,
+    },
+    {
+      labelKey: 'navigation.requestFeedback',
+      path: '/feedback/request/new',
+      icon: <AddComment />,
     },
     {
       labelKey: 'navigation.settings',

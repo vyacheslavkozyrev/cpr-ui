@@ -22,10 +22,10 @@ import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import type { CreateFeedbackRequestDto } from '../../../types/feedbackRequest'
 import { useCreateFeedbackRequest } from '../../../services'
 import { useFeedbackRequestDraftStore } from '../../../stores'
 import { useToastStore } from '../../../stores/toastStore'
+import type { CreateFeedbackRequestDto } from '../../../types/feedbackRequest'
 import { logger } from '../../../utils/logger'
 import { EmployeeMultiSelect } from './EmployeeMultiSelect'
 
@@ -432,8 +432,8 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
                           errors.message
                             ? errors.message.message
                             : t('feedbackRequest.form.message.currentLength', {
-                                current: messageLength,
-                              })
+                              current: messageLength,
+                            })
                         }
                         error={Boolean(errors.message)}
                       />
