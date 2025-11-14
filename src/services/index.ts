@@ -40,3 +40,18 @@ export {
   FeedbackRequestApiService,
   type FeedbackRequestListParams,
 } from './feedbackRequestService'
+
+// Feedback Request Query Service (React Query hooks for Feature 0004)
+export {
+  useCancelFeedbackRequest,
+  useCancelRecipient,
+  useCreateFeedbackRequest,
+  useFeedbackRequest,
+  useSendAllReminders,
+  useSendReminder,
+  useSentRequests,
+  useTeamReceivedRequests,
+  useTeamSentRequests,
+  useTodoRequests,
+  useUpdateFeedbackRequest,
+} from './feedbackRequestQueryService'
