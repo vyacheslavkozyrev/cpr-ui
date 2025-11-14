@@ -176,6 +176,9 @@
     "noGoal": "No goal associated"
   },
   "toasts": {
+    "createSuccess": "Feedback request sent to {{count}} employees",
+    "createError": "Failed to send feedback request. Please try again.",
+    "duplicatesRemoved": "{{count}} duplicate recipients removed. Please review and submit again.",
     "success": {
       "sent": {
         "single": "Feedback request sent to {{name}}",

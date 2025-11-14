@@ -1,6 +1,6 @@
 import {
-  AdminPanelSettings,
   AddComment,
+  AdminPanelSettings,
   BugReport,
   Dashboard,
   Feedback,
@@ -178,7 +178,7 @@ export const Sidebar: React.FC = () => {
                 <ListItemText
                   primary={
                     item.labelKey.startsWith('navigation.') ||
-                    item.labelKey.startsWith('sidebar.')
+                      item.labelKey.startsWith('sidebar.')
                       ? t(item.labelKey)
                       : item.labelKey
                   }

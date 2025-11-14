@@ -27,6 +27,7 @@ import { useFeedbackRequestDraftStore } from '../../../stores'
 import { useToastStore } from '../../../stores/toastStore'
 import type { CreateFeedbackRequestDto } from '../../../types/feedbackRequest'
 import { logger } from '../../../utils/logger'
+import { DuplicateDetectionModal } from './DuplicateDetectionModal'
 import { EmployeeMultiSelect } from './EmployeeMultiSelect'
 
 /**
@@ -79,6 +80,7 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
     handleSubmit,
     watch,
     setValue,
+    getValues,
     formState: { errors, isDirty, isSubmitting },
     reset,
   } = useForm<FeedbackRequestFormData>({
@@ -99,6 +101,10 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
   // Local state
   const [showDraftBanner, setShowDraftBanner] = useState(false)
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
+  const [showDuplicateModal, setShowDuplicateModal] = useState(false)
+  const [duplicateEmployeeIds, setDuplicateEmployeeIds] = useState<string[]>(
+    []
+  )
   const [autoSaveTimer, setAutoSaveTimer] = useState<NodeJS.Timeout | null>(
     null
   )
@@ -236,11 +242,85 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
       } else {
         navigate('/feedback/requests/sent')
       }
-    } catch (error) {
+    } catch (error: any) {
       logger.error('Failed to create feedback request', { error })
 
-      addToast(t('feedbackRequest.toasts.createError'), 'error')
+      // Check for 409 Conflict (duplicate recipients)
+      if (error?.status === 409 || error?.response?.status === 409) {
+        // Extract duplicate employee IDs from error message if available
+        // Backend returns: "Active feedback requests already exist for these recipients: guid1, guid2"
+        const errorMessage =
+          error?.message || error?.response?.data?.message || ''
+        const duplicateIds = extractDuplicateIds(errorMessage, data.employeeIds)
+
+        setDuplicateEmployeeIds(duplicateIds)
+        setShowDuplicateModal(true)
+      } else {
+        addToast(t('feedbackRequest.toasts.createError'), 'error')
+      }
     }
+  }
+
+  /**
+   * Extract duplicate employee IDs from error message
+   */
+  const extractDuplicateIds = (
+    errorMessage: string,
+    allEmployeeIds: string[]
+  ): string[] => {
+    // If the backend provides specific IDs in the error message, parse them
+    // Otherwise, assume all employees are duplicates (full duplicate case)
+    if (errorMessage.includes('recipients:')) {
+      // Try to extract GUIDs from the error message
+      const guidPattern =
+        /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi
+      const matches = errorMessage.match(guidPattern)
+      if (matches && matches.length > 0) {
+        return matches
+      }
+    }
+
+    // Fallback: assume all are duplicates
+    return allEmployeeIds
+  }
+
+  /**
+   * Handle removing duplicate employees and resubmitting
+   */
+  const handleRemoveDuplicates = () => {
+    // Remove duplicate employees from the form
+    const currentEmployeeIds = getValues('employeeIds') || []
+    const filteredIds = currentEmployeeIds.filter(
+      (id) => !duplicateEmployeeIds.includes(id)
+    )
+
+    setValue('employeeIds', filteredIds, { shouldValidate: true })
+    setShowDuplicateModal(false)
+    setDuplicateEmployeeIds([])
+
+    // Show toast to inform user
+    addToast(
+      t('feedbackRequest.toasts.duplicatesRemoved', {
+        count: duplicateEmployeeIds.length,
+      }),
+      'info'
+    )
+  }
+
+  /**
+   * Handle viewing existing requests
+   */
+  const handleViewExisting = () => {
+    setShowDuplicateModal(false)
+    navigate('/feedback/requests/sent')
+  }
+
+  /**
+   * Handle cancel duplicate modal
+   */
+  const handleCancelDuplicateModal = () => {
+    setShowDuplicateModal(false)
+    setDuplicateEmployeeIds([])
   }
 
   /**
@@ -564,6 +644,23 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
             {t('feedbackRequest.form.confirmation.message')}
           </Alert>
         )}
+
+        {/* Duplicate Detection Modal */}
+        <DuplicateDetectionModal
+          open={showDuplicateModal}
+          duplicateEmployees={duplicateEmployeeIds.map((id) => ({
+            id,
+            display_name: `Employee ${id.substring(0, 8)}`, // TODO: Get actual employee names
+          }))}
+          isFullDuplicate={
+            duplicateEmployeeIds.length === employeeIds.length &&
+            employeeIds.length > 0
+          }
+          context={watchedValues.projectId ? 'project' : watchedValues.goalId ? 'goal' : 'general'}
+          onRemoveDuplicates={handleRemoveDuplicates}
+          onViewExisting={handleViewExisting}
+          onCancel={handleCancelDuplicateModal}
+        />
       </Box>
     </LocalizationProvider>
   )
