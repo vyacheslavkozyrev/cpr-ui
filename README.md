@@ -277,3 +277,69 @@ export default tseslint.config({
   },
 })
 ```
+
+# 🐳 Running the SPA with Podman/Docker
+
+This guide explains how to **build**, **run**, and **access** the Single Page Application (SPA) container using **Podman/Docker**.  
+All required files (e.g. `Dockerfile`, `nginx.conf`, source code) are assumed to already exist in the repository.
+
+---
+
+## 🧱 1. Build the Container
+
+Run the following command to build the optimized container image:
+
+```bash
+podman build -t my-spa-app:v0.1.0 .
+or
+docker build -t my-spa-app:v0.1.0 .
+```
+
+This performs a **multi-stage build**:
+1. Uses a Node.js image to install dependencies and run `yarn build`.
+2. Copies the optimized static build output into a minimal **Nginx** image.
+
+---
+
+## 🚀 2. Run the Container
+
+To run the SPA container locally:
+
+```bash
+podman run -d --name my-spa-app -p 3000:3000 my-spa-app:v0.1.0
+or
+docker run -d --name my-spa-app -p 3000:3000 my-spa-app:v0.1.0
+
+```
+
+This command:
+- Starts the container in detached mode (`-d`).
+- Maps **container port 3000** (Nginx) to **localhost:3000**.
+- Uses the default Nginx configuration to serve your app.
+
+---
+
+## ⚙️ 3. Access the App
+
+Once the container is running, open your browser and visit:
+
+👉 [http://localhost:3000](http://localhost:3000)
+
+You should see your built SPA running.
+
+---
+
+## 🧹 4. Cleanup (Optional)
+
+To stop and remove the container:
+
+```bash
+podman stop my-spa-app
+podman rm my-spa-app
+```
+
+To remove the built image:
+
+```bash
+podman rmi my-spa-app
+```
