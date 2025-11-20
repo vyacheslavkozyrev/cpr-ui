@@ -512,10 +512,13 @@
               "single": "Feedback request sent to {{name}}",
               "multiple": "Feedback request sent to {{count}} employees"
             },
-            "reminderSent": "Reminder sent to {{name}}",
+            "reminderSent": "Reminder sent successfully",
             "remindersSent": "Reminders sent to {{count}} recipients",
             "cancelled": "{{name}}'s request cancelled",
             "cancelledAll": "Feedback request cancelled for all recipients"
+          },
+          "info": {
+            "noRemindersNeeded": "All recipients were recently reminded or have already responded"
           },
           "error": {
             "employeeNotFound": "The selected employee could not be found. Please try another.",
@@ -525,6 +528,7 @@
             "selfRequest": "You cannot request feedback from yourself.",
             "rateLimit": "You've created too many requests today. Please try again tomorrow.",
             "dailyLimit": "Daily limit reached. You can create up to 50 feedback requests per day. Try again tomorrow.",
+            "reminderCooldown": "Please wait 48 hours between reminders for this recipient",
             "networkError": "Unable to send feedback request. Please check your connection and try again.",
             "timeout": "Request timed out. Please try again.",
             "generic": "Something went wrong. Please try again."

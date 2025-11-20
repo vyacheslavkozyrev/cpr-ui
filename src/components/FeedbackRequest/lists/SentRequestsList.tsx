@@ -11,6 +11,7 @@
 } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSendAllReminders, useSendReminder } from '../../../hooks'
 import { useSentRequests } from '../../../services'
 import { useToastStore } from '../../../stores/toastStore'
 import { FeedbackRequestCard } from '../cards/FeedbackRequestCard'
@@ -26,6 +27,10 @@ import { RequestsSummary } from '../summary/RequestsSummary'
 export const SentRequestsList: React.FC = () => {
   const { t } = useTranslation()
   const addToast = useToastStore(state => state.addToast)
+
+  // Mutations for reminders
+  const sendReminderMutation = useSendReminder()
+  const sendAllRemindersMutation = useSendAllReminders()
 
   // State for filters, sorting, and pagination
   const [page, setPage] = useState(1)
@@ -113,36 +118,13 @@ export const SentRequestsList: React.FC = () => {
   }
 
   // Handle send reminder
-  const handleSendReminder = async (
-    _requestId: string,
-    _recipientId: string
-  ) => {
-    try {
-      // TODO: Implement send reminder API call
-      addToast(
-        t('pages.feedback.request.toasts.success.reminderSent', {
-          name: 'Recipient',
-        }),
-        'success'
-      )
-      refetch()
-    } catch {
-      addToast(t('pages.feedback.request.toasts.error.generic'), 'error')
-    }
+  const handleSendReminder = async (requestId: string, recipientId: string) => {
+    sendReminderMutation.mutate({ requestId, recipientId })
   }
 
   // Handle remind all
-  const handleRemindAll = async (_requestId: string) => {
-    try {
-      // TODO: Implement remind all API call
-      addToast(
-        t('pages.feedback.request.toasts.success.remindersSent', { count: 3 }),
-        'success'
-      )
-      refetch()
-    } catch {
-      addToast(t('pages.feedback.request.toasts.error.generic'), 'error')
-    }
+  const handleRemindAll = async (requestId: string) => {
+    sendAllRemindersMutation.mutate(requestId)
   }
 
   // Confirm cancel
