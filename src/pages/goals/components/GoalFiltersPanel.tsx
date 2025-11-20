@@ -1,4 +1,4 @@
-import ClearIcon from '@mui/icons-material/Clear'
+﻿import ClearIcon from '@mui/icons-material/Clear'
 import SearchIcon from '@mui/icons-material/Search'
 import {
   Box,

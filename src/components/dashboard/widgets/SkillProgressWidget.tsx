@@ -1,4 +1,4 @@
-import {
+﻿import {
   Box,
   Button,
   LinearProgress,
@@ -260,7 +260,7 @@ export const SkillProgressWidget: React.FC = () => {
               }
               secondary={
                 <Typography variant='caption' color='text.secondary'>
-                  {t('dashboard.labels.level')} {assessment.level}/5 •{' '}
+                  {t('dashboard.labels.level')} {assessment.level}/5 â€¢{' '}
                   {t('dashboard.labels.assessedLabel')}{' '}
                   {new Date(assessment.assessedAt).toLocaleDateString()}
                 </Typography>

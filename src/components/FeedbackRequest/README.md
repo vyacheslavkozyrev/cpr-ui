@@ -55,5 +55,5 @@ All components use:
 
 - All components are feature-scoped (no shared generic components here)
 - API integration uses types from `src/types/feedbackRequest.ts`
-- i18n keys from `public/locales/{en|es}/feedbackRequest.json`
+- i18n keys from `public/locales/{en|es}/translation.json`
 - Follow CPR naming conventions: PascalCase for components, camelCase for functions/variables

@@ -1,3 +1,4 @@
+import { useToastStore } from '../stores/toastStore'
 import type { TApiResponse } from '../types/apiTypes'
 import type {
   CreateFeedbackRequestDto,
@@ -6,6 +7,14 @@ import type {
   SendReminderResponseDto,
   UpdateFeedbackRequestDto,
 } from '../types/feedbackRequest'
+import { logger } from '../utils/logger'
+import {
+  addToQueue,
+  getQueuedRequests,
+  removeFromQueue,
+  updateQueuedRequest,
+  type QueuedRequest,
+} from '../utils/offlineQueue'
 import { apiClient } from './apiClient'
 
 /**
@@ -48,10 +57,42 @@ export class FeedbackRequestApiService {
    * - 403: Self-request (requestor in employee_ids)
    * - 409: Duplicate request (same recipients + project/goal combination)
    * - 429: Rate limit exceeded (>50 requests in 24 hours)
+   *
+   * T039: Offline queue support
+   * - Checks navigator.onLine before making request
+   * - If offline, saves to IndexedDB queue and shows toast notification
+   * - Request will be retried when connection is restored
    */
   async createFeedbackRequest(
     requestData: CreateFeedbackRequestDto
   ): Promise<TApiResponse<FeedbackRequestDto>> {
+    // Check if online
+    if (!navigator.onLine) {
+      // Save to offline queue
+      await addToQueue({
+        url: '/feedback/request',
+        method: 'POST',
+        body: requestData,
+        maxRetries: 3,
+      })
+
+      // Show toast notification
+      const addToast = useToastStore.getState().addToast
+      addToast(
+        'You are offline. Your feedback request will be sent when you reconnect.',
+        'warning',
+        8000
+      )
+
+      // Return a pending response
+      return {
+        data: {} as FeedbackRequestDto,
+        success: false,
+        message: 'Request queued for offline processing',
+        timestamp: new Date().toISOString(),
+      }
+    }
+
     return apiClient.post<FeedbackRequestDto>('/feedback/request', requestData)
   }
 
@@ -334,3 +375,149 @@ export class FeedbackRequestApiService {
  * Singleton instance of FeedbackRequestApiService
  */
 export const feedbackRequestApiService = new FeedbackRequestApiService()
+
+// ========================================
+// Offline Queue Management (T039)
+// ========================================
+
+/**
+ * Process queued requests when back online
+ * Retries all queued requests and removes successful ones from queue
+ */
+async function processOfflineQueue(): Promise<void> {
+  try {
+    const queuedRequests = await getQueuedRequests()
+
+    if (queuedRequests.length === 0) {
+      return
+    }
+
+    const addToast = useToastStore.getState().addToast
+    addToast(
+      `Processing ${queuedRequests.length} queued request(s)...`,
+      'info',
+      4000
+    )
+
+    let successCount = 0
+    let failureCount = 0
+
+    for (const request of queuedRequests) {
+      try {
+        // Retry the request
+        let response: TApiResponse<unknown>
+
+        switch (request.method) {
+          case 'POST':
+            response = await apiClient.post(request.url, request.body)
+            break
+          case 'PUT':
+            response = await apiClient.put(request.url, request.body)
+            break
+          case 'PATCH':
+            response = await apiClient.patch(request.url, request.body)
+            break
+          case 'DELETE':
+            response = await apiClient.delete(request.url)
+            break
+          case 'GET':
+          default:
+            response = await apiClient.get(request.url)
+            break
+        }
+
+        if (response.success) {
+          // Remove from queue on success
+          await removeFromQueue(request.id)
+          successCount++
+        } else {
+          // Increment retry count
+          const updatedRequest: QueuedRequest = {
+            ...request,
+            retryCount: request.retryCount + 1,
+          }
+
+          if (updatedRequest.retryCount >= updatedRequest.maxRetries) {
+            // Max retries reached, remove from queue
+            await removeFromQueue(request.id)
+            failureCount++
+          } else {
+            // Update retry count
+            await updateQueuedRequest(updatedRequest)
+          }
+        }
+      } catch {
+        // Increment retry count on error
+        const updatedRequest: QueuedRequest = {
+          ...request,
+          retryCount: request.retryCount + 1,
+        }
+
+        if (updatedRequest.retryCount >= updatedRequest.maxRetries) {
+          // Max retries reached, remove from queue
+          await removeFromQueue(request.id)
+          failureCount++
+        } else {
+          // Update retry count
+          await updateQueuedRequest(updatedRequest)
+        }
+      }
+    }
+
+    // Show results toast
+    if (successCount > 0) {
+      addToast(
+        `Successfully sent ${successCount} queued request(s)`,
+        'success',
+        6000
+      )
+    }
+    if (failureCount > 0) {
+      addToast(
+        `Failed to send ${failureCount} request(s). Please try again later.`,
+        'error',
+        8000
+      )
+    }
+  } catch (error) {
+    logger.error('Failed to process offline queue', { error })
+  }
+}
+
+/**
+ * Initialize offline queue listeners
+ * Sets up event listener for when connection is restored
+ * Should be called once during app initialization
+ */
+export function initializeOfflineQueue(): void {
+  // Listen for online event
+  window.addEventListener('online', () => {
+    const addToast = useToastStore.getState().addToast
+    addToast(
+      'Connection restored. Processing queued requests...',
+      'success',
+      4000
+    )
+
+    // Process the queue
+    processOfflineQueue()
+  })
+
+  // Listen for offline event
+  window.addEventListener('offline', () => {
+    const addToast = useToastStore.getState().addToast
+    addToast(
+      'You are offline. Your requests will be queued and sent when reconnected.',
+      'warning',
+      6000
+    )
+  })
+
+  // Check if there are queued requests on initialization
+  getQueuedRequests().then(requests => {
+    if (requests.length > 0 && navigator.onLine) {
+      // Process queue if online and has pending requests
+      processOfflineQueue()
+    }
+  })
+}

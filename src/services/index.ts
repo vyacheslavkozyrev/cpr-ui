@@ -55,3 +55,6 @@ export {
   useTodoRequests,
   useUpdateFeedbackRequest,
 } from './feedbackRequestQueryService'
+
+// Project Query Service (React Query hooks)
+export { useProjects, type ProjectSummaryDto } from './projectQueryService'

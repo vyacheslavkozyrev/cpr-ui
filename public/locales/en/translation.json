@@ -1,4 +1,4 @@
-{
+﻿{
   "common": {
     "loading": "Loading...",
     "save": "Save",
@@ -15,7 +15,10 @@
     "yes": "Yes",
     "no": "No",
     "ok": "OK",
-    "error": "Error",
+    "error": {
+      "general": "Error",
+      "loadFailed": "Failed to load data"
+    },
     "success": "Success",
     "warning": "Warning",
     "info": "Information",
@@ -27,7 +30,6 @@
     "goals": "Goals",
     "skills": "Skills",
     "feedback": "Feedback",
-    "requestFeedback": "Request Feedback",
     "settings": "Settings",
     "team": "Team",
     "admin": "Admin",
@@ -145,7 +147,20 @@
       "goalSummary": "Goal Summary",
       "feedbackSummary": "Feedback Summary",
       "skillProgress": "Skill Progress",
-      "activityFeed": "Activity Feed"
+      "activityFeed": "Activity Feed",
+      "feedbackRequests": {
+        "title": "Feedback Requests",
+        "errorMessage": "Failed to load feedback requests",
+        "allCaughtUp": "You're all caught up!",
+        "noRequests": "No pending feedback requests",
+        "pendingRequests": "pending",
+        "pendingRequests_one": "request",
+        "pendingRequests_other": "requests",
+        "overdueWarning": "{{count}} overdue",
+        "overdueWarning_one": "{{count}} overdue",
+        "overdueWarning_other": "{{count}} overdue",
+        "viewRequests": "View All Requests"
+      }
     },
     "tabs": {
       "chart": "Chart",
@@ -276,7 +291,7 @@
     "languageChanged": "Language changed to {{language}}"
   },
   "footer": {
-    "copyright": "© {{year}} CPR Performance Management System. All rights reserved."
+    "copyright": "Â© {{year}} CPR Performance Management System. All rights reserved."
   },
   "pages": {
     "team": {
@@ -286,6 +301,284 @@
     "skills": {
       "title": "Skills",
       "comingSoon": "Skills assessment coming soon..."
+    },
+    "feedback": {
+      "title": "Feedback",
+      "comingSoon": "Coming soon - This section is under development",
+      "tabs": {
+        "feedback": "Feedback",
+        "requests": "Requests"
+      },
+      "requests": {
+        "title": "My Feedback Requests",
+        "createButton": "Request Feedback",
+        "tabs": {
+          "todo": "Todo",
+          "sent": "Sent"
+        }
+      },
+      "request": {
+        "form": {
+          "title": "Request Feedback",
+          "employees": {
+            "label": "Select Employees",
+            "placeholder": "Search employees by name, role, or department...",
+            "searchPlaceholder": "Search by name, email, or job title...",
+            "required": "Please select at least one employee",
+            "maxExceeded": "Maximum 20 recipients allowed per request",
+            "maxReached": "Maximum {{max}} recipients reached. Remove recipients to add more.",
+            "searchEmpty": "No employees found matching your search",
+            "noResults": "No employees found",
+            "selected": "{{count}} of {{max}} recipients selected",
+            "clearAll": "Clear All",
+            "filterLabel": "Filter by:",
+            "filters": {
+              "department": "Department",
+              "location": "Location",
+              "role": "Role",
+              "all": "All",
+              "clear": "Clear Filters"
+            }
+          },
+          "project": {
+            "label": "Project (Optional)",
+            "placeholder": "Select a project context...",
+            "empty": "No projects available",
+            "error": "Selected project is no longer available"
+          },
+          "goal": {
+            "label": "Goal (Optional)",
+            "placeholder": "Select a goal context...",
+            "empty": "No goals available",
+            "error": "Selected goal is no longer available"
+          },
+          "message": {
+            "label": "Message (Optional)",
+            "placeholder": "Add context or specific areas you'd like feedback on...",
+            "maxLength": "Message must be 500 characters or less",
+            "currentLength": "{{current}} / 500 characters"
+          },
+          "dueDate": {
+            "label": "Due Date (Optional)",
+            "placeholder": "Select a due date...",
+            "quickSelect": {
+              "3days": "+3 days",
+              "7days": "+7 days",
+              "14days": "+14 days",
+              "30days": "+30 days"
+            },
+            "warnings": {
+              "short": "âš  Short turnaround - consider allowing more time for thoughtful feedback",
+              "long": "â„¹ Consider a shorter timeframe to ensure timely feedback"
+            },
+            "error": "Due date must be today or in the future"
+          },
+          "buttons": {
+            "send": "Send Request",
+            "sending": "Sending...",
+            "cancel": "Cancel",
+            "saveDraft": "Save Draft",
+            "loadDraft": "Load Draft",
+            "discardDraft": "Discard Draft"
+          },
+          "draft": {
+            "banner": "You have an unsaved draft from {{time}}.",
+            "loaded": "Draft loaded successfully",
+            "discarded": "Draft discarded",
+            "expired": "Draft expired"
+          },
+          "duplicate": {
+            "title": "Duplicate Recipients Detected",
+            "partialMessage": "{{count}} of your selected recipients already have an active request for this {{context}}:",
+            "fullMessage": "All selected recipients already have active requests for this {{context}}. Please view your existing requests.",
+            "actions": {
+              "removeDuplicates": "Remove Duplicates & Continue",
+              "viewExisting": "View Existing Requests",
+              "cancel": "Cancel"
+            }
+          },
+          "confirmation": {
+            "title": "Discard request?",
+            "message": "Are you sure you want to discard this feedback request? Your changes will be saved as a draft.",
+            "actions": {
+              "keepEditing": "Keep Editing",
+              "discard": "Discard"
+            }
+          }
+        },
+        "list": {
+          "sent": {
+            "title": "Sent Requests",
+            "empty": "Start gathering feedback",
+            "emptyDescription": "You haven't sent any feedback requests yet.",
+            "filters": {
+              "all": "All",
+              "pending": "Pending",
+              "partial": "Partial",
+              "complete": "Complete",
+              "overdue": "Overdue"
+            },
+            "sort": {
+              "newest": "Newest",
+              "oldest": "Oldest",
+              "dueDate": "Due Date"
+            },
+            "summary": "Showing {{showing}} of {{total}} requests ({{pending}} pending, {{partial}} partially complete, {{complete}} fully complete)"
+          },
+          "todo": {
+            "title": "Todo Requests",
+            "empty": "No pending requests",
+            "emptyDescription": "You don't have any pending feedback requests to complete.",
+            "summary": "Showing {{showing}} of {{total}} requests",
+            "overdueCount": "{{count}} overdue",
+            "overdueCount_one": "{{count}} overdue",
+            "overdueCount_other": "{{count}} overdue",
+            "filters": {
+              "all": "All",
+              "pending": "Pending",
+              "overdue": "Overdue"
+            }
+          },
+          "team": {
+            "sent": {
+              "title": "Team Sent Requests",
+              "empty": "Your team hasn't sent any feedback requests yet"
+            },
+            "received": {
+              "title": "Team Received Requests",
+              "empty": "Your team hasn't received any feedback requests yet"
+            },
+            "filters": {
+              "allTeam": "All Team Members",
+              "byMember": "By Team Member"
+            },
+            "summary": "Team has {{active}} active requests ({{pending}} pending, {{overdue}} overdue)"
+          }
+        },
+        "card": {
+          "status": {
+            "pending": "Pending",
+            "overdue": "Overdue",
+            "responded": "Responded",
+            "cancelled": "Cancelled",
+            "partial": "{{responded}} of {{total}} responded",
+            "complete": "Complete"
+          },
+          "dueDate": {
+            "label": "Due:",
+            "overdue": "Overdue by {{days}} days"
+          },
+          "recipients": {
+            "single": "{{name}}",
+            "multiple": "{{count}} recipients",
+            "showMore": "+ {{count}} more"
+          },
+          "actions": {
+            "respond": "Respond",
+            "viewResponses": "View Responses ({{count}})",
+            "viewFeedback": "View Feedback",
+            "sendReminder": "Send Reminder",
+            "remindAll": "Remind All",
+            "cancelRequest": "Cancel Request",
+            "cancelForRecipient": "Cancel for {{name}}",
+            "cancelEntireRequest": "Cancel Entire Request",
+            "showMore": "Show more",
+            "showLess": "Show less"
+          },
+          "reminders": {
+            "lastSent": "Last reminded {{time}}",
+            "cooldown": "You can send another reminder in {{hours}} hours"
+          }
+        },
+        "detail": {
+          "title": "Request Details",
+          "from": "From:",
+          "project": "Project:",
+          "goal": "Goal:",
+          "message": "Message:",
+          "dueDate": "Due Date:",
+          "created": "Created:",
+          "recipients": "Recipients ({{count}}):",
+          "noMessage": "No message provided",
+          "noProject": "No project associated",
+          "noGoal": "No goal associated"
+        },
+        "toasts": {
+          "createSuccess": "Feedback request sent to {{count}} employees",
+          "createError": "Failed to send feedback request. Please try again.",
+          "duplicatesRemoved": "{{count}} duplicate recipients removed. Please review and submit again.",
+          "success": {
+            "sent": {
+              "single": "Feedback request sent to {{name}}",
+              "multiple": "Feedback request sent to {{count}} employees"
+            },
+            "reminderSent": "Reminder sent to {{name}}",
+            "remindersSent": "Reminders sent to {{count}} recipients",
+            "cancelled": "{{name}}'s request cancelled",
+            "cancelledAll": "Feedback request cancelled for all recipients"
+          },
+          "error": {
+            "employeeNotFound": "The selected employee could not be found. Please try another.",
+            "duplicateRequest": "You already have an active request for this employee. Please view your sent requests.",
+            "invalidGoal": "The selected goal is no longer available. Please select another or remove the goal.",
+            "invalidProject": "The selected project is no longer available. Please select another or remove the project.",
+            "selfRequest": "You cannot request feedback from yourself.",
+            "rateLimit": "You've created too many requests today. Please try again tomorrow.",
+            "dailyLimit": "Daily limit reached. You can create up to 50 feedback requests per day. Try again tomorrow.",
+            "networkError": "Unable to send feedback request. Please check your connection and try again.",
+            "timeout": "Request timed out. Please try again.",
+            "generic": "Something went wrong. Please try again."
+          },
+          "offline": {
+            "queued": "You're offline. Request will be sent automatically when connection is restored.",
+            "syncFailed": "Failed to send request. Tap to retry."
+          }
+        },
+        "validation": {
+          "employeesRequired": "Please select at least one employee",
+          "employeesMax": "Maximum 20 recipients allowed per request",
+          "messageMaxLength": "Message must be 500 characters or less (current: {{length}})",
+          "dueDatePast": "Due date must be today or in the future",
+          "dueDateInvalid": "Please select a valid date"
+        },
+        "cancel": {
+          "title": "Cancel Feedback Request?",
+          "single": {
+            "message": "This will permanently remove the feedback request to {{name}}. They will no longer see it in their todo list."
+          },
+          "multiple": {
+            "message": "This will permanently cancel the feedback request for all {{count}} recipients. They will no longer see it in their todo lists."
+          },
+          "individual": {
+            "title": "Cancel Request for {{name}}?",
+            "message": "This will remove {{name}} from this feedback request. Other recipients will still be able to respond."
+          },
+          "actions": {
+            "yesCancel": "Yes, Cancel",
+            "keepRequest": "Keep Request"
+          }
+        },
+        "status": {
+          "pending": "Pending",
+          "overdue": "Overdue",
+          "responded": "Responded",
+          "cancelled": "Cancelled",
+          "partial": "Partial",
+          "complete": "Complete"
+        },
+        "accessibility": {
+          "selectEmployees": "Select employees to request feedback from",
+          "removeEmployee": "Remove {{name}} from recipients",
+          "selectProject": "Select project context",
+          "selectGoal": "Select goal context",
+          "enterMessage": "Enter message or context for feedback request",
+          "selectDueDate": "Select due date for feedback response",
+          "sendRequest": "Send feedback request",
+          "cancelRequest": "Cancel feedback request",
+          "expandCard": "Expand request details",
+          "collapseCard": "Collapse request details"
+        }
+      }
     },
     "goals": {
       "title": "Goals",
@@ -356,6 +649,7 @@
         "status": "Status",
         "progress": "Progress",
         "priority": "Priority",
+        "tasks": "Tasks",
         "deadline": "Deadline",
         "actions": "Actions"
       },
@@ -376,10 +670,6 @@
       "completed": "Completed",
       "markComplete": "Complete",
       "markIncomplete": "Reopen"
-    },
-    "feedback": {
-      "title": "Feedback",
-      "comingSoon": "Feedback features coming soon..."
     },
     "admin": {
       "title": "Admin",

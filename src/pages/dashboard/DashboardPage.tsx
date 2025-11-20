@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+﻿import { Box, Typography } from '@mui/material'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserStatisticsCards } from '../../components/dashboard/cards'
@@ -9,6 +9,7 @@ import {
 import { DashboardGrid } from '../../components/dashboard/layout/DashboardGrid'
 import {
   ActivityFeedWidget,
+  FeedbackRequestsWidget,
   FeedbackSummaryWidget,
   GoalSummaryWidget,
   SkillProgressWidget,
@@ -43,6 +44,8 @@ export const DashboardPage: React.FC = () => {
         return <GoalSummaryWidget />
       case 'feedback':
         return <FeedbackSummaryWidget />
+      case 'feedbackRequests':
+        return <FeedbackRequestsWidget />
       case 'skills':
         return <SkillProgressWidget />
       case 'activity':

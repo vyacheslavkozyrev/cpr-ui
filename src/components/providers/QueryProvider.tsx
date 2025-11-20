@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+﻿import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import React, { type ReactNode, Suspense, lazy } from 'react'
 
 import { queryClient } from '../../config/queryClient'

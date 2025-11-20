@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+﻿import { screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import type { TGoalDto } from '../../../dtos/GoalDto'
 import { GoalCard } from '../../../pages/goals/components/GoalCard'

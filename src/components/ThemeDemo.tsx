@@ -1,4 +1,4 @@
-import {
+﻿import {
   Box,
   Button,
   Card,
@@ -75,7 +75,7 @@ export const ThemeDemo: React.FC = () => {
               alignItems='center'
             >
               <Typography variant='h4' gutterBottom>
-                🎨 Theme System Demo
+                ðŸŽ¨ Theme System Demo
               </Typography>
               <ThemeToggle variant='menu' />
             </Box>
@@ -142,14 +142,14 @@ export const ThemeDemo: React.FC = () => {
               </Typography>
               <Stack spacing={1}>
                 <Typography variant='body2'>
-                  <strong>isDark():</strong> {isDark() ? '✅ Yes' : '❌ No'}
+                  <strong>isDark():</strong> {isDark() ? 'âœ… Yes' : 'âŒ No'}
                 </Typography>
                 <Typography variant='body2'>
-                  <strong>isLight():</strong> {isLight() ? '✅ Yes' : '❌ No'}
+                  <strong>isLight():</strong> {isLight() ? 'âœ… Yes' : 'âŒ No'}
                 </Typography>
                 <Typography variant='body2'>
                   <strong>isSystemMode():</strong>{' '}
-                  {isSystemMode() ? '✅ Yes' : '❌ No'}
+                  {isSystemMode() ? 'âœ… Yes' : 'âŒ No'}
                 </Typography>
               </Stack>
             </Box>

@@ -1,0 +1,322 @@
+import { Search as SearchIcon } from '@mui/icons-material';
+import {
+    Alert,
+    Avatar,
+    Box,
+    Chip,
+    CircularProgress,
+    FormControl,
+    FormHelperText,
+    InputLabel,
+    List,
+    ListItemButton,
+    MenuItem,
+    Paper,
+    Select,
+    Stack,
+    TextField,
+    Typography,
+} from '@mui/material';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDebounce } from '../../../hooks/useDebounce';
+import { useEmployeeSearch, type EmployeeSearchParams, type EmployeeSummaryDto } from '../../../services/employeeQueryService';
+
+type Employee = EmployeeSummaryDto;
+
+interface EmployeeMultiSelectProps {
+    value: string[]; // Array of employee IDs
+    onChange: (employeeIds: string[]) => void;
+    error?: string;
+    required?: boolean;
+    maxSelection?: number;
+    disabled?: boolean;
+}
+
+interface Filters {
+    department: string;
+    location: string;
+    role: string;
+}
+
+export const EmployeeMultiSelect: React.FC<EmployeeMultiSelectProps> = ({
+    value = [],
+    onChange,
+    error,
+    required = false,
+    maxSelection = 20,
+    disabled = false,
+}) => {
+    const { t } = useTranslation('feedbackRequest');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filters, setFilters] = useState<Filters>({
+        department: '',
+        location: '',
+        role: '',
+    });
+    const [searchResults, setSearchResults] = useState<Employee[]>([]);
+    const [selectedEmployees, setSelectedEmployees] = useState<Employee[]>([]);
+    const [showResults, setShowResults] = useState(false);
+
+    // Debounce search query to avoid excessive API calls
+    const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
+    // Create stable reference for value array to avoid infinite loops
+    const valueKey = useMemo(() => value.join(','), [value]);
+
+    // Use real employee search API
+    const searchParams: EmployeeSearchParams = {};
+    if (debouncedSearchQuery) searchParams.query = debouncedSearchQuery;
+    if (filters.department) searchParams.department = filters.department;
+    if (filters.role) searchParams.role = filters.role;
+
+    const {
+        data: apiResults = [],
+        isLoading: isSearching,
+    } = useEmployeeSearch(
+        searchParams,
+        debouncedSearchQuery.length >= 2 || !!filters.department || !!filters.role
+    );
+
+    // Filter out already selected employees and update search results
+    useEffect(() => {
+        if (apiResults) {
+            const filteredResults = apiResults.filter((emp) => !value.includes(emp.id));
+            setSearchResults(filteredResults);
+            if (debouncedSearchQuery || filters.department || filters.role) {
+                setShowResults(true);
+            }
+        }
+    }, [apiResults, valueKey, debouncedSearchQuery, filters.department, filters.role, value]);
+
+    // Load selected employees details
+    // Note: In a real app, you'd want to fetch these from the API or cache
+    // For now, we'll maintain them in state as they're selected
+    useEffect(() => {
+        // Keep only employees that are still in the value array
+        setSelectedEmployees((prev) =>
+            prev.filter((emp) => value.includes(emp.id))
+        );
+    }, [valueKey, value]);
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const handleFilterChange = (filterType: keyof Filters, filterValue: string) => {
+        setFilters((prev) => ({
+            ...prev,
+            [filterType]: filterValue,
+        }));
+    };
+
+    const handleSelectEmployee = (employee: Employee) => {
+        if (value.length >= maxSelection) {
+            // Max selection reached, don't add
+            return;
+        }
+
+        const newValue = [...value, employee.id];
+        onChange(newValue);
+
+        // Add employee to selectedEmployees state
+        setSelectedEmployees((prev) => [...prev, employee]);
+
+        setSearchQuery('');
+        setSearchResults([]);
+        setShowResults(false);
+    };
+
+    const handleRemoveEmployee = (employeeId: string) => {
+        const newValue = value.filter((id) => id !== employeeId);
+        onChange(newValue);
+
+        // Remove from selectedEmployees state
+        setSelectedEmployees((prev) => prev.filter((emp) => emp.id !== employeeId));
+    };
+
+    const handleClearAll = () => {
+        onChange([]);
+        setSelectedEmployees([]);
+    };
+
+    const getInitials = (name: string): string => {
+        const parts = name.split(' ');
+        if (parts.length >= 2) {
+            return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+        }
+        return name.substring(0, 2).toUpperCase();
+    };
+
+    const isMaxReached = value.length >= maxSelection;
+
+    // Get unique filter options from API results
+    const departments = Array.from(new Set(apiResults.map((e) => e.department).filter(Boolean))) as string[];
+    const roles = Array.from(new Set(apiResults.map((e) => e.job_title).filter(Boolean))) as string[];
+
+    return (
+        <FormControl fullWidth error={!!error} disabled={disabled}>
+            <Box>
+                {/* Selected Employees Chips */}
+                {selectedEmployees.length > 0 && (
+                    <Box sx={{ mb: 2 }}>
+                        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                            {selectedEmployees.map((employee) => (
+                                <Chip
+                                    key={employee.id}
+                                    avatar={<Avatar>{getInitials(employee.display_name)}</Avatar>}
+                                    label={employee.display_name}
+                                    onDelete={() => handleRemoveEmployee(employee.id)}
+                                    color="primary"
+                                    sx={{ mb: 1 }}
+                                />
+                            ))}
+                            {selectedEmployees.length > 1 && (
+                                <Chip
+                                    label={t('form.employees.clearAll')}
+                                    onClick={handleClearAll}
+                                    variant="outlined"
+                                    color="default"
+                                    size="small"
+                                    sx={{ mb: 1 }}
+                                />
+                            )}
+                        </Stack>
+                        <Typography variant="caption" color="text.secondary" sx={{ mt: 1 }}>
+                            {t('form.employees.selected', { count: value.length, max: maxSelection })}
+                        </Typography>
+                    </Box>
+                )}
+
+                {/* Max Selection Warning */}
+                {isMaxReached && (
+                    <Alert severity="warning" sx={{ mb: 2 }}>
+                        {t('form.employees.maxReached', { max: maxSelection })}
+                    </Alert>
+                )}
+
+                {/* Search Input */}
+                <TextField
+                    fullWidth
+                    placeholder={t('form.employees.searchPlaceholder')}
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    disabled={disabled || isMaxReached}
+                    InputProps={{
+                        startAdornment: <SearchIcon sx={{ mr: 1, color: 'action.active' }} />,
+                        endAdornment: isSearching ? <CircularProgress size={20} /> : null,
+                    }}
+                    sx={{ mb: 2 }}
+                />
+
+                {/* Filter Chips */}
+                <Box sx={{ mb: 2 }}>
+                    <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                        {/* Department Filter */}
+                        <FormControl size="small" sx={{ minWidth: 150 }}>
+                            <InputLabel>{t('form.employees.filters.department')}</InputLabel>
+                            <Select
+                                value={filters.department}
+                                onChange={(e) => handleFilterChange('department', e.target.value)}
+                                label={t('form.employees.filters.department')}
+                                disabled={disabled}
+                            >
+                                <MenuItem value="">
+                                    <em>{t('form.employees.filters.all')}</em>
+                                </MenuItem>
+                                {departments.map((dept) => (
+                                    <MenuItem key={dept} value={dept}>
+                                        {dept}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+
+                        {/* Location Filter - Removed (not supported by API yet) */}
+
+                        {/* Role Filter */}
+                        <FormControl size="small" sx={{ minWidth: 150 }}>
+                            <InputLabel>{t('form.employees.filters.role')}</InputLabel>
+                            <Select
+                                value={filters.role}
+                                onChange={(e) => handleFilterChange('role', e.target.value)}
+                                label={t('form.employees.filters.role')}
+                                disabled={disabled}
+                            >
+                                <MenuItem value="">
+                                    <em>{t('form.employees.filters.all')}</em>
+                                </MenuItem>
+                                {roles.map((role) => (
+                                    <MenuItem key={role} value={role}>
+                                        {role}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+
+                        {/* Clear Filters Button */}
+                        {(filters.department || filters.location || filters.role) && (
+                            <Chip
+                                label={t('form.employees.filters.clear')}
+                                onClick={() => setFilters({ department: '', location: '', role: '' })}
+                                onDelete={() => setFilters({ department: '', location: '', role: '' })}
+                                size="small"
+                                color="default"
+                            />
+                        )}
+                    </Stack>
+                </Box>
+
+                {/* Search Results */}
+                {showResults && (
+                    <Paper variant="outlined" sx={{ maxHeight: 300, overflow: 'auto' }}>
+                        {searchResults.length === 0 ? (
+                            <Box sx={{ p: 2, textAlign: 'center' }}>
+                                <Typography variant="body2" color="text.secondary">
+                                    {t('form.employees.noResults')}
+                                </Typography>
+                            </Box>
+                        ) : (
+                            <List disablePadding>
+                                {searchResults.map((employee) => (
+                                    <ListItemButton
+                                        key={employee.id}
+                                        onClick={() => handleSelectEmployee(employee)}
+                                        disabled={isMaxReached}
+                                        divider
+                                    >
+                                        <Stack direction="row" spacing={2} alignItems="center" width="100%">
+                                            <Avatar>{getInitials(employee.display_name)}</Avatar>
+                                            <Box flex={1}>
+                                                {/* Line 1: Name */}
+                                                <Typography variant="body1" fontWeight={500}>
+                                                    {employee.display_name}
+                                                </Typography>
+                                                {/* Line 2: Job Title */}
+                                                <Typography variant="body2" color="text.secondary">
+                                                    {employee.job_title}
+                                                </Typography>
+                                                {/* Line 3: Department */}
+                                                <Typography variant="caption" color="text.secondary">
+                                                    {employee.department}
+                                                </Typography>
+                                            </Box>
+                                        </Stack>
+                                    </ListItemButton>
+                                ))}
+                            </List>
+                        )}
+                    </Paper>
+                )}
+
+                {/* Error Message */}
+                {error && <FormHelperText error>{error}</FormHelperText>}
+
+                {/* Required Indicator */}
+                {required && !error && value.length === 0 && (
+                    <FormHelperText>{t('form.employees.required')}</FormHelperText>
+                )}
+            </Box>
+        </FormControl>
+    );
+};

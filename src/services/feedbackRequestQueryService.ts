@@ -35,7 +35,7 @@ export const useSentRequests = (
       return response.success ? response.data : null
     },
     enabled,
-    staleTime: 2 * 60 * 1000, // 2 minutes
+    staleTime: 0, // Always refetch when params change
     gcTime: 5 * 60 * 1000, // 5 minutes in cache
     retry: (failureCount, error) => {
       if (error && typeof error === 'object' && 'status' in error) {
@@ -65,7 +65,7 @@ export const useTodoRequests = (
       return response.success ? response.data : null
     },
     enabled,
-    staleTime: 2 * 60 * 1000,
+    staleTime: 0, // Always refetch when params change
     gcTime: 5 * 60 * 1000,
     retry: (failureCount, error) => {
       if (error && typeof error === 'object' && 'status' in error) {
@@ -77,6 +77,28 @@ export const useTodoRequests = (
       return failureCount < 2
     },
     retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 10000),
+  })
+}
+
+/**
+ * Hook to get count of pending todo requests (for notification badge)
+ * Lightweight query that only fetches page 1 to get the total count
+ */
+export const useTodoRequestsCount = (enabled = true) => {
+  return useQuery({
+    queryKey: ['feedbackRequests', 'todo', 'count'],
+    queryFn: async () => {
+      const response = await feedbackRequestApiService.getTodoRequests({
+        page: 1,
+        page_size: 1, // Minimal data fetch
+        status: 'pending',
+      })
+      return response.success ? (response.data?.summary.pending_count ?? 0) : 0
+    },
+    enabled,
+    staleTime: 1 * 60 * 1000, // 1 minute - refresh frequently for notifications
+    gcTime: 5 * 60 * 1000,
+    retry: 1,
   })
 }
 

@@ -1,4 +1,4 @@
-import {
+﻿import {
   AdminPanelSettings as AdminIcon,
   Logout as LogoutIcon,
   Person as PersonIcon,
@@ -131,7 +131,7 @@ export const UserProfile = () => {
                   </Typography>
                   <Typography variant='body2' sx={styles.accessToken}>
                     {user.accessToken
-                      ? '●●●●●●●●●●●●●●●●'
+                      ? 'â—â—â—â—â—â—â—â—â—â—â—â—â—â—â—â—'
                       : t('auth.notAvailable')}
                     {isStubMode && ` ${t('auth.stubToken')}`}
                   </Typography>

@@ -1,4 +1,4 @@
-import {
+﻿import {
   Assignment,
   Feedback,
   Psychology,
@@ -377,7 +377,7 @@ export const ActivityFeedWidget: React.FC = () => {
                         color='text.secondary'
                         sx={styles.timestampSpacing}
                       >
-                        • {formatTimeAgo(activity.timestamp)}
+                        â€¢ {formatTimeAgo(activity.timestamp)}
                       </Typography>
                     </Box>
                   }

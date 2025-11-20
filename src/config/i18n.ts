@@ -60,6 +60,9 @@ i18n
     // Default namespace
     defaultNS: 'translation',
 
+    // Only load the translation namespace
+    ns: ['translation'],
+
     // Available languages
     supportedLngs: AVAILABLE_LANGUAGES.map(lang => lang.code),
 

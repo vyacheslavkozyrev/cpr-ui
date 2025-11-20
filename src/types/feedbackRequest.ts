@@ -173,6 +173,7 @@ export interface FeedbackRequestSummaryDto {
 
 /**
  * Summary DTO for employee information
+ * Note: API should return snake_case per CPR constitution
  */
 export interface EmployeeSummaryDto {
   /** Employee identifier */

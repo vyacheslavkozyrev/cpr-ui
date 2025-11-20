@@ -199,5 +199,260 @@
       "goBack": "Retour",
       "reloadPage": "Recharger la Page"
     }
+  },
+  "feedbackRequest": {
+    "form": {
+      "title": "Demander des Commentaires",
+      "employees": {
+        "label": "Sélectionner des Employés",
+        "placeholder": "Rechercher des employés par nom, poste ou département...",
+        "searchPlaceholder": "Rechercher par nom, e-mail ou titre de poste...",
+        "required": "Veuillez sélectionner au moins un employé",
+        "maxExceeded": "Maximum 20 destinataires autorisés par demande",
+        "maxReached": "Maximum {{max}} destinataires atteint. Supprimez des destinataires pour en ajouter d'autres.",
+        "searchEmpty": "Aucun employé trouvé correspondant à votre recherche",
+        "noResults": "Aucun employé trouvé",
+        "selected": "{{count}} sur {{max}} destinataires sélectionnés",
+        "clearAll": "Tout Effacer",
+        "filterLabel": "Filtrer par:",
+        "filters": {
+          "department": "Département",
+          "location": "Localisation",
+          "role": "Rôle",
+          "all": "Tous",
+          "clear": "Effacer les Filtres"
+        }
+      },
+      "project": {
+        "label": "Projet (Optionnel)",
+        "placeholder": "Sélectionner un contexte de projet...",
+        "error": "Le projet sélectionné n'est plus disponible"
+      },
+      "goal": {
+        "label": "Objectif (Optionnel)",
+        "placeholder": "Sélectionner un contexte d'objectif...",
+        "error": "L'objectif sélectionné n'est plus disponible"
+      },
+      "message": {
+        "label": "Message (Optionnel)",
+        "placeholder": "Ajoutez du contexte ou des domaines spécifiques sur lesquels vous souhaitez des commentaires...",
+        "maxLength": "Le message doit contenir 500 caractères ou moins",
+        "currentLength": "{{current}} / 500 caractères"
+      },
+      "dueDate": {
+        "label": "Date Limite (Optionnel)",
+        "placeholder": "Sélectionner une date limite...",
+        "quickSelect": {
+          "3days": "+3 jours",
+          "7days": "+7 jours",
+          "14days": "+14 jours",
+          "30days": "+30 jours"
+        },
+        "warnings": {
+          "short": "⚠ Délai court - envisagez d'accorder plus de temps pour des commentaires réfléchis",
+          "long": "ℹ Envisagez un délai plus court pour garantir des commentaires opportuns"
+        },
+        "error": "La date limite doit être aujourd'hui ou dans le futur"
+      },
+      "buttons": {
+        "send": "Envoyer la Demande",
+        "sending": "Envoi en cours...",
+        "cancel": "Annuler",
+        "saveDraft": "Sauvegarder le Brouillon",
+        "loadDraft": "Charger le Brouillon",
+        "discardDraft": "Supprimer le Brouillon"
+      },
+      "draft": {
+        "banner": "Vous avez un brouillon non enregistré depuis {{time}}.",
+        "loaded": "Brouillon chargé avec succès",
+        "discarded": "Brouillon supprimé",
+        "expired": "Brouillon expiré"
+      },
+      "duplicate": {
+        "title": "Destinataires en Double Détectés",
+        "partialMessage": "{{count}} de vos destinataires sélectionnés ont déjà une demande active pour ce {{context}}:",
+        "fullMessage": "Tous les destinataires sélectionnés ont déjà des demandes actives pour ce {{context}}. Veuillez consulter vos demandes existantes.",
+        "actions": {
+          "removeDuplicates": "Supprimer les Doublons et Continuer",
+          "viewExisting": "Voir les Demandes Existantes",
+          "cancel": "Annuler"
+        }
+      },
+      "confirmation": {
+        "title": "Abandonner la demande?",
+        "message": "Êtes-vous sûr de vouloir abandonner cette demande de commentaires? Vos modifications seront enregistrées en tant que brouillon.",
+        "actions": {
+          "keepEditing": "Continuer l'Édition",
+          "discard": "Abandonner"
+        }
+      }
+    },
+    "list": {
+      "sent": {
+        "title": "Demandes Envoyées",
+        "empty": "Commencez à collecter des commentaires",
+        "emptyDescription": "Vous n'avez encore envoyé aucune demande de commentaires.",
+        "filters": {
+          "all": "Toutes",
+          "pending": "En Attente",
+          "partial": "Partiel",
+          "complete": "Terminées",
+          "overdue": "En Retard"
+        },
+        "sort": {
+          "newest": "Plus Récentes",
+          "oldest": "Plus Anciennes",
+          "dueDate": "Date Limite"
+        },
+        "summary": "Affichage de {{showing}} sur {{total}} demandes ({{pending}} en attente, {{partial}} partiellement terminées, {{complete}} entièrement terminées)"
+      },
+      "todo": {
+        "title": "Demandes à Faire",
+        "empty": "Aucune demande en attente",
+        "emptyDescription": "Vous n'avez aucune demande de commentaires en attente à compléter.",
+        "filters": {
+          "all": "Toutes",
+          "pending": "En Attente",
+          "overdue": "En Retard"
+        }
+      },
+      "team": {
+        "sent": {
+          "title": "Demandes Envoyées par l'Équipe",
+          "empty": "Votre équipe n'a encore envoyé aucune demande de commentaires"
+        },
+        "received": {
+          "title": "Demandes Reçues par l'Équipe",
+          "empty": "Votre équipe n'a encore reçu aucune demande de commentaires"
+        },
+        "filters": {
+          "allTeam": "Tous les Membres de l'Équipe",
+          "byMember": "Par Membre de l'Équipe"
+        },
+        "summary": "L'équipe a {{active}} demandes actives ({{pending}} en attente, {{overdue}} en retard)"
+      }
+    },
+    "card": {
+      "status": {
+        "pending": "En Attente",
+        "overdue": "En Retard",
+        "responded": "Répondu",
+        "cancelled": "Annulée",
+        "partial": "{{responded}} sur {{total}} ont répondu",
+        "complete": "Terminée"
+      },
+      "dueDate": {
+        "label": "Échéance:",
+        "overdue": "En retard de {{days}} jours"
+      },
+      "recipients": {
+        "single": "{{name}}",
+        "multiple": "{{count}} destinataires",
+        "showMore": "+ {{count}} de plus"
+      },
+      "actions": {
+        "viewResponses": "Voir les Réponses ({{count}})",
+        "viewFeedback": "Voir les Commentaires",
+        "sendReminder": "Envoyer un Rappel",
+        "remindAll": "Rappeler à Tous",
+        "cancelRequest": "Annuler la Demande",
+        "cancelForRecipient": "Annuler pour {{name}}",
+        "cancelEntireRequest": "Annuler Toute la Demande",
+        "showMore": "Afficher plus",
+        "showLess": "Afficher moins"
+      },
+      "reminders": {
+        "lastSent": "Dernier rappel {{time}}",
+        "cooldown": "Vous pouvez envoyer un autre rappel dans {{hours}} heures"
+      }
+    },
+    "detail": {
+      "title": "Détails de la Demande",
+      "from": "De:",
+      "project": "Projet:",
+      "goal": "Objectif:",
+      "message": "Message:",
+      "dueDate": "Date Limite:",
+      "created": "Créée:",
+      "recipients": "Destinataires ({{count}}):",
+      "noMessage": "Aucun message fourni",
+      "noProject": "Aucun projet associé",
+      "noGoal": "Aucun objectif associé"
+    },
+    "toasts": {
+      "createSuccess": "Demande de commentaires envoyée à {{count}} employés",
+      "createError": "Échec de l'envoi de la demande de commentaires. Veuillez réessayer.",
+      "duplicatesRemoved": "{{count}} destinataires en double supprimés. Veuillez vérifier et soumettre à nouveau.",
+      "success": {
+        "sent": {
+          "single": "Demande de commentaires envoyée à {{name}}",
+          "multiple": "Demande de commentaires envoyée à {{count}} employés"
+        },
+        "reminderSent": "Rappel envoyé à {{name}}",
+        "remindersSent": "Rappels envoyés à {{count}} destinataires",
+        "cancelled": "Demande de {{name}} annulée",
+        "cancelledAll": "Demande de commentaires annulée pour tous les destinataires"
+      },
+      "error": {
+        "employeeNotFound": "L'employé sélectionné est introuvable. Veuillez en essayer un autre.",
+        "duplicateRequest": "Vous avez déjà une demande active pour cet employé. Veuillez consulter vos demandes envoyées.",
+        "invalidGoal": "L'objectif sélectionné n'est plus disponible. Veuillez en sélectionner un autre ou supprimer l'objectif.",
+        "invalidProject": "Le projet sélectionné n'est plus disponible. Veuillez en sélectionner un autre ou supprimer le projet.",
+        "selfRequest": "Vous ne pouvez pas demander de commentaires à vous-même.",
+        "rateLimit": "Vous avez créé trop de demandes aujourd'hui. Veuillez réessayer demain.",
+        "dailyLimit": "Limite quotidienne atteinte. Vous pouvez créer jusqu'à 50 demandes de commentaires par jour. Réessayez demain.",
+        "networkError": "Impossible d'envoyer la demande de commentaires. Veuillez vérifier votre connexion et réessayer.",
+        "timeout": "Délai d'attente dépassé. Veuillez réessayer.",
+        "generic": "Une erreur s'est produite. Veuillez réessayer."
+      },
+      "offline": {
+        "queued": "Vous êtes hors ligne. La demande sera envoyée automatiquement lorsque la connexion sera rétablie.",
+        "syncFailed": "Échec de l'envoi de la demande. Appuyez pour réessayer."
+      }
+    },
+    "validation": {
+      "employeesRequired": "Veuillez sélectionner au moins un employé",
+      "employeesMax": "Maximum 20 destinataires autorisés par demande",
+      "messageMaxLength": "Le message doit contenir 500 caractères ou moins (actuel: {{length}})",
+      "dueDatePast": "La date limite doit être aujourd'hui ou dans le futur",
+      "dueDateInvalid": "Veuillez sélectionner une date valide"
+    },
+    "cancel": {
+      "title": "Annuler la Demande de Commentaires?",
+      "single": {
+        "message": "Cela supprimera définitivement la demande de commentaires à {{name}}. Ils ne la verront plus dans leur liste de tâches."
+      },
+      "multiple": {
+        "message": "Cela annulera définitivement la demande de commentaires pour tous les {{count}} destinataires. Ils ne la verront plus dans leurs listes de tâches."
+      },
+      "individual": {
+        "title": "Annuler la Demande pour {{name}}?",
+        "message": "Cela supprimera {{name}} de cette demande de commentaires. Les autres destinataires pourront toujours répondre."
+      },
+      "actions": {
+        "yesCancel": "Oui, Annuler",
+        "keepRequest": "Conserver la Demande"
+      }
+    },
+    "status": {
+      "pending": "En Attente",
+      "overdue": "En Retard",
+      "responded": "Répondu",
+      "cancelled": "Annulée",
+      "partial": "Partiel",
+      "complete": "Terminée"
+    },
+    "accessibility": {
+      "selectEmployees": "Sélectionner les employés pour demander des commentaires",
+      "removeEmployee": "Supprimer {{name}} des destinataires",
+      "selectProject": "Sélectionner le contexte du projet",
+      "selectGoal": "Sélectionner le contexte de l'objectif",
+      "enterMessage": "Entrer le message ou le contexte pour la demande de commentaires",
+      "selectDueDate": "Sélectionner la date limite pour la réponse aux commentaires",
+      "sendRequest": "Envoyer la demande de commentaires",
+      "cancelRequest": "Annuler la demande de commentaires",
+      "expandCard": "Développer les détails de la demande",
+      "collapseCard": "Réduire les détails de la demande"
+    }
   }
 }

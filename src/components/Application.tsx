@@ -1,4 +1,4 @@
-import {
+﻿import {
   Api as ApiIcon,
   CheckCircle as CheckCircleIcon,
   Palette as PaletteIcon,
@@ -66,13 +66,13 @@ export const Application = () => {
             >
               <Box>
                 <Typography variant='h3' gutterBottom>
-                  🎯 CPR System
+                  ðŸŽ¯ CPR System
                 </Typography>
                 <Typography variant='subtitle1' color='text.secondary'>
                   Current Performance Review Application
                 </Typography>
                 <Typography variant='body2' color='text.secondary'>
-                  Theme: {mode} → {resolvedTheme} | Auth:{' '}
+                  Theme: {mode} â†’ {resolvedTheme} | Auth:{' '}
                   {isAuthenticated ? 'Authenticated' : 'Not authenticated'}
                   {isStubMode && ' (stub mode)'}
                 </Typography>
@@ -86,8 +86,9 @@ export const Application = () => {
         {isStubMode && (
           <Alert severity='info' sx={styles.devAlert}>
             <Typography variant='body2'>
-              🚧 <strong>Development Mode:</strong> Authentication is running in
-              stub mode. Real MSAL.js integration is configured but not active.
+              ðŸš§ <strong>Development Mode:</strong> Authentication is running
+              in stub mode. Real MSAL.js integration is configured but not
+              active.
             </Typography>
           </Alert>
         )}
@@ -131,7 +132,7 @@ export const Application = () => {
           <Card elevation={1}>
             <CardContent>
               <Typography variant='h5' gutterBottom>
-                🚀 React Query Infrastructure
+                ðŸš€ React Query Infrastructure
               </Typography>
               <Typography variant='body1' paragraph>
                 Complete API infrastructure setup with React Query (TanStack
@@ -139,7 +140,7 @@ export const Application = () => {
               </Typography>
 
               <Typography variant='h6' gutterBottom sx={styles.sectionTitle}>
-                ✅ Features Implemented:
+                âœ… Features Implemented:
               </Typography>
 
               <List>
@@ -200,31 +201,31 @@ export const Application = () => {
               </List>
 
               <Typography variant='h6' gutterBottom sx={styles.sectionTitle}>
-                � Theme Integration:
+                ï¿½ Theme Integration:
               </Typography>
 
               <List>
                 <ListItem>
                   <ListItemText
-                    primary='• Set up React Router for navigation'
+                    primary='â€¢ Set up React Router for navigation'
                     secondary='Add protected routes and route guards'
                   />
                 </ListItem>
                 <ListItem>
                   <ListItemText
-                    primary='• Create your first API service'
+                    primary='â€¢ Create your first API service'
                     secondary='Build services for goals, skills, and feedback management'
                   />
                 </ListItem>
                 <ListItem>
                   <ListItemText
-                    primary='• Add MSW (Mock Service Worker)'
+                    primary='â€¢ Add MSW (Mock Service Worker)'
                     secondary='Development API mocking for realistic testing'
                   />
                 </ListItem>
                 <ListItem>
                   <ListItemText
-                    primary='• Build UI components with query hooks'
+                    primary='â€¢ Build UI components with query hooks'
                     secondary='Create data-driven components using React Query patterns'
                   />
                 </ListItem>
@@ -245,7 +246,7 @@ export const Application = () => {
         {/* Footer */}
         <Box sx={styles.footer}>
           <Typography variant='body2' color='text.secondary'>
-            🚀 Built with React + TypeScript + MUI v6 + Zustand + MSAL.js v3 +
+            ðŸš€ Built with React + TypeScript + MUI v6 + Zustand + MSAL.js v3 +
             React Query
           </Typography>
         </Box>

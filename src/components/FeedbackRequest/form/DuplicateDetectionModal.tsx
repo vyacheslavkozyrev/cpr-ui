@@ -1,4 +1,5 @@
-import {
+﻿import {
+  Alert,
   Button,
   Dialog,
   DialogActions,
@@ -8,23 +9,22 @@ import {
   List,
   ListItem,
   ListItemText,
-  Alert,
-} from '@mui/material';
-import { useTranslation } from 'react-i18next';
+} from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
 export interface DuplicateRecipient {
-  id: string;
-  display_name: string;
+  id: string
+  display_name: string
 }
 
 interface DuplicateDetectionModalProps {
-  open: boolean;
-  duplicateEmployees: DuplicateRecipient[];
-  isFullDuplicate: boolean;
-  context: string; // 'project', 'goal', or 'general'
-  onRemoveDuplicates: () => void;
-  onViewExisting: () => void;
-  onCancel: () => void;
+  open: boolean
+  duplicateEmployees: DuplicateRecipient[]
+  isFullDuplicate: boolean
+  context: string // 'project', 'goal', or 'general'
+  onRemoveDuplicates: () => void
+  onViewExisting: () => void
+  onCancel: () => void
 }
 
 /**
@@ -42,45 +42,43 @@ export const DuplicateDetectionModal: React.FC<
   onViewExisting,
   onCancel,
 }) => {
-  const { t } = useTranslation('feedbackRequest');
+  const { t } = useTranslation()
 
   const contextLabel =
-    context === 'project'
-      ? 'project'
-      : context === 'goal'
-        ? 'goal'
-        : 'context';
+    context === 'project' ? 'project' : context === 'goal' ? 'goal' : 'context'
 
   return (
     <Dialog
       open={open}
       onClose={onCancel}
-      maxWidth="sm"
+      maxWidth='sm'
       fullWidth
-      aria-labelledby="duplicate-detection-dialog-title"
+      aria-labelledby='duplicate-detection-dialog-title'
     >
-      <DialogTitle id="duplicate-detection-dialog-title">
-        {t('form.duplicate.title')}
+      <DialogTitle id='duplicate-detection-dialog-title'>
+        {t('pages.feedback.request.duplicate.title')}
       </DialogTitle>
 
       <DialogContent>
         {isFullDuplicate ? (
           <>
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {t('form.duplicate.fullMessage', { context: contextLabel })}
+            <Alert severity='error' sx={{ mb: 2 }}>
+              {t('pages.feedback.request.duplicate.fullMessage', {
+                context: contextLabel,
+              })}
             </Alert>
           </>
         ) : (
           <>
             <DialogContentText>
-              {t('form.duplicate.partialMessage', {
+              {t('pages.feedback.request.duplicate.partialMessage', {
                 count: duplicateEmployees.length,
                 context: contextLabel,
               })}
             </DialogContentText>
 
             <List dense sx={{ mt: 2 }}>
-              {duplicateEmployees.map((employee) => (
+              {duplicateEmployees.map(employee => (
                 <ListItem key={employee.id} disableGutters>
                   <ListItemText
                     primary={employee.display_name}
@@ -99,31 +97,35 @@ export const DuplicateDetectionModal: React.FC<
       <DialogActions>
         {isFullDuplicate ? (
           <>
-            <Button onClick={onViewExisting} color="primary" variant="contained">
-              {t('form.duplicate.actions.viewExisting')}
+            <Button
+              onClick={onViewExisting}
+              color='primary'
+              variant='contained'
+            >
+              {t('pages.feedback.request.duplicate.actions.viewExisting')}
             </Button>
-            <Button onClick={onCancel} color="inherit">
-              {t('form.duplicate.actions.cancel')}
+            <Button onClick={onCancel} color='inherit'>
+              {t('pages.feedback.request.duplicate.actions.cancel')}
             </Button>
           </>
         ) : (
           <>
             <Button
               onClick={onRemoveDuplicates}
-              color="primary"
-              variant="contained"
+              color='primary'
+              variant='contained'
             >
-              {t('form.duplicate.actions.removeDuplicates')}
+              {t('pages.feedback.request.duplicate.actions.removeDuplicates')}
             </Button>
-            <Button onClick={onViewExisting} color="inherit">
-              {t('form.duplicate.actions.viewExisting')}
+            <Button onClick={onViewExisting} color='inherit'>
+              {t('pages.feedback.request.duplicate.actions.viewExisting')}
             </Button>
-            <Button onClick={onCancel} color="inherit">
-              {t('form.duplicate.actions.cancel')}
+            <Button onClick={onCancel} color='inherit'>
+              {t('pages.feedback.request.duplicate.actions.cancel')}
             </Button>
           </>
         )}
       </DialogActions>
     </Dialog>
-  );
-};
+  )
+}

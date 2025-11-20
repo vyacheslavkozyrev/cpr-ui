@@ -1,4 +1,4 @@
-import { CssBaseline, ThemeProvider } from '@mui/material'
+﻿import { CssBaseline, ThemeProvider } from '@mui/material'
 import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
@@ -8,6 +8,7 @@ import { QueryProvider } from './components/providers/QueryProvider'
 import { useInitializeApiClient } from './hooks/useInitializeApiClient'
 import './index.css'
 import { routes } from './routes'
+import { initializeOfflineQueue } from './services/feedbackRequestService'
 import { useAuthStore } from './stores/authStore'
 import { useThemeStore } from './stores/themeStore'
 import { darkTheme, lightTheme } from './theme/index'
@@ -77,6 +78,10 @@ function ThemedApp() {
     initAuth().catch(error =>
       logger.error('Failed to initialize auth', { error })
     )
+
+    // Initialize offline queue (T039)
+    initializeOfflineQueue()
+    logger.info('Offline queue initialized')
   }, [])
 
   return (

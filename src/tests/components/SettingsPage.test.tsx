@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+﻿import { describe, expect, it } from 'vitest'
 
 describe('SettingsPage Tests', () => {
   // Positive test cases
@@ -23,8 +23,8 @@ describe('SettingsPage Tests', () => {
       // Test language configuration
       const availableLanguages = [
         { code: 'en', name: 'English', nativeName: 'English' },
-        { code: 'es', name: 'Spanish', nativeName: 'Español' },
-        { code: 'fr', name: 'French', nativeName: 'Français' },
+        { code: 'es', name: 'Spanish', nativeName: 'EspaÃ±ol' },
+        { code: 'fr', name: 'French', nativeName: 'FranÃ§ais' },
       ]
 
       const currentLanguage = 'en'

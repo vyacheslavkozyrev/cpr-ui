@@ -1,4 +1,4 @@
-import {
+﻿import {
   DarkMode as DarkIcon,
   LightMode as LightIcon,
   SettingsBrightness as SystemIcon,

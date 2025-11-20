@@ -1,4 +1,4 @@
-import { Login as LoginIcon, Person as PersonIcon } from '@mui/icons-material'
+﻿import { Login as LoginIcon, Person as PersonIcon } from '@mui/icons-material'
 import {
   Alert,
   Box,
@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../stores/authStore'
 import { logger } from '../../utils/logger'
 
-// Styles factory — defined outside component per agreed pattern
+// Styles factory â€” defined outside component per agreed pattern
 const getStyles = () => ({
   container: {
     display: 'flex',

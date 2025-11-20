@@ -1,4 +1,4 @@
-import SaveIcon from '@mui/icons-material/Save'
+﻿import SaveIcon from '@mui/icons-material/Save'
 import SendIcon from '@mui/icons-material/Send'
 import {
   Alert,
@@ -22,7 +22,13 @@ import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { useCreateFeedbackRequest } from '../../../services'
+import type { TGoalDto } from '../../../dtos/GoalDto'
+import {
+  type ProjectSummaryDto,
+  useCreateFeedbackRequest,
+  useGoals,
+  useProjects,
+} from '../../../services'
 import { useFeedbackRequestDraftStore } from '../../../stores'
 import { useToastStore } from '../../../stores/toastStore'
 import type { CreateFeedbackRequestDto } from '../../../types/feedbackRequest'
@@ -74,6 +80,21 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
   // Create mutation
   const createMutation = useCreateFeedbackRequest()
 
+  // Load projects and goals for dropdowns
+  const {
+    data: projectsData,
+    isLoading: projectsLoading,
+    error: projectsError,
+  } = useProjects()
+  const {
+    data: goalsData,
+    isLoading: goalsLoading,
+    error: goalsError,
+  } = useGoals({ per_page: 100 }) // Load up to 100 goals for dropdown
+
+  const projects = projectsData || []
+  const goals = goalsData?.items || []
+
   // Form state
   const {
     control,
@@ -93,21 +114,14 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
     },
   })
 
-  // Watch all form values for auto-save
-  const watchedValues = watch()
+  // Watch message for character count only
   const message = watch('message') || ''
-  const employeeIds = watch('employeeIds') || []
 
   // Local state
   const [showDraftBanner, setShowDraftBanner] = useState(false)
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
   const [showDuplicateModal, setShowDuplicateModal] = useState(false)
-  const [duplicateEmployeeIds, setDuplicateEmployeeIds] = useState<string[]>(
-    []
-  )
-  const [autoSaveTimer, setAutoSaveTimer] = useState<NodeJS.Timeout | null>(
-    null
-  )
+  const [duplicateEmployeeIds, setDuplicateEmployeeIds] = useState<string[]>([])
 
   // Character count for message
   const messageLength = message.length
@@ -127,27 +141,18 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
   // Auto-save draft every 30 seconds when form is dirty
   useEffect(() => {
     if (isDirty) {
-      // Clear existing timer
-      if (autoSaveTimer) {
-        clearTimeout(autoSaveTimer)
-      }
-
       // Set new timer for 30 seconds
       const timer = setTimeout(() => {
         handleAutoSave()
       }, 30000) // 30 seconds
 
-      setAutoSaveTimer(timer)
-
       return () => {
-        if (timer) {
-          clearTimeout(timer)
-        }
+        clearTimeout(timer)
       }
     }
     return undefined
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDirty, watchedValues])
+  }, [isDirty])
 
   /**
    * Auto-save draft to localStorage
@@ -156,22 +161,23 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
     // TODO: Get current employee ID from auth context
     const currentEmployeeId = 'current-employee-id' // Placeholder
 
+    // Get current form values
+    const formValues = getValues()
+
     // Convert form data to API format
     const draftData: Partial<CreateFeedbackRequestDto> = {
-      employee_ids: watchedValues.employeeIds,
-      project_id: watchedValues.projectId || null,
-      goal_id: watchedValues.goalId || null,
-      message: watchedValues.message || null,
-      due_date: watchedValues.dueDate
-        ? watchedValues.dueDate.toISOString()
-        : null,
+      employee_ids: formValues.employeeIds,
+      project_id: formValues.projectId || null,
+      goal_id: formValues.goalId || null,
+      message: formValues.message || null,
+      due_date: formValues.dueDate ? formValues.dueDate.toISOString() : null,
     }
 
     saveDraft(draftData, currentEmployeeId)
     markDirty()
 
     logger.debug('Form auto-saved', {
-      employeeCount: watchedValues.employeeIds.length,
+      employeeCount: formValues.employeeIds.length,
     })
   }
 
@@ -195,7 +201,7 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
       })
 
       setShowDraftBanner(false)
-      addToast(t('feedbackRequest.form.draft.loaded'), 'info')
+      addToast(t('pages.feedback.request.form.draft.loaded'), 'info')
     }
   }
 
@@ -205,7 +211,7 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
   const handleDiscardDraft = () => {
     clearDraft()
     setShowDraftBanner(false)
-    addToast(t('feedbackRequest.form.draft.discarded'), 'info')
+    addToast(t('pages.feedback.request.form.draft.discarded'), 'info')
   }
 
   /**
@@ -230,7 +236,7 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
 
       // Show success toast
       addToast(
-        t('feedbackRequest.toasts.createSuccess', {
+        t('pages.feedback.request.toasts.createSuccess', {
           count: data.employeeIds.length,
         }),
         'success'
@@ -242,11 +248,25 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
       } else {
         navigate('/feedback/requests/sent')
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('Failed to create feedback request', { error })
 
+      // Type guard for error with status
+      const isErrorWithStatus = (
+        err: unknown
+      ): err is {
+        status?: number
+        response?: { status?: number; data?: { message?: string } }
+        message?: string
+      } => {
+        return typeof err === 'object' && err !== null
+      }
+
       // Check for 409 Conflict (duplicate recipients)
-      if (error?.status === 409 || error?.response?.status === 409) {
+      if (
+        isErrorWithStatus(error) &&
+        (error?.status === 409 || error?.response?.status === 409)
+      ) {
         // Extract duplicate employee IDs from error message if available
         // Backend returns: "Active feedback requests already exist for these recipients: guid1, guid2"
         const errorMessage =
@@ -256,7 +276,7 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
         setDuplicateEmployeeIds(duplicateIds)
         setShowDuplicateModal(true)
       } else {
-        addToast(t('feedbackRequest.toasts.createError'), 'error')
+        addToast(t('pages.feedback.request.toasts.createError'), 'error')
       }
     }
   }
@@ -291,7 +311,7 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
     // Remove duplicate employees from the form
     const currentEmployeeIds = getValues('employeeIds') || []
     const filteredIds = currentEmployeeIds.filter(
-      (id) => !duplicateEmployeeIds.includes(id)
+      id => !duplicateEmployeeIds.includes(id)
     )
 
     setValue('employeeIds', filteredIds, { shouldValidate: true })
@@ -300,7 +320,7 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
 
     // Show toast to inform user
     addToast(
-      t('feedbackRequest.toasts.duplicatesRemoved', {
+      t('pages.feedback.request.toasts.duplicatesRemoved', {
         count: duplicateEmployeeIds.length,
       }),
       'info'
@@ -374,15 +394,15 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
             action={
               <Stack direction='row' spacing={1}>
                 <Button size='small' onClick={handleLoadDraft}>
-                  {t('feedbackRequest.form.buttons.loadDraft')}
+                  {t('pages.feedback.request.form.buttons.loadDraft')}
                 </Button>
                 <Button size='small' onClick={handleDiscardDraft}>
-                  {t('feedbackRequest.form.buttons.discardDraft')}
+                  {t('pages.feedback.request.form.buttons.discardDraft')}
                 </Button>
               </Stack>
             }
           >
-            {t('feedbackRequest.form.draft.banner', {
+            {t('pages.feedback.request.form.draft.banner', {
               time: getDraftAge() !== null ? `${getDraftAge()} days ago` : '',
             })}
           </Alert>
@@ -392,7 +412,7 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
         <Card>
           <CardContent>
             <Typography variant='h5' gutterBottom>
-              {t('feedbackRequest.form.title')}
+              {t('pages.feedback.request.form.title')}
             </Typography>
 
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -404,19 +424,25 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
                   error={Boolean(errors.employeeIds)}
                 >
                   <InputLabel>
-                    {t('feedbackRequest.form.employees.label')}
+                    {t('pages.feedback.request.form.employees.label')}
                   </InputLabel>
                   <Controller
                     name='employeeIds'
                     control={control}
                     rules={{
-                      required: t('feedbackRequest.form.employees.required'),
+                      required: t(
+                        'pages.feedback.request.form.employees.required'
+                      ),
                       validate: value => {
                         if (value.length === 0) {
-                          return t('feedbackRequest.form.employees.required')
+                          return t(
+                            'pages.feedback.request.form.employees.required'
+                          )
                         }
                         if (value.length > 20) {
-                          return t('feedbackRequest.form.employees.maxExceeded')
+                          return t(
+                            'pages.feedback.request.form.employees.maxExceeded'
+                          )
                         }
                         return true
                       },
@@ -439,7 +465,7 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
                 {/* Project Dropdown */}
                 <FormControl fullWidth>
                   <InputLabel>
-                    {t('feedbackRequest.form.project.label')}
+                    {t('pages.feedback.request.form.project.label')}
                   </InputLabel>
                   <Controller
                     name='projectId'
@@ -448,16 +474,39 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
                       <Select
                         {...field}
                         value={field.value || ''}
-                        label={t('feedbackRequest.form.project.label')}
+                        label={t('pages.feedback.request.form.project.label')}
+                        disabled={projectsLoading || isSubmitting}
                       >
                         <MenuItem value=''>
                           <em>
-                            {t('feedbackRequest.form.project.placeholder')}
+                            {t(
+                              'pages.feedback.request.form.project.placeholder'
+                            )}
                           </em>
                         </MenuItem>
-                        {/* TODO: Load projects from API */}
-                        <MenuItem value='project-1'>Sample Project 1</MenuItem>
-                        <MenuItem value='project-2'>Sample Project 2</MenuItem>
+                        {projectsLoading && (
+                          <MenuItem disabled>
+                            <CircularProgress size={20} sx={{ mr: 1 }} />
+                            {t('common.loading')}
+                          </MenuItem>
+                        )}
+                        {projectsError && (
+                          <MenuItem disabled>
+                            {t('common.error.loadFailed')}
+                          </MenuItem>
+                        )}
+                        {!projectsLoading &&
+                          !projectsError &&
+                          projects.length === 0 && (
+                            <MenuItem disabled>
+                              {t('pages.feedback.request.form.project.empty')}
+                            </MenuItem>
+                          )}
+                        {projects.map((project: ProjectSummaryDto) => (
+                          <MenuItem key={project.id} value={project.id}>
+                            {project.name}
+                          </MenuItem>
+                        ))}
                       </Select>
                     )}
                   />
@@ -466,7 +515,7 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
                 {/* Goal Dropdown */}
                 <FormControl fullWidth>
                   <InputLabel>
-                    {t('feedbackRequest.form.goal.label')}
+                    {t('pages.feedback.request.form.goal.label')}
                   </InputLabel>
                   <Controller
                     name='goalId'
@@ -475,14 +524,35 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
                       <Select
                         {...field}
                         value={field.value || ''}
-                        label={t('feedbackRequest.form.goal.label')}
+                        label={t('pages.feedback.request.form.goal.label')}
+                        disabled={goalsLoading || isSubmitting}
                       >
                         <MenuItem value=''>
-                          <em>{t('feedbackRequest.form.goal.placeholder')}</em>
+                          <em>
+                            {t('pages.feedback.request.form.goal.placeholder')}
+                          </em>
                         </MenuItem>
-                        {/* TODO: Load goals from API */}
-                        <MenuItem value='goal-1'>Sample Goal 1</MenuItem>
-                        <MenuItem value='goal-2'>Sample Goal 2</MenuItem>
+                        {goalsLoading && (
+                          <MenuItem disabled>
+                            <CircularProgress size={20} sx={{ mr: 1 }} />
+                            {t('common.loading')}
+                          </MenuItem>
+                        )}
+                        {goalsError && (
+                          <MenuItem disabled>
+                            {t('common.error.loadFailed')}
+                          </MenuItem>
+                        )}
+                        {!goalsLoading && !goalsError && goals.length === 0 && (
+                          <MenuItem disabled>
+                            {t('pages.feedback.request.form.goal.empty')}
+                          </MenuItem>
+                        )}
+                        {goals.map((goal: TGoalDto) => (
+                          <MenuItem key={goal.id} value={goal.id}>
+                            {goal.title}
+                          </MenuItem>
+                        ))}
                       </Select>
                     )}
                   />
@@ -496,24 +566,29 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
                     rules={{
                       maxLength: {
                         value: maxMessageLength,
-                        message: t('feedbackRequest.form.message.maxLength'),
+                        message: t(
+                          'pages.feedback.request.form.message.maxLength'
+                        ),
                       },
                     }}
                     render={({ field }) => (
                       <TextField
                         {...field}
-                        label={t('feedbackRequest.form.message.label')}
+                        label={t('pages.feedback.request.form.message.label')}
                         placeholder={t(
-                          'feedbackRequest.form.message.placeholder'
+                          'pages.feedback.request.form.message.placeholder'
                         )}
                         multiline
                         rows={4}
                         helperText={
                           errors.message
                             ? errors.message.message
-                            : t('feedbackRequest.form.message.currentLength', {
-                              current: messageLength,
-                            })
+                            : t(
+                                'pages.feedback.request.form.message.currentLength',
+                                {
+                                  current: messageLength,
+                                }
+                              )
                         }
                         error={Boolean(errors.message)}
                       />
@@ -529,7 +604,7 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
                     rules={{
                       validate: value => {
                         if (value && value < new Date()) {
-                          return t('feedbackRequest.form.dueDate.error')
+                          return t('pages.feedback.request.form.dueDate.error')
                         }
                         return true
                       },
@@ -538,7 +613,7 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
                       <DatePicker
                         {...field}
                         value={field.value ?? null}
-                        label={t('feedbackRequest.form.dueDate.label')}
+                        label={t('pages.feedback.request.form.dueDate.label')}
                         slotProps={{
                           textField: {
                             fullWidth: true,
@@ -554,28 +629,28 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
                   <Stack direction='row' spacing={1} sx={{ mt: 1 }}>
                     <Chip
                       label={t(
-                        'feedbackRequest.form.dueDate.quickSelect.3days'
+                        'pages.feedback.request.form.dueDate.quickSelect.3days'
                       )}
                       size='small'
                       onClick={() => handleQuickSelectDueDate(3)}
                     />
                     <Chip
                       label={t(
-                        'feedbackRequest.form.dueDate.quickSelect.7days'
+                        'pages.feedback.request.form.dueDate.quickSelect.7days'
                       )}
                       size='small'
                       onClick={() => handleQuickSelectDueDate(7)}
                     />
                     <Chip
                       label={t(
-                        'feedbackRequest.form.dueDate.quickSelect.14days'
+                        'pages.feedback.request.form.dueDate.quickSelect.14days'
                       )}
                       size='small'
                       onClick={() => handleQuickSelectDueDate(14)}
                     />
                     <Chip
                       label={t(
-                        'feedbackRequest.form.dueDate.quickSelect.30days'
+                        'pages.feedback.request.form.dueDate.quickSelect.30days'
                       )}
                       size='small'
                       onClick={() => handleQuickSelectDueDate(30)}
@@ -590,7 +665,7 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
                     onClick={handleCancel}
                     disabled={isSubmitting}
                   >
-                    {t('feedbackRequest.form.buttons.cancel')}
+                    {t('pages.feedback.request.form.buttons.cancel')}
                   </Button>
                   <Button
                     variant='outlined'
@@ -598,7 +673,7 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
                     onClick={handleAutoSave}
                     disabled={!isDirty || isSubmitting}
                   >
-                    {t('feedbackRequest.form.buttons.saveDraft')}
+                    {t('pages.feedback.request.form.buttons.saveDraft')}
                   </Button>
                   <Button
                     type='submit'
@@ -610,11 +685,11 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
                         <SendIcon />
                       )
                     }
-                    disabled={isSubmitting || employeeIds.length === 0}
+                    disabled={isSubmitting}
                   >
                     {isSubmitting
-                      ? t('feedbackRequest.form.buttons.sending')
-                      : t('feedbackRequest.form.buttons.send')}
+                      ? t('pages.feedback.request.form.buttons.sending')
+                      : t('pages.feedback.request.form.buttons.send')}
                   </Button>
                 </Stack>
               </Stack>
@@ -633,30 +708,31 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
                   size='small'
                   onClick={() => setShowCancelConfirm(false)}
                 >
-                  {t('feedbackRequest.form.confirmation.actions.keepEditing')}
+                  {t(
+                    'pages.feedback.request.form.confirmation.actions.keepEditing'
+                  )}
                 </Button>
                 <Button size='small' onClick={handleConfirmCancel}>
-                  {t('feedbackRequest.form.confirmation.actions.discard')}
+                  {t(
+                    'pages.feedback.request.form.confirmation.actions.discard'
+                  )}
                 </Button>
               </Stack>
             }
           >
-            {t('feedbackRequest.form.confirmation.message')}
+            {t('pages.feedback.request.form.confirmation.message')}
           </Alert>
         )}
 
         {/* Duplicate Detection Modal */}
         <DuplicateDetectionModal
           open={showDuplicateModal}
-          duplicateEmployees={duplicateEmployeeIds.map((id) => ({
+          duplicateEmployees={duplicateEmployeeIds.map(id => ({
             id,
             display_name: `Employee ${id.substring(0, 8)}`, // TODO: Get actual employee names
           }))}
-          isFullDuplicate={
-            duplicateEmployeeIds.length === employeeIds.length &&
-            employeeIds.length > 0
-          }
-          context={watchedValues.projectId ? 'project' : watchedValues.goalId ? 'goal' : 'general'}
+          isFullDuplicate={duplicateEmployeeIds.length > 0}
+          context='general'
           onRemoveDuplicates={handleRemoveDuplicates}
           onViewExisting={handleViewExisting}
           onCancel={handleCancelDuplicateModal}
