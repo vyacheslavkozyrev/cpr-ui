@@ -47,6 +47,8 @@ export {
   useCancelRecipient,
   useCreateFeedbackRequest,
   useFeedbackRequest,
+  useManagerTeamReceivedRequests,
+  useManagerTeamSentRequests,
   useSendAllReminders,
   useSendReminder,
   useSentRequests,

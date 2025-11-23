@@ -1,4 +1,5 @@
-﻿import { Settings, Visibility, VisibilityOff } from '@mui/icons-material'
+﻿/* eslint-disable react-refresh/only-export-components */
+import { Settings, Visibility, VisibilityOff } from '@mui/icons-material'
 import {
   Box,
   Chip,

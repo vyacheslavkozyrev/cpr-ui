@@ -1,4 +1,5 @@
-﻿import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
+﻿/* eslint-disable react-refresh/only-export-components */
+import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { RenderOptions, RenderResult } from '@testing-library/react'
 import { render } from '@testing-library/react'

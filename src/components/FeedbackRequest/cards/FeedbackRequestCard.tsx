@@ -131,6 +131,15 @@ export const FeedbackRequestCard: React.FC<FeedbackRequestCardProps> = ({
       }}
     >
       <CardContent>
+        {/* Requestor Name - Manager View Only */}
+        {isManagerView && 'requestor' in request && request.requestor && (
+          <Box mb={1}>
+            <Typography variant='subtitle2' color='primary'>
+              {request.requestor.display_name}
+            </Typography>
+          </Box>
+        )}
+
         {/* Header Section */}
         <Stack
           direction='row'

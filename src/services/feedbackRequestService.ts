@@ -176,15 +176,15 @@ export class FeedbackRequestApiService {
 
   /**
    * Get team sent feedback requests (manager view)
-   * GET /api/team/feedback/request/sent
+   * GET /api/manager/feedback/request/sent
    *
-   * Requires: People Manager, Solution Owner, Director, or Administrator role
+   * Requires: Manager with direct reports
    *
    * @param params - Query parameters for pagination, filtering, sorting
    * @returns Paginated list of team members' sent requests
    *
    * Error cases:
-   * - 403: Not a manager or insufficient permissions
+   * - 403: Not a manager or has no direct reports
    */
   async getTeamSentRequests(
     params?: FeedbackRequestListParams
@@ -203,23 +203,23 @@ export class FeedbackRequestApiService {
 
     const query = queryParams.toString()
     const url = query
-      ? `/team/feedback/request/sent?${query}`
-      : '/team/feedback/request/sent'
+      ? `/manager/feedback/request/sent?${query}`
+      : '/manager/feedback/request/sent'
 
     return apiClient.get<PaginatedFeedbackRequestsDto>(url)
   }
 
   /**
    * Get team received feedback requests (manager view)
-   * GET /api/team/feedback/request/received
+   * GET /api/manager/feedback/request/received
    *
-   * Requires: People Manager, Solution Owner, Director, or Administrator role
+   * Requires: Manager with direct reports
    *
    * @param params - Query parameters for pagination, filtering, sorting
    * @returns Paginated list of requests addressed to team members
    *
    * Error cases:
-   * - 403: Not a manager or insufficient permissions
+   * - 403: Not a manager or has no direct reports
    */
   async getTeamReceivedRequests(
     params?: FeedbackRequestListParams
@@ -238,8 +238,8 @@ export class FeedbackRequestApiService {
 
     const query = queryParams.toString()
     const url = query
-      ? `/team/feedback/request/received?${query}`
-      : '/team/feedback/request/received'
+      ? `/manager/feedback/request/received?${query}`
+      : '/manager/feedback/request/received'
 
     return apiClient.get<PaginatedFeedbackRequestsDto>(url)
   }

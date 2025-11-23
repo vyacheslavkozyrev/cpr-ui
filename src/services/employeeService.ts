@@ -56,6 +56,16 @@ export class EmployeeApiService {
 
     return apiClient.get<EmployeeSummaryDto[]>(url)
   }
+
+  /**
+   * Get direct reports for the current user
+   * GET /api/employees/direct-reports
+   *
+   * @returns List of employees where manager_id equals current user's employee_id
+   */
+  async getDirectReports(): Promise<TApiResponse<EmployeeSummaryDto[]>> {
+    return apiClient.get<EmployeeSummaryDto[]>('/employees/direct-reports')
+  }
 }
 
 // Export singleton instance

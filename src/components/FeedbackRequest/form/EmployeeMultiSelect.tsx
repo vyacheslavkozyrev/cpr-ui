@@ -28,6 +28,7 @@ type Employee = EmployeeSummaryDto
 interface EmployeeMultiSelectProps {
   value: string[]
   onChange: (employeeIds: string[]) => void
+  onSelectedEmployeesChange?: (employees: Employee[]) => void
   error?: string
   required?: boolean
   maxSelection?: number
@@ -37,6 +38,7 @@ interface EmployeeMultiSelectProps {
 export const EmployeeMultiSelect: React.FC<EmployeeMultiSelectProps> = ({
   value = [],
   onChange,
+  onSelectedEmployeesChange,
   error,
   required = false,
   maxSelection = 20,
@@ -76,20 +78,25 @@ export const EmployeeMultiSelect: React.FC<EmployeeMultiSelectProps> = ({
       return
     }
 
+    const newEmployees = [...selectedEmployees, employee]
     onChange([...value, employee.id])
-    setSelectedEmployees(prev => [...prev, employee])
+    setSelectedEmployees(newEmployees)
+    onSelectedEmployeesChange?.(newEmployees)
     setSearchQuery('')
     setShowResults(false)
   }
 
   const handleRemoveEmployee = (employeeId: string) => {
+    const newEmployees = selectedEmployees.filter(emp => emp.id !== employeeId)
     onChange(value.filter(id => id !== employeeId))
-    setSelectedEmployees(prev => prev.filter(emp => emp.id !== employeeId))
+    setSelectedEmployees(newEmployees)
+    onSelectedEmployeesChange?.(newEmployees)
   }
 
   const handleClearAll = () => {
     onChange([])
     setSelectedEmployees([])
+    onSelectedEmployeesChange?.([])
   }
 
   const getInitials = (name?: string | null): string => {

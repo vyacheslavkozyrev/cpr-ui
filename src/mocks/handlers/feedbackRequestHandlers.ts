@@ -200,12 +200,7 @@ export const feedbackRequestHandlers = [
       recipientCount: newRequest.recipients.length,
     })
 
-    return HttpResponse.json({
-      data: newRequest,
-      success: true,
-      message: 'Feedback request created successfully',
-      timestamp: new Date().toISOString(),
-    })
+    return HttpResponse.json(newRequest, { status: 201 })
   }),
 
   // GET /api/feedback/request/sent - List sent requests
@@ -440,5 +435,159 @@ export const feedbackRequestHandlers = [
       message: `Reminder sent to ${remindedCount} recipient(s)`,
       timestamp: new Date().toISOString(),
     })
+  }),
+
+  // GET /api/me/feedback/request - Get sent requests for current user
+  http.get('*/api/me/feedback/request', ({ request }) => {
+    const url = new URL(request.url)
+    const page = parseInt(url.searchParams.get('page') || '1', 10)
+    const pageSize = parseInt(url.searchParams.get('page_size') || '20', 10)
+    const status = url.searchParams.get('status') || ''
+    const search = url.searchParams.get('search') || ''
+
+    logger.msw('Listing sent feedback requests for current user', {
+      page,
+      pageSize,
+      status,
+      search,
+    })
+
+    initializeMockData()
+
+    // Filter by status
+    let filtered = [...feedbackRequests]
+    if (status) {
+      filtered = filtered.filter(req => req.status === status)
+    }
+
+    // Filter by search query
+    if (search) {
+      const query = search.toLowerCase()
+      filtered = filtered.filter(
+        req =>
+          req.message?.toLowerCase().includes(query) ||
+          req.requestor?.display_name.toLowerCase().includes(query) ||
+          req.recipients.some(r =>
+            r.employee?.display_name.toLowerCase().includes(query)
+          )
+      )
+    }
+
+    // Pagination
+    const total = filtered.length
+    const startIndex = (page - 1) * pageSize
+    const endIndex = startIndex + pageSize
+    const items = filtered.slice(startIndex, endIndex)
+
+    // Convert to list DTOs with pagination
+    const listItems: FeedbackRequestListDto[] = items.map(req => ({
+      id: req.id,
+      requestor_id: req.requestor_id,
+      message_preview: req.message?.substring(0, 100) ?? null,
+      due_date: req.due_date ?? null,
+      created_at: req.created_at,
+      status: req.status,
+      responded_count: req.responded_count,
+      total_recipients: req.total_recipients,
+      has_overdue: false,
+      requestor: req.requestor ?? null,
+      project: req.project ?? null,
+      goal: req.goal ?? null,
+      recipients_preview: req.recipients.slice(0, 3),
+    }))
+
+    const response: PaginatedFeedbackRequestsDto = {
+      data: listItems,
+      pagination: {
+        page,
+        page_size: pageSize,
+        total_items: total,
+        total_pages: Math.ceil(total / pageSize),
+        has_previous: page > 1,
+        has_next: page < Math.ceil(total / pageSize),
+      },
+      summary: {
+        total_active: feedbackRequests.length,
+        pending_count: feedbackRequests.filter(r => r.status === 'pending')
+          .length,
+        partial_count: feedbackRequests.filter(r => r.status === 'partial')
+          .length,
+        complete_count: feedbackRequests.filter(r => r.status === 'complete')
+          .length,
+        overdue_count: 0,
+      },
+    }
+
+    return HttpResponse.json(response)
+  }),
+
+  // GET /api/me/feedback/request/todo - Get todo requests for current user (as recipient)
+  http.get('*/api/me/feedback/request/todo', ({ request }) => {
+    const url = new URL(request.url)
+    const page = parseInt(url.searchParams.get('page') || '1', 10)
+    const pageSize = parseInt(url.searchParams.get('page_size') || '20', 10)
+    const status = url.searchParams.get('status') || ''
+
+    logger.msw('Listing todo feedback requests for current user', {
+      page,
+      pageSize,
+      status,
+    })
+
+    initializeMockData()
+
+    // For testing purposes, return same data as sent requests
+    // In real implementation, this would filter by current user as recipient
+    let filtered = [...feedbackRequests]
+    if (status) {
+      filtered = filtered.filter(req => req.status === status)
+    }
+
+    // Pagination
+    const total = filtered.length
+    const startIndex = (page - 1) * pageSize
+    const endIndex = startIndex + pageSize
+    const items = filtered.slice(startIndex, endIndex)
+
+    // Convert to list DTOs
+    const listItems: FeedbackRequestListDto[] = items.map(req => ({
+      id: req.id,
+      requestor_id: req.requestor_id,
+      message_preview: req.message?.substring(0, 100) ?? null,
+      due_date: req.due_date ?? null,
+      created_at: req.created_at,
+      status: req.status,
+      responded_count: req.responded_count,
+      total_recipients: req.total_recipients,
+      has_overdue: false,
+      requestor: req.requestor ?? null,
+      project: req.project ?? null,
+      goal: req.goal ?? null,
+      recipients_preview: req.recipients.slice(0, 3),
+    }))
+
+    const response: PaginatedFeedbackRequestsDto = {
+      data: listItems,
+      pagination: {
+        page,
+        page_size: pageSize,
+        total_items: total,
+        total_pages: Math.ceil(total / pageSize),
+        has_previous: page > 1,
+        has_next: page < Math.ceil(total / pageSize),
+      },
+      summary: {
+        total_active: feedbackRequests.length,
+        pending_count: feedbackRequests.filter(r => r.status === 'pending')
+          .length,
+        partial_count: feedbackRequests.filter(r => r.status === 'partial')
+          .length,
+        complete_count: feedbackRequests.filter(r => r.status === 'complete')
+          .length,
+        overdue_count: 0,
+      },
+    }
+
+    return HttpResponse.json(response)
   }),
 ]

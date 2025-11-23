@@ -5,6 +5,9 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { SentRequestsList } from '../../components/FeedbackRequest/lists/SentRequestsList'
 import { TodoRequestsList } from '../../components/FeedbackRequest/lists/TodoRequestsList'
+import { UserRole } from '../../models'
+import { useAuthStore } from '../../stores/authStore'
+import { ManagerTeamRequests } from './ManagerTeamRequests'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -44,6 +47,17 @@ export const FeedbackPage: React.FC = () => {
   const navigate = useNavigate()
   const [tabValue, setTabValue] = useState(0)
   const [requestsSubTab, setRequestsSubTab] = useState(0)
+  const { user } = useAuthStore()
+
+  // Check if user has manager-level roles (People Manager, Solution Owner, Director, Administrator)
+  // These roles typically have direct reports and can view team requests
+  const isManager = user?.roles?.some(
+    role =>
+      role === UserRole.PEOPLE_MANAGER ||
+      role === UserRole.SOLUTION_OWNER ||
+      role === UserRole.DIRECTOR ||
+      role === UserRole.ADMINISTRATOR
+  )
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue)
@@ -78,6 +92,12 @@ export const FeedbackPage: React.FC = () => {
         >
           <Tab label={t('pages.feedback.tabs.feedback')} {...a11yProps(0)} />
           <Tab label={t('pages.feedback.tabs.requests')} {...a11yProps(1)} />
+          {isManager && (
+            <Tab
+              label={t('pages.feedback.tabs.teamRequests')}
+              {...a11yProps(2)}
+            />
+          )}
         </Tabs>
       </Box>
 
@@ -127,6 +147,13 @@ export const FeedbackPage: React.FC = () => {
         {/* Sent Requests List - US-002 */}
         {requestsSubTab === 1 && <SentRequestsList />}
       </TabPanel>
+
+      {/* Team Requests Tab - US-002B (Managers only) */}
+      {isManager && (
+        <TabPanel value={tabValue} index={2}>
+          <ManagerTeamRequests />
+        </TabPanel>
+      )}
     </Box>
   )
 }

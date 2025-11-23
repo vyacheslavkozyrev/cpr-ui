@@ -81,6 +81,68 @@ export const useTodoRequests = (
 }
 
 /**
+ * Hook to get paginated list of team sent feedback requests (manager view)
+ * GET /api/manager/feedback/request/sent
+ */
+export const useManagerTeamSentRequests = (
+  params?: FeedbackRequestListParams,
+  enabled = true
+) => {
+  return useQuery({
+    queryKey: ['feedbackRequests', 'manager', 'sent', params],
+    queryFn: async () => {
+      const response =
+        await feedbackRequestApiService.getTeamSentRequests(params)
+      return response.success ? response.data : null
+    },
+    enabled,
+    staleTime: 0, // Always refetch when params change
+    gcTime: 5 * 60 * 1000,
+    retry: (failureCount, error) => {
+      if (error && typeof error === 'object' && 'status' in error) {
+        const status = (error as { status?: number }).status
+        if (status && status >= 400 && status < 500) {
+          return false
+        }
+      }
+      return failureCount < 2
+    },
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 10000),
+  })
+}
+
+/**
+ * Hook to get paginated list of team received feedback requests (manager view)
+ * GET /api/manager/feedback/request/received
+ */
+export const useManagerTeamReceivedRequests = (
+  params?: FeedbackRequestListParams,
+  enabled = true
+) => {
+  return useQuery({
+    queryKey: ['feedbackRequests', 'manager', 'received', params],
+    queryFn: async () => {
+      const response =
+        await feedbackRequestApiService.getTeamReceivedRequests(params)
+      return response.success ? response.data : null
+    },
+    enabled,
+    staleTime: 0, // Always refetch when params change
+    gcTime: 5 * 60 * 1000,
+    retry: (failureCount, error) => {
+      if (error && typeof error === 'object' && 'status' in error) {
+        const status = (error as { status?: number }).status
+        if (status && status >= 400 && status < 500) {
+          return false
+        }
+      }
+      return failureCount < 2
+    },
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 10000),
+  })
+}
+
+/**
  * Hook to get count of pending todo requests (for notification badge)
  * Lightweight query that only fetches page 1 to get the total count
  */

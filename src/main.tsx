@@ -1,4 +1,5 @@
-﻿import { CssBaseline, ThemeProvider } from '@mui/material'
+﻿/* eslint-disable react-refresh/only-export-components */
+import { CssBaseline, ThemeProvider } from '@mui/material'
 import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'

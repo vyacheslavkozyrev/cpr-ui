@@ -307,7 +307,20 @@
       "comingSoon": "Coming soon - This section is under development",
       "tabs": {
         "feedback": "Feedback",
-        "requests": "Requests"
+        "requests": "Requests",
+        "teamRequests": "Team Requests"
+      },
+      "teamRequests": {
+        "title": "Team Feedback Requests",
+        "description": "View feedback requests sent by and received by your direct reports",
+        "tabs": {
+          "sentByTeam": "Sent by Team",
+          "receivedByTeam": "Received by Team"
+        },
+        "filters": {
+          "teamMember": "Team Member",
+          "allTeamMembers": "All Team Members"
+        }
       },
       "requests": {
         "title": "My Feedback Requests",
@@ -404,6 +417,10 @@
               "keepEditing": "Keep Editing",
               "discard": "Discard"
             }
+          },
+          "offline": {
+            "banner": "You're offline. Requests will be queued and sent automatically when you're back online.",
+            "syncing": "Syncing {{count}} queued requests..."
           }
         },
         "list": {
@@ -506,6 +523,7 @@
         "toasts": {
           "createSuccess": "Feedback request sent to {{count}} employees",
           "createError": "Failed to send feedback request. Please try again.",
+          "queuedOffline": "You're offline. Request to {{count}} employees will be sent when you're back online.",
           "duplicatesRemoved": "{{count}} duplicate recipients removed. Please review and submit again.",
           "success": {
             "sent": {

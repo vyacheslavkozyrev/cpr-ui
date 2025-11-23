@@ -32,3 +32,24 @@ export const useEmployeeSearch = (
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 }
+
+/**
+ * React Query hook for getting direct reports of the current user
+ *
+ * @param enabled - Whether the query should run (default: true)
+ * @returns React Query result with direct reports list
+ */
+export const useDirectReports = (enabled: boolean = true) => {
+  return useQuery<EmployeeSummaryDto[], Error>({
+    queryKey: ['employees', 'direct-reports'],
+    queryFn: async () => {
+      const response = await employeeService.getDirectReports()
+      if (!response.success) {
+        throw new Error(response.message || 'Failed to fetch direct reports')
+      }
+      return response.data
+    },
+    enabled,
+    staleTime: 10 * 60 * 1000, // 10 minutes (changes less frequently)
+  })
+}

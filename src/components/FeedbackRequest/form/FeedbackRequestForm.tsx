@@ -23,13 +23,17 @@ import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import type { TGoalDto } from '../../../dtos/GoalDto'
+import { useOfflineQueue } from '../../../hooks/useOfflineQueue'
 import {
   type ProjectSummaryDto,
   useCreateFeedbackRequest,
   useGoals,
   useProjects,
 } from '../../../services'
+import type { EmployeeSummaryDto } from '../../../services/employeeQueryService'
+import { offlineQueueService } from '../../../services/offlineQueueService'
 import { useFeedbackRequestDraftStore } from '../../../stores'
+import { useAuthStore } from '../../../stores/authStore'
 import { useToastStore } from '../../../stores/toastStore'
 import type { CreateFeedbackRequestDto } from '../../../types/feedbackRequest'
 import { logger } from '../../../utils/logger'
@@ -73,9 +77,16 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
   const navigate = useNavigate()
   const addToast = useToastStore(state => state.addToast)
 
+  // Get current user ID for draft management
+  const { user } = useAuthStore()
+  const currentEmployeeId = user?.id || 'anonymous'
+
   // Draft store
   const { saveDraft, loadDraft, clearDraft, hasDraft, getDraftAge, markDirty } =
     useFeedbackRequestDraftStore()
+
+  // Offline queue
+  const { isOnline, pendingCount } = useOfflineQueue()
 
   // Create mutation
   const createMutation = useCreateFeedbackRequest()
@@ -122,6 +133,9 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
   const [showDuplicateModal, setShowDuplicateModal] = useState(false)
   const [duplicateEmployeeIds, setDuplicateEmployeeIds] = useState<string[]>([])
+  const [selectedEmployees, setSelectedEmployees] = useState<
+    EmployeeSummaryDto[]
+  >([])
 
   // Character count for message
   const messageLength = message.length
@@ -129,14 +143,11 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
 
   // Check for existing draft on mount
   useEffect(() => {
-    // TODO: Get current employee ID from auth context
-    const currentEmployeeId = 'current-employee-id' // Placeholder
-
-    if (hasDraft(currentEmployeeId)) {
+    if (currentEmployeeId && hasDraft(currentEmployeeId)) {
       setShowDraftBanner(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [currentEmployeeId])
 
   // Auto-save draft every 30 seconds when form is dirty
   useEffect(() => {
@@ -158,8 +169,10 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
    * Auto-save draft to localStorage
    */
   const handleAutoSave = () => {
-    // TODO: Get current employee ID from auth context
-    const currentEmployeeId = 'current-employee-id' // Placeholder
+    if (!currentEmployeeId) {
+      logger.warn('Cannot auto-save: no employee ID available')
+      return
+    }
 
     // Get current form values
     const formValues = getValues()
@@ -177,7 +190,9 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
     markDirty()
 
     logger.debug('Form auto-saved', {
+      employeeId: currentEmployeeId,
       employeeCount: formValues.employeeIds.length,
+      timestamp: new Date().toISOString(),
     })
   }
 
@@ -185,8 +200,10 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
    * Load draft into form
    */
   const handleLoadDraft = () => {
-    // TODO: Get current employee ID from auth context
-    const currentEmployeeId = 'current-employee-id' // Placeholder
+    if (!currentEmployeeId) {
+      logger.warn('Cannot load draft: no employee ID available')
+      return
+    }
 
     const draftData = loadDraft(currentEmployeeId)
 
@@ -226,6 +243,25 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
         goal_id: data.goalId || null,
         message: data.message || null,
         due_date: data.dueDate ? data.dueDate.toISOString() : null,
+      }
+
+      // Check if offline - queue the request
+      if (!isOnline) {
+        await offlineQueueService.enqueue(requestData, currentEmployeeId)
+        clearDraft()
+        addToast(
+          t('pages.feedback.request.toasts.queuedOffline', {
+            count: data.employeeIds.length,
+          }),
+          'info'
+        )
+
+        if (onSuccess) {
+          onSuccess()
+        } else {
+          navigate('/feedback/requests/sent')
+        }
+        return
       }
 
       // Submit via mutation
@@ -408,6 +444,21 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
           </Alert>
         )}
 
+        {/* Offline Queue Indicator */}
+        {!isOnline && (
+          <Alert severity='warning' sx={{ mb: 3 }}>
+            {t('pages.feedback.request.form.offline.banner')}
+          </Alert>
+        )}
+
+        {pendingCount > 0 && isOnline && (
+          <Alert severity='info' sx={{ mb: 3 }}>
+            {t('pages.feedback.request.form.offline.syncing', {
+              count: pendingCount,
+            })}
+          </Alert>
+        )}
+
         {/* Main Form Card */}
         <Card>
           <CardContent>
@@ -451,6 +502,7 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
                       <EmployeeMultiSelect
                         value={field.value || []}
                         onChange={field.onChange}
+                        onSelectedEmployeesChange={setSelectedEmployees}
                         {...(errors.employeeIds?.message && {
                           error: errors.employeeIds.message,
                         })}
@@ -727,11 +779,17 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
         {/* Duplicate Detection Modal */}
         <DuplicateDetectionModal
           open={showDuplicateModal}
-          duplicateEmployees={duplicateEmployeeIds.map(id => ({
-            id,
-            display_name: `Employee ${id.substring(0, 8)}`, // TODO: Get actual employee names
-          }))}
-          isFullDuplicate={duplicateEmployeeIds.length > 0}
+          duplicateEmployees={duplicateEmployeeIds.map(id => {
+            const employee = selectedEmployees.find(emp => emp.id === id)
+            return {
+              id,
+              display_name:
+                employee?.display_name || `Employee ${id.substring(0, 8)}`,
+            }
+          })}
+          isFullDuplicate={
+            duplicateEmployeeIds.length === getValues('employeeIds')?.length
+          }
           context='general'
           onRemoveDuplicates={handleRemoveDuplicates}
           onViewExisting={handleViewExisting}
