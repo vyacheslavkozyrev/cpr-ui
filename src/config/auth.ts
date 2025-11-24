@@ -94,45 +94,46 @@ export const authConfig = {
   },
 
   // Mock user profiles for different roles
+  // Using actual User IDs from database for stub authentication
   mockUsers: {
     employee: {
-      id: 'emp-001',
-      name: 'John Employee',
-      email: 'john.employee@cpr.com',
+      id: 'c7746e91-a5e8-4f8b-9f22-f48374ffa2a4', // Eve Adams (Director of Security Engineering) - Employee ID: ...0007
+      name: 'Eve Adams',
+      email: 'eve.adams@cpr.com',
       roles: ['CPR.Employee'],
       tenantId: 'mock-tenant-001',
       department: 'Engineering',
-      position: 'Software Developer',
+      position: 'Director of Security Engineering',
     },
     'people-manager': {
-      id: 'pm-001',
-      name: 'Sarah Manager',
-      email: 'sarah.manager@cpr.com',
+      id: '977f4f1f-b3ce-4244-98fc-2c0d0248de88', // Henry Wilson (Director of Technical Support) - Employee ID: ...000a
+      name: 'Henry Wilson',
+      email: 'henry.wilson@cpr.com',
       roles: ['CPR.Employee', 'CPR.PeopleManager'],
       tenantId: 'mock-tenant-001',
-      department: 'Engineering',
-      position: 'Engineering Manager',
+      department: 'Support',
+      position: 'Director of Technical Support',
     },
     'solution-owner': {
-      id: 'so-001',
-      name: 'Mike Owner',
-      email: 'mike.owner@cpr.com',
+      id: 'c7746e91-a5e8-4f8b-9f22-f48374ffa2a4', // Using Eve Adams for now (can be updated with actual SO user)
+      name: 'Eve Adams',
+      email: 'eve.adams@cpr.com',
       roles: ['CPR.Employee', 'CPR.SolutionOwner'],
       tenantId: 'mock-tenant-001',
       department: 'Product',
-      position: 'Product Manager',
+      position: 'Director of Security Engineering',
     },
     director: {
-      id: 'dir-001',
-      name: 'Lisa Director',
-      email: 'lisa.director@cpr.com',
+      id: 'c7746e91-a5e8-4f8b-9f22-f48374ffa2a4', // Using Eve Adams (who is a Director)
+      name: 'Eve Adams',
+      email: 'eve.adams@cpr.com',
       roles: ['CPR.Employee', 'CPR.Director'],
       tenantId: 'mock-tenant-001',
       department: 'Engineering',
-      position: 'Engineering Director',
+      position: 'Director of Security Engineering',
     },
     administrator: {
-      id: 'admin-001',
+      id: '679add6e-6c29-4e00-b6a5-b69c8e0f3445', // Administrator User
       name: 'Admin User',
       email: 'admin@cpr.com',
       roles: ['CPR.Employee', 'CPR.Administrator'],

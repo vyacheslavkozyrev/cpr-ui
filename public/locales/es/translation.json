@@ -442,6 +442,16 @@
       "partial": "Parcial",
       "complete": "Completa"
     },
+    "duplicate": {
+      "title": "Solicitudes de Retroalimentación Duplicadas",
+      "fullMessage": "Todos los destinatarios seleccionados ya tienen solicitudes activas para este {{context}}.",
+      "partialMessage": "Algunos destinatarios ya tienen solicitudes de retroalimentación activas. Puede:",
+      "actions": {
+        "removeDuplicates": "Eliminar duplicados y continuar",
+        "viewExisting": "Ver solicitudes existentes",
+        "cancel": "Cancelar"
+      }
+    },
     "accessibility": {
       "selectEmployees": "Seleccionar empleados para solicitar retroalimentación",
       "removeEmployee": "Eliminar {{name}} de los destinatarios",

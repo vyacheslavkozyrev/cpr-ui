@@ -520,6 +520,16 @@
           "noProject": "No project associated",
           "noGoal": "No goal associated"
         },
+        "duplicate": {
+          "title": "Duplicate Feedback Requests",
+          "fullMessage": "All selected recipients already have active requests for this {{context}}.",
+          "partialMessage": "Some recipients already have active feedback requests. You can:",
+          "actions": {
+            "removeDuplicates": "Remove duplicates and continue",
+            "viewExisting": "View existing requests",
+            "cancel": "Cancel"
+          }
+        },
         "toasts": {
           "createSuccess": "Feedback request sent to {{count}} employees",
           "createError": "Failed to send feedback request. Please try again.",
@@ -674,6 +684,15 @@
         "tasks": "Tasks",
         "deadline": "Deadline",
         "actions": "Actions"
+      },
+      "duplicate": {
+        "title": "Duplicate Feedback Requests",
+        "partialMessage": "Some recipients already have active feedback requests. You can:",
+        "actions": {
+          "removeDuplicates": "Remove duplicates and continue",
+          "viewExisting": "View existing requests",
+          "cancel": "Cancel"
+        }
       },
       "goalTitle": "Goal Title",
       "titleHelp": "Clear, specific goal (1-250 characters)",

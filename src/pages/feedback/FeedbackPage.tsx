@@ -1,8 +1,8 @@
 ﻿import { Add as AddIcon } from '@mui/icons-material'
 import { Box, Button, Tab, Tabs, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { SentRequestsList } from '../../components/FeedbackRequest/lists/SentRequestsList'
 import { TodoRequestsList } from '../../components/FeedbackRequest/lists/TodoRequestsList'
 import { UserRole } from '../../models'
@@ -45,6 +45,7 @@ function a11yProps(index: number) {
 export const FeedbackPage: React.FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const location = useLocation()
   const [tabValue, setTabValue] = useState(0)
   const [requestsSubTab, setRequestsSubTab] = useState(0)
   const { user } = useAuthStore()
@@ -58,6 +59,19 @@ export const FeedbackPage: React.FC = () => {
       role === UserRole.DIRECTOR ||
       role === UserRole.ADMINISTRATOR
   )
+
+  // Handle navigation state to set active tab
+  useEffect(() => {
+    if (location.state) {
+      const state = location.state as { tab?: number; subTab?: number }
+      if (typeof state.tab === 'number') {
+        setTabValue(state.tab)
+      }
+      if (typeof state.subTab === 'number') {
+        setRequestsSubTab(state.subTab)
+      }
+    }
+  }, [location.state])
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue)

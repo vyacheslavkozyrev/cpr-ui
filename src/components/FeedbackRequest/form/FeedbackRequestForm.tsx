@@ -259,7 +259,7 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
         if (onSuccess) {
           onSuccess()
         } else {
-          navigate('/feedback/requests/sent')
+          navigate('/dashboard')
         }
         return
       }
@@ -278,42 +278,37 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
         'success'
       )
 
-      // Navigate to sent list or call onSuccess callback
+      // Navigate back to dashboard or call onSuccess callback
       if (onSuccess) {
         onSuccess()
       } else {
-        navigate('/feedback/requests/sent')
+        navigate('/dashboard')
       }
     } catch (error: unknown) {
       logger.error('Failed to create feedback request', { error })
 
-      // Type guard for error with status
-      const isErrorWithStatus = (
+      // Type guard for error with message
+      const isErrorWithMessage = (
         err: unknown
-      ): err is {
-        status?: number
-        response?: { status?: number; data?: { message?: string } }
-        message?: string
-      } => {
-        return typeof err === 'object' && err !== null
+      ): err is { message?: string } => {
+        return typeof err === 'object' && err !== null && 'message' in err
       }
 
-      // Check for 409 Conflict (duplicate recipients)
-      if (
-        isErrorWithStatus(error) &&
-        (error?.status === 409 || error?.response?.status === 409)
-      ) {
-        // Extract duplicate employee IDs from error message if available
-        // Backend returns: "Active feedback requests already exist for these recipients: guid1, guid2"
-        const errorMessage =
-          error?.message || error?.response?.data?.message || ''
-        const duplicateIds = extractDuplicateIds(errorMessage, data.employeeIds)
-
-        setDuplicateEmployeeIds(duplicateIds)
-        setShowDuplicateModal(true)
-      } else {
-        addToast(t('pages.feedback.request.toasts.createError'), 'error')
+      // Check for duplicate recipients error
+      if (isErrorWithMessage(error) && error.message) {
+        if (error.message.includes('Active feedback requests already exist')) {
+          const duplicateIds = extractDuplicateIds(
+            error.message,
+            data.employeeIds
+          )
+          setDuplicateEmployeeIds(duplicateIds)
+          setShowDuplicateModal(true)
+          return
+        }
       }
+
+      // Show generic error for other failures
+      addToast(t('pages.feedback.request.toasts.createError'), 'error')
     }
   }
 
@@ -368,7 +363,8 @@ export const FeedbackRequestForm: React.FC<FeedbackRequestFormProps> = ({
    */
   const handleViewExisting = () => {
     setShowDuplicateModal(false)
-    navigate('/feedback/requests/sent')
+    // Navigate to feedback page with state to show Requests tab (tab 1) and Sent sub-tab (sub-tab 1)
+    navigate('/feedback', { state: { tab: 1, subTab: 1 } })
   }
 
   /**

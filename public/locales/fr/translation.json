@@ -442,6 +442,16 @@
       "partial": "Partiel",
       "complete": "Terminée"
     },
+    "duplicate": {
+      "title": "Demandes de Feedback Dupliquées",
+      "fullMessage": "Tous les destinataires sélectionnés ont déjà des demandes actives pour ce {{context}}.",
+      "partialMessage": "Certains destinataires ont déjà des demandes de feedback actives. Vous pouvez :",
+      "actions": {
+        "removeDuplicates": "Supprimer les doublons et continuer",
+        "viewExisting": "Voir les demandes existantes",
+        "cancel": "Annuler"
+      }
+    },
     "accessibility": {
       "selectEmployees": "Sélectionner les employés pour demander des commentaires",
       "removeEmployee": "Supprimer {{name}} des destinataires",
