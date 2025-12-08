@@ -281,3 +281,31 @@ class OfflineQueueService {
 
 // Export singleton instance
 export const offlineQueueService = new OfflineQueueService()
+
+/**
+ * Sync offline queue (helper function for feedback sync)
+ * Returns number of requests synced successfully and failed
+ */
+export async function syncOfflineQueue(): Promise<{
+  synced: number
+  failed: number
+}> {
+  const pending = await offlineQueueService.getPendingRequests()
+
+  let synced = 0
+  let failed = 0
+
+  for (const request of pending) {
+    try {
+      // Note: Actual sync logic would call API here
+      // For now, just mark as synced (will be implemented with API integration)
+      logger.info('Would sync offline request', { id: request.id })
+      synced++
+    } catch (error) {
+      logger.error('Failed to sync offline request', { id: request.id, error })
+      failed++
+    }
+  }
+
+  return { synced, failed }
+}

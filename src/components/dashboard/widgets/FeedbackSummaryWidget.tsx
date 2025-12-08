@@ -25,6 +25,7 @@ import React, { useMemo, useState } from 'react'
 import { Line } from 'react-chartjs-2'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { useDateFormat } from '../../../hooks/useDateFormat'
 import type { DashboardPeriod } from '../../../models/Dashboard'
 import { useFeedbackSummary } from '../../../services/api/dashboardService'
 import { DashboardWidget } from '../layout'
@@ -126,7 +127,8 @@ const getStyles = () => ({
 export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
   period = 'month',
 }) => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const { formatDate } = useDateFormat()
   const navigate = useNavigate()
   const {
     data: feedbackSummary,
@@ -144,11 +146,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
   const chartData = {
     labels:
       feedbackSummary?.ratingTrend.map(trend => {
-        const date = new Date(trend.period)
-        return date.toLocaleDateString(i18n.language, {
-          month: 'short',
-          day: 'numeric',
-        })
+        return formatDate(trend.period, 'DAY_MONTH')
       }) || [],
     datasets: [
       {

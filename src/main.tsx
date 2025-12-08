@@ -10,6 +10,7 @@ import { useInitializeApiClient } from './hooks/useInitializeApiClient'
 import './index.css'
 import { routes } from './routes'
 import { initializeOfflineQueue } from './services/feedbackRequestService'
+import { useFeedbackSync } from './services/feedbackSyncHook'
 import { useAuthStore } from './stores/authStore'
 import { useThemeStore } from './stores/themeStore'
 import { darkTheme, lightTheme } from './theme/index'
@@ -58,6 +59,16 @@ function ApiClientInitializer({ children }: { children: React.ReactNode }) {
   // Initialize API client with auth token getter
   useInitializeApiClient(getAccessToken)
 
+  // Initialize feedback sync for offline/online handling (Phase 3 US-002, T056-T063)
+  // Must be inside QueryProvider context
+  useFeedbackSync()
+
+  useEffect(() => {
+    // Initialize offline queue (T039)
+    initializeOfflineQueue()
+    logger.info('Offline queue initialized')
+  }, [])
+
   return <>{children}</>
 }
 
@@ -79,10 +90,6 @@ function ThemedApp() {
     initAuth().catch(error =>
       logger.error('Failed to initialize auth', { error })
     )
-
-    // Initialize offline queue (T039)
-    initializeOfflineQueue()
-    logger.info('Offline queue initialized')
   }, [])
 
   return (

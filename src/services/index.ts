@@ -60,3 +60,36 @@ export {
 
 // Project Query Service (React Query hooks)
 export { useProjects, type ProjectSummaryDto } from './projectQueryService'
+
+// Feedback Service (Feature 0005)
+export {
+  FeedbackApiService,
+  feedbackApiService,
+  type FeedbackAnalyticsParams,
+  type MyFeedbackQueryParams,
+} from './feedbackService'
+
+// Feedback Query Service (React Query hooks for Feature 0005)
+export {
+  useCompleteFeedbackRequest,
+  useFeedbackAnalytics,
+  useFeedbackById,
+  useMyFeedback,
+  useSubmitFeedback,
+} from './feedbackQueryService'
+
+// Feedback Cache Manager (Feature 0005 - Phase 3 US-002)
+export {
+  cacheFeedbackItem,
+  cacheFeedbackList,
+  cleanupExpiredCache,
+  clearAllCache,
+  getCacheMetadata,
+  getCachedFeedbackItem,
+  getCachedFeedbackList,
+  initCacheManager,
+  isCacheStale,
+} from './feedbackCacheManager'
+
+// Feedback Sync Hook (Feature 0005 - Phase 3 US-002)
+export { useFeedbackSync, useManualFeedbackSync } from './feedbackSyncHook'

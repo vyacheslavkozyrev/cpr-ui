@@ -463,6 +463,74 @@
       "cancelRequest": "Cancelar solicitud de retroalimentación",
       "expandCard": "Expandir detalles de la solicitud",
       "collapseCard": "Contraer detalles de la solicitud"
+    },
+    "list": {
+      "title": "Mi Retroalimentación",
+      "empty_state": {
+        "title": "Sin Retroalimentación Aún",
+        "description": "No has recibido retroalimentación. Pide opiniones a tus colegas sobre tus objetivos.",
+        "action": "Solicitar Retroalimentación"
+      },
+      "tabs": {
+        "list": "Lista de Retroalimentación",
+        "analytics": "Analíticas"
+      },
+      "filters": {
+        "search": "Buscar retroalimentación...",
+        "date_range": "Rango de Fechas",
+        "rating": "Calificación",
+        "all_ratings": "Todas las Calificaciones",
+        "goal": "Objetivo",
+        "all_goals": "Todos los Objetivos",
+        "project": "Proyecto",
+        "all_projects": "Todos los Proyectos",
+        "from_employee": "De Empleado",
+        "all_employees": "Todos los Empleados",
+        "clear_all": "Limpiar Todos los Filtros",
+        "active_filters": "{{count}} filtro activo",
+        "active_filters_other": "{{count}} filtros activos"
+      },
+      "stats": {
+        "total": "Retroalimentación Total",
+        "average_rating": "Calificación Promedio",
+        "recent": "Reciente (7 días)"
+      },
+      "sort": {
+        "label": "Ordenar Por",
+        "created_at": "Fecha de Recepción",
+        "rating": "Calificación",
+        "from_employee": "Proveedor de Retroalimentación",
+        "goal": "Objetivo",
+        "project": "Proyecto",
+        "asc": "Ascendente",
+        "desc": "Descendente",
+        "date_newest": "Fecha (Más Reciente Primero)",
+        "date_oldest": "Fecha (Más Antigua Primero)",
+        "rating_highest": "Calificación (Más Alta Primero)",
+        "rating_lowest": "Calificación (Más Baja Primero)",
+        "provider_name": "Nombre del Proveedor (A-Z)",
+        "goal_title": "Título del Objetivo (A-Z)"
+      },
+      "pagination": {
+        "label": "Paginación de retroalimentación"
+      },
+      "summary": "Mostrando {{showing}} de {{total}} elementos de retroalimentación",
+      "no_results": {
+        "title": "No se Encontró Retroalimentación",
+        "description": "Ninguna retroalimentación coincide con tus filtros actuales. Intenta ajustar tus criterios de búsqueda.",
+        "action": "Limpiar Filtros"
+      }
+    },
+    "detail": {
+      "title": "Detalles de Retroalimentación",
+      "from": "De:",
+      "goal": "Objetivo:",
+      "project": "Proyecto:",
+      "rating": "Calificación:",
+      "received": "Recibido:",
+      "content": "Retroalimentación:",
+      "no_project": "Sin proyecto asociado",
+      "back": "Volver a la Lista"
     }
   }
 }

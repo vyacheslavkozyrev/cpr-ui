@@ -3,6 +3,7 @@ import { Box, Button, Tab, Tabs, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { MyFeedbackList } from '../../components/Feedback/MyFeedbackList'
 import { SentRequestsList } from '../../components/FeedbackRequest/lists/SentRequestsList'
 import { TodoRequestsList } from '../../components/FeedbackRequest/lists/TodoRequestsList'
 import { UserRole } from '../../models'
@@ -115,9 +116,11 @@ export const FeedbackPage: React.FC = () => {
         </Tabs>
       </Box>
 
-      {/* Feedback Tab */}
+      {/* Feedback Tab - US-002: View Received Feedback */}
       <TabPanel value={tabValue} index={0}>
-        <Typography>{t('pages.feedback.comingSoon')}</Typography>
+        <MyFeedbackList
+          onFeedbackClick={feedbackId => navigate(`/feedback/${feedbackId}`)}
+        />
       </TabPanel>
 
       {/* Requests Tab */}

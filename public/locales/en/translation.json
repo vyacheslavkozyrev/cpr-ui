@@ -15,6 +15,7 @@
     "yes": "Yes",
     "no": "No",
     "ok": "OK",
+    "clear_search": "Clear search",
     "error": {
       "general": "Error",
       "loadFailed": "Failed to load data"
@@ -22,7 +23,8 @@
     "success": "Success",
     "warning": "Warning",
     "info": "Information",
-    "offline": "You are currently offline. Some features may be limited."
+    "offline": "You are currently offline. Some features may be limited.",
+    "notProvided": "Not provided"
   },
   "navigation": {
     "dashboard": "Dashboard",
@@ -309,6 +311,83 @@
         "feedback": "Feedback",
         "requests": "Requests",
         "teamRequests": "Team Requests"
+      },
+      "list": {
+        "stats": {
+          "total": "Total Feedback",
+          "average_rating": "Average Rating",
+          "recent": "Recent (7 days)"
+        },
+        "filters": {
+          "label": "Filters",
+          "search": "Search feedback content...",
+          "date_from": "From Date",
+          "date_to": "To Date",
+          "rating": "Rating",
+          "goal": "Goal",
+          "project": "Project",
+          "all_ratings": "All Ratings",
+          "all_goals": "All Goals",
+          "all_projects": "All Projects",
+          "clear_all": "Clear All Filters",
+          "active_filters": "Active filters"
+        },
+        "sort": {
+          "label": "Sort By",
+          "order": "Order",
+          "asc": "Ascending",
+          "desc": "Descending",
+          "created_at": "Date",
+          "rating": "Rating",
+          "from_employee": "Provider Name",
+          "goal": "Goal",
+          "project": "Project",
+          "date_newest": "Date (Newest First)",
+          "date_oldest": "Date (Oldest First)",
+          "rating_highest": "Rating (Highest First)",
+          "rating_lowest": "Rating (Lowest First)",
+          "provider_name": "Provider Name (A-Z)",
+          "goal_title": "Goal Title (A-Z)"
+        },
+        "pagination": {
+          "label": "Feedback pagination"
+        },
+        "showing_results": "Showing {{count}} of {{total}} feedback items",
+        "summary": "Showing {{showing}} of {{total}}",
+        "error": "Failed to load feedback. Please try again.",
+        "empty_state": {
+          "title": "No feedback yet",
+          "description": "Feedback helps you understand your strengths and identify areas for improvement. Regular feedback accelerates professional development and prepares you for performance reviews.",
+          "action": "Request Feedback"
+        },
+        "no_results": {
+          "title": "No feedback matches your filters",
+          "description": "Try adjusting your filters to see more results.",
+          "action": "Clear All Filters"
+        }
+      },
+      "detail": {
+        "title": "Feedback Details",
+        "back": "Back to Feedback List",
+        "from": "From",
+        "rating": "Rating",
+        "content": "Feedback",
+        "goal": "Related Goal",
+        "project": "Related Project",
+        "received": "Received",
+        "close": "Close",
+        "error": "Failed to load feedback details. Please try again."
+      },
+      "submission": {
+        "form": {
+          "rating": {
+            "label_1": "Needs Improvement",
+            "label_2": "Below Expectations",
+            "label_3": "Meets Expectations",
+            "label_4": "Exceeds Expectations",
+            "label_5": "Outstanding"
+          }
+        }
       },
       "teamRequests": {
         "title": "Team Feedback Requests",
@@ -609,6 +688,206 @@
           "cancelRequest": "Cancel feedback request",
           "expandCard": "Expand request details",
           "collapseCard": "Collapse request details"
+        }
+      },
+      "submission": {
+        "title": "Submit Feedback",
+        "form": {
+          "recipient": "To",
+          "goal": {
+            "label": "Goal",
+            "placeholder": "Select a goal...",
+            "required": "Please select a goal",
+            "deleted": "Original goal no longer available. Please select an active goal.",
+            "no_goals": "No active goals available"
+          },
+          "project": {
+            "label": "Project (Optional)",
+            "placeholder": "Select a project...",
+            "no_projects": "No projects available"
+          },
+          "content": {
+            "label": "Feedback",
+            "placeholder": "Share specific examples, observations, and constructive suggestions...",
+            "required": "Feedback content is required",
+            "minLength": "Feedback must be at least 10 characters",
+            "maxLength": "Feedback must be 2000 characters or less",
+            "currentLength": "{{current}} / 2000 characters"
+          },
+          "rating": {
+            "label": "Rating",
+            "label_1": "Needs Improvement",
+            "label_2": "Below Expectations",
+            "label_3": "Meets Expectations",
+            "label_4": "Exceeds Expectations",
+            "label_5": "Outstanding",
+            "select_rating": "Select a rating",
+            "required": "Please provide a rating",
+            "tooltip": "Rate this feedback on a 1-5 scale",
+            "aria_label": "Rating input"
+          },
+          "search_employee": "Search employee...",
+          "no_employees_found": "No employees found",
+          "no_details": "No details",
+          "no_options": "No options available",
+          "buttons": {
+            "submit": "Submit Feedback",
+            "submitting": "Submitting...",
+            "cancel": "Cancel",
+            "discard_draft": "Discard Draft"
+          },
+          "draft": {
+            "saved": "Draft saved",
+            "saved_at": "Draft saved at {{time}}",
+            "loaded": "Draft loaded from {{time}}",
+            "confirm_discard_title": "Discard Draft?",
+            "confirm_discard_message": "This will permanently delete your draft. This action cannot be undone.",
+            "confirm_discard": "Discard",
+            "auto_save": "Auto-saving..."
+          },
+          "offline": {
+            "banner": "You're offline. Feedback will be submitted when you're back online.",
+            "will_submit": "Will submit when online",
+            "queued": "Feedback queued for submission"
+          },
+          "duplicate": {
+            "title": "Duplicate Feedback Detected",
+            "message": "You already provided feedback on this goal {{hours}} hours ago. Please wait {{remaining}} hours before submitting again.",
+            "button": "OK"
+          },
+          "confirmation": {
+            "unsaved_title": "Unsaved Changes",
+            "unsaved_message": "You have unsaved changes. Are you sure you want to leave?",
+            "discard_changes": "Discard Changes",
+            "keep_editing": "Keep Editing"
+          }
+        },
+        "toasts": {
+          "success": "Feedback submitted successfully to {{name}}",
+          "error": "Failed to submit feedback. Please try again.",
+          "queued_offline": "You're offline. Feedback will be sent automatically when connection is restored.",
+          "duplicate": "You already provided feedback on this goal recently. Please wait before submitting again.",
+          "goal_not_found": "The selected goal is no longer available.",
+          "employee_not_found": "The selected employee could not be found.",
+          "project_not_found": "The selected project is no longer available.",
+          "network_error": "Network error. Please check your connection and try again."
+        }
+      },
+      "list": {
+        "title": "My Feedback",
+        "empty_state": {
+          "title": "No Feedback Yet",
+          "description": "You haven't received any feedback. Ask your colleagues for input on your goals.",
+          "action": "Request Feedback"
+        },
+        "tabs": {
+          "list": "Feedback List",
+          "analytics": "Analytics"
+        },
+        "filters": {
+          "search": "Search feedback...",
+          "date_range": "Date Range",
+          "rating": "Rating",
+          "all_ratings": "All Ratings",
+          "goal": "Goal",
+          "all_goals": "All Goals",
+          "project": "Project",
+          "all_projects": "All Projects",
+          "from_employee": "From Employee",
+          "all_employees": "All Employees",
+          "clear_all": "Clear All Filters",
+          "active_filters": "{{count}} filter active",
+          "active_filters_other": "{{count}} filters active"
+        },
+        "stats": {
+          "total": "Total Feedback",
+          "average_rating": "Average Rating",
+          "recent": "Recent (7 days)"
+        },
+        "sort": {
+          "label": "Sort By",
+          "created_at": "Date Received",
+          "rating": "Rating",
+          "from_employee": "Feedback Provider",
+          "goal": "Goal",
+          "project": "Project",
+          "asc": "Ascending",
+          "desc": "Descending",
+          "date_newest": "Date (Newest First)",
+          "date_oldest": "Date (Oldest First)",
+          "rating_highest": "Rating (Highest First)",
+          "rating_lowest": "Rating (Lowest First)",
+          "provider_name": "Provider Name (A-Z)",
+          "goal_title": "Goal Title (A-Z)"
+        },
+        "pagination": {
+          "label": "Feedback pagination"
+        },
+        "summary": "Showing {{showing}} of {{total}} feedback items",
+        "no_results": {
+          "title": "No Feedback Found",
+          "description": "No feedback matches your current filters. Try adjusting your search criteria.",
+          "action": "Clear Filters"
+        }
+      },
+      "detail": {
+        "title": "Feedback Details",
+        "from": "From:",
+        "goal": "Goal:",
+        "project": "Project:",
+        "rating": "Rating:",
+        "received": "Received:",
+        "content": "Feedback:",
+        "no_project": "No project associated",
+        "back": "Back to List"
+      },
+      "analytics": {
+        "title": "Feedback Analytics",
+        "time_range": {
+          "label": "Time Range",
+          "last_30_days": "Last 30 Days",
+          "last_90_days": "Last 90 Days",
+          "last_6_months": "Last 6 Months",
+          "year_to_date": "Year to Date",
+          "all_time": "All Time",
+          "custom": "Custom Range"
+        },
+        "comparison": {
+          "toggle": "Compare with Previous Period",
+          "note": "Comparing {{current}} vs {{previous}}",
+          "delta_up": "+{{percent}}% vs previous period",
+          "delta_down": "{{percent}}% vs previous period",
+          "delta_neutral": "No change vs previous period"
+        },
+        "metrics": {
+          "total_feedback": "Total Feedback",
+          "average_rating": "Average Rating",
+          "feedback_trend": "Recent Trend",
+          "rating_distribution": "Rating Distribution"
+        },
+        "charts": {
+          "rating_distribution": "Rating Distribution",
+          "monthly_trend": "Feedback by Month",
+          "view_as_table": "View as Table",
+          "view_as_chart": "View as Chart"
+        },
+        "top_lists": {
+          "providers": "Top Feedback Providers",
+          "goals": "Goals with Most Feedback",
+          "projects": "Projects with Most Feedback",
+          "count": "{{count}} feedback",
+          "count_other": "{{count}} feedback items",
+          "avg_rating": "Avg: {{rating}}"
+        },
+        "export": {
+          "pdf": "Export to PDF",
+          "csv": "Export Data (CSV)",
+          "generating": "Generating report..."
+        },
+        "empty": {
+          "title": "Not Enough Data",
+          "description": "Receive more feedback to see analytics and insights.",
+          "action": "Request Feedback"
         }
       }
     },
