@@ -195,7 +195,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
           )}
         </Box>
       )}
-      noOptionsText={noOptionsText || t('feedback.form.no_options')}
+      noOptionsText={noOptionsText || t('pages.feedback.form.no_options')}
     />
   )
 }

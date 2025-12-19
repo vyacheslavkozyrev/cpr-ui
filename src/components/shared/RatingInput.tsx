@@ -68,11 +68,11 @@ export interface RatingInputProps {
 const getRatingLabels = (
   t: (key: string) => string
 ): Record<number, string> => ({
-  1: t('feedback.rating.label_1'), // "Needs Improvement"
-  2: t('feedback.rating.label_2'), // "Below Expectations"
-  3: t('feedback.rating.label_3'), // "Meets Expectations"
-  4: t('feedback.rating.label_4'), // "Exceeds Expectations"
-  5: t('feedback.rating.label_5'), // "Outstanding"
+  1: t('pages.feedback.rating.label_1'), // "Needs Improvement"
+  2: t('pages.feedback.rating.label_2'), // "Below Expectations"
+  3: t('pages.feedback.rating.label_3'), // "Meets Expectations"
+  4: t('pages.feedback.rating.label_4'), // "Exceeds Expectations"
+  5: t('pages.feedback.rating.label_5'), // "Outstanding"
 })
 
 /**
@@ -120,7 +120,7 @@ export const RatingInput: React.FC<RatingInputProps> = ({
     const labelValue = hover !== -1 ? hover : value
     return labelValue
       ? ratingLabels[labelValue]
-      : t('feedback.rating.select_rating')
+      : t('pages.feedback.rating.select_rating')
   }, [hover, value, ratingLabels, t])
 
   const handleChange = (

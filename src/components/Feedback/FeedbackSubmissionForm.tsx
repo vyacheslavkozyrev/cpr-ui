@@ -14,21 +14,37 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 import type { TGoalDto } from '../../dtos/GoalDto'
 import { useOnlineStatus } from '../../hooks/useOnlineStatus'
-import { useGoals, useProjects, useSubmitFeedback } from '../../services'
+import {
+  useCurrentUser,
+  useEmployeeGoals,
+  useEmployeeProjects,
+  useGoals,
+  useProjects,
+  useSubmitFeedback,
+} from '../../services'
 import { draftManager } from '../../services/draftManager'
+import {
+  useEmployeeSearch,
+  type EmployeeSummaryDto,
+} from '../../services/employeeQueryService'
 import { offlineQueue } from '../../services/offlineQueue'
 import type { ProjectSummaryDto } from '../../services/projectQueryService'
 import { useToast } from '../../stores/toastStore'
 import type { RatingValue, SubmitFeedbackRequest } from '../../types/feedback'
 import { checkDuplicateFeedback } from '../../utils/duplicateDetection'
 import { logger } from '../../utils/logger'
-import { ConfirmationDialog, RatingInput, SearchableDropdown } from '../shared'
+import {
+  ConfirmationDialog,
+  EmployeeAutocomplete,
+  RatingInput,
+  SearchableDropdown,
+} from '../shared'
 
 /**
  * Props for FeedbackSubmissionForm component
@@ -50,27 +66,39 @@ export interface FeedbackSubmissionFormProps {
   compact?: boolean
 }
 
-// Validation schema using Zod
-const feedbackSchema = z.object({
-  employeeId: z.string().min(1, 'Employee is required'),
-  goalId: z.string().min(1, 'Goal is required'),
-  projectId: z.string().nullable().optional(),
-  content: z
-    .string()
-    .min(10, 'Feedback must be at least 10 characters')
-    .max(2000, 'Feedback must be 2000 characters or less'),
-  rating: z
-    .number()
-    .min(1, 'Please select a rating')
-    .max(5, 'Invalid rating value'),
-})
-
-type FeedbackFormSchema = z.infer<typeof feedbackSchema>
+// Validation schema using Zod (supports both solicited and unsolicited feedback)
+const createFeedbackSchema = (
+  t: (key: string) => string,
+  currentUserId?: string
+) =>
+  z.object({
+    employeeId: z
+      .string()
+      .min(1, t('pages.feedback.submission.form.employee_required'))
+      .refine(
+        value => !currentUserId || value !== currentUserId,
+        t('pages.feedback.submission.form.employee_self_error')
+      ),
+    goalId: z.string().optional(), // Optional for unsolicited feedback
+    projectId: z.string().nullable().optional(),
+    content: z
+      .string()
+      .min(10, 'Feedback must be at least 10 characters')
+      .max(2000, 'Feedback must be 2000 characters or less'),
+    rating: z
+      .number()
+      .min(1, 'Please select a rating')
+      .max(5, 'Invalid rating value'),
+  })
 
 /**
  * Feedback Submission Form Component
  * Submit feedback for employees with goal/project context and rating
- * Feature 0005 - Phase 2 US-001
+ * Feature 0005 - Phase 2 US-001 (Solicited) + Phase 4 US-003 (Unsolicited)
+ *
+ * Modes:
+ * - Solicited: When feedbackRequestId or initialEmployeeId is provided
+ * - Unsolicited: When neither is provided, shows employee search
  */
 export const FeedbackSubmissionForm: React.FC<FeedbackSubmissionFormProps> = ({
   feedbackRequestId,
@@ -85,6 +113,10 @@ export const FeedbackSubmissionForm: React.FC<FeedbackSubmissionFormProps> = ({
   const isOnline = useOnlineStatus()
   const { showSuccess, showError, showInfo } = useToast()
 
+  // Get current user for self-feedback validation
+  const { data: currentUser } = useCurrentUser()
+  const currentUserId = currentUser?.id
+
   // State
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
   const [showDiscardDraftConfirm, setShowDiscardDraftConfirm] = useState(false)
@@ -95,7 +127,30 @@ export const FeedbackSubmissionForm: React.FC<FeedbackSubmissionFormProps> = ({
   const [contentLength, setContentLength] = useState(0)
   const [draftSavedAt, setDraftSavedAt] = useState<Date | null>(null)
   const [draftId, setDraftId] = useState<string | null>(null)
-  const [isLoadingDraft, setIsLoadingDraft] = useState(true) // React Hook Form setup with Zod validation
+  const [isLoadingDraft, setIsLoadingDraft] = useState(true)
+
+  // Employee search state (for unsolicited feedback)
+  const [employeeSearchQuery, setEmployeeSearchQuery] = useState('')
+  const [selectedEmployee, setSelectedEmployee] =
+    useState<EmployeeSummaryDto | null>(null)
+
+  // Employee search hook (only enabled for unsolicited feedback)
+  const isUnsolicitedMode = !feedbackRequestId && !initialEmployeeId
+  const { data: employeeSearchResults = [], isLoading: employeeSearchLoading } =
+    useEmployeeSearch(
+      { query: employeeSearchQuery },
+      isUnsolicitedMode && employeeSearchQuery.length >= 2
+    )
+
+  // Create validation schema with current user ID for self-feedback check
+  const feedbackSchema = useMemo(
+    () => createFeedbackSchema(t, currentUserId),
+    [t, currentUserId]
+  )
+
+  type FeedbackFormSchema = z.infer<ReturnType<typeof createFeedbackSchema>>
+
+  // React Hook Form setup with Zod validation
   const {
     control,
     handleSubmit,
@@ -122,11 +177,32 @@ export const FeedbackSubmissionForm: React.FC<FeedbackSubmissionFormProps> = ({
     setContentLength(watchedFields.content?.length || 0)
   }, [watchedFields.content])
 
+  // Handle employee selection (for unsolicited feedback)
+  const handleEmployeeChange = useCallback(
+    (employee: EmployeeSummaryDto | null) => {
+      setSelectedEmployee(employee)
+      setValue('employeeId', employee?.id || '', { shouldValidate: true })
+    },
+    [setValue]
+  )
+
+  const handleEmployeeSearchChange = useCallback((query: string) => {
+    setEmployeeSearchQuery(query)
+  }, [])
+
   // T035: Load draft on component mount
   useEffect(() => {
     const loadDraft = async () => {
       try {
         setIsLoadingDraft(true)
+
+        // Skip draft loading for unsolicited feedback (no context to load)
+        if (!feedbackRequestId && !initialEmployeeId) {
+          logger.debug('Skipping draft load for unsolicited feedback')
+          setIsLoadingDraft(false)
+          return
+        }
+
         const draft = await draftManager.loadDraft(
           feedbackRequestId,
           initialEmployeeId
@@ -210,17 +286,54 @@ export const FeedbackSubmissionForm: React.FC<FeedbackSubmissionFormProps> = ({
   }, [watchedFields, isDirty, isSubmitting, isLoadingDraft, feedbackRequestId])
 
   // Load data for dropdowns
+  // For unsolicited feedback, load selected employee's goals
+  // For solicited feedback, load current user's goals
   const {
-    data: goalsData,
-    isLoading: goalsLoading,
-    error: goalsError,
-  } = useGoals({ per_page: 100, status: 'in_progress' })
+    data: myGoalsData,
+    isLoading: myGoalsLoading,
+    error: myGoalsError,
+  } = useGoals(
+    { per_page: 100, status: 'in_progress' },
+    !isUnsolicitedMode // Only load for solicited feedback
+  )
 
   const {
-    data: projectsData,
-    isLoading: projectsLoading,
-    error: projectsError,
-  } = useProjects()
+    data: employeeGoalsData,
+    isLoading: employeeGoalsLoading,
+    error: employeeGoalsError,
+  } = useEmployeeGoals(
+    selectedEmployee?.id,
+    { per_page: 100, status: 'in_progress' },
+    isUnsolicitedMode // Only load for unsolicited feedback when employee selected
+  )
+
+  const {
+    data: myProjectsData,
+    isLoading: myProjectsLoading,
+    error: myProjectsError,
+  } = useProjects(!isUnsolicitedMode) // Only load for solicited feedback
+
+  const {
+    data: employeeProjectsData,
+    isLoading: employeeProjectsLoading,
+    error: employeeProjectsError,
+  } = useEmployeeProjects(
+    selectedEmployee?.id,
+    isUnsolicitedMode // Only load for unsolicited feedback when employee selected
+  )
+
+  // Use appropriate goals and projects based on mode
+  const goalsData = isUnsolicitedMode ? employeeGoalsData : myGoalsData
+  const goalsLoading = isUnsolicitedMode ? employeeGoalsLoading : myGoalsLoading
+  const goalsError = isUnsolicitedMode ? employeeGoalsError : myGoalsError
+
+  const projectsData = isUnsolicitedMode ? employeeProjectsData : myProjectsData
+  const projectsLoading = isUnsolicitedMode
+    ? employeeProjectsLoading
+    : myProjectsLoading
+  const projectsError = isUnsolicitedMode
+    ? employeeProjectsError
+    : myProjectsError
 
   const goals = useMemo<TGoalDto[]>(() => goalsData?.items || [], [goalsData])
   const projects = useMemo<ProjectSummaryDto[]>(
@@ -270,7 +383,7 @@ export const FeedbackSubmissionForm: React.FC<FeedbackSubmissionFormProps> = ({
       if (!feedbackRequestId) {
         const duplicateCheck = await checkDuplicateFeedback(
           data.employeeId,
-          data.goalId,
+          data.goalId ?? '',
           feedbackRequestId
         )
 
@@ -290,7 +403,7 @@ export const FeedbackSubmissionForm: React.FC<FeedbackSubmissionFormProps> = ({
       // Prepare submission data
       const submissionData: SubmitFeedbackRequest = {
         employee_id: data.employeeId,
-        goal_id: data.goalId,
+        goal_id: data.goalId ?? '', // Empty string if not provided (API may handle)
         project_id: data.projectId || null,
         content: data.content,
         rating: data.rating as RatingValue,
@@ -351,7 +464,7 @@ export const FeedbackSubmissionForm: React.FC<FeedbackSubmissionFormProps> = ({
       // T040: Show success toast with recipient name
       showSuccess(
         t('pages.feedback.submission.toasts.success', {
-          name: data.employeeId, // Note: In production, you'd want to get the actual display name
+          name: result.to_employee.display_name, // Note: In production, you'd want to get the actual display name
         })
       )
 
@@ -496,41 +609,83 @@ export const FeedbackSubmissionForm: React.FC<FeedbackSubmissionFormProps> = ({
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={3}>
-              {/* Employee Field - Read-only when initialEmployeeId provided */}
+              {/* Employee Field - Different rendering based on mode */}
+              {isUnsolicitedMode ? (
+                /* Unsolicited: Show employee search/autocomplete */
+                <FormControl
+                  fullWidth
+                  required
+                  error={Boolean(errors.employeeId)}
+                >
+                  <Controller
+                    name='employeeId'
+                    control={control}
+                    render={() => (
+                      <EmployeeAutocomplete
+                        value={selectedEmployee}
+                        onChange={handleEmployeeChange}
+                        options={employeeSearchResults}
+                        loading={employeeSearchLoading}
+                        disabled={isSubmitting}
+                        error={Boolean(errors.employeeId)}
+                        {...(errors.employeeId?.message && {
+                          helperText: errors.employeeId.message,
+                        })}
+                        required
+                        label={t('pages.feedback.submission.form.employee')}
+                        placeholder={t(
+                          'pages.feedback.submission.form.employee_placeholder'
+                        )}
+                        onSearchChange={handleEmployeeSearchChange}
+                      />
+                    )}
+                  />
+                </FormControl>
+              ) : (
+                /* Solicited: Read-only recipient field */
+                <FormControl
+                  fullWidth
+                  required
+                  error={Boolean(errors.employeeId)}
+                >
+                  <Controller
+                    name='employeeId'
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label={t('pages.feedback.submission.form.recipient')}
+                        value={field.value}
+                        disabled={true}
+                        required
+                        error={Boolean(errors.employeeId)}
+                        helperText={errors.employeeId?.message}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    )}
+                  />
+                </FormControl>
+              )}
+
+              {/* Goal Dropdown - Now optional for unsolicited feedback */}
               <FormControl
                 fullWidth
-                required
-                error={Boolean(errors.employeeId)}
+                required={!isUnsolicitedMode}
+                error={Boolean(errors.goalId)}
               >
-                <Controller
-                  name='employeeId'
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label={t('pages.feedback.submission.form.recipient')}
-                      value={field.value}
-                      disabled={true}
-                      required
-                      error={Boolean(errors.employeeId)}
-                      helperText={errors.employeeId?.message}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  )}
-                />
-              </FormControl>
-
-              {/* Goal Dropdown */}
-              <FormControl fullWidth required error={Boolean(errors.goalId)}>
                 <Controller
                   name='goalId'
                   control={control}
                   render={({ field }) => (
                     <>
                       <InputLabel shrink>
-                        {t('pages.feedback.submission.form.goal.label')}
+                        {isUnsolicitedMode
+                          ? t(
+                              'pages.feedback.submission.form.goal_optional_label'
+                            )
+                          : t('pages.feedback.submission.form.goal.label')}
                       </InputLabel>
                       <SearchableDropdown
                         value={
@@ -539,13 +694,30 @@ export const FeedbackSubmissionForm: React.FC<FeedbackSubmissionFormProps> = ({
                         }
                         onChange={option => field.onChange(option?.id || '')}
                         options={goalOptions}
-                        label={t('pages.feedback.submission.form.goal.label')}
+                        label={
+                          isUnsolicitedMode
+                            ? t(
+                                'pages.feedback.submission.form.goal_optional_label'
+                              )
+                            : t('pages.feedback.submission.form.goal.label')
+                        }
                         loading={goalsLoading}
                         placeholder={t(
                           'pages.feedback.submission.form.goal.placeholder'
                         )}
                         disabled={isSubmitting || Boolean(initialGoalId)}
                       />
+                      {isUnsolicitedMode && !errors.goalId && (
+                        <Typography
+                          variant='caption'
+                          color='text.secondary'
+                          sx={{ mt: 0.5, ml: 1.75 }}
+                        >
+                          {t(
+                            'pages.feedback.submission.form.goal_optional_help'
+                          )}
+                        </Typography>
+                      )}
                       {errors.goalId && (
                         <Typography
                           variant='caption'

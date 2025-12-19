@@ -15,7 +15,7 @@ import {
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDebounce } from '../../hooks/useDebounce'
-import type { EmployeeSummaryDto } from '../../types/feedback'
+import type { EmployeeSummaryDto } from '../../services/employeeService'
 
 // Style factory outside component
 const getStyles = (theme: Theme) => ({
@@ -201,7 +201,7 @@ export const EmployeeAutocomplete: React.FC<EmployeeAutocompleteProps> = ({
           </Box>
         </Box>
       )}
-      noOptionsText={t('feedback.form.no_employees_found')}
+      noOptionsText={t('pages.feedback.form.no_employees_found')}
     />
   )
 }

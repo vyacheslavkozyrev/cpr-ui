@@ -24,7 +24,8 @@
     "warning": "Warning",
     "info": "Information",
     "offline": "You are currently offline. Some features may be limited.",
-    "notProvided": "Not provided"
+    "notProvided": "Not provided",
+    "stars": "stars"
   },
   "navigation": {
     "dashboard": "Dashboard",
@@ -307,6 +308,11 @@
     "feedback": {
       "title": "Feedback",
       "comingSoon": "Coming soon - This section is under development",
+      "new": {
+        "back": "Back to Feedback",
+        "title": "Give Feedback",
+        "description": "Share constructive feedback with your colleague. Your input helps them grow and improve."
+      },
       "tabs": {
         "feedback": "Feedback",
         "requests": "Requests",
@@ -386,8 +392,22 @@
             "label_3": "Meets Expectations",
             "label_4": "Exceeds Expectations",
             "label_5": "Outstanding"
-          }
+          },
+          "employee": "Recipient",
+          "employee_placeholder": "Search by name, email, or job title...",
+          "employee_required": "Please select a recipient",
+          "employee_self_error": "You cannot submit feedback to yourself",
+          "goal_optional_label": "Goal (Optional)",
+          "goal_optional_help": "Select a goal to provide context, or leave blank for general feedback",
+          "search_employee": "Search employees...",
+          "no_details": "No details available"
         }
+      },
+      "new": {
+        "title": "Give Feedback",
+        "description": "Provide constructive feedback to help your colleagues grow and develop. Select a recipient, optionally associate with a goal or project, and share your insights.",
+        "back": "Back to Feedback",
+        "button": "Give Feedback"
       },
       "teamRequests": {
         "title": "Team Feedback Requests",

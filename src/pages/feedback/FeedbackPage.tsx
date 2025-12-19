@@ -116,8 +116,28 @@ export const FeedbackPage: React.FC = () => {
         </Tabs>
       </Box>
 
-      {/* Feedback Tab - US-002: View Received Feedback */}
+      {/* Feedback Tab - US-002: View Received Feedback + US-003: Give Feedback Button */}
       <TabPanel value={tabValue} index={0}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            mb: 3,
+          }}
+        >
+          <Typography variant='h6'>
+            {t('pages.feedback.list.title', 'My Feedback')}
+          </Typography>
+          <Button
+            variant='contained'
+            color='primary'
+            startIcon={<AddIcon />}
+            onClick={() => navigate('/feedback/new')}
+          >
+            {t('pages.feedback.new.button')}
+          </Button>
+        </Box>
         <MyFeedbackList
           onFeedbackClick={feedbackId => navigate(`/feedback/${feedbackId}`)}
         />

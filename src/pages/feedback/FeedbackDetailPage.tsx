@@ -234,56 +234,60 @@ export const FeedbackDetailPage: React.FC = () => {
             <Divider />
 
             {/* Goal Context */}
-            <Box>
-              <Typography
-                variant='overline'
-                color='text.secondary'
-                gutterBottom
-              >
-                {t('pages.feedback.detail.goal', 'Related Goal')}
-              </Typography>
-              <Card variant='outlined'>
-                <CardContent>
-                  <Stack spacing={1}>
-                    <Typography variant='h6'>{feedback.goal.title}</Typography>
-                    {feedback.goal.description && (
-                      <Typography variant='body2' color='text.secondary'>
-                        {feedback.goal.description}
+            {feedback.goal && (
+              <Box>
+                <Typography
+                  variant='overline'
+                  color='text.secondary'
+                  gutterBottom
+                >
+                  {t('pages.feedback.detail.goal', 'Related Goal')}
+                </Typography>
+                <Card variant='outlined'>
+                  <CardContent>
+                    <Stack spacing={1}>
+                      <Typography variant='h6'>
+                        {feedback.goal.title}
                       </Typography>
-                    )}
-                    <Stack
-                      direction='row'
-                      spacing={1}
-                      flexWrap='wrap'
-                      useFlexGap
-                    >
-                      {feedback.goal.status && (
-                        <Chip
-                          label={feedback.goal.status}
-                          size='small'
-                          color={
-                            feedback.goal.status === 'completed'
-                              ? 'success'
-                              : feedback.goal.status === 'in_progress'
-                                ? 'info'
-                                : feedback.goal.status === 'not_started'
-                                  ? 'default'
-                                  : 'warning'
-                          }
-                        />
+                      {feedback.goal.description && (
+                        <Typography variant='body2' color='text.secondary'>
+                          {feedback.goal.description}
+                        </Typography>
                       )}
-                      {feedback.goal.progress !== undefined && (
-                        <Chip
-                          label={`${feedback.goal.progress}% Complete`}
-                          size='small'
-                          variant='outlined'
-                        />
-                      )}
+                      <Stack
+                        direction='row'
+                        spacing={1}
+                        flexWrap='wrap'
+                        useFlexGap
+                      >
+                        {feedback.goal.status && (
+                          <Chip
+                            label={feedback.goal.status}
+                            size='small'
+                            color={
+                              feedback.goal.status === 'completed'
+                                ? 'success'
+                                : feedback.goal.status === 'in_progress'
+                                  ? 'info'
+                                  : feedback.goal.status === 'not_started'
+                                    ? 'default'
+                                    : 'warning'
+                            }
+                          />
+                        )}
+                        {feedback.goal.progress !== undefined && (
+                          <Chip
+                            label={`${feedback.goal.progress}% Complete`}
+                            size='small'
+                            variant='outlined'
+                          />
+                        )}
+                      </Stack>
                     </Stack>
-                  </Stack>
-                </CardContent>
-              </Card>
-            </Box>
+                  </CardContent>
+                </Card>
+              </Box>
+            )}
 
             {/* Project Context (if applicable) */}
             {feedback.project && (

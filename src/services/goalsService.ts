@@ -100,6 +100,57 @@ export class GoalsApiService {
   }
 
   /**
+   * Get goals for a specific employee (filtered by visibility)
+   * GET /api/employees/{employeeId}/goals
+   */
+  async getEmployeeGoals(
+    employeeId: string,
+    params?: Partial<IGoalsQueryParams>
+  ): Promise<TApiResponse<TPaginatedGoalsResponseDto>> {
+    const queryParams = new URLSearchParams()
+
+    if (params) {
+      // Add pagination parameters
+      if (params.page) queryParams.set('page', params.page.toString())
+      if (params.per_page)
+        queryParams.set('per_page', params.per_page.toString())
+
+      // Add filter parameters if needed
+      if (params.status && params.status !== 'all')
+        queryParams.set('status', params.status)
+    }
+
+    const query = queryParams.toString()
+    const url = query
+      ? `/employees/${employeeId}/goals?${query}`
+      : `/employees/${employeeId}/goals`
+
+    // Backend returns GoalDto[] - transform to paginated response
+    const response = await apiClient.get<TGoalDto[]>(url)
+
+    const items = response.data || []
+    const page = params?.page || 1
+    const perPage = params?.per_page || 20
+
+    const result: TApiResponse<TPaginatedGoalsResponseDto> = {
+      success: response.success,
+      data: {
+        items,
+        total: items.length,
+        page,
+        per_page: perPage,
+      },
+      timestamp: response.timestamp,
+    }
+
+    if (response.message) {
+      result.message = response.message
+    }
+
+    return result
+  }
+
+  /**
    * Get specific goal by ID with tasks and metadata
    * GET /api/Goals/{id}
    */
