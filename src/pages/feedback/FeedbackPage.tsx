@@ -8,6 +8,7 @@ import { SentRequestsList } from '../../components/FeedbackRequest/lists/SentReq
 import { TodoRequestsList } from '../../components/FeedbackRequest/lists/TodoRequestsList'
 import { UserRole } from '../../models'
 import { useAuthStore } from '../../stores/authStore'
+import { FeedbackAnalyticsPage } from './FeedbackAnalyticsPage'
 import { ManagerTeamRequests } from './ManagerTeamRequests'
 
 interface TabPanelProps {
@@ -106,11 +107,12 @@ export const FeedbackPage: React.FC = () => {
           aria-label='feedback tabs'
         >
           <Tab label={t('pages.feedback.tabs.feedback')} {...a11yProps(0)} />
-          <Tab label={t('pages.feedback.tabs.requests')} {...a11yProps(1)} />
+          <Tab label={t('pages.feedback.tabs.analytics')} {...a11yProps(1)} />
+          <Tab label={t('pages.feedback.tabs.requests')} {...a11yProps(2)} />
           {isManager && (
             <Tab
               label={t('pages.feedback.tabs.teamRequests')}
-              {...a11yProps(2)}
+              {...a11yProps(3)}
             />
           )}
         </Tabs>
@@ -143,8 +145,13 @@ export const FeedbackPage: React.FC = () => {
         />
       </TabPanel>
 
-      {/* Requests Tab */}
+      {/* Analytics Tab - US-004: Feedback Analytics */}
       <TabPanel value={tabValue} index={1}>
+        <FeedbackAnalyticsPage />
+      </TabPanel>
+
+      {/* Requests Tab */}
+      <TabPanel value={tabValue} index={2}>
         <Box
           sx={{
             display: 'flex',
@@ -187,7 +194,7 @@ export const FeedbackPage: React.FC = () => {
 
       {/* Team Requests Tab - US-002B (Managers only) */}
       {isManager && (
-        <TabPanel value={tabValue} index={2}>
+        <TabPanel value={tabValue} index={3}>
           <ManagerTeamRequests />
         </TabPanel>
       )}

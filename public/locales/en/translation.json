@@ -15,6 +15,8 @@
     "yes": "Yes",
     "no": "No",
     "ok": "OK",
+    "apply": "Apply",
+    "retry": "Retry",
     "clear_search": "Clear search",
     "error": {
       "general": "Error",
@@ -315,6 +317,7 @@
       },
       "tabs": {
         "feedback": "Feedback",
+        "analytics": "Analytics",
         "requests": "Requests",
         "teamRequests": "Team Requests"
       },
@@ -863,51 +866,64 @@
       },
       "analytics": {
         "title": "Feedback Analytics",
-        "time_range": {
+        "noData": "No data available",
+        "error": {
+          "title": "Failed to load analytics",
+          "message": "An error occurred while loading analytics data. Please try again."
+        },
+        "timeRange": {
           "label": "Time Range",
-          "last_30_days": "Last 30 Days",
-          "last_90_days": "Last 90 Days",
-          "last_6_months": "Last 6 Months",
-          "year_to_date": "Year to Date",
-          "all_time": "All Time",
+          "last30Days": "Last 30 Days",
+          "last90Days": "Last 90 Days",
+          "last6Months": "Last 6 Months",
+          "yearToDate": "Year to Date",
+          "allTime": "All Time",
           "custom": "Custom Range"
+        },
+        "customRange": {
+          "startDate": "Start Date",
+          "endDate": "End Date"
         },
         "comparison": {
           "toggle": "Compare with Previous Period",
           "note": "Comparing {{current}} vs {{previous}}",
-          "delta_up": "+{{percent}}% vs previous period",
-          "delta_down": "{{percent}}% vs previous period",
-          "delta_neutral": "No change vs previous period"
+          "deltaUp": "+{{percent}}% vs previous period",
+          "deltaDown": "{{percent}}% vs previous period",
+          "deltaNeutral": "No change vs previous period"
         },
         "metrics": {
-          "total_feedback": "Total Feedback",
-          "average_rating": "Average Rating",
-          "feedback_trend": "Recent Trend",
-          "rating_distribution": "Rating Distribution"
+          "totalFeedback": "Total Feedback",
+          "avgRating": "Average Rating",
+          "topRating": "Most Common Rating",
+          "recentActivity": "This Period",
+          "items": "items",
+          "distributionNote": "{{count}} feedback items",
+          "trend": "Avg {{avgRating}}★"
+        },
+        "rating": {
+          "1star": "1★ Needs Improvement",
+          "2star": "2★ Below Expectations",
+          "3star": "3★ Meets Expectations",
+          "4star": "4★ Exceeds Expectations",
+          "5star": "5★ Outstanding"
         },
         "charts": {
-          "rating_distribution": "Rating Distribution",
-          "monthly_trend": "Feedback by Month",
-          "view_as_table": "View as Table",
-          "view_as_chart": "View as Chart"
+          "ratingDistribution": "Rating Distribution",
+          "monthlyTrend": "Monthly Trend"
         },
-        "top_lists": {
+        "viewChart": "View Chart",
+        "viewTable": "View as Table",
+        "table": {
+          "rating": "Rating",
+          "count": "Count",
+          "percentage": "Percentage",
+          "month": "Month",
+          "avgRating": "Avg Rating"
+        },
+        "topLists": {
           "providers": "Top Feedback Providers",
           "goals": "Goals with Most Feedback",
-          "projects": "Projects with Most Feedback",
-          "count": "{{count}} feedback",
-          "count_other": "{{count}} feedback items",
-          "avg_rating": "Avg: {{rating}}"
-        },
-        "export": {
-          "pdf": "Export to PDF",
-          "csv": "Export Data (CSV)",
-          "generating": "Generating report..."
-        },
-        "empty": {
-          "title": "Not Enough Data",
-          "description": "Receive more feedback to see analytics and insights.",
-          "action": "Request Feedback"
+          "projects": "Projects with Most Feedback"
         }
       }
     },

@@ -59,6 +59,7 @@
     "react-i18next": "^16.2.1",
     "react-router-dom": "^7.9.4",
     "react-window": "^1.8.11",
+    "recharts": "^2.15.0",
     "zod": "^4.1.12",
     "zustand": "^5.0.8"
   },
