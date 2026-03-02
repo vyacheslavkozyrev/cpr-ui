@@ -27,8 +27,8 @@ export default defineConfig({
   },
 
   test: {
-    // Test environment
-    environment: 'jsdom',
+    // Test environment (happy-dom: jsdom v27 has ERR_REQUIRE_ESM with Node 18)
+    environment: 'happy-dom',
 
     // Setup files
     setupFiles: ['./src/tests/setup.ts'],

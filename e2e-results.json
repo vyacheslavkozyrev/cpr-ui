@@ -1,0 +1,685 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\serzh\\VSC_Projects\\cpr-meta\\source\\cpr-ui\\playwright.config.ts",
+    "rootDir": "C:/Users/serzh/VSC_Projects/cpr-meta/source/cpr-ui/e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/serzh/VSC_Projects/cpr-meta/source/cpr-ui/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/serzh/VSC_Projects/cpr-meta/source/cpr-ui/e2e",
+        "testIgnore": [],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      ["list", null],
+      [
+        "json",
+        {
+          "outputFile": "e2e-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.2",
+    "workers": 1,
+    "webServer": {
+      "command": "yarn vite --mode playwright --port 3000 --host 0.0.0.0",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": false,
+      "timeout": 60000,
+      "stdout": "ignore",
+      "stderr": "pipe"
+    }
+  },
+  "suites": [
+    {
+      "title": "360-degree-feedback.spec.ts",
+      "file": "360-degree-feedback.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Director Cycle List",
+          "file": "360-degree-feedback.spec.ts",
+          "line": 26,
+          "column": 6,
+          "specs": [
+            {
+              "title": "AC-040 — Director sees paginated cycle list",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4957,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-02T00:42:00.912Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9a8e1d310bc1b355413b-96f03b868cd74d7bd9c0",
+              "file": "360-degree-feedback.spec.ts",
+              "line": 34,
+              "column": 3
+            },
+            {
+              "title": "AC-041 — Each row shows id/title/status/nominees/responses/created_at fields",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5451,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-02T00:42:06.023Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9a8e1d310bc1b355413b-5eec09b13c735d828d82",
+              "file": "360-degree-feedback.spec.ts",
+              "line": 40,
+              "column": 3
+            },
+            {
+              "title": "AC-042 — List sorted by created_at desc (latest row appears first)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7446,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-02T00:42:11.489Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9a8e1d310bc1b355413b-39b5a82d8409d226e301",
+              "file": "360-degree-feedback.spec.ts",
+              "line": 53,
+              "column": 3
+            },
+            {
+              "title": "Create cycle dialog opens when button clicked",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4866,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-02T00:42:18.946Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9a8e1d310bc1b355413b-6b12c0e1ad81ab1b3730",
+              "file": "360-degree-feedback.spec.ts",
+              "line": 66,
+              "column": 3
+            },
+            {
+              "title": "Filter by status dropdown narrows results",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6869,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-02T00:42:23.829Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9a8e1d310bc1b355413b-67d15ba4628cd78bfb90",
+              "file": "360-degree-feedback.spec.ts",
+              "line": 71,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Employee My Cycles List",
+          "file": "360-degree-feedback.spec.ts",
+          "line": 86,
+          "column": 6,
+          "specs": [
+            {
+              "title": "AC-043 — Authenticated user sees their cycles at /my-reviews",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5455,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-02T00:42:30.714Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9a8e1d310bc1b355413b-52e6c7dad25c300aae98",
+              "file": "360-degree-feedback.spec.ts",
+              "line": 94,
+              "column": 3
+            },
+            {
+              "title": "AC-044 — Employee view has no \"Reviewer\" column header",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5835,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-02T00:42:36.184Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9a8e1d310bc1b355413b-9d6467ed03f8a856186a",
+              "file": "360-degree-feedback.spec.ts",
+              "line": 106,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Reviewer — Pending Review Requests",
+          "file": "360-degree-feedback.spec.ts",
+          "line": 115,
+          "column": 6,
+          "specs": [
+            {
+              "title": "AC-045 — Page renders review request list",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6452,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-02T00:42:42.034Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9a8e1d310bc1b355413b-c9f0168d2902bacd5575",
+              "file": "360-degree-feedback.spec.ts",
+              "line": 125,
+              "column": 3
+            },
+            {
+              "title": "AC-046 — Each request shows cycle title and subject (no email)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6299,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-02T00:42:48.499Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9a8e1d310bc1b355413b-649da4481a90b87c7925",
+              "file": "360-degree-feedback.spec.ts",
+              "line": 139,
+              "column": 3
+            },
+            {
+              "title": "AC-047 — Submitted cycles are excluded (empty state override)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5961,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-02T00:42:54.814Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9a8e1d310bc1b355413b-7c819131fa3f7b3f347d",
+              "file": "360-degree-feedback.spec.ts",
+              "line": 151,
+              "column": 3
+            },
+            {
+              "title": "Error path — empty state when no requests",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6387,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-02T00:43:00.792Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9a8e1d310bc1b355413b-adbcb9cc93d899954042",
+              "file": "360-degree-feedback.spec.ts",
+              "line": 157,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Cycle Detail Page",
+          "file": "360-degree-feedback.spec.ts",
+          "line": 183,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Draft cycle shows \"Open for Nominations\" button (Director)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4625,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-02T00:43:07.192Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9a8e1d310bc1b355413b-798c708bb1c80209525a",
+              "file": "360-degree-feedback.spec.ts",
+              "line": 193,
+              "column": 3
+            },
+            {
+              "title": "In-progress cycle shows nominees and \"Close Cycle\" button",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4591,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-02T00:43:11.831Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9a8e1d310bc1b355413b-da8653c0adf576c90f4d",
+              "file": "360-degree-feedback.spec.ts",
+              "line": 199,
+              "column": 3
+            },
+            {
+              "title": "Closed cycle shows results section",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4649,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-02T00:43:16.433Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9a8e1d310bc1b355413b-641373d6f1d5b7fa2e8c",
+              "file": "360-degree-feedback.spec.ts",
+              "line": 208,
+              "column": 3
+            },
+            {
+              "title": "Non-existent cycle shows error alert",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 13315,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-02T00:43:21.096Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9a8e1d310bc1b355413b-4ec603acc68dda4d87e5",
+              "file": "360-degree-feedback.spec.ts",
+              "line": 215,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Reviewer Submission Form",
+          "file": "360-degree-feedback.spec.ts",
+          "line": 230,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Submission form is accessible from review requests page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "C:\\Users\\serzh\\VSC_Projects\\cpr-meta\\source\\cpr-ui\\e2e\\360-degree-feedback.spec.ts",
+                        "line": 240,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 4784,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-02T00:43:34.427Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "C:\\Users\\serzh\\VSC_Projects\\cpr-meta\\source\\cpr-ui\\e2e\\360-degree-feedback.spec.ts",
+                            "line": 240,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "9a8e1d310bc1b355413b-094e4333b53b2dad909d",
+              "file": "360-degree-feedback.spec.ts",
+              "line": 233,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-03-02T00:41:57.841Z",
+    "duration": 102104.90999999999,
+    "expected": 15,
+    "skipped": 1,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -9,6 +9,10 @@ import { DashboardPage } from '../pages/dashboard'
 import { FeedbackPage } from '../pages/feedback'
 import { GoalDetailPage, GoalFormPage, GoalsPage } from '../pages/goals'
 import { ProfilePage } from '../pages/profile'
+import ReviewCycleDetailPage from '../pages/reviews/ReviewCycleDetailPage'
+import ReviewCyclesPage from '../pages/reviews/ReviewCyclesPage'
+import MyCyclesPage from '../pages/reviews/MyCyclesPage'
+import ReviewRequestsPage from '../pages/reviews/ReviewRequestsPage'
 import { SettingsPage } from '../pages/settings'
 import { SkillsPage } from '../pages/skills'
 import { TeamPage } from '../pages/team'
@@ -91,6 +95,42 @@ export const routes: RouteObject[] = [
       {
         path: 'feedback',
         element: <FeedbackPage />,
+        errorElement: <RouteErrorBoundary />,
+      },
+
+      // Review Cycles - Director/Admin only (management view)
+      {
+        path: 'reviews',
+        errorElement: <RouteErrorBoundary />,
+        children: [
+          {
+            index: true,
+            element: (
+              <RoleGuard
+                allowedRoles={[UserRole.DIRECTOR, UserRole.ADMINISTRATOR]}
+              >
+                <ReviewCyclesPage />
+              </RoleGuard>
+            ),
+          },
+          {
+            path: ':id',
+            element: <ReviewCycleDetailPage />,
+          },
+        ],
+      },
+
+      // My Reviews - accessible to all authenticated users
+      {
+        path: 'my-reviews',
+        element: <MyCyclesPage />,
+        errorElement: <RouteErrorBoundary />,
+      },
+
+      // My Review Requests - accessible to all authenticated users
+      {
+        path: 'my-review-requests',
+        element: <ReviewRequestsPage />,
         errorElement: <RouteErrorBoundary />,
       },
 

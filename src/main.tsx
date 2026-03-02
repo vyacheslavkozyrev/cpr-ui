@@ -42,6 +42,13 @@ async function enableMocking() {
       logger.msw(
         `Mock User Role: ${import.meta.env['VITE_MOCK_USER_ROLE'] || 'employee'}`
       )
+      // Expose worker + MSW utilities for E2E test handler overrides
+      const { http, HttpResponse } = await import('msw')
+      ;(window as unknown as Record<string, unknown>)['__msw'] = {
+        worker,
+        http,
+        HttpResponse,
+      }
     } catch (error) {
       logger.error('Failed to initialize Mock Service Worker', { error })
     }
