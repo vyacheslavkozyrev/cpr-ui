@@ -1,4 +1,4 @@
-import { Home } from '@mui/icons-material'
+﻿import { Home } from '@mui/icons-material'
 import { Breadcrumbs, Link, Typography } from '@mui/material'
 import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -50,6 +50,8 @@ export const BreadcrumbNavigation: React.FC = () => {
         admin: t('navigation.admin'),
         profile: t('navigation.profile'),
         settings: t('navigation.settings'),
+        request: t('pages.feedback.request.form.title'),
+        new: t('common.create'),
       }
 
       return (

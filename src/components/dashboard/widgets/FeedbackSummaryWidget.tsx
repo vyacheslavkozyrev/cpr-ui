@@ -1,4 +1,4 @@
-import {
+﻿import {
   Avatar,
   Box,
   Button,
@@ -258,7 +258,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
               }
               secondary={
                 <Typography variant='caption' color='text.secondary'>
-                  {new Date(feedback.createdAt).toLocaleDateString()} •{' '}
+                  {new Date(feedback.createdAt).toLocaleDateString()} â€¢{' '}
                   {/* Note: goalTitle not available in new model, using placeholder */}
                   {t('dashboard.labels.generalFeedback')}
                 </Typography>

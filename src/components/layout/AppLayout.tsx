@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+﻿import { Box } from '@mui/material'
 import React, { useMemo } from 'react'
 import { Outlet } from 'react-router-dom'
 import { OfflineIndicator } from '../OfflineIndicator'

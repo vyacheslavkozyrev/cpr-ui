@@ -33,3 +33,30 @@ export {
   useUpdateGoal,
   useUpdateTask,
 } from './goalsQueryService'
+
+// Feedback Request Service (Feature 0004)
+export {
+  FeedbackRequestApiService,
+  feedbackRequestApiService,
+  type FeedbackRequestListParams,
+} from './feedbackRequestService'
+
+// Feedback Request Query Service (React Query hooks for Feature 0004)
+export {
+  useCancelFeedbackRequest,
+  useCancelRecipient,
+  useCreateFeedbackRequest,
+  useFeedbackRequest,
+  useManagerTeamReceivedRequests,
+  useManagerTeamSentRequests,
+  useSendAllReminders,
+  useSendReminder,
+  useSentRequests,
+  useTeamReceivedRequests,
+  useTeamSentRequests,
+  useTodoRequests,
+  useUpdateFeedbackRequest,
+} from './feedbackRequestQueryService'
+
+// Project Query Service (React Query hooks)
+export { useProjects, type ProjectSummaryDto } from './projectQueryService'

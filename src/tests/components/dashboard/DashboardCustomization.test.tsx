@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+﻿import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import {
@@ -183,8 +183,8 @@ describe('useDashboardCustomization hook', () => {
   it('initializes with default widget configuration', () => {
     renderWithRouter(<TestHookWrapper />)
 
-    expect(screen.getByTestId('widget-count')).toHaveTextContent('4')
-    expect(screen.getByTestId('visible-count')).toHaveTextContent('4')
+    expect(screen.getByTestId('widget-count')).toHaveTextContent('5')
+    expect(screen.getByTestId('visible-count')).toHaveTextContent('5')
 
     // Check all widgets are initially visible
     expect(screen.getByTestId('goals-visible')).toHaveTextContent('true')
@@ -201,7 +201,7 @@ describe('useDashboardCustomization hook', () => {
     await user.click(toggleButton)
 
     expect(screen.getByTestId('goals-visible')).toHaveTextContent('false')
-    expect(screen.getByTestId('visible-count')).toHaveTextContent('3')
+    expect(screen.getByTestId('visible-count')).toHaveTextContent('4')
   })
 
   it('resets all widgets to visible when resetLayout is called', async () => {
@@ -219,7 +219,7 @@ describe('useDashboardCustomization hook', () => {
     await user.click(resetButton)
 
     expect(screen.getByTestId('goals-visible')).toHaveTextContent('true')
-    expect(screen.getByTestId('visible-count')).toHaveTextContent('4')
+    expect(screen.getByTestId('visible-count')).toHaveTextContent('5')
   })
 
   it('returns visible widgets in correct order', async () => {
@@ -230,7 +230,7 @@ describe('useDashboardCustomization hook', () => {
     const toggleButton = screen.getByText('Toggle skills')
     await user.click(toggleButton)
 
-    expect(screen.getByTestId('visible-count')).toHaveTextContent('3')
+    expect(screen.getByTestId('visible-count')).toHaveTextContent('4')
 
     // Visible widgets should still maintain their order
     const visibleWidgets = ['goals', 'feedback', 'activity'].map(

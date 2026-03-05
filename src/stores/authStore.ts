@@ -4,6 +4,7 @@ import { subscribeWithSelector } from 'zustand/middleware'
 import { authConfig } from '../config/auth'
 import { authService } from '../services'
 import { logger } from '../utils/logger'
+import { generateStubToken, getSigningKey } from '../utils/stubToken'
 
 // Authentication types following T/I/E conventions
 export interface IAuthUser {
@@ -116,16 +117,23 @@ export const useAuthStore = create<IAuthState>()(
               mockUserRole
             ] || mockUsers.employee
 
+          // Generate proper HMAC token for stub authentication
+          const signingKey = getSigningKey()
+          const stubAccessToken = await generateStubToken(
+            selectedMockUser.id,
+            signingKey
+          )
+
           const stubUser: IAuthUser = {
             ...selectedMockUser,
-            accessToken: 'stub-access-token',
+            accessToken: stubAccessToken,
             idToken: 'stub-id-token',
           }
 
           set({
             isAuthenticated: true,
             user: stubUser,
-            accessToken: 'stub-access-token',
+            accessToken: stubAccessToken,
             idToken: 'stub-id-token',
           })
           // Persist stub auth so page reloads stay authenticated (E2E / dev)

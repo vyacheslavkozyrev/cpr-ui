@@ -1,3 +1,4 @@
+﻿/* eslint-disable react-refresh/only-export-components */
 import { Settings, Visibility, VisibilityOff } from '@mui/icons-material'
 import {
   Box,
@@ -225,22 +226,28 @@ export const useDashboardCustomization = () => {
       order: 1,
     },
     {
+      id: 'feedbackRequests',
+      name: t('dashboard.widgets.feedbackRequests.title'),
+      visible: true,
+      order: 2,
+    },
+    {
       id: 'feedback',
       name: t('dashboard.widgets.feedbackSummary'),
       visible: true,
-      order: 2,
+      order: 3,
     },
     {
       id: 'skills',
       name: t('dashboard.widgets.skillProgress'),
       visible: true,
-      order: 3,
+      order: 4,
     },
     {
       id: 'activity',
       name: t('dashboard.widgets.activityFeed'),
       visible: true,
-      order: 4,
+      order: 5,
     },
   ])
 

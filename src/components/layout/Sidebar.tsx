@@ -1,4 +1,4 @@
-import {
+﻿import {
   AdminPanelSettings,
   BugReport,
   Dashboard,
@@ -10,6 +10,7 @@ import {
   TrackChanges,
 } from '@mui/icons-material'
 import {
+  Badge,
   Box,
   Divider,
   Drawer,
@@ -24,6 +25,7 @@ import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { UserRole } from '../../models'
+import { useTodoRequestsCount } from '../../services/feedbackRequestQueryService'
 import { useAuthStore } from '../../stores/authStore'
 
 const drawerWidth = 240
@@ -71,6 +73,9 @@ export const Sidebar: React.FC = () => {
   const location = useLocation()
   const { user } = useAuthStore()
   const styles = useMemo(() => getStyles(), [])
+
+  // Get pending todo requests count for badge
+  const { data: todoCount } = useTodoRequestsCount(!!user)
 
   // Get user roles for menu filtering
   const userRoles = user?.roles || [UserRole.EMPLOYEE]
@@ -161,6 +166,10 @@ export const Sidebar: React.FC = () => {
             handleNavigation(item.path)
           }
 
+          // Show badge for feedback item with pending todo count
+          const showBadge =
+            item.path === '/feedback' && todoCount && todoCount > 0
+
           return (
             <ListItem key={item.path} disablePadding>
               <ListItemButton
@@ -168,7 +177,15 @@ export const Sidebar: React.FC = () => {
                 onClick={handleItemClick}
                 sx={styles.listItemButton}
               >
-                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemIcon>
+                  {showBadge ? (
+                    <Badge badgeContent={todoCount} color='error' max={99}>
+                      {item.icon}
+                    </Badge>
+                  ) : (
+                    item.icon
+                  )}
+                </ListItemIcon>
                 <ListItemText
                   primary={
                     item.labelKey.startsWith('navigation.') ||

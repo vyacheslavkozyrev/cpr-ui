@@ -1,6 +1,7 @@
-import { Navigate, type RouteObject } from 'react-router-dom'
+﻿import { Navigate, type RouteObject } from 'react-router-dom'
 import { ProtectedRoute, RoleGuard } from '../components/auth'
 import { NotFoundPage, RouteErrorBoundary } from '../components/errors'
+import { FeedbackRequestForm } from '../components/FeedbackRequest/form'
 import { AppLayout } from '../components/layout'
 import { UserRole } from '../models'
 import { AdminPage } from '../pages/admin'
@@ -94,8 +95,17 @@ export const routes: RouteObject[] = [
       // Feedback - accessible to all authenticated users
       {
         path: 'feedback',
-        element: <FeedbackPage />,
         errorElement: <RouteErrorBoundary />,
+        children: [
+          {
+            index: true,
+            element: <FeedbackPage />,
+          },
+          {
+            path: 'request/new',
+            element: <FeedbackRequestForm />,
+          },
+        ],
       },
 
       // Review Cycles - Director/Admin only (management view)

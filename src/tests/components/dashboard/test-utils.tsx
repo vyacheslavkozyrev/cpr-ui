@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Dashboard Test Utilities
  * Shared utilities and setup for dashboard component testing
  */

@@ -4,6 +4,7 @@
  */
 
 export { ActivityFeedWidget } from './ActivityFeedWidget'
+export { FeedbackRequestsWidget } from './FeedbackRequestsWidget'
 export { FeedbackSummaryWidget } from './FeedbackSummaryWidget'
 export { GoalSummaryWidget } from './GoalSummaryWidget'
 export { SkillProgressWidget } from './SkillProgressWidget'

@@ -201,7 +201,13 @@ class ApiClient {
     try {
       // Check if response has content
       const contentType = response.headers.get('Content-Type')
-      if (contentType && contentType.includes('application/json')) {
+
+      // Parse JSON for application/json or application/problem+json
+      if (
+        contentType &&
+        (contentType.includes('application/json') ||
+          contentType.includes('application/problem+json'))
+      ) {
         data = await response.json()
       } else {
         data = await response.text()
@@ -217,14 +223,19 @@ class ApiClient {
 
     // Handle HTTP error status codes
     if (!response.ok) {
+      // Check for 'detail' (ASP.NET ProblemDetails) or 'message'
       const errorMessage =
         data &&
         typeof data === 'object' &&
         data !== null &&
-        'message' in data &&
-        typeof (data as { message: unknown }).message === 'string'
-          ? (data as { message: string }).message
+        ('detail' in data || 'message' in data) &&
+        (typeof (data as { detail?: unknown }).detail === 'string' ||
+          typeof (data as { message?: unknown }).message === 'string')
+          ? (data as { detail?: string }).detail ||
+            (data as { message?: string }).message ||
+            `HTTP ${response.status}: ${response.statusText}`
           : `HTTP ${response.status}: ${response.statusText}`
+
       const errorCode = this.getErrorCodeByStatus(response.status)
 
       throw this.createError(errorCode, errorMessage, response.status, data)
