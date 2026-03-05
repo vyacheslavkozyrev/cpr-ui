@@ -76,7 +76,7 @@ export const queryKeys = {
       [...queryKeys.skills.all, 'assessment', userId] as const,
   },
 
-  // Feedback-related queries
+  // Feedback-related queries (Feature 0004 & 0005)
   feedback: {
     all: ['feedback'] as const,
     lists: () => [...queryKeys.feedback.all, 'list'] as const,
@@ -84,6 +84,12 @@ export const queryKeys = {
       [...queryKeys.feedback.lists(), 'received', userId] as const,
     sent: (userId: string) =>
       [...queryKeys.feedback.lists(), 'sent', userId] as const,
+    my: (params?: Record<string, unknown>) =>
+      [...queryKeys.feedback.lists(), 'my', params] as const,
+    detail: (feedbackId: string) =>
+      [...queryKeys.feedback.all, 'detail', feedbackId] as const,
+    analytics: (params?: Record<string, unknown>) =>
+      [...queryKeys.feedback.all, 'analytics', params] as const,
   },
 
   // Team-related queries (for managers)

@@ -25,17 +25,56 @@ import { goalsApiService } from './goalsService'
  * Hook to get paginated list of goals with filters
  * GET /api/me/goals
  */
-export const useGoals = (params?: Partial<IGoalsQueryParams>) => {
+export const useGoals = (
+  params?: Partial<IGoalsQueryParams>,
+  enabled = true
+) => {
   return useQuery({
     queryKey: queryKeys.goals.list(params),
     queryFn: async () => {
       const response = await goalsApiService.getMyGoals(params)
       return response.success ? response.data : null
     },
+    enabled,
     staleTime: 2 * 60 * 1000, // 2 minutes - goals data updates frequently
     gcTime: 5 * 60 * 1000, // 5 minutes in cache
     retry: (failureCount, error) => {
       // Don't retry on client errors
+      if (error && typeof error === 'object' && 'status' in error) {
+        const status = (error as { status?: number }).status
+        if (status && status >= 400 && status < 500) {
+          return false
+        }
+      }
+      return failureCount < 2
+    },
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 10000),
+  })
+}
+
+/**
+ * Hook to get goals for a specific employee (filtered by visibility)
+ * GET /api/employees/{employeeId}/goals
+ */
+export const useEmployeeGoals = (
+  employeeId: string | undefined,
+  params?: Partial<IGoalsQueryParams>,
+  enabled = true
+) => {
+  return useQuery({
+    queryKey: ['goals', 'employee', employeeId, params],
+    queryFn: async () => {
+      if (!employeeId) return null
+      const response = await goalsApiService.getEmployeeGoals(
+        employeeId,
+        params
+      )
+      return response.success ? response.data : null
+    },
+    enabled: enabled && Boolean(employeeId),
+    staleTime: 2 * 60 * 1000, // 2 minutes
+    gcTime: 5 * 60 * 1000, // 5 minutes in cache
+    retry: (failureCount, error) => {
       if (error && typeof error === 'object' && 'status' in error) {
         const status = (error as { status?: number }).status
         if (status && status >= 400 && status < 500) {

@@ -7,7 +7,11 @@ import { UserRole } from '../models'
 import { AdminPage } from '../pages/admin'
 import { LoginPage } from '../pages/auth'
 import { DashboardPage } from '../pages/dashboard'
-import { FeedbackPage } from '../pages/feedback'
+import {
+  FeedbackDetailPage,
+  FeedbackPage,
+  NewFeedbackPage,
+} from '../pages/feedback'
 import { GoalDetailPage, GoalFormPage, GoalsPage } from '../pages/goals'
 import { ProfilePage } from '../pages/profile'
 import ReviewCycleDetailPage from '../pages/reviews/ReviewCycleDetailPage'
@@ -100,6 +104,14 @@ export const routes: RouteObject[] = [
           {
             index: true,
             element: <FeedbackPage />,
+          },
+          {
+            path: 'new',
+            element: <NewFeedbackPage />,
+          },
+          {
+            path: ':id',
+            element: <FeedbackDetailPage />,
           },
           {
             path: 'request/new',

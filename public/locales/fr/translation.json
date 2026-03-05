@@ -463,6 +463,74 @@
       "cancelRequest": "Annuler la demande de commentaires",
       "expandCard": "Développer les détails de la demande",
       "collapseCard": "Réduire les détails de la demande"
+    },
+    "list": {
+      "title": "Mes Commentaires",
+      "empty_state": {
+        "title": "Aucun Commentaire Pour L'instant",
+        "description": "Vous n'avez pas encore reçu de commentaires. Demandez des avis à vos collègues sur vos objectifs.",
+        "action": "Demander des Commentaires"
+      },
+      "tabs": {
+        "list": "Liste des Commentaires",
+        "analytics": "Analytique"
+      },
+      "filters": {
+        "search": "Rechercher des commentaires...",
+        "date_range": "Plage de Dates",
+        "rating": "Évaluation",
+        "all_ratings": "Toutes les Évaluations",
+        "goal": "Objectif",
+        "all_goals": "Tous les Objectifs",
+        "project": "Projet",
+        "all_projects": "Tous les Projets",
+        "from_employee": "De l'Employé",
+        "all_employees": "Tous les Employés",
+        "clear_all": "Effacer Tous les Filtres",
+        "active_filters": "{{count}} filtre actif",
+        "active_filters_other": "{{count}} filtres actifs"
+      },
+      "stats": {
+        "total": "Total des Commentaires",
+        "average_rating": "Évaluation Moyenne",
+        "recent": "Récent (7 jours)"
+      },
+      "sort": {
+        "label": "Trier Par",
+        "created_at": "Date de Réception",
+        "rating": "Évaluation",
+        "from_employee": "Fournisseur de Commentaires",
+        "goal": "Objectif",
+        "project": "Projet",
+        "asc": "Ascendant",
+        "desc": "Descendant",
+        "date_newest": "Date (Plus Récent d'Abord)",
+        "date_oldest": "Date (Plus Ancien d'Abord)",
+        "rating_highest": "Évaluation (Plus Élevée d'Abord)",
+        "rating_lowest": "Évaluation (Plus Basse d'Abord)",
+        "provider_name": "Nom du Fournisseur (A-Z)",
+        "goal_title": "Titre de l'Objectif (A-Z)"
+      },
+      "pagination": {
+        "label": "Pagination des commentaires"
+      },
+      "summary": "Affichage de {{showing}} sur {{total}} éléments de commentaires",
+      "no_results": {
+        "title": "Aucun Commentaire Trouvé",
+        "description": "Aucun commentaire ne correspond à vos filtres actuels. Essayez d'ajuster vos critères de recherche.",
+        "action": "Effacer les Filtres"
+      }
+    },
+    "detail": {
+      "title": "Détails du Commentaire",
+      "from": "De :",
+      "goal": "Objectif :",
+      "project": "Projet :",
+      "rating": "Évaluation :",
+      "received": "Reçu :",
+      "content": "Commentaire :",
+      "no_project": "Aucun projet associé",
+      "back": "Retour à la Liste"
     }
   }
 }

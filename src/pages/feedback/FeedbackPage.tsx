@@ -3,10 +3,12 @@ import { Box, Button, Tab, Tabs, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { MyFeedbackList } from '../../components/Feedback/MyFeedbackList'
 import { SentRequestsList } from '../../components/FeedbackRequest/lists/SentRequestsList'
 import { TodoRequestsList } from '../../components/FeedbackRequest/lists/TodoRequestsList'
 import { UserRole } from '../../models'
 import { useAuthStore } from '../../stores/authStore'
+import { FeedbackAnalyticsPage } from './FeedbackAnalyticsPage'
 import { ManagerTeamRequests } from './ManagerTeamRequests'
 
 interface TabPanelProps {
@@ -105,23 +107,51 @@ export const FeedbackPage: React.FC = () => {
           aria-label='feedback tabs'
         >
           <Tab label={t('pages.feedback.tabs.feedback')} {...a11yProps(0)} />
-          <Tab label={t('pages.feedback.tabs.requests')} {...a11yProps(1)} />
+          <Tab label={t('pages.feedback.tabs.analytics')} {...a11yProps(1)} />
+          <Tab label={t('pages.feedback.tabs.requests')} {...a11yProps(2)} />
           {isManager && (
             <Tab
               label={t('pages.feedback.tabs.teamRequests')}
-              {...a11yProps(2)}
+              {...a11yProps(3)}
             />
           )}
         </Tabs>
       </Box>
 
-      {/* Feedback Tab */}
+      {/* Feedback Tab - US-002: View Received Feedback + US-003: Give Feedback Button */}
       <TabPanel value={tabValue} index={0}>
-        <Typography>{t('pages.feedback.comingSoon')}</Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            mb: 3,
+          }}
+        >
+          <Typography variant='h6'>
+            {t('pages.feedback.list.title', 'My Feedback')}
+          </Typography>
+          <Button
+            variant='contained'
+            color='primary'
+            startIcon={<AddIcon />}
+            onClick={() => navigate('/feedback/new')}
+          >
+            {t('pages.feedback.new.button')}
+          </Button>
+        </Box>
+        <MyFeedbackList
+          onFeedbackClick={feedbackId => navigate(`/feedback/${feedbackId}`)}
+        />
+      </TabPanel>
+
+      {/* Analytics Tab - US-004: Feedback Analytics */}
+      <TabPanel value={tabValue} index={1}>
+        <FeedbackAnalyticsPage />
       </TabPanel>
 
       {/* Requests Tab */}
-      <TabPanel value={tabValue} index={1}>
+      <TabPanel value={tabValue} index={2}>
         <Box
           sx={{
             display: 'flex',
@@ -164,7 +194,7 @@ export const FeedbackPage: React.FC = () => {
 
       {/* Team Requests Tab - US-002B (Managers only) */}
       {isManager && (
-        <TabPanel value={tabValue} index={2}>
+        <TabPanel value={tabValue} index={3}>
           <ManagerTeamRequests />
         </TabPanel>
       )}

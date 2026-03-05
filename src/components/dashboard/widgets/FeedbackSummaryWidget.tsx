@@ -1,4 +1,5 @@
-﻿import {
+﻿import AddIcon from '@mui/icons-material/Add'
+import {
   Avatar,
   Box,
   Button,
@@ -25,6 +26,7 @@ import React, { useMemo, useState } from 'react'
 import { Line } from 'react-chartjs-2'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { useDateFormat } from '../../../hooks/useDateFormat'
 import type { DashboardPeriod } from '../../../models/Dashboard'
 import { useFeedbackSummary } from '../../../services/api/dashboardService'
 import { DashboardWidget } from '../layout'
@@ -126,7 +128,8 @@ const getStyles = () => ({
 export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
   period = 'month',
 }) => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const { formatDate } = useDateFormat()
   const navigate = useNavigate()
   const {
     data: feedbackSummary,
@@ -144,11 +147,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
   const chartData = {
     labels:
       feedbackSummary?.ratingTrend.map(trend => {
-        const date = new Date(trend.period)
-        return date.toLocaleDateString(i18n.language, {
-          month: 'short',
-          day: 'numeric',
-        })
+        return formatDate(trend.period, 'DAY_MONTH')
       }) || [],
     datasets: [
       {
@@ -282,15 +281,32 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
 
   const widgetContent = feedbackSummary && (
     <Box>
-      {/* Header with Title and Tabs */}
-      <Box sx={styles.headerContainer}>
+      {/* Header with Title and Actions */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 1,
+        }}
+      >
         <Typography variant='h6' component='h3'>
           {t('dashboard.widgets.feedbackSummary')}
         </Typography>
-        <Tabs value={tabValue} onChange={handleTabChange} sx={styles.tabs}>
-          <Tab label={t('dashboard.tabs.chart')} sx={styles.tab} />
-          <Tab label={t('dashboard.tabs.feedback')} sx={styles.tab} />
-        </Tabs>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          <Button
+            size='small'
+            variant='contained'
+            startIcon={<AddIcon />}
+            onClick={() => navigate('/feedback/new')}
+          >
+            {t('feedback.new.button')}
+          </Button>
+          <Tabs value={tabValue} onChange={handleTabChange} sx={styles.tabs}>
+            <Tab label={t('dashboard.tabs.chart')} sx={styles.tab} />
+            <Tab label={t('dashboard.tabs.feedback')} sx={styles.tab} />
+          </Tabs>
+        </Box>
       </Box>
 
       <TabPanel value={tabValue} index={0}>
