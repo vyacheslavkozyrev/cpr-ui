@@ -278,6 +278,35 @@
     "copyright": "© {{year}} CPR Performance Management System. All rights reserved."
   },
   "pages": {
+    "reviewCycles": {
+      "title": "Review Cycles",
+      "createButton": "Create Review Cycle",
+      "titleColumn": "Title",
+      "subjectColumn": "Subject",
+      "statusColumn": "Status",
+      "nomineesColumn": "Nominees",
+      "responsesColumn": "Responses",
+      "createdColumn": "Created",
+      "emptyState": "No review cycles yet"
+    },
+    "myReviews": {
+      "title": "My Reviews",
+      "emptyState": "You have no review cycles"
+    },
+    "reviewCycleDetail": {
+      "subject": "Subject",
+      "opened": "Opened",
+      "started": "Started",
+      "closed": "Closed",
+      "accessDenied": "You do not have access to this review cycle",
+      "notFound": "Review cycle not found"
+    },
+    "reviewRequests": {
+      "title": "My Pending Review Requests",
+      "emptyState": "No pending review requests",
+      "emptyStateSubtext": "You have no pending 360 feedback to submit",
+      "submitButton": "Submit Feedback"
+    },
     "team": {
       "title": "Team Management",
       "comingSoon": "Team management features coming soon..."
@@ -385,7 +414,75 @@
       "comingSoon": "Admin features coming soon..."
     }
   },
+  "components": {
+    "nomineePanel": {
+      "sectionTitle": "Nominees",
+      "reviewerColumn": "Reviewer",
+      "nominatedByColumn": "Nominated by",
+      "statusColumn": "Status",
+      "reviewerIdPlaceholder": "Reviewer Employee ID",
+      "nominateButton": "Nominate",
+      "addNomineeLabel": "Add Nominee",
+      "removeTooltip": "Remove nominee",
+      "transitionButtons": {
+        "openForNominations": "Open for Nominations",
+        "startReview": "Start Review",
+        "closeCycle": "Close Cycle"
+      },
+      "confirmDialog": {
+        "title": "Confirm Status Change",
+        "body": "Are you sure you want to change the cycle status?",
+        "confirm": "Confirm",
+        "cancel": "Cancel"
+      },
+      "minNomineesHint": "Need ≥2 nominees to start"
+    },
+    "reviewResponseForm": {
+      "ratingLabel": "Your Rating",
+      "commentsLabel": "Comments",
+      "commentsHint": "10–2000 characters",
+      "submitButton": "Submit Feedback",
+      "alreadySubmittedTitle": "Feedback Submitted",
+      "notNominated": "You are not nominated to review this cycle.",
+      "notAccepting": "This cycle is not currently accepting responses."
+    },
+    "resultsView": {
+      "aggregatedTitle": "Your 360 Feedback Results",
+      "detailedTitle": "360 Feedback Results",
+      "averageRatingLabel": "Average Rating",
+      "responseCountLabel": "responses",
+      "anonymizedCommentsHeading": "Feedback Comments",
+      "noResults": "No responses received"
+    }
+  },
+  "enums": {
+    "reviewCycleStatus": {
+      "draft": "Draft",
+      "open": "Open",
+      "in_progress": "In Progress",
+      "closed": "Closed"
+    },
+    "reviewNomineeStatus": {
+      "pending": "Pending",
+      "invited": "Invited",
+      "submitted": "Submitted"
+    }
+  },
   "errors": {
+    "reviewCycle": {
+      "invalid_transition": "Invalid status transition.",
+      "insufficient_nominees": "At least 2 nominees are required to start the review.",
+      "nominations_closed": "Nominations are closed for this cycle.",
+      "not_accepting_responses": "This cycle is not currently accepting responses.",
+      "results_not_available": "Results are not available until the cycle is closed."
+    },
+    "reviewNominee": {
+      "self_nomination": "You cannot nominate yourself.",
+      "duplicate": "This reviewer has already been nominated."
+    },
+    "reviewResponse": {
+      "already_submitted": "You have already submitted feedback for this cycle."
+    },
     "404": {
       "title": "Page Not Found",
       "message": "The page you are looking for does not exist or has been moved."

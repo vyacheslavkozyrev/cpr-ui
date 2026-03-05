@@ -54,15 +54,31 @@ export interface IAuthState {
   reset: () => void
 }
 
+// Restore stub auth from sessionStorage (synchronous, before first render)
+const _restoreStubAuth = () => {
+  if (!authConfig.enableStubAuth) return null
+  try {
+    const saved = sessionStorage.getItem('__stub_auth__')
+    if (saved) {
+      const parsed = JSON.parse(saved)
+      if (parsed.isAuthenticated && parsed.user) return parsed
+    }
+  } catch {
+    /* ignore */
+  }
+  return null
+}
+const _savedAuth = _restoreStubAuth()
+
 // Initial state
 const initialState = {
-  isAuthenticated: false,
+  isAuthenticated: _savedAuth?.isAuthenticated ?? false,
   isLoading: false,
   error: null,
-  user: null,
+  user: _savedAuth?.user ?? null,
   account: null,
-  accessToken: null,
-  idToken: null,
+  accessToken: _savedAuth?.accessToken ?? null,
+  idToken: _savedAuth?.idToken ?? null,
   isStubMode: authConfig.enableStubAuth,
 }
 
@@ -112,6 +128,20 @@ export const useAuthStore = create<IAuthState>()(
             accessToken: 'stub-access-token',
             idToken: 'stub-id-token',
           })
+          // Persist stub auth so page reloads stay authenticated (E2E / dev)
+          try {
+            sessionStorage.setItem(
+              '__stub_auth__',
+              JSON.stringify({
+                isAuthenticated: true,
+                user: stubUser,
+                accessToken: 'stub-access-token',
+                idToken: 'stub-id-token',
+              })
+            )
+          } catch {
+            /* ignore */
+          }
         } else {
           // Real MSAL authentication
           const result = await authService.loginPopup()
@@ -159,6 +189,11 @@ export const useAuthStore = create<IAuthState>()(
       try {
         if (isStubMode) {
           // Stub logout
+          try {
+            sessionStorage.removeItem('__stub_auth__')
+          } catch {
+            /* ignore */
+          }
           set({
             isAuthenticated: false,
             user: null,

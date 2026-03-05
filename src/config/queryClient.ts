@@ -39,6 +39,11 @@ export const createQueryClient = (): QueryClient => {
  */
 export const queryClient = createQueryClient()
 
+// Expose for E2E test cache invalidation (MSW mode only)
+if (import.meta.env['VITE_USE_MSW'] === 'true') {
+  ;(window as unknown as Record<string, unknown>)['__queryClient'] = queryClient
+}
+
 /**
  * Query keys factory for consistent cache key generation
  * Helps prevent typos and provides centralized key management
