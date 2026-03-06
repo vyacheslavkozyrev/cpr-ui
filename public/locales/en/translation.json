@@ -412,6 +412,30 @@
     "admin": {
       "title": "Admin",
       "comingSoon": "Admin features coming soon..."
+    },
+    "skillAssessment": {
+      "title": "Skill Self-Assessment",
+      "loadError": "Failed to load skill assessment.",
+      "emptyState": "No skills required for your current position.",
+      "position": "Position",
+      "careerTrack": "Career Track",
+      "careerPath": "Career Path",
+      "nextPosition": "Next Position"
+    },
+    "employeeAssessment": {
+      "title": "Skill Assessment",
+      "readOnlyBanner": "Viewing assessment for:",
+      "forbidden": "You do not have access to this employee's assessment.",
+      "notFound": "Employee not found.",
+      "loadError": "Failed to load assessment."
+    },
+    "teamSkillOverview": {
+      "title": "Team Skill Overview",
+      "columnName": "Name",
+      "columnPosition": "Position",
+      "columnAssessed": "Assessed",
+      "columnMeeting": "Meeting Requirement",
+      "emptyState": "No direct reports found."
     }
   },
   "components": {
@@ -445,6 +469,28 @@
       "alreadySubmittedTitle": "Feedback Submitted",
       "notNominated": "You are not nominated to review this cycle.",
       "notAccepting": "This cycle is not currently accepting responses."
+    },
+    "assessmentSkillRow": {
+      "skill": "Skill",
+      "required": "Required",
+      "currentLevel": "Current Level",
+      "targetLevel": "Target Level",
+      "notes": "Notes",
+      "notAssessed": "Not assessed",
+      "noTarget": "No target set",
+      "clearTarget": "Clear target",
+      "saved": "Saved ✓",
+      "saving": "Saving...",
+      "linkFeedback": "Link feedback",
+      "targetConflict": "Target level must be higher than your current level. Clear or raise the target first.",
+      "targetTooLow": "Target level must be strictly greater than your current level."
+    },
+    "evidenceModal": {
+      "title": "Link Evidence",
+      "searchPlaceholder": "Search feedback...",
+      "emptyState": "No feedback received yet.",
+      "save": "Save",
+      "cancel": "Cancel"
     },
     "resultsView": {
       "aggregatedTitle": "Your 360 Feedback Results",

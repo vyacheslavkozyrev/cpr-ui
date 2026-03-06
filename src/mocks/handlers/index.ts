@@ -1,9 +1,16 @@
 import { dashboardHandlers } from './dashboardHandlers'
 import goalsHandlers from './goalsHandlers'
 import reviewCyclesHandlers from './reviewCyclesHandlers'
+import skillAssessmentHandlers from './skillAssessmentHandlers'
 import { userHandlers } from './userHandlers'
 
-export { dashboardHandlers, goalsHandlers, reviewCyclesHandlers, userHandlers }
+export {
+  dashboardHandlers,
+  goalsHandlers,
+  reviewCyclesHandlers,
+  skillAssessmentHandlers,
+  userHandlers,
+}
 
 // Export all handlers for easy importing
 export const allHandlers = [
@@ -11,4 +18,5 @@ export const allHandlers = [
   ...dashboardHandlers,
   ...goalsHandlers,
   ...reviewCyclesHandlers,
+  ...skillAssessmentHandlers,
 ]
