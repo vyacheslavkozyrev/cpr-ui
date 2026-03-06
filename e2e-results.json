@@ -62,20 +62,20 @@
   },
   "suites": [
     {
-      "title": "360-degree-feedback.spec.ts",
-      "file": "360-degree-feedback.spec.ts",
+      "title": "skills-self-assessment.spec.ts",
+      "file": "skills-self-assessment.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Director Cycle List",
-          "file": "360-degree-feedback.spec.ts",
-          "line": 26,
+          "title": "US-001: Skill Self-Assessment Dashboard",
+          "file": "skills-self-assessment.spec.ts",
+          "line": 57,
           "column": 6,
           "specs": [
             {
-              "title": "AC-040 — Director sees paginated cycle list",
+              "title": "AC-001 — Position header shows position title and career track",
               "ok": true,
               "tags": [],
               "tests": [
@@ -90,12 +90,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4957,
+                      "duration": 7995,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-02T00:42:00.912Z",
+                      "startTime": "2026-03-05T02:59:24.806Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -103,13 +103,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "9a8e1d310bc1b355413b-96f03b868cd74d7bd9c0",
-              "file": "360-degree-feedback.spec.ts",
-              "line": 34,
+              "id": "a4228d2c278b9e83b3c1-df4bcc77d5e27a28f3fe",
+              "file": "skills-self-assessment.spec.ts",
+              "line": 64,
               "column": 3
             },
             {
-              "title": "AC-041 — Each row shows id/title/status/nominees/responses/created_at fields",
+              "title": "AC-002 — Skill categories are grouped and listed",
               "ok": true,
               "tags": [],
               "tests": [
@@ -124,12 +124,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5451,
+                      "duration": 7537,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-02T00:42:06.023Z",
+                      "startTime": "2026-03-05T02:59:33.135Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -137,13 +137,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "9a8e1d310bc1b355413b-5eec09b13c735d828d82",
-              "file": "360-degree-feedback.spec.ts",
-              "line": 40,
+              "id": "a4228d2c278b9e83b3c1-7ef89248e8ef5f9d7b97",
+              "file": "skills-self-assessment.spec.ts",
+              "line": 74,
               "column": 3
             },
             {
-              "title": "AC-042 — List sorted by created_at desc (latest row appears first)",
+              "title": "AC-003 — Skill rows display title and required level badge",
               "ok": true,
               "tags": [],
               "tests": [
@@ -158,12 +158,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 7446,
+                      "duration": 7256,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-02T00:42:11.489Z",
+                      "startTime": "2026-03-05T02:59:40.694Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -171,13 +171,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "9a8e1d310bc1b355413b-39b5a82d8409d226e301",
-              "file": "360-degree-feedback.spec.ts",
-              "line": 53,
+              "id": "a4228d2c278b9e83b3c1-2b1c43fd9f8c21c11255",
+              "file": "skills-self-assessment.spec.ts",
+              "line": 79,
               "column": 3
             },
             {
-              "title": "Create cycle dialog opens when button clicked",
+              "title": "AC-004 — Page loads successfully for authenticated Director role",
               "ok": true,
               "tags": [],
               "tests": [
@@ -192,12 +192,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4866,
+                      "duration": 7119,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-02T00:42:18.946Z",
+                      "startTime": "2026-03-05T02:59:47.973Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -205,55 +205,21 @@
                   "status": "expected"
                 }
               ],
-              "id": "9a8e1d310bc1b355413b-6b12c0e1ad81ab1b3730",
-              "file": "360-degree-feedback.spec.ts",
-              "line": 66,
-              "column": 3
-            },
-            {
-              "title": "Filter by status dropdown narrows results",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 45000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 6869,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-03-02T00:42:23.829Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "9a8e1d310bc1b355413b-67d15ba4628cd78bfb90",
-              "file": "360-degree-feedback.spec.ts",
-              "line": 71,
+              "id": "a4228d2c278b9e83b3c1-b4eef0f573c27ae2d2ac",
+              "file": "skills-self-assessment.spec.ts",
+              "line": 89,
               "column": 3
             }
           ]
         },
         {
-          "title": "Employee My Cycles List",
-          "file": "360-degree-feedback.spec.ts",
-          "line": 86,
+          "title": "US-002: Self-Assess Current Skill Level",
+          "file": "skills-self-assessment.spec.ts",
+          "line": 99,
           "column": 6,
           "specs": [
             {
-              "title": "AC-043 — Authenticated user sees their cycles at /my-reviews",
+              "title": "AC-005 — Level selector dropdowns are present",
               "ok": true,
               "tags": [],
               "tests": [
@@ -268,12 +234,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5455,
+                      "duration": 7305,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-02T00:42:30.714Z",
+                      "startTime": "2026-03-05T02:59:55.118Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -281,89 +247,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "9a8e1d310bc1b355413b-52e6c7dad25c300aae98",
-              "file": "360-degree-feedback.spec.ts",
-              "line": 94,
-              "column": 3
-            },
-            {
-              "title": "AC-044 — Employee view has no \"Reviewer\" column header",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 45000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 5835,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-03-02T00:42:36.184Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "9a8e1d310bc1b355413b-9d6467ed03f8a856186a",
-              "file": "360-degree-feedback.spec.ts",
+              "id": "a4228d2c278b9e83b3c1-0129c692e882a1336ba7",
+              "file": "skills-self-assessment.spec.ts",
               "line": 106,
               "column": 3
-            }
-          ]
-        },
-        {
-          "title": "Reviewer — Pending Review Requests",
-          "file": "360-degree-feedback.spec.ts",
-          "line": 115,
-          "column": 6,
-          "specs": [
-            {
-              "title": "AC-045 — Page renders review request list",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 45000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 6452,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-03-02T00:42:42.034Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "9a8e1d310bc1b355413b-c9f0168d2902bacd5575",
-              "file": "360-degree-feedback.spec.ts",
-              "line": 125,
-              "column": 3
             },
             {
-              "title": "AC-046 — Each request shows cycle title and subject (no email)",
+              "title": "AC-006 — No explicit save button — save happens on dropdown change",
               "ok": true,
               "tags": [],
               "tests": [
@@ -378,12 +268,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6299,
+                      "duration": 7839,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-02T00:42:48.499Z",
+                      "startTime": "2026-03-05T03:00:02.441Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -391,89 +281,21 @@
                   "status": "expected"
                 }
               ],
-              "id": "9a8e1d310bc1b355413b-649da4481a90b87c7925",
-              "file": "360-degree-feedback.spec.ts",
-              "line": 139,
-              "column": 3
-            },
-            {
-              "title": "AC-047 — Submitted cycles are excluded (empty state override)",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 45000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 5961,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-03-02T00:42:54.814Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "9a8e1d310bc1b355413b-7c819131fa3f7b3f347d",
-              "file": "360-degree-feedback.spec.ts",
-              "line": 151,
-              "column": 3
-            },
-            {
-              "title": "Error path — empty state when no requests",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 45000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 6387,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-03-02T00:43:00.792Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "9a8e1d310bc1b355413b-adbcb9cc93d899954042",
-              "file": "360-degree-feedback.spec.ts",
-              "line": 157,
+              "id": "a4228d2c278b9e83b3c1-f09243212481bb628a9e",
+              "file": "skills-self-assessment.spec.ts",
+              "line": 111,
               "column": 3
             }
           ]
         },
         {
-          "title": "Cycle Detail Page",
-          "file": "360-degree-feedback.spec.ts",
-          "line": 183,
+          "title": "US-003: Set Target Skill Level",
+          "file": "skills-self-assessment.spec.ts",
+          "line": 122,
           "column": 6,
           "specs": [
             {
-              "title": "Draft cycle shows \"Open for Nominations\" button (Director)",
+              "title": "AC-010 — Target level Select dropdowns are present alongside current level dropdowns",
               "ok": true,
               "tags": [],
               "tests": [
@@ -488,12 +310,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4625,
+                      "duration": 7194,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-02T00:43:07.192Z",
+                      "startTime": "2026-03-05T03:00:10.303Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -501,13 +323,55 @@
                   "status": "expected"
                 }
               ],
-              "id": "9a8e1d310bc1b355413b-798c708bb1c80209525a",
-              "file": "360-degree-feedback.spec.ts",
-              "line": 193,
+              "id": "a4228d2c278b9e83b3c1-6d8558b1e8c86ac144e8",
+              "file": "skills-self-assessment.spec.ts",
+              "line": 129,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "US-004: Radar Chart",
+          "file": "skills-self-assessment.spec.ts",
+          "line": 140,
+          "column": 6,
+          "specs": [
+            {
+              "title": "AC-014 — Radar chart canvas is rendered",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8034,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T03:00:17.519Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a4228d2c278b9e83b3c1-d50f4a7de8be5a996f3c",
+              "file": "skills-self-assessment.spec.ts",
+              "line": 148,
               "column": 3
             },
             {
-              "title": "In-progress cycle shows nominees and \"Close Cycle\" button",
+              "title": "AC-015 — \"Highest position\" banner absent when next_position exists",
               "ok": true,
               "tags": [],
               "tests": [
@@ -522,12 +386,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4591,
+                      "duration": 7662,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-02T00:43:11.831Z",
+                      "startTime": "2026-03-05T03:00:25.578Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -535,13 +399,55 @@
                   "status": "expected"
                 }
               ],
-              "id": "9a8e1d310bc1b355413b-da8653c0adf576c90f4d",
-              "file": "360-degree-feedback.spec.ts",
-              "line": 199,
+              "id": "a4228d2c278b9e83b3c1-fa4d4351fb4ca053db36",
+              "file": "skills-self-assessment.spec.ts",
+              "line": 153,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "US-005: Link Received Feedback as Evidence",
+          "file": "skills-self-assessment.spec.ts",
+          "line": 164,
+          "column": 6,
+          "specs": [
+            {
+              "title": "AC-018 — \"Link feedback\" action opens Evidence modal",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7670,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T03:00:33.263Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a4228d2c278b9e83b3c1-03c6749fc864163a592c",
+              "file": "skills-self-assessment.spec.ts",
+              "line": 171,
               "column": 3
             },
             {
-              "title": "Closed cycle shows results section",
+              "title": "AC-020 — Already-linked feedback is pre-checked in modal",
               "ok": true,
               "tags": [],
               "tests": [
@@ -556,12 +462,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4649,
+                      "duration": 7488,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-02T00:43:16.433Z",
+                      "startTime": "2026-03-05T03:00:40.957Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -569,13 +475,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "9a8e1d310bc1b355413b-641373d6f1d5b7fa2e8c",
-              "file": "360-degree-feedback.spec.ts",
-              "line": 208,
+              "id": "a4228d2c278b9e83b3c1-f91c96a0d4938179c502",
+              "file": "skills-self-assessment.spec.ts",
+              "line": 181,
               "column": 3
             },
             {
-              "title": "Non-existent cycle shows error alert",
+              "title": "AC-021 — Evidence items appear below skill row",
               "ok": true,
               "tags": [],
               "tests": [
@@ -590,12 +496,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 13315,
+                      "duration": 7205,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-02T00:43:21.096Z",
+                      "startTime": "2026-03-05T03:00:48.467Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -603,69 +509,195 @@
                   "status": "expected"
                 }
               ],
-              "id": "9a8e1d310bc1b355413b-4ec603acc68dda4d87e5",
-              "file": "360-degree-feedback.spec.ts",
+              "id": "a4228d2c278b9e83b3c1-ea80e42f405762c20e3a",
+              "file": "skills-self-assessment.spec.ts",
+              "line": 200,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "US-006: PeopleManager Team Overview",
+          "file": "skills-self-assessment.spec.ts",
+          "line": 208,
+          "column": 6,
+          "specs": [
+            {
+              "title": "AC-023 — PeopleManager sees team skill overview with direct reports",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8488,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T03:00:55.692Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a4228d2c278b9e83b3c1-4546ac172608f3eb1336",
+              "file": "skills-self-assessment.spec.ts",
               "line": 215,
               "column": 3
-            }
-          ]
-        },
-        {
-          "title": "Reviewer Submission Form",
-          "file": "360-degree-feedback.spec.ts",
-          "line": 230,
-          "column": 6,
-          "specs": [
+            },
             {
-              "title": "Submission form is accessible from review requests page",
+              "title": "AC-024 — Clicking a direct report navigates to their read-only assessment",
               "ok": true,
               "tags": [],
               "tests": [
                 {
                   "timeout": 45000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\serzh\\VSC_Projects\\cpr-meta\\source\\cpr-ui\\e2e\\360-degree-feedback.spec.ts",
-                        "line": 240,
-                        "column": 12
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
+                  "annotations": [],
+                  "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "skipped",
-                      "duration": 4784,
+                      "status": "passed",
+                      "duration": 9221,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-02T00:43:34.427Z",
-                      "annotations": [
-                        {
-                          "type": "skip",
-                          "location": {
-                            "file": "C:\\Users\\serzh\\VSC_Projects\\cpr-meta\\source\\cpr-ui\\e2e\\360-degree-feedback.spec.ts",
-                            "line": 240,
-                            "column": 12
-                          }
-                        }
-                      ],
+                      "startTime": "2026-03-05T03:01:04.201Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
-                  "status": "skipped"
+                  "status": "expected"
                 }
               ],
-              "id": "9a8e1d310bc1b355413b-094e4333b53b2dad909d",
-              "file": "360-degree-feedback.spec.ts",
-              "line": 233,
+              "id": "a4228d2c278b9e83b3c1-a43ee0b0b5505c3414b7",
+              "file": "skills-self-assessment.spec.ts",
+              "line": 223,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "US-007: Director / Admin Read-Only Assessment",
+          "file": "skills-self-assessment.spec.ts",
+          "line": 238,
+          "column": 6,
+          "specs": [
+            {
+              "title": "AC-026 — Director can access any employee assessment page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7544,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T03:01:13.445Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a4228d2c278b9e83b3c1-afeb7a8db49dd976b16a",
+              "file": "skills-self-assessment.spec.ts",
+              "line": 245,
+              "column": 3
+            },
+            {
+              "title": "AC-027 — Read-only view shows banner and no interactive controls",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7500,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T03:01:21.017Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a4228d2c278b9e83b3c1-b04381f0ebad007ed53c",
+              "file": "skills-self-assessment.spec.ts",
+              "line": 252,
+              "column": 3
+            },
+            {
+              "title": "AC-025 — Read-only view shows skills with notes and evidence",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7710,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-05T03:01:28.540Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a4228d2c278b9e83b3c1-05f90be9284fdd1d3a91",
+              "file": "skills-self-assessment.spec.ts",
+              "line": 264,
               "column": 3
             }
           ]
@@ -675,10 +707,10 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-03-02T00:41:57.841Z",
-    "duration": 102104.90999999999,
-    "expected": 15,
-    "skipped": 1,
+    "startTime": "2026-03-05T02:59:18.405Z",
+    "duration": 138811.362,
+    "expected": 17,
+    "skipped": 0,
     "unexpected": 0,
     "flaky": 0
   }

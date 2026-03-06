@@ -19,6 +19,9 @@ import ReviewCyclesPage from '../pages/reviews/ReviewCyclesPage'
 import MyCyclesPage from '../pages/reviews/MyCyclesPage'
 import ReviewRequestsPage from '../pages/reviews/ReviewRequestsPage'
 import { SettingsPage } from '../pages/settings'
+import EmployeeAssessmentPage from '../pages/skillAssessment/EmployeeAssessmentPage'
+import SkillAssessmentPage from '../pages/skillAssessment/SkillAssessmentPage'
+import TeamSkillOverviewPage from '../pages/skillAssessment/TeamSkillOverviewPage'
 import { SkillsPage } from '../pages/skills'
 import { TeamPage } from '../pages/team'
 import { TestErrorsPage } from '../pages/test-errors'
@@ -92,8 +95,39 @@ export const routes: RouteObject[] = [
       // Skills - accessible to all authenticated users
       {
         path: 'skills',
-        element: <SkillsPage />,
         errorElement: <RouteErrorBoundary />,
+        children: [
+          {
+            index: true,
+            element: <SkillsPage />,
+          },
+          {
+            path: 'assessment',
+            element: <SkillAssessmentPage />,
+          },
+          {
+            path: 'team',
+            element: (
+              <RoleGuard allowedRoles={[UserRole.PEOPLE_MANAGER]}>
+                <TeamSkillOverviewPage />
+              </RoleGuard>
+            ),
+          },
+          {
+            path: 'employees/:employeeId/assessment',
+            element: (
+              <RoleGuard
+                allowedRoles={[
+                  UserRole.PEOPLE_MANAGER,
+                  UserRole.DIRECTOR,
+                  UserRole.ADMINISTRATOR,
+                ]}
+              >
+                <EmployeeAssessmentPage />
+              </RoleGuard>
+            ),
+          },
+        ],
       },
 
       // Feedback - accessible to all authenticated users
