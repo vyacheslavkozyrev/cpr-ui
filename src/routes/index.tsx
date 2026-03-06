@@ -3,6 +3,7 @@ import { ProtectedRoute, RoleGuard } from '../components/auth'
 import { NotFoundPage, RouteErrorBoundary } from '../components/errors'
 import { FeedbackRequestForm } from '../components/FeedbackRequest/form'
 import { AppLayout } from '../components/layout'
+import TaxonomyAdminTabs from '../components/taxonomy/admin/TaxonomyAdminTabs'
 import { UserRole } from '../models'
 import { AdminPage } from '../pages/admin'
 import { LoginPage } from '../pages/auth'
@@ -23,6 +24,10 @@ import EmployeeAssessmentPage from '../pages/skillAssessment/EmployeeAssessmentP
 import SkillAssessmentPage from '../pages/skillAssessment/SkillAssessmentPage'
 import TeamSkillOverviewPage from '../pages/skillAssessment/TeamSkillOverviewPage'
 import { SkillsPage } from '../pages/skills'
+import CareerFrameworkPage from '../pages/taxonomy/CareerFrameworkPage'
+import CareerPathDetailPage from '../pages/taxonomy/CareerPathDetailPage'
+import CareerTrackDetailPage from '../pages/taxonomy/CareerTrackDetailPage'
+import PositionDetailPage from '../pages/taxonomy/PositionDetailPage'
 import { TeamPage } from '../pages/team'
 import { TestErrorsPage } from '../pages/test-errors'
 
@@ -210,6 +215,41 @@ export const routes: RouteObject[] = [
             ]}
           >
             <TeamPage />
+          </RoleGuard>
+        ),
+        errorElement: <RouteErrorBoundary />,
+      },
+
+      // Career Framework - accessible to all authenticated users
+      {
+        path: 'career-framework',
+        errorElement: <RouteErrorBoundary />,
+        children: [
+          {
+            index: true,
+            element: <CareerFrameworkPage />,
+          },
+          {
+            path: ':pathId',
+            element: <CareerPathDetailPage />,
+          },
+          {
+            path: ':pathId/tracks/:trackId',
+            element: <CareerTrackDetailPage />,
+          },
+          {
+            path: ':pathId/tracks/:trackId/positions/:positionId',
+            element: <PositionDetailPage />,
+          },
+        ],
+      },
+
+      // Career Framework Admin - Administrator only
+      {
+        path: 'settings/career-framework',
+        element: (
+          <RoleGuard allowedRoles={[UserRole.ADMINISTRATOR]}>
+            <TaxonomyAdminTabs />
           </RoleGuard>
         ),
         errorElement: <RouteErrorBoundary />,
