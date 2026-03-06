@@ -173,6 +173,75 @@
       "microsoftNote": "Inicie sesión con su cuenta de Microsoft"
     }
   },
+  "taxonomy": {
+    "careerFramework": {
+      "title": "Marco de Carrera",
+      "addCareerPath": "Agregar Ruta de Carrera",
+      "emptyState": "No se encontraron rutas de carrera."
+    },
+    "careerPath": {
+      "edit": "Editar Ruta de Carrera",
+      "addTrack": "Agregar Pista de Carrera",
+      "tracks": "Pistas de Carrera",
+      "noTracks": "No hay pistas de carrera disponibles."
+    },
+    "careerTrack": {
+      "edit": "Editar Pista",
+      "addPosition": "Agregar Posición",
+      "positions": "Posiciones",
+      "noPositions": "No hay posiciones disponibles."
+    },
+    "position": {
+      "edit": "Editar Posición",
+      "manageSkills": "Gestionar Habilidades",
+      "skillProfile": "Perfil de Habilidades",
+      "skillRequirements": "Requisitos de Habilidades",
+      "noSkills": "No hay requisitos de habilidades definidos.",
+      "expectations": "Expectativas",
+      "skills": "Habilidades Requeridas"
+    },
+    "skill": {
+      "category": "Categoría",
+      "skillName": "Habilidad",
+      "level": "Nivel Requerido",
+      "mandatory": "Obligatorio",
+      "optional": "Opcional",
+      "weight": "Peso",
+      "rationale": "Justificación",
+      "detail": "Detalle de Habilidad",
+      "proficiencyLevels": "Niveles de Competencia",
+      "requiredLevel": "Nivel Requerido"
+    },
+    "admin": {
+      "addSkillRequirement": "Agregar Requisito de Habilidad",
+      "editSkillRequirement": "Editar Requisito de Habilidad",
+      "allCategories": "Todas las Categorías",
+      "skills": "Habilidades",
+      "addSkill": "Agregar Habilidad",
+      "noSkills": "No se encontraron habilidades.",
+      "careerPaths": "Rutas de Carrera",
+      "addCareerPath": "Agregar Ruta de Carrera",
+      "noCareerPaths": "No se encontraron rutas de carrera.",
+      "careerTracks": "Pistas de Carrera",
+      "addCareerTrack": "Agregar Pista de Carrera",
+      "noCareerTracks": "No se encontraron pistas de carrera.",
+      "positions": "Posiciones",
+      "positionsNote": "Seleccione una página de detalle de pista de carrera para gestionar posiciones.",
+      "addPosition": "Agregar Posición",
+      "skillCategories": "Categorías de Habilidades",
+      "addSkillCategory": "Agregar Categoría de Habilidad",
+      "noSkillCategories": "No se encontraron categorías de habilidades.",
+      "confirmDelete": "¿Está seguro de que desea eliminar esto?",
+      "levels": {
+        "addLevel": "Agregar Nivel"
+      }
+    },
+    "errors": {
+      "loadFailed": "Error al cargar datos. Por favor, inténtelo de nuevo.",
+      "saveFailed": "Error al guardar. Por favor, inténtelo de nuevo.",
+      "deleteFailed": "Error al eliminar. Por favor, inténtelo de nuevo."
+    }
+  },
   "errors": {
     "404": {
       "title": "Página No Encontrada",

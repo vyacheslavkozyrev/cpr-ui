@@ -21,7 +21,7 @@ import {
   Typography,
 } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { type Resolver, type SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -93,7 +93,7 @@ const SkillLevelsSubPanel: React.FC<ISkillLevelsSubPanelProps> = React.memo(
       reset,
       formState: { errors },
     } = useForm<TFormData>({
-      resolver: zodResolver(schema),
+      resolver: zodResolver(schema) as Resolver<TFormData>,
       defaultValues: {
         title: '',
         description: '',
@@ -127,7 +127,7 @@ const SkillLevelsSubPanel: React.FC<ISkillLevelsSubPanelProps> = React.memo(
       }
     }, [isPending])
 
-    const onSubmit = useCallback(
+    const onSubmit: SubmitHandler<TFormData> = useCallback(
       async (data: TFormData) => {
         try {
           if (editTarget) {

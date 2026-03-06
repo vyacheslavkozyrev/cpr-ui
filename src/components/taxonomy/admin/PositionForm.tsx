@@ -15,7 +15,12 @@ import {
   TextField,
 } from '@mui/material'
 import React, { useCallback, useEffect, useMemo } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import {
+  Controller,
+  type Resolver,
+  type SubmitHandler,
+  useForm,
+} from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -42,7 +47,7 @@ const schema = z.object({
     .nullable()
     .optional(),
   career_track_id: z.string().min(1, 'Career track is required'),
-  sort_order: z.coerce.number().int().min(0).optional(),
+  sort_order: z.coerce.number().int().min(0).default(0),
 })
 
 type TFormData = z.infer<typeof schema>
@@ -78,7 +83,7 @@ const PositionForm: React.FC<IPositionFormProps> = React.memo(
       control,
       formState: { errors },
     } = useForm<TFormData>({
-      resolver: zodResolver(schema),
+      resolver: zodResolver(schema) as Resolver<TFormData>,
       defaultValues: {
         title: existing?.title ?? '',
         description: existing?.description ?? '',
@@ -100,7 +105,7 @@ const PositionForm: React.FC<IPositionFormProps> = React.memo(
       }
     }, [open, existing, reset])
 
-    const onSubmit = useCallback(
+    const onSubmit: SubmitHandler<TFormData> = useCallback(
       async (data: TFormData) => {
         try {
           if (isEdit && existing) {
@@ -108,8 +113,12 @@ const PositionForm: React.FC<IPositionFormProps> = React.memo(
               id: existing.id,
               dto: {
                 title: data.title,
-                description: data.description ?? null,
-                expectations: data.expectations ?? null,
+                ...(data.description !== undefined
+                  ? { description: data.description ?? null }
+                  : {}),
+                ...(data.expectations !== undefined
+                  ? { expectations: data.expectations ?? null }
+                  : {}),
                 career_track_id: data.career_track_id,
                 sort_order: data.sort_order,
               },
@@ -117,8 +126,12 @@ const PositionForm: React.FC<IPositionFormProps> = React.memo(
           } else {
             await createMutation.mutateAsync({
               title: data.title,
-              description: data.description ?? null,
-              expectations: data.expectations ?? null,
+              ...(data.description !== undefined
+                ? { description: data.description ?? null }
+                : {}),
+              ...(data.expectations !== undefined
+                ? { expectations: data.expectations ?? null }
+                : {}),
               career_track_id: data.career_track_id,
               sort_order: data.sort_order,
             })

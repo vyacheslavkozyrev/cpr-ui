@@ -31,7 +31,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   alt4: '#c62828',
 }
 
-const getCategoryColor = (categoryId: string, index: number): string => {
+const getCategoryColor = (_categoryId: string, index: number): string => {
   const keys = Object.keys(CATEGORY_COLORS)
   return (
     CATEGORY_COLORS[keys[index % keys.length]] ?? CATEGORY_COLORS['default']

@@ -75,8 +75,11 @@ const ProgressionLadder: React.FC<IProgressionLadderProps> = React.memo(
       )
     }
 
-    // Sort descending by sort_order (highest = most senior = top)
-    const sorted = [...positions].sort((a, b) => b.sort_order - a.sort_order)
+    // Sort descending by sort_order (highest = most senior = top); alphabetical tiebreak
+    const sorted = [...positions].sort((a, b) => {
+      const o = b.sort_order - a.sort_order
+      return o !== 0 ? o : a.title.localeCompare(b.title)
+    })
 
     return (
       <Box sx={styles.container}>
@@ -84,9 +87,9 @@ const ProgressionLadder: React.FC<IProgressionLadderProps> = React.memo(
           <React.Fragment key={position.id}>
             <PositionCard
               position={position}
-              onClick={
-                onPositionClick ? () => onPositionClick(position.id) : undefined
-              }
+              {...(onPositionClick
+                ? { onClick: () => onPositionClick(position.id) }
+                : {})}
             />
             {index < sorted.length - 1 && (
               <Box sx={styles.connector}>

@@ -60,7 +60,7 @@ export const useCareerTracks = (careerPathId?: string) =>
     queryKey: TAXONOMY_KEYS.careerTracks(careerPathId),
     queryFn: async () => {
       const res = await taxonomyApiService.getCareerTracks({
-        career_path_id: careerPathId,
+        ...(careerPathId ? { career_path_id: careerPathId } : {}),
         per_page: 100,
       })
       return res.data.data
@@ -105,7 +105,7 @@ export const useSkills = (categoryId?: string) =>
     queryKey: TAXONOMY_KEYS.skills(categoryId),
     queryFn: async () => {
       const res = await taxonomyApiService.getSkills({
-        category_id: categoryId,
+        ...(categoryId ? { category_id: categoryId } : {}),
         per_page: 100,
       })
       return res.data.data

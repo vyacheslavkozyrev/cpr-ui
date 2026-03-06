@@ -173,6 +173,75 @@
       "microsoftNote": "Connectez-vous avec votre compte Microsoft"
     }
   },
+  "taxonomy": {
+    "careerFramework": {
+      "title": "Cadre de Carrière",
+      "addCareerPath": "Ajouter un Parcours de Carrière",
+      "emptyState": "Aucun parcours de carrière trouvé."
+    },
+    "careerPath": {
+      "edit": "Modifier le Parcours de Carrière",
+      "addTrack": "Ajouter une Filière",
+      "tracks": "Filières de Carrière",
+      "noTracks": "Aucune filière de carrière disponible."
+    },
+    "careerTrack": {
+      "edit": "Modifier la Filière",
+      "addPosition": "Ajouter un Poste",
+      "positions": "Postes",
+      "noPositions": "Aucun poste disponible."
+    },
+    "position": {
+      "edit": "Modifier le Poste",
+      "manageSkills": "Gérer les Compétences",
+      "skillProfile": "Profil de Compétences",
+      "skillRequirements": "Exigences de Compétences",
+      "noSkills": "Aucune exigence de compétence définie.",
+      "expectations": "Attentes",
+      "skills": "Compétences Requises"
+    },
+    "skill": {
+      "category": "Catégorie",
+      "skillName": "Compétence",
+      "level": "Niveau Requis",
+      "mandatory": "Obligatoire",
+      "optional": "Optionnel",
+      "weight": "Poids",
+      "rationale": "Justification",
+      "detail": "Détail de la Compétence",
+      "proficiencyLevels": "Niveaux de Compétence",
+      "requiredLevel": "Niveau Requis"
+    },
+    "admin": {
+      "addSkillRequirement": "Ajouter une Exigence de Compétence",
+      "editSkillRequirement": "Modifier une Exigence de Compétence",
+      "allCategories": "Toutes les Catégories",
+      "skills": "Compétences",
+      "addSkill": "Ajouter une Compétence",
+      "noSkills": "Aucune compétence trouvée.",
+      "careerPaths": "Parcours de Carrière",
+      "addCareerPath": "Ajouter un Parcours de Carrière",
+      "noCareerPaths": "Aucun parcours de carrière trouvé.",
+      "careerTracks": "Filières de Carrière",
+      "addCareerTrack": "Ajouter une Filière",
+      "noCareerTracks": "Aucune filière de carrière trouvée.",
+      "positions": "Postes",
+      "positionsNote": "Sélectionnez une page de détail de filière pour gérer les postes.",
+      "addPosition": "Ajouter un Poste",
+      "skillCategories": "Catégories de Compétences",
+      "addSkillCategory": "Ajouter une Catégorie de Compétence",
+      "noSkillCategories": "Aucune catégorie de compétence trouvée.",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer ceci ?",
+      "levels": {
+        "addLevel": "Ajouter un Niveau"
+      }
+    },
+    "errors": {
+      "loadFailed": "Échec du chargement des données. Veuillez réessayer.",
+      "saveFailed": "Échec de la sauvegarde. Veuillez réessayer.",
+      "deleteFailed": "Échec de la suppression. Veuillez réessayer."
+    }
+  },
   "errors": {
     "404": {
       "title": "Page Non Trouvée",

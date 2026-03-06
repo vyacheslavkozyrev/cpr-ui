@@ -1022,6 +1022,75 @@
     "deadline": "Тэрмін",
     "deadlineHelp": "Дата завяршэння (неабавязкова, павінна быць у будучыні)"
   },
+  "taxonomy": {
+    "careerFramework": {
+      "title": "Кар'ерная Структура",
+      "addCareerPath": "Дадаць Кар'ерны Шлях",
+      "emptyState": "Кар'ерных шляхоў не знойдзена."
+    },
+    "careerPath": {
+      "edit": "Рэдагаваць Кар'ерны Шлях",
+      "addTrack": "Дадаць Кар'ерны Трэк",
+      "tracks": "Кар'ерныя Трэкі",
+      "noTracks": "Кар'ерных трэкаў няма."
+    },
+    "careerTrack": {
+      "edit": "Рэдагаваць Трэк",
+      "addPosition": "Дадаць Пасаду",
+      "positions": "Пасады",
+      "noPositions": "Пасад няма."
+    },
+    "position": {
+      "edit": "Рэдагаваць Пасаду",
+      "manageSkills": "Кіраваць Навыкамі",
+      "skillProfile": "Профіль Навыкаў",
+      "skillRequirements": "Патрабаванні да Навыкаў",
+      "noSkills": "Патрабаванні да навыкаў не вызначаны.",
+      "expectations": "Чаканні",
+      "skills": "Неабходныя Навыкі"
+    },
+    "skill": {
+      "category": "Катэгорыя",
+      "skillName": "Навык",
+      "level": "Патрабуемы Узровень",
+      "mandatory": "Абавязкова",
+      "optional": "Неабавязкова",
+      "weight": "Вага",
+      "rationale": "Абгрунтаванне",
+      "detail": "Дэталі Навыку",
+      "proficiencyLevels": "Узроўні Кампетэнцыі",
+      "requiredLevel": "Патрабуемы Узровень"
+    },
+    "admin": {
+      "addSkillRequirement": "Дадаць Патрабаванне да Навыку",
+      "editSkillRequirement": "Рэдагаваць Патрабаванне да Навыку",
+      "allCategories": "Усе Катэгорыі",
+      "skills": "Навыкі",
+      "addSkill": "Дадаць Навык",
+      "noSkills": "Навыкаў не знойдзена.",
+      "careerPaths": "Кар'ерныя Шляхі",
+      "addCareerPath": "Дадаць Кар'ерны Шлях",
+      "noCareerPaths": "Кар'ерных шляхоў не знойдзена.",
+      "careerTracks": "Кар'ерныя Трэкі",
+      "addCareerTrack": "Дадаць Кар'ерны Трэк",
+      "noCareerTracks": "Кар'ерных трэкаў не знойдзена.",
+      "positions": "Пасады",
+      "positionsNote": "Выберыце старонку дэталяў трэка для кіравання пасадамі.",
+      "addPosition": "Дадаць Пасаду",
+      "skillCategories": "Катэгорыі Навыкаў",
+      "addSkillCategory": "Дадаць Катэгорыю Навыкаў",
+      "noSkillCategories": "Катэгорый навыкаў не знойдзена.",
+      "confirmDelete": "Вы ўпэўнены, што хочаце выдаліць гэта?",
+      "levels": {
+        "addLevel": "Дадаць Узровень"
+      }
+    },
+    "errors": {
+      "loadFailed": "Памылка загрузкі дадзеных. Паўтарыце спробу.",
+      "saveFailed": "Памылка захавання. Паўтарыце спробу.",
+      "deleteFailed": "Памылка выдалення. Паўтарыце спробу."
+    }
+  },
   "errors": {
     "404": {
       "title": "Старонка Не Знойдзена",

@@ -28,13 +28,19 @@ import {
   Typography,
 } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import {
+  Controller,
+  type Resolver,
+  type SubmitHandler,
+  useForm,
+} from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import {
   useAddPositionSkill,
   useDeletePositionSkill,
+  useSkill,
   useSkillCategories,
   useSkills,
   useUpdatePositionSkill,
@@ -101,7 +107,7 @@ const PositionSkillsPanel: React.FC<IPositionSkillsPanelProps> = React.memo(
       watch,
       formState: { errors },
     } = useForm<TFormData>({
-      resolver: zodResolver(schema),
+      resolver: zodResolver(schema) as Resolver<TFormData>,
       defaultValues: {
         skill_id: '',
         skill_level_id: '',
@@ -112,9 +118,16 @@ const PositionSkillsPanel: React.FC<IPositionSkillsPanelProps> = React.memo(
     })
 
     const watchedSkillId = watch('skill_id')
-    const selectedSkill = useMemo(
-      () => skills?.find(s => s.id === watchedSkillId),
-      [skills, watchedSkillId]
+
+    const { data: selectedSkillDetail } = useSkill(watchedSkillId)
+    const { data: editTargetSkillDetail } = useSkill(editTarget?.skill_id ?? '')
+
+    const availableLevels = useMemo(
+      () =>
+        editTarget
+          ? (editTargetSkillDetail?.levels ?? [])
+          : (selectedSkillDetail?.levels ?? []),
+      [editTarget, editTargetSkillDetail, selectedSkillDetail]
     )
 
     const handleAdd = useCallback(() => {
@@ -170,7 +183,7 @@ const PositionSkillsPanel: React.FC<IPositionSkillsPanelProps> = React.memo(
       [position.id, deleteSkillMutation, t]
     )
 
-    const onSubmit = useCallback(
+    const onSubmit: SubmitHandler<TFormData> = useCallback(
       async (data: TFormData) => {
         try {
           if (editTarget) {
@@ -365,9 +378,9 @@ const PositionSkillsPanel: React.FC<IPositionSkillsPanelProps> = React.memo(
                       {...field}
                       label={t('taxonomy.skill.level', 'Required Level')}
                     >
-                      {(editTarget ? [] : selectedSkill ? [] : []).map(l => (
-                        <MenuItem key={l} value={l}>
-                          {l}
+                      {availableLevels.map(l => (
+                        <MenuItem key={l.id} value={l.id}>
+                          {l.value}. {l.title}
                         </MenuItem>
                       ))}
                     </Select>
