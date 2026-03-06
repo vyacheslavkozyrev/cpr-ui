@@ -14,7 +14,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import type { TGoalDto } from '../../../dtos/GoalDto'
@@ -23,6 +23,44 @@ import { useDateFormat } from '../../../hooks'
 interface GoalCardProps {
   goal: TGoalDto
 }
+
+const getStyles = () => ({
+  card: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    transition: 'transform 0.2s, box-shadow 0.2s',
+    '&:hover': {
+      transform: 'translateY(-4px)',
+      boxShadow: 4,
+    },
+  },
+  cardActionArea: {
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch',
+  },
+  cardContent: { flexGrow: 1, width: '100%' },
+  menuButton: { ml: 1 },
+  title: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: 'vertical',
+    minHeight: '3em',
+  },
+  description: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: 'vertical',
+    mb: 2,
+  },
+  progressBar: { height: 6, borderRadius: 1 },
+})
 
 /**
  * Goal Card Component
@@ -35,6 +73,7 @@ export const GoalCard: React.FC<GoalCardProps> = memo(({ goal }) => {
   const { formatDate } = useDateFormat()
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const styles = useMemo(() => getStyles(), [])
 
   const handleCardClick = useCallback(() => {
     navigate(`/goals/${goal.id}`)
@@ -95,29 +134,9 @@ export const GoalCard: React.FC<GoalCardProps> = memo(({ goal }) => {
   const priorityInfo = getPriorityLabel(goal.priority)
 
   return (
-    <Card
-      elevation={2}
-      sx={{
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        transition: 'transform 0.2s, box-shadow 0.2s',
-        '&:hover': {
-          transform: 'translateY(-4px)',
-          boxShadow: 4,
-        },
-      }}
-    >
-      <CardActionArea
-        onClick={handleCardClick}
-        sx={{
-          flexGrow: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'stretch',
-        }}
-      >
-        <CardContent sx={{ flexGrow: 1, width: '100%' }}>
+    <Card elevation={2} sx={styles.card}>
+      <CardActionArea onClick={handleCardClick} sx={styles.cardActionArea}>
+        <CardContent sx={styles.cardContent}>
           {/* Header with status and menu */}
           <Stack
             direction='row'
@@ -149,7 +168,12 @@ export const GoalCard: React.FC<GoalCardProps> = memo(({ goal }) => {
               )}
             </Stack>
 
-            <IconButton size='small' onClick={handleMenuOpen} sx={{ ml: 1 }}>
+            <IconButton
+              component='span'
+              size='small'
+              onClick={handleMenuOpen}
+              sx={styles.menuButton}
+            >
               <MoreVertIcon />
             </IconButton>
           </Stack>
@@ -159,14 +183,7 @@ export const GoalCard: React.FC<GoalCardProps> = memo(({ goal }) => {
             variant='h6'
             component='h3'
             gutterBottom
-            sx={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              minHeight: '3em',
-            }}
+            sx={styles.title}
           >
             {goal.title}
           </Typography>
@@ -176,14 +193,7 @@ export const GoalCard: React.FC<GoalCardProps> = memo(({ goal }) => {
             <Typography
               variant='body2'
               color='text.secondary'
-              sx={{
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                mb: 2,
-              }}
+              sx={styles.description}
             >
               {goal.description}
             </Typography>
@@ -201,13 +211,13 @@ export const GoalCard: React.FC<GoalCardProps> = memo(({ goal }) => {
                 {t('pages.goals.progress', 'Progress')}
               </Typography>
               <Typography variant='caption' fontWeight='medium'>
-                {goal.progressPercent.toFixed(0)}%
+                {(goal.progressPercent ?? 0).toFixed(0)}%
               </Typography>
             </Stack>
             <LinearProgress
               variant='determinate'
-              value={goal.progressPercent}
-              sx={{ height: 6, borderRadius: 1 }}
+              value={goal.progressPercent ?? 0}
+              sx={styles.progressBar}
             />
           </Box>
 

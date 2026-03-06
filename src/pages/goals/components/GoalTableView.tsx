@@ -204,12 +204,12 @@ export const GoalTableView: React.FC<GoalTableViewProps> = ({
                       <Box flexGrow={1} maxWidth={150}>
                         <LinearProgress
                           variant='determinate'
-                          value={goal.progressPercent}
+                          value={goal.progressPercent ?? 0}
                           sx={{ height: 6, borderRadius: 1 }}
                         />
                       </Box>
                       <Typography variant='caption' minWidth={40}>
-                        {goal.progressPercent.toFixed(0)}%
+                        {(goal.progressPercent ?? 0).toFixed(0)}%
                       </Typography>
                     </Box>
                   </TableCell>

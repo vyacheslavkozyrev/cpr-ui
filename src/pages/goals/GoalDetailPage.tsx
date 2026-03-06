@@ -263,11 +263,11 @@ export const GoalDetailPage: React.FC = () => {
             <Box mt={1}>
               <LinearProgress
                 variant='determinate'
-                value={goal.progressPercent}
+                value={goal.progressPercent ?? 0}
                 sx={{ height: 8, borderRadius: 1, mb: 0.5 }}
               />
               <Typography variant='h6'>
-                {goal.progressPercent.toFixed(0)}%
+                {(goal.progressPercent ?? 0).toFixed(0)}%
               </Typography>
             </Box>
           </Box>
