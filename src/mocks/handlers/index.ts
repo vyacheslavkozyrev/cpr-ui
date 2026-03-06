@@ -3,6 +3,7 @@ import { feedbackRequestHandlers } from './feedbackRequestHandlers'
 import goalsHandlers from './goalsHandlers'
 import reviewCyclesHandlers from './reviewCyclesHandlers'
 import skillAssessmentHandlers from './skillAssessmentHandlers'
+import taxonomyHandlers from './taxonomyHandlers'
 import { userHandlers } from './userHandlers'
 
 export {
@@ -11,6 +12,7 @@ export {
   goalsHandlers,
   reviewCyclesHandlers,
   skillAssessmentHandlers,
+  taxonomyHandlers,
   userHandlers,
 }
 
@@ -21,4 +23,5 @@ export const allHandlers = [
   ...reviewCyclesHandlers,
   ...feedbackRequestHandlers,
   ...skillAssessmentHandlers,
+  ...taxonomyHandlers,
 ]
