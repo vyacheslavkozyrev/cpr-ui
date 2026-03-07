@@ -50,15 +50,18 @@ import type {
   IPositionSkillRequirement,
 } from '@/types/taxonomy.types'
 
-const schema = z.object({
-  skill_id: z.string().min(1, 'Skill is required'),
-  skill_level_id: z.string().min(1, 'Level is required'),
-  is_mandatory: z.boolean(),
-  weight: z.coerce.number().nullable().optional(),
-  rationale: z.string().max(500).nullable().optional(),
-})
+const makeSchema = (t: (key: string) => string) =>
+  z.object({
+    skill_id: z.string().min(1, t('taxonomy.admin.validation.skillRequired')),
+    skill_level_id: z
+      .string()
+      .min(1, t('taxonomy.admin.validation.levelRequired')),
+    is_mandatory: z.boolean(),
+    weight: z.coerce.number().nullable().optional(),
+    rationale: z.string().max(500).nullable().optional(),
+  })
 
-type TFormData = z.infer<typeof schema>
+type TFormData = z.infer<ReturnType<typeof makeSchema>>
 
 interface IPositionSkillsPanelProps {
   position: IPositionDetail
@@ -77,6 +80,7 @@ const PositionSkillsPanel: React.FC<IPositionSkillsPanelProps> = React.memo(
   ({ position }) => {
     const { t } = useTranslation()
     const styles = useMemo(() => getStyles(), [])
+    const schema = useMemo(() => makeSchema(t), [t])
 
     const [formOpen, setFormOpen] = useState(false)
     const [editTarget, setEditTarget] =

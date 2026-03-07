@@ -1223,6 +1223,19 @@
       "confirmDelete": "Are you sure you want to delete this?",
       "levels": {
         "addLevel": "Add Level"
+      },
+      "validation": {
+        "titleRequired": "Title is required",
+        "titleMax200": "Title must be at most 200 characters",
+        "titleMax100": "Title must be at most 100 characters",
+        "descMax1000": "Description must be at most 1000 characters",
+        "expectationsMax2000": "Expectations must be at most 2000 characters",
+        "careerPathRequired": "Career path is required",
+        "careerTrackRequired": "Career track is required",
+        "categoryRequired": "Category is required",
+        "levelRange": "Value must be between 1 and 5",
+        "skillRequired": "Skill is required",
+        "levelRequired": "Level is required"
       }
     },
     "errors": {

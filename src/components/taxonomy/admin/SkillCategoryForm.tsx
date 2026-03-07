@@ -19,19 +19,20 @@ import {
 } from '@/services/taxonomyQueryService'
 import type { ISkillCategory } from '@/types/taxonomy.types'
 
-const schema = z.object({
-  title: z
-    .string()
-    .min(1, 'Title is required')
-    .max(200, 'Title must be at most 200 characters'),
-  description: z
-    .string()
-    .max(1000, 'Description must be at most 1000 characters')
-    .nullable()
-    .optional(),
-})
+const makeSchema = (t: (key: string) => string) =>
+  z.object({
+    title: z
+      .string()
+      .min(1, t('taxonomy.admin.validation.titleRequired'))
+      .max(200, t('taxonomy.admin.validation.titleMax200')),
+    description: z
+      .string()
+      .max(1000, t('taxonomy.admin.validation.descMax1000'))
+      .nullable()
+      .optional(),
+  })
 
-type TFormData = z.infer<typeof schema>
+type TFormData = z.infer<ReturnType<typeof makeSchema>>
 
 interface ISkillCategoryFormProps {
   open: boolean
@@ -50,6 +51,7 @@ const SkillCategoryForm: React.FC<ISkillCategoryFormProps> = React.memo(
     const { t } = useTranslation()
     const styles = useMemo(() => getStyles(), [])
     const isEdit = Boolean(existing)
+    const schema = useMemo(() => makeSchema(t), [t])
 
     const createMutation = useCreateSkillCategory()
     const updateMutation = useUpdateSkillCategory()

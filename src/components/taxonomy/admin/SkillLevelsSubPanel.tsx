@@ -31,15 +31,22 @@ import {
 } from '@/services/taxonomyQueryService'
 import type { ISkillDetail, ISkillLevelSummary } from '@/types/taxonomy.types'
 
-const buildSchema = (existingValues: number[], editingValue?: number) =>
+const buildSchema = (
+  t: (key: string) => string,
+  existingValues: number[],
+  editingValue?: number
+) =>
   z.object({
-    title: z.string().min(1, 'Title is required').max(100),
+    title: z
+      .string()
+      .min(1, t('taxonomy.admin.validation.titleRequired'))
+      .max(100, t('taxonomy.admin.validation.titleMax100')),
     description: z.string().max(500).nullable().optional(),
     value: z.coerce
       .number()
       .int()
-      .min(1, 'Value must be between 1 and 5')
-      .max(5, 'Value must be between 1 and 5')
+      .min(1, t('taxonomy.admin.validation.levelRange'))
+      .max(5, t('taxonomy.admin.validation.levelRange'))
       .refine(
         v => !existingValues.includes(v) || v === editingValue,
         'This value already exists'
@@ -83,8 +90,8 @@ const SkillLevelsSubPanel: React.FC<ISkillLevelsSubPanelProps> = React.memo(
     )
 
     const schema = useMemo(
-      () => buildSchema(existingValues, editTarget?.value),
-      [existingValues, editTarget]
+      () => buildSchema(t, existingValues, editTarget?.value),
+      [t, existingValues, editTarget]
     )
 
     const {
