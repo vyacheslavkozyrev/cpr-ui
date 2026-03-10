@@ -1,4 +1,5 @@
 // Hook exports
+export * from './useTaxonomy'
 export { useAutoSave } from './useAutoSave'
 export { useDateFormat, type IUseDateFormat } from './useDateFormat'
 export { useDebounce } from './useDebounce'

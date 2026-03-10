@@ -336,7 +336,7 @@ export const FeedbackFilters: React.FC<FeedbackFiltersProps> = ({
           )}
           {(filters.date_from || filters.date_to) && (
             <Chip
-              label='Date Range'
+              label={t('common.dateRange')}
               size='small'
               onDelete={() => {
                 handleDateFromChange(null)

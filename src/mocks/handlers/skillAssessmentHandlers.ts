@@ -48,7 +48,7 @@ export const skillAssessmentHandlers = [
 
   // GET /api/me/skill-assessment
   http.get(`${DEFAULT_API_BASE_URL}/me/skill-assessment`, () =>
-    ok(mockSkillAssessmentResponse)
+    HttpResponse.json(mockSkillAssessmentResponse)
   ),
 
   // PUT /api/me/skill-assessment/skills/:skillId
@@ -156,13 +156,13 @@ export const skillAssessmentHandlers = [
 
   // GET /api/me/team/skill-assessment-summary
   http.get(`${DEFAULT_API_BASE_URL}/me/team/skill-assessment-summary`, () =>
-    ok(mockTeamSkillSummaryResponse)
+    HttpResponse.json(mockTeamSkillSummaryResponse)
   ),
 
   // GET /api/employees/:employeeId/skill-assessment
   http.get(
     `${DEFAULT_API_BASE_URL}/employees/:employeeId/skill-assessment`,
-    () => ok(mockEmployeeSkillAssessmentResponse)
+    () => HttpResponse.json(mockEmployeeSkillAssessmentResponse)
   ),
 ]
 

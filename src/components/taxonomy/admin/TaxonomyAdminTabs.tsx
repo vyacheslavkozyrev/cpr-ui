@@ -2,7 +2,7 @@ import { Box, CircularProgress, Tab, Tabs, Typography } from '@mui/material'
 import React, { lazy, Suspense, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { RoleGuard } from '@/components/auth'
-import { UserRole } from '@/models'
+import { EUserRole } from '@/models'
 
 const CareerPathsAdminPanel = lazy(() => import('./CareerPathsAdminPanel'))
 const CareerTracksAdminPanel = lazy(() => import('./CareerTracksAdminPanel'))
@@ -60,7 +60,7 @@ const TaxonomyAdminTabs: React.FC = React.memo(() => {
   )
 
   return (
-    <RoleGuard allowedRoles={[UserRole.ADMINISTRATOR]}>
+    <RoleGuard allowedRoles={[EUserRole.ADMINISTRATOR]}>
       <Box sx={styles.container}>
         <Typography variant='h5' gutterBottom>
           {t('taxonomy.admin.title', 'Taxonomy Administration')}

@@ -12,9 +12,11 @@ import {
   DialogTitle,
   Divider,
   Link as MuiLink,
+  Tab,
+  Tabs,
   Typography,
 } from '@mui/material'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router-dom'
 import { RoleGuard } from '@/components/auth'
@@ -23,11 +25,18 @@ import SkillRadarChart from '@/components/taxonomy/SkillRadarChart'
 import SkillRequirementsTable from '@/components/taxonomy/SkillRequirementsTable'
 import PositionForm from '@/components/taxonomy/admin/PositionForm'
 import PositionSkillsPanel from '@/components/taxonomy/admin/PositionSkillsPanel'
-import { UserRole } from '@/models'
-import { usePosition } from '@/services/taxonomyQueryService'
+import { EUserRole } from '@/models'
+import { usePosition } from '@/hooks/useTaxonomy'
 import type { IPositionSkillRequirement } from '@/types/taxonomy.types'
 
+// W1: factory function per CLAUDE.md convention
 const getStyles = () => ({
+  container: {
+    py: 3,
+  },
+  breadcrumbs: {
+    mb: 2,
+  },
   header: {
     display: 'flex',
     alignItems: 'flex-start',
@@ -40,8 +49,21 @@ const getStyles = () => ({
     flexShrink: 0,
     ml: 2,
   },
+  bodyText: {
+    mt: 1,
+  },
   section: {
     mt: 3,
+  },
+  sectionHeader: {
+    mb: 2,
+  },
+  tabs: {
+    mb: 2,
+  },
+  categoryLabel: {
+    mb: 2,
+    fontWeight: 600,
   },
 })
 
@@ -66,8 +88,41 @@ const PositionDetailPage: React.FC = React.memo(() => {
   const [selectedSkill, setSelectedSkill] =
     useState<IPositionSkillRequirement | null>(null)
   const [skillPanelOpen, setSkillPanelOpen] = useState(false)
+  const [activeCategoryId, setActiveCategoryId] = useState<string>('')
 
-  const handleRefetch = useCallback(() => refetch(), [refetch])
+  const categories = useMemo(
+    () =>
+      position
+        ? Array.from(
+            new Map(
+              position.skills.map(s => [
+                s.category_id,
+                { id: s.category_id, title: s.category_title },
+              ])
+            ).values()
+          )
+        : [],
+    [position]
+  )
+
+  // W4: only reset tab if the active category no longer exists after a mutation
+  useEffect(() => {
+    if (activeCategoryId && !categories.some(c => c.id === activeCategoryId)) {
+      setActiveCategoryId('')
+    }
+  }, [categories, activeCategoryId])
+
+  const effectiveCategoryId = useMemo(
+    () => activeCategoryId || categories[0]?.id || '',
+    [activeCategoryId, categories]
+  )
+
+  const filteredSkills = useMemo(
+    () =>
+      position?.skills.filter(s => s.category_id === effectiveCategoryId) ?? [],
+    [position, effectiveCategoryId]
+  )
+
   const handleEditOpen = useCallback(() => setEditFormOpen(true), [])
   const handleEditClose = useCallback(() => setEditFormOpen(false), [])
   const handleManageSkillsOpen = useCallback(
@@ -95,9 +150,15 @@ const PositionDetailPage: React.FC = React.memo(() => {
     setSelectedSkill(null)
   }, [])
 
+  const handleTabChange = useCallback(
+    (_: React.SyntheticEvent, newValue: string) =>
+      setActiveCategoryId(newValue),
+    []
+  )
+
   if (isLoading) {
     return (
-      <Container maxWidth='lg' sx={{ py: 3 }}>
+      <Container maxWidth='lg' sx={styles.container}>
         <CircularProgress />
       </Container>
     )
@@ -105,38 +166,37 @@ const PositionDetailPage: React.FC = React.memo(() => {
 
   if (isError || !position) {
     return (
-      <Container maxWidth='lg' sx={{ py: 3 }}>
+      <Container maxWidth='lg' sx={styles.container}>
         <Alert
           severity='error'
           action={
-            <Button color='inherit' size='small' onClick={handleRefetch}>
-              {t('common.retry', 'Retry')}
+            <Button color='inherit' size='small' onClick={refetch}>
+              {t('common.retry')}
             </Button>
           }
         >
-          {t(
-            'taxonomy.errors.loadFailed',
-            'Failed to load data. Please try again.'
-          )}
+          {t('taxonomy.errors.loadFailed')}
         </Alert>
       </Container>
     )
   }
 
   return (
-    <Container maxWidth='lg' sx={{ py: 3 }}>
-      <Breadcrumbs sx={{ mb: 2 }}>
+    <Container maxWidth='lg' sx={styles.container}>
+      {/* S2: breadcrumbs margin extracted to styles */}
+      <Breadcrumbs sx={styles.breadcrumbs}>
         <MuiLink
           component={Link}
           to='/career-framework'
           underline='hover'
           color='inherit'
         >
-          {t('taxonomy.careerFramework.title', 'Career Framework')}
+          {t('taxonomy.careerFramework.title')}
         </MuiLink>
+        {/* S6: guard against undefined route params */}
         <MuiLink
           component={Link}
-          to={`/career-framework/${pathId}`}
+          to={pathId ? `/career-framework/${pathId}` : '/career-framework'}
           underline='hover'
           color='inherit'
         >
@@ -144,7 +204,11 @@ const PositionDetailPage: React.FC = React.memo(() => {
         </MuiLink>
         <MuiLink
           component={Link}
-          to={`/career-framework/${pathId}/tracks/${trackId}`}
+          to={
+            pathId && trackId
+              ? `/career-framework/${pathId}/tracks/${trackId}`
+              : '/career-framework'
+          }
           underline='hover'
           color='inherit'
         >
@@ -159,20 +223,26 @@ const PositionDetailPage: React.FC = React.memo(() => {
             {position.title}
           </Typography>
           {position.description && (
-            <Typography variant='body1' color='text.secondary' sx={{ mt: 1 }}>
+            <Typography
+              variant='body1'
+              color='text.secondary'
+              sx={styles.bodyText}
+            >
               {position.description}
             </Typography>
           )}
           {position.expectations && (
-            <Typography variant='body2' color='text.secondary' sx={{ mt: 1 }}>
-              <strong>
-                {t('taxonomy.position.expectations', 'Expectations')}:{' '}
-              </strong>
+            <Typography
+              variant='body2'
+              color='text.secondary'
+              sx={styles.bodyText}
+            >
+              <strong>{t('taxonomy.position.expectations')}: </strong>
               {position.expectations}
             </Typography>
           )}
         </Box>
-        <RoleGuard allowedRoles={[UserRole.ADMINISTRATOR]} fallback={null}>
+        <RoleGuard allowedRoles={[EUserRole.ADMINISTRATOR]} fallback={null}>
           <Box sx={styles.actions}>
             <Button
               variant='outlined'
@@ -180,7 +250,7 @@ const PositionDetailPage: React.FC = React.memo(() => {
               onClick={handleEditOpen}
               size='small'
             >
-              {t('taxonomy.position.edit', 'Edit Position')}
+              {t('taxonomy.position.edit')}
             </Button>
             <Button
               variant='contained'
@@ -188,7 +258,7 @@ const PositionDetailPage: React.FC = React.memo(() => {
               onClick={handleManageSkillsOpen}
               size='small'
             >
-              {t('taxonomy.position.manageSkills', 'Manage Skills')}
+              {t('taxonomy.position.manageSkills')}
             </Button>
           </Box>
         </RoleGuard>
@@ -197,18 +267,35 @@ const PositionDetailPage: React.FC = React.memo(() => {
       <Divider />
 
       <Box sx={styles.section}>
-        <Typography variant='h6' sx={{ mb: 2 }}>
-          {t('taxonomy.position.skillProfile', 'Skill Profile')}
+        <Typography variant='h6' sx={styles.sectionHeader}>
+          {t('taxonomy.position.skillProfile')}
         </Typography>
-        <SkillRadarChart skills={position.skills} />
+        {categories.length > 1 ? (
+          <Tabs
+            value={effectiveCategoryId}
+            onChange={handleTabChange}
+            sx={styles.tabs}
+          >
+            {categories.map(cat => (
+              <Tab key={cat.id} label={cat.title} value={cat.id} />
+            ))}
+          </Tabs>
+        ) : (
+          categories.length === 1 && (
+            <Typography variant='subtitle2' sx={styles.categoryLabel}>
+              {categories[0].title}
+            </Typography>
+          )
+        )}
+        <SkillRadarChart skills={filteredSkills} />
       </Box>
 
       <Box sx={styles.section}>
-        <Typography variant='h6' sx={{ mb: 2 }}>
-          {t('taxonomy.position.skillRequirements', 'Skill Requirements')}
+        <Typography variant='h6' sx={styles.sectionHeader}>
+          {t('taxonomy.position.skillRequirements')}
         </Typography>
         <SkillRequirementsTable
-          skills={position.skills}
+          skills={filteredSkills}
           onSkillClick={handleSkillClick}
         />
       </Box>
@@ -220,7 +307,7 @@ const PositionDetailPage: React.FC = React.memo(() => {
         onClose={handleSkillPanelClose}
       />
 
-      <RoleGuard allowedRoles={[UserRole.ADMINISTRATOR]} fallback={null}>
+      <RoleGuard allowedRoles={[EUserRole.ADMINISTRATOR]} fallback={null}>
         <PositionForm
           open={editFormOpen}
           onClose={handleEditClose}
@@ -240,9 +327,7 @@ const PositionDetailPage: React.FC = React.memo(() => {
           maxWidth='md'
           fullWidth
         >
-          <DialogTitle>
-            {t('taxonomy.position.manageSkills', 'Manage Skills')}
-          </DialogTitle>
+          <DialogTitle>{t('taxonomy.position.manageSkills')}</DialogTitle>
           <DialogContent>
             <PositionSkillsPanel position={position} />
           </DialogContent>

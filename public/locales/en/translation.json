@@ -27,7 +27,11 @@
     "info": "Information",
     "offline": "You are currently offline. Some features may be limited.",
     "notProvided": "Not provided",
-    "stars": "stars"
+    "stars": "stars",
+    "or": "or",
+    "status": "Status",
+    "sortBy": "Sort By",
+    "dateRange": "Date Range"
   },
   "navigation": {
     "dashboard": "Dashboard",
@@ -39,7 +43,13 @@
     "team": "Team",
     "admin": "Admin",
     "logout": "Logout",
-    "careerFramework": "Career Framework"
+    "careerFramework": "Career Framework",
+    "career": "Career"
+  },
+  "auth": {
+    "roleGuard": {
+      "noPermission": "You don't have permission to access this content. Required role: {{roles}}"
+    }
   },
   "header": {
     "brand": "CPR Performance",
@@ -309,7 +319,10 @@
       "nomineesColumn": "Nominees",
       "responsesColumn": "Responses",
       "createdColumn": "Created",
-      "emptyState": "No review cycles yet"
+      "emptyState": "No review cycles yet",
+      "titleRequired": "Title is required",
+      "subjectLabel": "Subject Employee ID",
+      "descriptionColumn": "Description"
     },
     "myReviews": {
       "title": "My Reviews",
@@ -349,6 +362,7 @@
         "feedback": "Feedback",
         "analytics": "Analytics",
         "requests": "Requests",
+        "reviews360": "360 Reviews",
         "teamRequests": "Team Requests"
       },
       "list": {
@@ -1187,7 +1201,9 @@
       "skillRequirements": "Skill Requirements",
       "noSkills": "No skill requirements defined.",
       "expectations": "Expectations",
-      "skills": "Required Skills"
+      "skills": "Required Skills",
+      "skillRadarChartAriaLabel": "Radar chart showing required skill levels",
+      "skillBarChartAriaLabel": "Bar chart showing required skill levels"
     },
     "skill": {
       "category": "Category",
@@ -1202,6 +1218,15 @@
       "requiredLevel": "Required Level"
     },
     "admin": {
+      "titleField": "Title",
+      "descriptionField": "Description",
+      "cancel": "Cancel",
+      "save": "Save",
+      "editCareerTrack": "Edit Career Track",
+      "noTracks": "No career tracks found.",
+      "careerPathField": "Career Path",
+      "careerTrackField": "Career Track",
+      "sortOrderField": "Sort Order",
       "addSkillRequirement": "Add Skill Requirement",
       "editSkillRequirement": "Edit Skill Requirement",
       "allCategories": "All Categories",

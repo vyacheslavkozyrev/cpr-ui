@@ -9,10 +9,10 @@ import {
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
-import AssessmentRadarChart from '../../components/skillAssessment/AssessmentRadarChart'
-import AssessmentSkillCategorySection from '../../components/skillAssessment/AssessmentSkillCategorySection'
-import { useEmployeeSkillAssessment } from '../../services/skillAssessmentQueryService'
-import type { ISkillLevelBrief } from '../../types/skillAssessment.types'
+import AssessmentSkillsRadarChart from '@/components/skillAssessment/AssessmentSkillsRadarChart'
+import AssessmentSkillCategorySection from '@/components/skillAssessment/AssessmentSkillCategorySection'
+import { useEmployeeSkillAssessment } from '@/services/skillAssessmentQueryService'
+import type { ISkillLevelBrief } from '@/types/skillAssessment.types'
 
 const EmployeeAssessmentPage: React.FC = () => {
   const { t } = useTranslation()
@@ -35,12 +35,6 @@ const EmployeeAssessmentPage: React.FC = () => {
             id: skill.assessed.skill_level_id,
             title: skill.assessed.skill_level_title,
             value: skill.assessed.skill_level_value,
-          })
-        if (skill.target)
-          addLevel({
-            id: skill.target.skill_level_id,
-            title: skill.target.skill_level_title,
-            value: skill.target.skill_level_value,
           })
       }
     }
@@ -135,7 +129,7 @@ const EmployeeAssessmentPage: React.FC = () => {
         </Typography>
       ) : (
         <>
-          <AssessmentRadarChart
+          <AssessmentSkillsRadarChart
             skillCategories={data?.skill_categories ?? []}
             nextPositionNull={data?.next_position == null}
           />
@@ -146,6 +140,7 @@ const EmployeeAssessmentPage: React.FC = () => {
               category={category}
               availableLevels={availableLevels}
               readOnly
+              showTitle
             />
           ))}
         </>

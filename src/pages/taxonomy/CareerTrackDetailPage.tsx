@@ -17,8 +17,8 @@ import { RoleGuard } from '@/components/auth'
 import ProgressionLadder from '@/components/taxonomy/ProgressionLadder'
 import CareerTrackForm from '@/components/taxonomy/admin/CareerTrackForm'
 import PositionForm from '@/components/taxonomy/admin/PositionForm'
-import { UserRole } from '@/models'
-import { useCareerPath, useCareerTrack } from '@/services/taxonomyQueryService'
+import { EUserRole } from '@/models'
+import { useCareerPath, useCareerTrack } from '@/hooks/useTaxonomy'
 
 const getStyles = () => ({
   header: {
@@ -131,7 +131,7 @@ const CareerTrackDetailPage: React.FC = React.memo(() => {
             </Typography>
           )}
         </Box>
-        <RoleGuard allowedRoles={[UserRole.ADMINISTRATOR]} fallback={null}>
+        <RoleGuard allowedRoles={[EUserRole.ADMINISTRATOR]} fallback={null}>
           <Box sx={styles.actions}>
             <Button
               variant='outlined'
@@ -162,7 +162,7 @@ const CareerTrackDetailPage: React.FC = React.memo(() => {
         onPositionClick={handlePositionClick}
       />
 
-      <RoleGuard allowedRoles={[UserRole.ADMINISTRATOR]} fallback={null}>
+      <RoleGuard allowedRoles={[EUserRole.ADMINISTRATOR]} fallback={null}>
         <CareerTrackForm
           open={editFormOpen}
           onClose={handleEditClose}

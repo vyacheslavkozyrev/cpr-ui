@@ -6,7 +6,7 @@ import { renderWithProviders } from '../../../tests/utils'
 import PositionDetailPage from '../../../pages/taxonomy/PositionDetailPage'
 import { useAuthStore } from '../../../stores/authStore'
 import type { IAuthUser } from '../../../stores/authStore'
-import { UserRole } from '../../../models'
+import { EUserRole } from '../../../models'
 
 // Mock IDs matching taxonomyMockData fixtures
 const PATH_001 = 'cp-001-engineering'
@@ -114,7 +114,7 @@ describe('PositionDetailPage', () => {
       name: 'Admin',
       email: 'admin@test.com',
       tenantId: 'test-tenant',
-      roles: [UserRole.ADMINISTRATOR],
+      roles: [EUserRole.ADMINISTRATOR],
     }
     useAuthStore.getState().setUser(adminUser)
 

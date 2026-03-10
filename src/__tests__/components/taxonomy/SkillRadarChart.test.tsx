@@ -29,7 +29,18 @@ vi.mock('recharts', () => ({
   PolarGrid: () => <div data-testid='polar-grid' />,
   PolarAngleAxis: () => null,
   PolarRadiusAxis: () => null,
-  Radar: () => null,
+  Radar: ({
+    name,
+    strokeDasharray,
+  }: {
+    name?: string
+    strokeDasharray?: string
+  }) => (
+    <div
+      data-testid={`radar-segment-${name ?? 'unknown'}`}
+      data-stroke-dasharray={strokeDasharray ?? 'solid'}
+    />
+  ),
   Bar: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
   Cell: () => null,
   CartesianGrid: () => null,
@@ -128,5 +139,28 @@ describe('SkillRadarChart', () => {
     expect(screen.queryByTestId('radar-chart')).not.toBeNull()
     expect(screen.queryByTestId('bar-chart')).toBeNull()
     expect(screen.queryByTestId('polar-grid')).not.toBeNull()
+  })
+
+  // AC-016: Mandatory skills are visually distinguished from optional skills
+  it('AC-016 — category with mandatory skill renders solid stroke; optional-only category renders dashed stroke', () => {
+    // Technical has a mandatory skill → solid stroke (strokeDasharray undefined)
+    // SoftSkills has only optional skills → dashed stroke (strokeDasharray "5 5")
+    const mixedMandatory: IPositionSkillRequirement[] = [
+      makeSkill('1', 'TypeScript', 3, true, 'cat-001', 'Technical'), // mandatory
+      makeSkill('2', '.NET', 2, true, 'cat-001', 'Technical'), // mandatory
+      makeSkill('3', 'Communication', 2, false, 'cat-002', 'SoftSkills'), // optional
+    ]
+    renderWithProviders(<SkillRadarChart skills={mixedMandatory} />)
+
+    // Radar chart should be used (3+ skills)
+    expect(screen.queryByTestId('radar-chart')).not.toBeNull()
+
+    // Technical category (has mandatory skill) → solid stroke
+    const technicalSegment = screen.getByTestId('radar-segment-Technical')
+    expect(technicalSegment).toHaveAttribute('data-stroke-dasharray', 'solid')
+
+    // SoftSkills category (no mandatory skills) → dashed stroke
+    const softSegment = screen.getByTestId('radar-segment-SoftSkills')
+    expect(softSegment).toHaveAttribute('data-stroke-dasharray', '5 5')
   })
 })

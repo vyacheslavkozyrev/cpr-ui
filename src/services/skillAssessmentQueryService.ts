@@ -18,7 +18,7 @@ export const useMySkillAssessment = () =>
     queryKey: SKILL_ASSESSMENT_KEYS.myAssessment,
     queryFn: async () => {
       const res = await skillAssessmentApiService.getMyAssessment()
-      return res.data.data
+      return res.data
     },
     staleTime: 2 * 60 * 1000,
   })
@@ -29,7 +29,7 @@ export const useEmployeeSkillAssessment = (employeeId: string) =>
     queryFn: async () => {
       const res =
         await skillAssessmentApiService.getEmployeeAssessment(employeeId)
-      return res.data.data
+      return res.data
     },
     enabled: Boolean(employeeId),
     staleTime: 2 * 60 * 1000,
@@ -40,7 +40,7 @@ export const useTeamSkillSummary = () =>
     queryKey: SKILL_ASSESSMENT_KEYS.teamSummary,
     queryFn: async () => {
       const res = await skillAssessmentApiService.getTeamSummary()
-      return res.data.data
+      return res.data
     },
     staleTime: 2 * 60 * 1000,
   })

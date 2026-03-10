@@ -28,7 +28,7 @@ import {
   useCareerTracks,
   useCreatePosition,
   useUpdatePosition,
-} from '@/services/taxonomyQueryService'
+} from '@/hooks/useTaxonomy'
 import type { IPositionSummary } from '@/types/taxonomy.types'
 
 const makeSchema = (t: (key: string) => string) =>

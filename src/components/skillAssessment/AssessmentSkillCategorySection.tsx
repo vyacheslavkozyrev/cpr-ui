@@ -13,31 +13,34 @@ import { useTranslation } from 'react-i18next'
 import type {
   ISkillCategoryGroup,
   ISkillLevelBrief,
-} from '../../types/skillAssessment.types'
+} from '@/types/skillAssessment.types'
 import AssessmentSkillRow from './AssessmentSkillRow'
 
 interface AssessmentSkillCategorySectionProps {
   category: ISkillCategoryGroup
   availableLevels: ISkillLevelBrief[]
   readOnly?: boolean
+  showTitle?: boolean
 }
 
 const AssessmentSkillCategorySection: React.FC<
   AssessmentSkillCategorySectionProps
-> = ({ category, availableLevels, readOnly = false }) => {
+> = ({ category, availableLevels, readOnly = false, showTitle = false }) => {
   const { t } = useTranslation()
 
   return (
     <TableContainer component={Paper} sx={{ mb: 3 }}>
       <Table size='small'>
         <TableHead>
-          <TableRow>
-            <TableCell colSpan={6}>
-              <Typography variant='subtitle1' fontWeight='medium'>
-                {category.title}
-              </Typography>
-            </TableCell>
-          </TableRow>
+          {showTitle && (
+            <TableRow>
+              <TableCell colSpan={5}>
+                <Typography variant='subtitle1' fontWeight='medium'>
+                  {category.title}
+                </Typography>
+              </TableCell>
+            </TableRow>
+          )}
           <TableRow>
             <TableCell>
               {t('components.assessmentSkillRow.skill', 'Skill')}
@@ -46,10 +49,7 @@ const AssessmentSkillCategorySection: React.FC<
               {t('components.assessmentSkillRow.required', 'Required')}
             </TableCell>
             <TableCell>
-              {t('components.assessmentSkillRow.currentLevel', 'Current Level')}
-            </TableCell>
-            <TableCell>
-              {t('components.assessmentSkillRow.targetLevel', 'Target Level')}
+              {t('components.assessmentSkillRow.myWeight', 'My Weight')}
             </TableCell>
             <TableCell>
               {t('components.assessmentSkillRow.notes', 'Notes')}

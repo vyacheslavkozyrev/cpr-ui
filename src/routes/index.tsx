@@ -4,7 +4,7 @@ import { NotFoundPage, RouteErrorBoundary } from '../components/errors'
 import { FeedbackRequestForm } from '../components/FeedbackRequest/form'
 import { AppLayout } from '../components/layout'
 import TaxonomyAdminTabs from '../components/taxonomy/admin/TaxonomyAdminTabs'
-import { UserRole } from '../models'
+import { EUserRole } from '../models'
 import { AdminPage } from '../pages/admin'
 import { LoginPage } from '../pages/auth'
 import { DashboardPage } from '../pages/dashboard'
@@ -23,7 +23,6 @@ import { SettingsPage } from '../pages/settings'
 import EmployeeAssessmentPage from '../pages/skillAssessment/EmployeeAssessmentPage'
 import SkillAssessmentPage from '../pages/skillAssessment/SkillAssessmentPage'
 import TeamSkillOverviewPage from '../pages/skillAssessment/TeamSkillOverviewPage'
-import { SkillsPage } from '../pages/skills'
 import CareerFrameworkPage from '../pages/taxonomy/CareerFrameworkPage'
 import CareerPathDetailPage from '../pages/taxonomy/CareerPathDetailPage'
 import CareerTrackDetailPage from '../pages/taxonomy/CareerTrackDetailPage'
@@ -104,7 +103,7 @@ export const routes: RouteObject[] = [
         children: [
           {
             index: true,
-            element: <SkillsPage />,
+            element: <SkillAssessmentPage />,
           },
           {
             path: 'assessment',
@@ -113,7 +112,7 @@ export const routes: RouteObject[] = [
           {
             path: 'team',
             element: (
-              <RoleGuard allowedRoles={[UserRole.PEOPLE_MANAGER]}>
+              <RoleGuard allowedRoles={[EUserRole.PEOPLE_MANAGER]}>
                 <TeamSkillOverviewPage />
               </RoleGuard>
             ),
@@ -123,9 +122,9 @@ export const routes: RouteObject[] = [
             element: (
               <RoleGuard
                 allowedRoles={[
-                  UserRole.PEOPLE_MANAGER,
-                  UserRole.DIRECTOR,
-                  UserRole.ADMINISTRATOR,
+                  EUserRole.PEOPLE_MANAGER,
+                  EUserRole.DIRECTOR,
+                  EUserRole.ADMINISTRATOR,
                 ]}
               >
                 <EmployeeAssessmentPage />
@@ -168,7 +167,7 @@ export const routes: RouteObject[] = [
             index: true,
             element: (
               <RoleGuard
-                allowedRoles={[UserRole.DIRECTOR, UserRole.ADMINISTRATOR]}
+                allowedRoles={[EUserRole.DIRECTOR, EUserRole.ADMINISTRATOR]}
               >
                 <ReviewCyclesPage />
               </RoleGuard>
@@ -208,10 +207,10 @@ export const routes: RouteObject[] = [
         element: (
           <RoleGuard
             allowedRoles={[
-              UserRole.PEOPLE_MANAGER,
-              UserRole.SOLUTION_OWNER,
-              UserRole.DIRECTOR,
-              UserRole.ADMINISTRATOR,
+              EUserRole.PEOPLE_MANAGER,
+              EUserRole.SOLUTION_OWNER,
+              EUserRole.DIRECTOR,
+              EUserRole.ADMINISTRATOR,
             ]}
           >
             <TeamPage />
@@ -248,7 +247,7 @@ export const routes: RouteObject[] = [
       {
         path: 'settings/career-framework',
         element: (
-          <RoleGuard allowedRoles={[UserRole.ADMINISTRATOR]}>
+          <RoleGuard allowedRoles={[EUserRole.ADMINISTRATOR]}>
             <TaxonomyAdminTabs />
           </RoleGuard>
         ),
@@ -259,7 +258,7 @@ export const routes: RouteObject[] = [
       {
         path: 'admin',
         element: (
-          <RoleGuard allowedRoles={[UserRole.ADMINISTRATOR]}>
+          <RoleGuard allowedRoles={[EUserRole.ADMINISTRATOR]}>
             <AdminPage />
           </RoleGuard>
         ),

@@ -8,7 +8,12 @@ import type {
   TCurrentUserDto,
   TUserPositionDto,
 } from '../dtos'
-import type { AuthenticatedUser, User, UserPosition, UserRole } from '../models'
+import type {
+  AuthenticatedUser,
+  User,
+  UserPosition,
+  EUserRole,
+} from '../models'
 
 /**
  * Transform user position DTO to model
@@ -53,7 +58,7 @@ export const mapAuthenticatedUser = (
   return {
     ...user,
     token: dto.access_token,
-    roles: dto.roles as UserRole[],
+    roles: dto.roles as EUserRole[],
     permissions: dto.permissions,
     lastLoginAt: new Date(), // Set to current time for login
   }

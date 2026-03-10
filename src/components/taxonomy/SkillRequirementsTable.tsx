@@ -1,4 +1,5 @@
 import {
+  ButtonBase,
   Chip,
   Paper,
   Table,
@@ -15,7 +16,6 @@ import { useTranslation } from 'react-i18next'
 import type { IPositionSkillRequirement } from '@/types/taxonomy.types'
 
 type TSortField =
-  | 'category_title'
   | 'skill_title'
   | 'skill_level_value'
   | 'is_mandatory'
@@ -27,11 +27,17 @@ interface ISkillRequirementsTableProps {
   onSkillClick: (skillId: string) => void
 }
 
+interface ISkillRowProps {
+  skill: IPositionSkillRequirement
+  onSkillClick: (skillId: string) => void
+}
+
+// W3: factory function per CLAUDE.md convention
 const getStyles = () => ({
   skillLink: {
     cursor: 'pointer',
-    color: 'primary.main',
     textDecoration: 'underline',
+    color: 'primary.main',
     '&:hover': {
       color: 'primary.dark',
     },
@@ -43,12 +49,67 @@ const getStyles = () => ({
   },
 })
 
+// B2: extracted sub-component so the click handler is a stable useCallback
+const SkillRow: React.FC<ISkillRowProps> = React.memo(
+  ({ skill, onSkillClick }) => {
+    const { t, i18n } = useTranslation()
+    const styles = useMemo(() => getStyles(), [])
+
+    const handleClick = useCallback(
+      () => onSkillClick(skill.skill_id),
+      [onSkillClick, skill.skill_id]
+    )
+
+    return (
+      <TableRow hover>
+        <TableCell>
+          {/* S4: ButtonBase is natively keyboard-accessible (Enter/Space) */}
+          <ButtonBase onClick={handleClick} sx={styles.skillLink}>
+            <Typography variant='body2'>{skill.skill_title}</Typography>
+          </ButtonBase>
+        </TableCell>
+        <TableCell>
+          <Typography variant='body2'>
+            {skill.skill_level_title} ({skill.skill_level_value})
+          </Typography>
+        </TableCell>
+        <TableCell>
+          <Chip
+            label={
+              skill.is_mandatory
+                ? t('taxonomy.skill.mandatory')
+                : t('taxonomy.skill.optional')
+            }
+            color={skill.is_mandatory ? 'primary' : 'default'}
+            size='small'
+          />
+        </TableCell>
+        <TableCell>
+          <Typography variant='body2'>
+            {/* S3: locale-aware number formatting */}
+            {skill.weight !== null
+              ? new Intl.NumberFormat(i18n.language).format(skill.weight)
+              : '—'}
+          </Typography>
+        </TableCell>
+        <TableCell>
+          <Typography variant='body2' color='text.secondary'>
+            {skill.rationale ?? '—'}
+          </Typography>
+        </TableCell>
+      </TableRow>
+    )
+  }
+)
+
+SkillRow.displayName = 'SkillRow'
+
 const SkillRequirementsTable: React.FC<ISkillRequirementsTableProps> =
   React.memo(({ skills, onSkillClick }) => {
     const { t } = useTranslation()
     const styles = useMemo(() => getStyles(), [])
 
-    const [sortField, setSortField] = useState<TSortField>('category_title')
+    const [sortField, setSortField] = useState<TSortField>('skill_title')
     const [sortDir, setSortDir] = useState<TSortDir>('asc')
 
     const handleSort = useCallback(
@@ -63,10 +124,6 @@ const SkillRequirementsTable: React.FC<ISkillRequirementsTableProps> =
       [sortField]
     )
 
-    const handleSortCategory = useCallback(
-      () => handleSort('category_title'),
-      [handleSort]
-    )
     const handleSortSkill = useCallback(
       () => handleSort('skill_title'),
       [handleSort]
@@ -89,6 +146,7 @@ const SkillRequirementsTable: React.FC<ISkillRequirementsTableProps> =
       return [...skills].sort((a, b) => {
         const va = a[sortField]
         const vb = b[sortField]
+        // W7: nulls always sort last regardless of direction
         if (va === null || va === undefined) return 1
         if (vb === null || vb === undefined) return -1
         if (typeof va === 'boolean' && typeof vb === 'boolean') {
@@ -104,7 +162,7 @@ const SkillRequirementsTable: React.FC<ISkillRequirementsTableProps> =
     if (skills.length === 0) {
       return (
         <Typography sx={styles.emptyState}>
-          {t('taxonomy.position.noSkills', 'No skill requirements defined.')}
+          {t('taxonomy.position.noSkills')}
         </Typography>
       )
     }
@@ -116,20 +174,11 @@ const SkillRequirementsTable: React.FC<ISkillRequirementsTableProps> =
             <TableRow>
               <TableCell>
                 <TableSortLabel
-                  active={sortField === 'category_title'}
-                  direction={sortField === 'category_title' ? sortDir : 'asc'}
-                  onClick={handleSortCategory}
-                >
-                  {t('taxonomy.skill.category', 'Category')}
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <TableSortLabel
                   active={sortField === 'skill_title'}
                   direction={sortField === 'skill_title' ? sortDir : 'asc'}
                   onClick={handleSortSkill}
                 >
-                  {t('taxonomy.skill.skillName', 'Skill')}
+                  {t('taxonomy.skill.skillName')}
                 </TableSortLabel>
               </TableCell>
               <TableCell>
@@ -140,7 +189,7 @@ const SkillRequirementsTable: React.FC<ISkillRequirementsTableProps> =
                   }
                   onClick={handleSortLevel}
                 >
-                  {t('taxonomy.skill.level', 'Required Level')}
+                  {t('taxonomy.skill.requiredLevel')}
                 </TableSortLabel>
               </TableCell>
               <TableCell>
@@ -149,7 +198,7 @@ const SkillRequirementsTable: React.FC<ISkillRequirementsTableProps> =
                   direction={sortField === 'is_mandatory' ? sortDir : 'asc'}
                   onClick={handleSortMandatory}
                 >
-                  {t('taxonomy.skill.mandatory', 'Mandatory')}
+                  {t('taxonomy.skill.mandatory')}
                 </TableSortLabel>
               </TableCell>
               <TableCell>
@@ -158,59 +207,19 @@ const SkillRequirementsTable: React.FC<ISkillRequirementsTableProps> =
                   direction={sortField === 'weight' ? sortDir : 'asc'}
                   onClick={handleSortWeight}
                 >
-                  {t('taxonomy.skill.weight', 'Weight')}
+                  {t('taxonomy.skill.weight')}
                 </TableSortLabel>
               </TableCell>
-              <TableCell>
-                {t('taxonomy.skill.rationale', 'Rationale')}
-              </TableCell>
+              <TableCell>{t('taxonomy.skill.rationale')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {sorted.map(skill => (
-              <TableRow key={skill.id} hover>
-                <TableCell>
-                  <Typography variant='body2'>
-                    {skill.category_title}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography
-                    variant='body2'
-                    sx={styles.skillLink}
-                    onClick={() => onSkillClick(skill.skill_id)}
-                    component='span'
-                  >
-                    {skill.skill_title}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant='body2'>
-                    {skill.skill_level_title} ({skill.skill_level_value})
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Chip
-                    label={
-                      skill.is_mandatory
-                        ? t('taxonomy.skill.mandatory', 'Mandatory')
-                        : t('taxonomy.skill.optional', 'Optional')
-                    }
-                    color={skill.is_mandatory ? 'primary' : 'default'}
-                    size='small'
-                  />
-                </TableCell>
-                <TableCell>
-                  <Typography variant='body2'>
-                    {skill.weight !== null ? skill.weight : '—'}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant='body2' color='text.secondary'>
-                    {skill.rationale ?? '—'}
-                  </Typography>
-                </TableCell>
-              </TableRow>
+              <SkillRow
+                key={skill.id}
+                skill={skill}
+                onSkillClick={onSkillClick}
+              />
             ))}
           </TableBody>
         </Table>

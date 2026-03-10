@@ -13,10 +13,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import {
-  useCreateCareerPath,
-  useUpdateCareerPath,
-} from '@/services/taxonomyQueryService'
+import { useCreateCareerPath, useUpdateCareerPath } from '@/hooks/useTaxonomy'
 import type { ICareerPathSummary } from '@/types/taxonomy.types'
 
 const makeSchema = (t: (key: string) => string) =>

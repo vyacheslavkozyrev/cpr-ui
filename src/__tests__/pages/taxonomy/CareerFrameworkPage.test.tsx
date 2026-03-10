@@ -6,7 +6,7 @@ import CareerFrameworkPage from '../../../pages/taxonomy/CareerFrameworkPage'
 import CareerPathDetailPage from '../../../pages/taxonomy/CareerPathDetailPage'
 import { useAuthStore } from '../../../stores/authStore'
 import type { IAuthUser } from '../../../stores/authStore'
-import { UserRole } from '../../../models'
+import { EUserRole } from '../../../models'
 
 // Helper: render CareerFrameworkPage inside a MemoryRouter
 function renderPage(userType: 'employee' | 'admin' = 'employee') {
@@ -63,7 +63,7 @@ describe('CareerFrameworkPage', () => {
       name: 'Admin User',
       email: 'admin@test.com',
       tenantId: 'test-tenant',
-      roles: [UserRole.ADMINISTRATOR],
+      roles: [EUserRole.ADMINISTRATOR],
     }
     useAuthStore.getState().setUser(adminUser)
 
@@ -136,7 +136,7 @@ describe('CareerPathDetailPage', () => {
       name: 'Admin User',
       email: 'admin@test.com',
       tenantId: 'test-tenant',
-      roles: [UserRole.ADMINISTRATOR],
+      roles: [EUserRole.ADMINISTRATOR],
     }
     useAuthStore.getState().setUser(adminUser)
 

@@ -16,7 +16,7 @@ import { z } from 'zod'
 import {
   useCreateSkillCategory,
   useUpdateSkillCategory,
-} from '@/services/taxonomyQueryService'
+} from '@/hooks/useTaxonomy'
 import type { ISkillCategory } from '@/types/taxonomy.types'
 
 const makeSchema = (t: (key: string) => string) =>

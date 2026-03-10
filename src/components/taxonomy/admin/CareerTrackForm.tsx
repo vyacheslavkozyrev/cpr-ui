@@ -23,7 +23,7 @@ import {
   useCareerPaths,
   useCreateCareerTrack,
   useUpdateCareerTrack,
-} from '@/services/taxonomyQueryService'
+} from '@/hooks/useTaxonomy'
 import type { ICareerTrackSummary } from '@/types/taxonomy.types'
 
 const makeSchema = (t: (key: string) => string) =>

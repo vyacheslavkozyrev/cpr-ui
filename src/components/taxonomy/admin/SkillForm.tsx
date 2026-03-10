@@ -23,7 +23,7 @@ import {
   useCreateSkill,
   useSkillCategories,
   useUpdateSkill,
-} from '@/services/taxonomyQueryService'
+} from '@/hooks/useTaxonomy'
 import type { ISkillDetail } from '@/types/taxonomy.types'
 
 const makeSchema = (t: (key: string) => string) =>

@@ -44,7 +44,7 @@ import {
   useSkillCategories,
   useSkills,
   useUpdatePositionSkill,
-} from '@/services/taxonomyQueryService'
+} from '@/hooks/useTaxonomy'
 import type {
   IPositionDetail,
   IPositionSkillRequirement,

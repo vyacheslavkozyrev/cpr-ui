@@ -223,10 +223,10 @@ export const SentRequestsList: React.FC = () => {
       >
         {/* Status Filter */}
         <FormControl size='small' sx={{ minWidth: 200 }}>
-          <InputLabel>Status</InputLabel>
+          <InputLabel>{t('common.status')}</InputLabel>
           <Select
             value={statusFilter}
-            label='Status'
+            label={t('common.status')}
             onChange={e => handleFilterChange(e.target.value)}
           >
             <MenuItem value='all'>
@@ -249,10 +249,10 @@ export const SentRequestsList: React.FC = () => {
 
         {/* Sort Dropdown */}
         <FormControl size='small' sx={{ minWidth: 200 }}>
-          <InputLabel>Sort By</InputLabel>
+          <InputLabel>{t('common.sortBy')}</InputLabel>
           <Select
             value={sortBy}
-            label='Sort By'
+            label={t('common.sortBy')}
             onChange={e => handleSortChange(e.target.value)}
           >
             <MenuItem value='newest'>

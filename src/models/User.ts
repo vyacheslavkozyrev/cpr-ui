@@ -23,7 +23,7 @@ export interface UserPosition {
 /**
  * User role enumeration matching DB values exactly
  */
-export const UserRole = {
+export const EUserRole = {
   EMPLOYEE: 'Employee',
   PEOPLE_MANAGER: 'People Manager',
   SOLUTION_OWNER: 'Solution Owner',
@@ -31,14 +31,14 @@ export const UserRole = {
   ADMINISTRATOR: 'Administrator',
 } as const
 
-export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+export type EUserRole = (typeof EUserRole)[keyof typeof EUserRole]
 
 /**
  * User authentication state
  */
 export interface AuthenticatedUser extends User {
   token: string
-  roles: UserRole[]
+  roles: EUserRole[]
   permissions: string[]
   lastLoginAt: Date | null
 }

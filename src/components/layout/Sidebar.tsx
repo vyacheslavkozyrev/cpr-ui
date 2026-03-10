@@ -24,7 +24,7 @@ import {
 import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { UserRole } from '../../models'
+import { EUserRole } from '../../models'
 import { useTodoRequestsCount } from '../../services/feedbackRequestQueryService'
 import { useAuthStore } from '../../stores/authStore'
 
@@ -78,7 +78,7 @@ export const Sidebar: React.FC = () => {
   const { data: todoCount } = useTodoRequestsCount(!!user)
 
   // Get user roles for menu filtering
-  const userRoles = user?.roles || [UserRole.EMPLOYEE]
+  const userRoles = user?.roles || [EUserRole.EMPLOYEE]
 
   // Navigation items with role requirements
   const navigationItems: INavigationItem[] = [
@@ -103,6 +103,11 @@ export const Sidebar: React.FC = () => {
       icon: <Psychology />,
     },
     {
+      labelKey: 'navigation.career',
+      path: '/career-framework',
+      icon: <Psychology />,
+    },
+    {
       labelKey: 'navigation.feedback',
       path: '/feedback',
       icon: <Feedback />,
@@ -117,17 +122,17 @@ export const Sidebar: React.FC = () => {
       path: '/team',
       icon: <Group />,
       requiredRoles: [
-        UserRole.PEOPLE_MANAGER,
-        UserRole.SOLUTION_OWNER,
-        UserRole.DIRECTOR,
-        UserRole.ADMINISTRATOR,
+        EUserRole.PEOPLE_MANAGER,
+        EUserRole.SOLUTION_OWNER,
+        EUserRole.DIRECTOR,
+        EUserRole.ADMINISTRATOR,
       ],
     },
     {
       labelKey: 'navigation.admin',
       path: '/admin',
       icon: <AdminPanelSettings />,
-      requiredRoles: [UserRole.ADMINISTRATOR],
+      requiredRoles: [EUserRole.ADMINISTRATOR],
     },
     // Development only - Test error boundaries
     {
@@ -173,7 +178,7 @@ export const Sidebar: React.FC = () => {
           return (
             <ListItem key={item.path} disablePadding>
               <ListItemButton
-                selected={location.pathname === item.path}
+                selected={location.pathname.startsWith(item.path)}
                 onClick={handleItemClick}
                 sx={styles.listItemButton}
               >

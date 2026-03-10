@@ -1,4 +1,5 @@
 import {
+  Button,
   Chip,
   CircularProgress,
   MenuItem,
@@ -9,19 +10,17 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   useDeleteCurrentLevel,
-  useDeleteTarget,
   useUnlinkEvidence,
   useUpsertCurrentLevel,
-  useUpsertTarget,
-} from '../../services/skillAssessmentQueryService'
+} from '@/services/skillAssessmentQueryService'
 import type {
   ISkillItem,
   ISkillLevelBrief,
-} from '../../types/skillAssessment.types'
+} from '@/types/skillAssessment.types'
 import EvidenceList from './EvidenceList'
 import EvidenceModal from './EvidenceModal'
 
@@ -31,8 +30,15 @@ interface AssessmentSkillRowProps {
   readOnly?: boolean
 }
 
-const CLEAR_TARGET = '__clear__'
 const NOT_ASSESSED = ''
+
+const getStyles = () => ({
+  skillTitle: { fontWeight: 'medium' } as const,
+  actionsCell: { verticalAlign: 'top', whiteSpace: 'nowrap' } as const,
+  topCell: { verticalAlign: 'top' } as const,
+  linkFeedbackBtn: { p: 0, textTransform: 'none' } as const,
+  saveIndicator: { display: 'block', mb: 0.5 } as const,
+})
 
 const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
   skill,
@@ -40,6 +46,7 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
   readOnly = false,
 }) => {
   const { t } = useTranslation()
+  const styles = useMemo(() => getStyles(), [])
   const [notes, setNotes] = useState(skill.assessed?.notes ?? '')
   const [savedIndicator, setSavedIndicator] = useState(false)
   const [rowError, setRowError] = useState<string | null>(null)
@@ -47,52 +54,49 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
 
   const upsertCurrent = useUpsertCurrentLevel()
   const deleteCurrent = useDeleteCurrentLevel()
-  const upsertTarget = useUpsertTarget()
-  const deleteTarget = useDeleteTarget()
   const unlinkEvidence = useUnlinkEvidence()
 
-  // Keep notes in sync with external data
   useEffect(() => {
     setNotes(skill.assessed?.notes ?? '')
   }, [skill.assessed?.notes])
 
-  const showSaved = () => {
+  const showSaved = useCallback(() => {
     setSavedIndicator(true)
     setTimeout(() => setSavedIndicator(false), 2000)
-  }
+  }, [])
 
-  const handleLevelChange = async (levelId: string) => {
-    setRowError(null)
-    if (levelId === NOT_ASSESSED) {
-      if (skill.assessed) {
-        await deleteCurrent
-          .mutateAsync(skill.skill_id)
-          .catch(err => setRowError(err?.message ?? 'Error'))
+  const handleLevelChange = useCallback(
+    async (levelId: string) => {
+      setRowError(null)
+      if (levelId === NOT_ASSESSED) {
+        if (skill.assessed) {
+          await deleteCurrent
+            .mutateAsync(skill.skill_id)
+            .catch(err => setRowError(err?.message ?? 'Error'))
+        }
+        return
       }
-      return
-    }
-    try {
-      await upsertCurrent.mutateAsync({
-        skillId: skill.skill_id,
-        dto: { skill_level_id: levelId, notes: notes || null },
-      })
-      showSaved()
-    } catch (err: unknown) {
-      const msg = (err as { message?: string })?.message ?? 'Error'
-      if (msg.includes('target_conflict')) {
-        setRowError(
-          t(
-            'components.assessmentSkillRow.targetConflict',
-            'Target level must be higher than your current level. Clear or raise the target first.'
-          )
-        )
-      } else {
-        setRowError(msg)
+      try {
+        await upsertCurrent.mutateAsync({
+          skillId: skill.skill_id,
+          dto: { skill_level_id: levelId, notes: notes || null },
+        })
+        showSaved()
+      } catch (err: unknown) {
+        setRowError((err as { message?: string })?.message ?? 'Error')
       }
-    }
-  }
+    },
+    [
+      skill.assessed,
+      skill.skill_id,
+      deleteCurrent,
+      upsertCurrent,
+      notes,
+      showSaved,
+    ]
+  )
 
-  const handleNotesBlur = async () => {
+  const handleNotesBlur = useCallback(async () => {
     if (!skill.assessed) return
     setRowError(null)
     try {
@@ -107,76 +111,62 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
     } catch {
       /* ignore */
     }
-  }
+  }, [skill.assessed, skill.skill_id, notes, upsertCurrent, showSaved])
 
-  const handleTargetChange = async (levelId: string) => {
-    setRowError(null)
-    if (levelId === CLEAR_TARGET) {
-      if (skill.target) {
-        await deleteTarget
-          .mutateAsync(skill.skill_id)
-          .catch(err => setRowError(err?.message ?? 'Error'))
-      }
-      return
-    }
-    try {
-      await upsertTarget.mutateAsync({
+  const handleNotesChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setNotes(e.target.value)
+    },
+    []
+  )
+
+  const handleRemoveEvidence = useCallback(
+    async (feedbackId: string) => {
+      await unlinkEvidence.mutateAsync({
         skillId: skill.skill_id,
-        dto: { skill_level_id: levelId },
+        feedbackId,
       })
-      showSaved()
-    } catch (err: unknown) {
-      const msg = (err as { message?: string })?.message ?? 'Error'
-      if (msg.includes('target_too_low')) {
-        setRowError(
-          t(
-            'components.assessmentSkillRow.targetTooLow',
-            'Target level must be strictly greater than your current level.'
-          )
-        )
-      } else {
-        setRowError(msg)
-      }
-    }
-  }
+    },
+    [unlinkEvidence, skill.skill_id]
+  )
 
-  const handleRemoveEvidence = async (feedbackId: string) => {
-    await unlinkEvidence.mutateAsync({
-      skillId: skill.skill_id,
-      feedbackId,
-    })
-  }
+  const openEvidenceModal = useCallback(() => setEvidenceModalOpen(true), [])
+  const closeEvidenceModal = useCallback(() => setEvidenceModalOpen(false), [])
 
-  const isSaving =
-    upsertCurrent.isPending ||
-    deleteCurrent.isPending ||
-    upsertTarget.isPending ||
-    deleteTarget.isPending
+  const isSaving = upsertCurrent.isPending || deleteCurrent.isPending
+
+  const isRequired = skill.required_level != null
 
   return (
     <>
       <TableRow>
-        {/* Skill title */}
-        <TableCell sx={{ verticalAlign: 'top' }}>
+        {/* Skill */}
+        <TableCell sx={styles.topCell}>
           <Tooltip title={skill.skill_description ?? ''}>
-            <Typography variant='body2' fontWeight='medium'>
+            <Typography variant='body2' sx={styles.skillTitle}>
               {skill.skill_title}
             </Typography>
           </Tooltip>
         </TableCell>
 
-        {/* Required level */}
-        <TableCell sx={{ verticalAlign: 'top' }}>
-          <Chip
-            label={skill.required_level.title}
-            size='small'
-            color='primary'
-            variant='outlined'
-          />
+        {/* Required label */}
+        <TableCell sx={styles.topCell}>
+          {isRequired ? (
+            <Chip
+              label={skill.required_level.title}
+              size='small'
+              color='primary'
+              variant='outlined'
+            />
+          ) : (
+            <Typography variant='body2' color='text.secondary'>
+              {t('components.assessmentSkillRow.notRequired', 'Not required')}
+            </Typography>
+          )}
         </TableCell>
 
-        {/* Current level */}
-        <TableCell sx={{ verticalAlign: 'top' }}>
+        {/* My Weight (current assessed level) */}
+        <TableCell sx={styles.topCell}>
           {readOnly ? (
             <Typography variant='body2'>
               {skill.assessed?.skill_level_title ??
@@ -207,47 +197,8 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
           )}
         </TableCell>
 
-        {/* Target level */}
-        <TableCell sx={{ verticalAlign: 'top' }}>
-          {readOnly ? (
-            <Typography variant='body2'>
-              {skill.target?.skill_level_title ??
-                t('components.assessmentSkillRow.noTarget', 'No target set')}
-            </Typography>
-          ) : (
-            <Select
-              size='small'
-              value={skill.target?.skill_level_id ?? NOT_ASSESSED}
-              onChange={e => handleTargetChange(e.target.value)}
-              displayEmpty
-              sx={{ minWidth: 140 }}
-            >
-              <MenuItem value={NOT_ASSESSED}>
-                <em>
-                  {t('components.assessmentSkillRow.noTarget', 'No target set')}
-                </em>
-              </MenuItem>
-              {availableLevels.map(l => (
-                <MenuItem key={l.id} value={l.id}>
-                  {l.title}
-                </MenuItem>
-              ))}
-              {skill.target && (
-                <MenuItem value={CLEAR_TARGET}>
-                  <em>
-                    {t(
-                      'components.assessmentSkillRow.clearTarget',
-                      'Clear target'
-                    )}
-                  </em>
-                </MenuItem>
-              )}
-            </Select>
-          )}
-        </TableCell>
-
         {/* Notes */}
-        <TableCell sx={{ verticalAlign: 'top' }}>
+        <TableCell sx={styles.topCell}>
           {readOnly ? (
             <Typography variant='body2' color='text.secondary'>
               {skill.assessed?.notes ?? '—'}
@@ -258,32 +209,39 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
               multiline
               maxRows={3}
               value={notes}
-              onChange={e => setNotes(e.target.value)}
+              onChange={handleNotesChange}
               onBlur={handleNotesBlur}
-              placeholder='Add notes...'
+              placeholder={t(
+                'components.assessmentSkillRow.notesPlaceholder',
+                'Add notes...'
+              )}
               inputProps={{ maxLength: 1000 }}
               sx={{ minWidth: 180 }}
             />
           )}
         </TableCell>
 
-        {/* Status / actions */}
-        <TableCell sx={{ verticalAlign: 'top', whiteSpace: 'nowrap' }}>
+        {/* Actions */}
+        <TableCell sx={styles.actionsCell}>
           {isSaving && <CircularProgress size={16} sx={{ mr: 1 }} />}
           {savedIndicator && !isSaving && (
-            <Typography variant='caption' color='success.main'>
+            <Typography
+              variant='caption'
+              color='success.main'
+              sx={styles.saveIndicator}
+            >
               {t('components.assessmentSkillRow.saved', 'Saved ✓')}
             </Typography>
           )}
           {!readOnly && (
-            <Typography
-              variant='caption'
-              color='primary'
-              sx={{ cursor: 'pointer', display: 'block' }}
-              onClick={() => setEvidenceModalOpen(true)}
+            <Button
+              variant='text'
+              size='small'
+              onClick={openEvidenceModal}
+              sx={styles.linkFeedbackBtn}
             >
               {t('components.assessmentSkillRow.linkFeedback', 'Link feedback')}
-            </Typography>
+            </Button>
           )}
         </TableCell>
       </TableRow>
@@ -291,7 +249,7 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
       {/* Error row */}
       {rowError && (
         <TableRow>
-          <TableCell colSpan={6} sx={{ py: 0, borderBottom: 'none' }}>
+          <TableCell colSpan={5} sx={{ py: 0, borderBottom: 'none' }}>
             <Typography variant='caption' color='error'>
               {rowError}
             </Typography>
@@ -302,7 +260,7 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
       {/* Evidence row */}
       {skill.evidence.length > 0 && (
         <TableRow>
-          <TableCell colSpan={6} sx={{ py: 0.5 }}>
+          <TableCell colSpan={5} sx={{ py: 0.5 }}>
             <EvidenceList
               evidence={skill.evidence}
               readOnly={readOnly}
@@ -316,7 +274,7 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
         open={evidenceModalOpen}
         skillId={skill.skill_id}
         existingEvidence={skill.evidence}
-        onClose={() => setEvidenceModalOpen(false)}
+        onClose={closeEvidenceModal}
       />
     </>
   )

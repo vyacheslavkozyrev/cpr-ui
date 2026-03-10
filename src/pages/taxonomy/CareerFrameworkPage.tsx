@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { RoleGuard } from '@/components/auth'
 import CareerPathCard from '@/components/taxonomy/CareerPathCard'
-import { UserRole } from '@/models'
-import { useCareerPaths } from '@/services/taxonomyQueryService'
+import { EUserRole } from '@/models'
+import { useCareerPaths } from '@/hooks/useTaxonomy'
 
 const getStyles = () => ({
   header: {
@@ -45,7 +45,7 @@ const CareerFrameworkPage: React.FC = React.memo(() => {
         <Typography variant='h5' component='h1'>
           {t('taxonomy.careerFramework.title', 'Career Framework')}
         </Typography>
-        <RoleGuard allowedRoles={[UserRole.ADMINISTRATOR]} fallback={null}>
+        <RoleGuard allowedRoles={[EUserRole.ADMINISTRATOR]} fallback={null}>
           <Button
             variant='contained'
             startIcon={<AddIcon />}

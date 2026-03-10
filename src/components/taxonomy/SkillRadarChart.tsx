@@ -1,11 +1,10 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, useTheme } from '@mui/material'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Bar,
   BarChart,
   CartesianGrid,
-  Cell,
   Legend,
   PolarAngleAxis,
   PolarGrid,
@@ -23,21 +22,7 @@ interface ISkillRadarChartProps {
   skills: IPositionSkillRequirement[]
 }
 
-const CATEGORY_COLORS: Record<string, string> = {
-  default: '#1976d2',
-  alt1: '#388e3c',
-  alt2: '#f57c00',
-  alt3: '#7b1fa2',
-  alt4: '#c62828',
-}
-
-const getCategoryColor = (_categoryId: string, index: number): string => {
-  const keys = Object.keys(CATEGORY_COLORS)
-  return (
-    CATEGORY_COLORS[keys[index % keys.length]] ?? CATEGORY_COLORS['default']
-  )
-}
-
+// W2: factory function per CLAUDE.md convention
 const getStyles = () => ({
   container: {
     width: '100%',
@@ -53,30 +38,15 @@ const getStyles = () => ({
 const SkillRadarChart: React.FC<ISkillRadarChartProps> = React.memo(
   ({ skills }) => {
     const { t } = useTranslation()
+    const theme = useTheme()
     const styles = useMemo(() => getStyles(), [])
+    const levelColor = theme.palette.primary.main
 
-    const categoryIds = useMemo(
-      () => Array.from(new Set(skills.map(s => s.category_id))),
-      [skills]
-    )
-
-    const radarData = useMemo(
+    const chartData = useMemo(
       () =>
         skills.map(s => ({
           skill: s.skill_title,
-          value: s.skill_level_value,
-          category_id: s.category_id,
-          is_mandatory: s.is_mandatory,
-        })),
-      [skills]
-    )
-
-    const barData = useMemo(
-      () =>
-        skills.map(s => ({
-          name: s.skill_title,
           level: s.skill_level_value,
-          category_id: s.category_id,
         })),
       [skills]
     )
@@ -85,7 +55,7 @@ const SkillRadarChart: React.FC<ISkillRadarChartProps> = React.memo(
       return (
         <Box sx={styles.emptyState}>
           <Typography variant='body1'>
-            {t('taxonomy.position.noSkills', 'No skill requirements defined.')}
+            {t('taxonomy.position.noSkills')}
           </Typography>
         </Box>
       )
@@ -94,25 +64,24 @@ const SkillRadarChart: React.FC<ISkillRadarChartProps> = React.memo(
     // Fall back to bar chart when fewer than 3 skills
     if (skills.length < 3) {
       return (
-        <Box sx={styles.container}>
+        // W6: accessible wrapper for bar chart
+        <Box
+          sx={styles.container}
+          role='img'
+          aria-label={t('taxonomy.position.skillBarChartAriaLabel')}
+        >
           <ResponsiveContainer width='100%' height={250}>
-            <BarChart data={barData}>
+            <BarChart data={chartData}>
               <CartesianGrid strokeDasharray='3 3' />
-              <XAxis dataKey='name' />
+              <XAxis dataKey='skill' />
               <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} />
               <Tooltip />
               <Legend />
-              <Bar dataKey='level' name={t('taxonomy.skill.level', 'Level')}>
-                {barData.map(entry => (
-                  <Cell
-                    key={entry.name}
-                    fill={getCategoryColor(
-                      entry.category_id,
-                      categoryIds.indexOf(entry.category_id)
-                    )}
-                  />
-                ))}
-              </Bar>
+              <Bar
+                dataKey='level'
+                name={t('taxonomy.skill.level')}
+                fill={levelColor}
+              />
             </BarChart>
           </ResponsiveContainer>
         </Box>
@@ -120,36 +89,24 @@ const SkillRadarChart: React.FC<ISkillRadarChartProps> = React.memo(
     }
 
     return (
-      <Box sx={styles.container}>
+      // W6: accessible wrapper for radar chart
+      <Box
+        sx={styles.container}
+        role='img'
+        aria-label={t('taxonomy.position.skillRadarChartAriaLabel')}
+      >
         <ResponsiveContainer width='100%' height={350}>
-          <RadarChart data={radarData}>
+          <RadarChart data={chartData}>
             <PolarGrid />
             <PolarAngleAxis dataKey='skill' />
             <PolarRadiusAxis angle={90} domain={[0, 5]} tickCount={6} />
-            {categoryIds.map((categoryId, index) => {
-              const categorySkills = skills.filter(
-                s => s.category_id === categoryId
-              )
-              const categoryTitle =
-                categorySkills[0]?.category_title ?? categoryId
-              const color = getCategoryColor(categoryId, index)
-              const hasMandatory = categorySkills.some(s => s.is_mandatory)
-              return (
-                <Radar
-                  key={categoryId}
-                  name={categoryTitle}
-                  dataKey={(entry: Record<string, unknown>) =>
-                    entry['category_id'] === categoryId
-                      ? (entry['value'] as number)
-                      : null
-                  }
-                  stroke={color}
-                  fill={color}
-                  fillOpacity={0.2}
-                  strokeDasharray={hasMandatory ? undefined : '5 5'}
-                />
-              )
-            })}
+            <Radar
+              name={t('taxonomy.skill.level')}
+              dataKey='level'
+              stroke={levelColor}
+              fill={levelColor}
+              fillOpacity={0.3}
+            />
             <Legend />
             <Tooltip />
           </RadarChart>

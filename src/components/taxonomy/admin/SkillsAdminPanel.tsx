@@ -16,11 +16,7 @@ import {
 } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  useDeleteSkill,
-  useSkill,
-  useSkills,
-} from '@/services/taxonomyQueryService'
+import { useDeleteSkill, useSkill, useSkills } from '@/hooks/useTaxonomy'
 import type { ISkillDetail, ISkillSummary } from '@/types/taxonomy.types'
 import SkillForm from './SkillForm'
 import SkillLevelsSubPanel from './SkillLevelsSubPanel'

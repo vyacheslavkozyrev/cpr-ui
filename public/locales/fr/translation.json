@@ -198,7 +198,9 @@
       "skillRequirements": "Exigences de Compétences",
       "noSkills": "Aucune exigence de compétence définie.",
       "expectations": "Attentes",
-      "skills": "Compétences Requises"
+      "skills": "Compétences Requises",
+      "skillRadarChartAriaLabel": "Graphique radar montrant les niveaux de compétences requis",
+      "skillBarChartAriaLabel": "Graphique à barres montrant les niveaux de compétences requis"
     },
     "skill": {
       "category": "Catégorie",

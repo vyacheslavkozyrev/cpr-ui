@@ -9,7 +9,7 @@ import {
   Skeleton,
   Typography,
 } from '@mui/material'
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { IPositionInTrack } from '@/types/taxonomy.types'
 
@@ -53,6 +53,10 @@ const PositionCard: React.FC<IPositionCardProps> = React.memo(
   ({ position, loading, onClick }) => {
     const { t } = useTranslation()
     const styles = useMemo(() => getStyles(), [])
+    const handleAccordionClick = useCallback(
+      (e: React.MouseEvent) => e.stopPropagation(),
+      []
+    )
 
     if (loading) {
       return (
@@ -81,7 +85,11 @@ const PositionCard: React.FC<IPositionCardProps> = React.memo(
           </Typography>
         )}
         {position.expectations && (
-          <Accordion sx={styles.accordion} disableGutters>
+          <Accordion
+            sx={styles.accordion}
+            disableGutters
+            onClick={handleAccordionClick}
+          >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               sx={styles.accordionSummary}

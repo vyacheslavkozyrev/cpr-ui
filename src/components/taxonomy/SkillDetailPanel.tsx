@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSkill } from '@/services/taxonomyQueryService'
+import { useSkill } from '@/hooks/useTaxonomy'
 
 interface ISkillDetailPanelProps {
   skillId: string | null

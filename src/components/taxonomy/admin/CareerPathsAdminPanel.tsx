@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useCareerPaths } from '@/services/taxonomyQueryService'
+import { useCareerPaths } from '@/hooks/useTaxonomy'
 import type { ICareerPathSummary } from '@/types/taxonomy.types'
 import CareerPathForm from './CareerPathForm'
 

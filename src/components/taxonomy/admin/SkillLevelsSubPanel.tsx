@@ -25,10 +25,7 @@ import { type Resolver, type SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import {
-  useAddSkillLevel,
-  useUpdateSkillLevel,
-} from '@/services/taxonomyQueryService'
+import { useAddSkillLevel, useUpdateSkillLevel } from '@/hooks/useTaxonomy'
 import type { ISkillDetail, ISkillLevelSummary } from '@/types/taxonomy.types'
 
 const buildSchema = (

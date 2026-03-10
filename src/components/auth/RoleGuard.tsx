@@ -1,6 +1,7 @@
 ﻿import { Alert, Box } from '@mui/material'
 import React, { useMemo } from 'react'
-import { UserRole, type UserRole as UserRoleType } from '../../models'
+import { useTranslation } from 'react-i18next'
+import { EUserRole, type EUserRole as EUserRoleType } from '../../models'
 import { useAuthStore } from '../../stores/authStore'
 
 // Style factory outside component
@@ -12,7 +13,7 @@ const getStyles = () => ({
 
 interface IRoleGuardProps {
   children: React.ReactNode
-  allowedRoles: UserRoleType[]
+  allowedRoles: EUserRoleType[]
   fallback?: React.ReactNode
 }
 
@@ -27,25 +28,27 @@ export const RoleGuard: React.FC<IRoleGuardProps> = ({
   fallback,
 }) => {
   const styles = useMemo(() => getStyles(), [])
+  const { t } = useTranslation()
   const { user } = useAuthStore()
 
-  // Get user roles (defaulting to [UserRole.EMPLOYEE] if not set)
-  const userRoles = user?.roles || [UserRole.EMPLOYEE]
+  // Get user roles (defaulting to [EUserRole.EMPLOYEE] if not set)
+  const userRoles = user?.roles || [EUserRole.EMPLOYEE]
 
   // Check if user has one of the allowed roles
   const hasRequiredRole = allowedRoles.some(role => userRoles.includes(role))
 
   if (!hasRequiredRole) {
-    // Show custom fallback or default error message
-    if (fallback) {
+    // fallback={null} means intentionally render nothing; undefined means no fallback provided
+    if (fallback !== undefined) {
       return <>{fallback}</>
     }
 
     return (
       <Box sx={styles.container}>
         <Alert severity='warning'>
-          You don't have permission to access this content. Required role:{' '}
-          {allowedRoles.join(' or ')}
+          {t('auth.roleGuard.noPermission', {
+            roles: allowedRoles.join(` ${t('common.or', 'or')} `),
+          })}
         </Alert>
       </Box>
     )

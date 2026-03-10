@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useCareerTracks } from '@/services/taxonomyQueryService'
+import { useCareerTracks } from '@/hooks/useTaxonomy'
 import type { IPositionSummary } from '@/types/taxonomy.types'
 import PositionForm from './PositionForm'
 

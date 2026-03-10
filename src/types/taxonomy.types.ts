@@ -182,6 +182,7 @@ export interface ICreateSkillDto {
   title: string
   description?: string | null
   category_id: string
+  levels?: IAddSkillLevelDto[]
 }
 
 export interface IUpdateSkillDto {

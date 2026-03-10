@@ -45,6 +45,7 @@ export const BreadcrumbNavigation: React.FC = () => {
         dashboard: t('navigation.dashboard'),
         goals: t('navigation.goals'),
         skills: t('navigation.skills'),
+        'career-framework': t('navigation.careerFramework'),
         feedback: t('navigation.feedback'),
         team: t('navigation.team'),
         admin: t('navigation.admin'),

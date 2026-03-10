@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSkillCategories } from '@/services/taxonomyQueryService'
+import { useSkillCategories } from '@/hooks/useTaxonomy'
 import type { ISkillCategory } from '@/types/taxonomy.types'
 import SkillCategoryForm from './SkillCategoryForm'
 

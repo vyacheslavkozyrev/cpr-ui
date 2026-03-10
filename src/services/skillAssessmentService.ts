@@ -13,9 +13,7 @@ import type {
 
 class SkillAssessmentApiService {
   async getMyAssessment() {
-    return apiClient.get<{ data: ISkillAssessmentResponse }>(
-      '/me/skill-assessment'
-    )
+    return apiClient.get<ISkillAssessmentResponse>('/me/skill-assessment')
   }
 
   async upsertCurrentLevel(
@@ -59,13 +57,13 @@ class SkillAssessmentApiService {
   }
 
   async getEmployeeAssessment(employeeId: string) {
-    return apiClient.get<{ data: IEmployeeSkillAssessmentResponse }>(
+    return apiClient.get<IEmployeeSkillAssessmentResponse>(
       `/employees/${employeeId}/skill-assessment`
     )
   }
 
   async getTeamSummary() {
-    return apiClient.get<{ data: ITeamSkillSummaryResponse }>(
+    return apiClient.get<ITeamSkillSummaryResponse>(
       '/me/team/skill-assessment-summary'
     )
   }

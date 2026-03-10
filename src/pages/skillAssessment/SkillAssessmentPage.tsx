@@ -1,14 +1,28 @@
-import { Box, Button, Container, Skeleton, Typography } from '@mui/material'
-import React, { useMemo } from 'react'
+import {
+  Box,
+  Button,
+  Container,
+  Skeleton,
+  Tab,
+  Tabs,
+  Typography,
+} from '@mui/material'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import AssessmentRadarChart from '../../components/skillAssessment/AssessmentRadarChart'
-import AssessmentSkillCategorySection from '../../components/skillAssessment/AssessmentSkillCategorySection'
-import { useMySkillAssessment } from '../../services/skillAssessmentQueryService'
-import type { ISkillLevelBrief } from '../../types/skillAssessment.types'
+import AssessmentSkillsRadarChart from '@/components/skillAssessment/AssessmentSkillsRadarChart'
+import AssessmentSkillCategorySection from '@/components/skillAssessment/AssessmentSkillCategorySection'
+import { useMySkillAssessment } from '@/services/skillAssessmentQueryService'
+import type { ISkillLevelBrief } from '@/types/skillAssessment.types'
+
+const getStyles = () => ({
+  tabs: { mb: 3, borderBottom: 1, borderColor: 'divider' },
+})
 
 const SkillAssessmentPage: React.FC = () => {
   const { t } = useTranslation()
   const { data, isLoading, isError, refetch } = useMySkillAssessment()
+  const [selectedTab, setSelectedTab] = useState(0)
+  const styles = useMemo(() => getStyles(), [])
 
   const availableLevels = useMemo<ISkillLevelBrief[]>(() => {
     if (!data) return []
@@ -26,16 +40,17 @@ const SkillAssessmentPage: React.FC = () => {
             title: skill.assessed.skill_level_title,
             value: skill.assessed.skill_level_value,
           })
-        if (skill.target)
-          addLevel({
-            id: skill.target.skill_level_id,
-            title: skill.target.skill_level_title,
-            value: skill.target.skill_level_value,
-          })
       }
     }
     return Array.from(levelMap.values()).sort((a, b) => a.value - b.value)
   }, [data])
+
+  const handleTabChange = useCallback(
+    (_: React.SyntheticEvent, newValue: number) => {
+      setSelectedTab(newValue)
+    },
+    []
+  )
 
   if (isLoading) {
     return (
@@ -63,7 +78,9 @@ const SkillAssessmentPage: React.FC = () => {
     )
   }
 
-  const hasSkills = (data?.skill_categories.length ?? 0) > 0
+  const categories = data?.skill_categories ?? []
+  const hasSkills = categories.length > 0
+  const selectedCategory = categories[selectedTab] ?? categories[0]
 
   return (
     <Container maxWidth='lg' sx={{ py: 3 }}>
@@ -95,18 +112,32 @@ const SkillAssessmentPage: React.FC = () => {
         </Typography>
       ) : (
         <>
-          <AssessmentRadarChart
-            skillCategories={data?.skill_categories ?? []}
+          {/* Radar chart for the selected category */}
+          <AssessmentSkillsRadarChart
+            skillCategories={selectedCategory ? [selectedCategory] : categories}
             nextPositionNull={data?.next_position == null}
           />
 
-          {data?.skill_categories.map(category => (
+          {/* Category tabs */}
+          <Tabs
+            value={selectedTab}
+            onChange={handleTabChange}
+            sx={styles.tabs}
+            variant='scrollable'
+            scrollButtons='auto'
+          >
+            {categories.map((cat, idx) => (
+              <Tab key={cat.id} label={cat.title} value={idx} />
+            ))}
+          </Tabs>
+
+          {/* Skills table for selected category */}
+          {selectedCategory && (
             <AssessmentSkillCategorySection
-              key={category.id}
-              category={category}
+              category={selectedCategory}
               availableLevels={availableLevels}
             />
-          ))}
+          )}
         </>
       )}
     </Container>
