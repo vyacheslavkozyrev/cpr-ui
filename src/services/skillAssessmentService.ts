@@ -1,6 +1,5 @@
 import { apiClient } from './apiClient'
 import type {
-  IAssessedLevel,
   IEvidenceItem,
   IEmployeeSkillAssessmentResponse,
   ILinkEvidenceRequest,
@@ -19,7 +18,7 @@ class SkillAssessmentApiService {
     skillId: string,
     dto: IUpsertSkillAssessmentRequest
   ) {
-    return apiClient.put<IAssessedLevel>(
+    return apiClient.put<ISkillAssessmentResponse>(
       `/me/skill-assessment/skills/${skillId}`,
       dto
     )
@@ -34,7 +33,7 @@ class SkillAssessmentApiService {
     skillId: string,
     dto: IUpsertManagerAssessmentRequest
   ) {
-    return apiClient.put<IAssessedLevel>(
+    return apiClient.put<IEmployeeSkillAssessmentResponse>(
       `/employees/${employeeId}/skill-assessment/skills/${skillId}/manager-assessment`,
       dto
     )

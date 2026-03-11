@@ -97,6 +97,9 @@ export const useUpsertManagerAssessment = () => {
       queryClient.invalidateQueries({
         queryKey: SKILL_ASSESSMENT_KEYS.employeeAssessment(employeeId),
       })
+      queryClient.invalidateQueries({
+        queryKey: SKILL_ASSESSMENT_KEYS.teamSummary,
+      })
     },
   })
 }

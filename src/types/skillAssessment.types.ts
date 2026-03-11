@@ -36,7 +36,7 @@ export interface IEvidenceItem {
   feedback_id: string
   sender_display_name: string
   rating: number | null
-  content_excerpt: string
+  feedback_content: string
 }
 
 export interface IAssessedLevel {

@@ -49,7 +49,7 @@ export const mockSkillAssessmentResponse: ISkillAssessmentResponse = {
               feedback_id: 'fb-001',
               sender_display_name: 'Alice Johnson',
               rating: 4,
-              content_excerpt:
+              feedback_content:
                 'Great job leading the API review and migration.',
             },
           ],

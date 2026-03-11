@@ -141,7 +141,8 @@ export const skillAssessmentHandlers = [
             feedback_id: feedbackId,
             sender_display_name: 'Test Sender',
             rating: 4,
-            content_excerpt: 'Excellent technical contribution to the project.',
+            feedback_content:
+              'Excellent technical contribution to the project.',
           },
           success: true,
           message: 'Created',

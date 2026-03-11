@@ -56,7 +56,7 @@ const EvidenceList: React.FC<EvidenceListProps> = ({
                 overflow: 'hidden',
               }}
             >
-              {item.content_excerpt}
+              {item.feedback_content}
             </Typography>
           </Box>
           {!readOnly && onRemove && (

@@ -12,12 +12,19 @@ import { useParams } from 'react-router-dom'
 import AssessmentSkillsRadarChart from '@/components/skillAssessment/AssessmentSkillsRadarChart'
 import AssessmentSkillCategorySection from '@/components/skillAssessment/AssessmentSkillCategorySection'
 import { useEmployeeSkillAssessment } from '@/services/skillAssessmentQueryService'
+import { useAuth } from '@/stores/authStore'
+
+const MANAGER_ROLES = ['People Manager', 'Director', 'Administrator']
 
 const EmployeeAssessmentPage: React.FC = () => {
   const { t } = useTranslation()
   const { employeeId } = useParams<{ employeeId: string }>()
+  const { hasAnyRole } = useAuth()
+  const isManager = hasAnyRole(MANAGER_ROLES)
   const { data, isLoading, isError, error, refetch } =
     useEmployeeSkillAssessment(employeeId ?? '')
+
+  if (!employeeId) return null
 
   if (isLoading) {
     return (
@@ -118,6 +125,8 @@ const EmployeeAssessmentPage: React.FC = () => {
               category={category}
               readOnly
               showTitle
+              employeeId={employeeId}
+              isManager={isManager}
             />
           ))}
         </>

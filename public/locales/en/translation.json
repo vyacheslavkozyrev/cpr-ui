@@ -1082,7 +1082,13 @@
       "position": "Position",
       "careerTrack": "Career Track",
       "careerPath": "Career Path",
-      "nextPosition": "Next Position"
+      "nextPosition": "Next Position",
+      "noSkills": "No skills to display",
+      "barChartAriaLabel": "Skill assessment bar chart",
+      "myCurrentLevel": "My Current Level",
+      "nextLevelRequired": "Next Level Required",
+      "radarChartAriaLabel": "Skill assessment radar chart",
+      "highestPosition": "You are at the highest position in your career track."
     },
     "employeeAssessment": {
       "title": "Skill Assessment",
@@ -1135,7 +1141,7 @@
     "assessmentSkillRow": {
       "skill": "Skill",
       "required": "Required",
-      "selfAssessment": "Self Assessment",
+      "selfAssessment": "My Weight",
       "managerAssessment": "Manager Assessment",
       "notes": "Notes",
       "notAssessed": "Not assessed",

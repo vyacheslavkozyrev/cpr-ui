@@ -17,12 +17,23 @@ interface AssessmentSkillCategorySectionProps {
   category: ISkillCategoryGroup
   readOnly?: boolean
   showTitle?: boolean
+  /** Present when rendering the employee assessment page — adds Manager Assessment column */
+  employeeId?: string
+  /** True when the viewer can set manager assessments */
+  isManager?: boolean
 }
 
 const AssessmentSkillCategorySection: React.FC<
   AssessmentSkillCategorySectionProps
-> = ({ category, readOnly = false, showTitle = false }) => {
+> = ({
+  category,
+  readOnly = false,
+  showTitle = false,
+  employeeId,
+  isManager = false,
+}) => {
   const { t } = useTranslation()
+  const showManagerColumn = Boolean(employeeId)
 
   return (
     <TableContainer component={Paper} sx={{ mb: 3 }}>
@@ -30,7 +41,7 @@ const AssessmentSkillCategorySection: React.FC<
         <TableHead>
           {showTitle && (
             <TableRow>
-              <TableCell colSpan={5}>
+              <TableCell colSpan={showManagerColumn ? 6 : 5}>
                 <Typography variant='subtitle1' fontWeight='medium'>
                   {category.title}
                 </Typography>
@@ -45,14 +56,19 @@ const AssessmentSkillCategorySection: React.FC<
               {t('components.assessmentSkillRow.required', 'Required')}
             </TableCell>
             <TableCell>
-              {t(
-                'components.assessmentSkillRow.selfAssessment',
-                'Self Assessment'
-              )}
+              {t('components.assessmentSkillRow.selfAssessment', 'My Weight')}
             </TableCell>
             <TableCell>
               {t('components.assessmentSkillRow.notes', 'Notes')}
             </TableCell>
+            {showManagerColumn && (
+              <TableCell>
+                {t(
+                  'components.assessmentSkillRow.managerAssessment',
+                  'Manager Assessment'
+                )}
+              </TableCell>
+            )}
             <TableCell />
           </TableRow>
         </TableHead>
@@ -62,6 +78,7 @@ const AssessmentSkillCategorySection: React.FC<
               key={skill.skill_id}
               skill={skill}
               readOnly={readOnly}
+              {...(employeeId !== undefined ? { employeeId, isManager } : {})}
             />
           ))}
         </TableBody>

@@ -14,6 +14,7 @@ import {
   useDeleteCurrentLevel,
   useUnlinkEvidence,
   useUpsertCurrentLevel,
+  useUpsertManagerAssessment,
 } from '@/services/skillAssessmentQueryService'
 import type { ISkillItem } from '@/types/skillAssessment.types'
 import EvidenceList from './EvidenceList'
@@ -22,6 +23,10 @@ import EvidenceModal from './EvidenceModal'
 interface AssessmentSkillRowProps {
   skill: ISkillItem
   readOnly?: boolean
+  /** Present when rendering the employee assessment page — enables manager assessment column */
+  employeeId?: string
+  /** True when the viewer can set manager assessments (People Manager, Director, Administrator) */
+  isManager?: boolean
 }
 
 const getStyles = () => ({
@@ -35,9 +40,15 @@ const getStyles = () => ({
 const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
   skill,
   readOnly = false,
+  employeeId,
+  isManager = false,
 }) => {
   const { t } = useTranslation()
   const styles = useMemo(() => getStyles(), [])
+  const showManagerColumn = Boolean(employeeId)
+  const colSpan = showManagerColumn ? 6 : 5
+
+  // Self-assessment state
   const [selfValue, setSelfValue] = useState<string>(
     skill.assessed?.self_assessment_value != null
       ? String(skill.assessed.self_assessment_value)
@@ -48,9 +59,19 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
   const [rowError, setRowError] = useState<string | null>(null)
   const [evidenceModalOpen, setEvidenceModalOpen] = useState(false)
 
+  // Manager assessment state
+  const [managerValue, setManagerValue] = useState<string>(
+    skill.assessed?.manager_assessment_value != null
+      ? String(skill.assessed.manager_assessment_value)
+      : ''
+  )
+  const [managerSaved, setManagerSaved] = useState(false)
+  const [managerError, setManagerError] = useState<string | null>(null)
+
   const upsertCurrent = useUpsertCurrentLevel()
   const deleteCurrent = useDeleteCurrentLevel()
   const unlinkEvidence = useUnlinkEvidence()
+  const upsertManager = useUpsertManagerAssessment()
 
   useEffect(() => {
     setSelfValue(
@@ -61,9 +82,22 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
     setNotes(skill.assessed?.notes ?? '')
   }, [skill.assessed?.self_assessment_value, skill.assessed?.notes])
 
+  useEffect(() => {
+    setManagerValue(
+      skill.assessed?.manager_assessment_value != null
+        ? String(skill.assessed.manager_assessment_value)
+        : ''
+    )
+  }, [skill.assessed?.manager_assessment_value])
+
   const showSaved = useCallback(() => {
     setSavedIndicator(true)
     setTimeout(() => setSavedIndicator(false), 2000)
+  }, [])
+
+  const showManagerSaved = useCallback(() => {
+    setManagerSaved(true)
+    setTimeout(() => setManagerSaved(false), 2000)
   }, [])
 
   const handleValueChange = useCallback(
@@ -142,6 +176,46 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
     showSaved,
   ])
 
+  const handleManagerValueChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setManagerValue(e.target.value)
+    },
+    []
+  )
+
+  const handleManagerValueBlur = useCallback(async () => {
+    if (!employeeId) return
+    setManagerError(null)
+    const parsed = parseFloat(managerValue)
+    if (managerValue === '' || isNaN(parsed)) return
+    if (parsed <= 0) {
+      setManagerError(
+        t(
+          'components.assessmentSkillRow.valueMustBePositive',
+          'Value must be greater than 0'
+        )
+      )
+      return
+    }
+    try {
+      await upsertManager.mutateAsync({
+        employeeId,
+        skillId: skill.skill_id,
+        dto: { manager_assessment_value: parsed },
+      })
+      showManagerSaved()
+    } catch (err: unknown) {
+      setManagerError((err as { message?: string })?.message ?? 'Error')
+    }
+  }, [
+    employeeId,
+    managerValue,
+    skill.skill_id,
+    upsertManager,
+    showManagerSaved,
+    t,
+  ])
+
   const handleRemoveEvidence = useCallback(
     async (feedbackId: string) => {
       await unlinkEvidence.mutateAsync({
@@ -156,7 +230,7 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
   const closeEvidenceModal = useCallback(() => setEvidenceModalOpen(false), [])
 
   const isSaving = upsertCurrent.isPending || deleteCurrent.isPending
-
+  const isManagerSaving = upsertManager.isPending
   const isRequired = skill.required_level != null
 
   return (
@@ -236,6 +310,50 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
           )}
         </TableCell>
 
+        {/* Manager assessment column (employee assessment page only) */}
+        {showManagerColumn && (
+          <TableCell sx={styles.topCell}>
+            {isManager ? (
+              <>
+                <TextField
+                  size='small'
+                  type='number'
+                  value={managerValue}
+                  onChange={handleManagerValueChange}
+                  onBlur={handleManagerValueBlur}
+                  inputProps={{ min: 0.1, step: 0.1 }}
+                  placeholder={t(
+                    'components.assessmentSkillRow.notAssessed',
+                    'Not assessed'
+                  )}
+                  sx={{ width: 120 }}
+                  error={Boolean(managerError)}
+                />
+                {isManagerSaving && (
+                  <CircularProgress size={14} sx={{ ml: 1 }} />
+                )}
+                {managerSaved && !isManagerSaving && (
+                  <Typography
+                    variant='caption'
+                    color='success.main'
+                    sx={styles.saveIndicator}
+                  >
+                    {t('components.assessmentSkillRow.saved', 'Saved ✓')}
+                  </Typography>
+                )}
+              </>
+            ) : (
+              <Typography variant='body2'>
+                {skill.assessed?.manager_assessment_value ??
+                  t(
+                    'components.assessmentSkillRow.notAssessed',
+                    'Not assessed'
+                  )}
+              </Typography>
+            )}
+          </TableCell>
+        )}
+
         {/* Actions */}
         <TableCell sx={styles.actionsCell}>
           {isSaving && <CircularProgress size={16} sx={{ mr: 1 }} />}
@@ -248,7 +366,7 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
               {t('components.assessmentSkillRow.saved', 'Saved ✓')}
             </Typography>
           )}
-          {!readOnly && (
+          {!readOnly && Boolean(skill.assessed) && (
             <Button
               variant='text'
               size='small'
@@ -262,11 +380,11 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
       </TableRow>
 
       {/* Error row */}
-      {rowError && (
+      {(rowError || managerError) && (
         <TableRow>
-          <TableCell colSpan={5} sx={{ py: 0, borderBottom: 'none' }}>
+          <TableCell colSpan={colSpan} sx={{ py: 0, borderBottom: 'none' }}>
             <Typography variant='caption' color='error'>
-              {rowError}
+              {rowError ?? managerError}
             </Typography>
           </TableCell>
         </TableRow>
@@ -275,7 +393,7 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
       {/* Evidence row */}
       {skill.evidence.length > 0 && (
         <TableRow>
-          <TableCell colSpan={5} sx={{ py: 0.5 }}>
+          <TableCell colSpan={colSpan} sx={{ py: 0.5 }}>
             <EvidenceList
               evidence={skill.evidence}
               readOnly={readOnly}
