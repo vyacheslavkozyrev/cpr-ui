@@ -5,10 +5,9 @@ import type {
   IEmployeeSkillAssessmentResponse,
   ILinkEvidenceRequest,
   ISkillAssessmentResponse,
-  ITargetLevel,
   ITeamSkillSummaryResponse,
+  IUpsertManagerAssessmentRequest,
   IUpsertSkillAssessmentRequest,
-  IUpsertSkillTargetRequest,
 } from '../types/skillAssessment.types'
 
 class SkillAssessmentApiService {
@@ -30,16 +29,14 @@ class SkillAssessmentApiService {
     return apiClient.delete<void>(`/me/skill-assessment/skills/${skillId}`)
   }
 
-  async upsertTarget(skillId: string, dto: IUpsertSkillTargetRequest) {
-    return apiClient.put<ITargetLevel>(
-      `/me/skill-assessment/skills/${skillId}/target`,
+  async upsertManagerAssessment(
+    employeeId: string,
+    skillId: string,
+    dto: IUpsertManagerAssessmentRequest
+  ) {
+    return apiClient.put<IAssessedLevel>(
+      `/employees/${employeeId}/skill-assessment/skills/${skillId}/manager-assessment`,
       dto
-    )
-  }
-
-  async deleteTarget(skillId: string) {
-    return apiClient.delete<void>(
-      `/me/skill-assessment/skills/${skillId}/target`
     )
   }
 

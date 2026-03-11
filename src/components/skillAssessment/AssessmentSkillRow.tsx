@@ -2,8 +2,6 @@ import {
   Button,
   Chip,
   CircularProgress,
-  MenuItem,
-  Select,
   TableCell,
   TableRow,
   TextField,
@@ -17,20 +15,14 @@ import {
   useUnlinkEvidence,
   useUpsertCurrentLevel,
 } from '@/services/skillAssessmentQueryService'
-import type {
-  ISkillItem,
-  ISkillLevelBrief,
-} from '@/types/skillAssessment.types'
+import type { ISkillItem } from '@/types/skillAssessment.types'
 import EvidenceList from './EvidenceList'
 import EvidenceModal from './EvidenceModal'
 
 interface AssessmentSkillRowProps {
   skill: ISkillItem
-  availableLevels: ISkillLevelBrief[]
   readOnly?: boolean
 }
-
-const NOT_ASSESSED = ''
 
 const getStyles = () => ({
   skillTitle: { fontWeight: 'medium' } as const,
@@ -42,11 +34,15 @@ const getStyles = () => ({
 
 const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
   skill,
-  availableLevels,
   readOnly = false,
 }) => {
   const { t } = useTranslation()
   const styles = useMemo(() => getStyles(), [])
+  const [selfValue, setSelfValue] = useState<string>(
+    skill.assessed?.self_assessment_value != null
+      ? String(skill.assessed.self_assessment_value)
+      : ''
+  )
   const [notes, setNotes] = useState(skill.assessed?.notes ?? '')
   const [savedIndicator, setSavedIndicator] = useState(false)
   const [rowError, setRowError] = useState<string | null>(null)
@@ -57,61 +53,65 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
   const unlinkEvidence = useUnlinkEvidence()
 
   useEffect(() => {
+    setSelfValue(
+      skill.assessed?.self_assessment_value != null
+        ? String(skill.assessed.self_assessment_value)
+        : ''
+    )
     setNotes(skill.assessed?.notes ?? '')
-  }, [skill.assessed?.notes])
+  }, [skill.assessed?.self_assessment_value, skill.assessed?.notes])
 
   const showSaved = useCallback(() => {
     setSavedIndicator(true)
     setTimeout(() => setSavedIndicator(false), 2000)
   }, [])
 
-  const handleLevelChange = useCallback(
-    async (levelId: string) => {
-      setRowError(null)
-      if (levelId === NOT_ASSESSED) {
-        if (skill.assessed) {
-          await deleteCurrent
-            .mutateAsync(skill.skill_id)
-            .catch(err => setRowError(err?.message ?? 'Error'))
-        }
-        return
-      }
-      try {
-        await upsertCurrent.mutateAsync({
-          skillId: skill.skill_id,
-          dto: { skill_level_id: levelId, notes: notes || null },
-        })
-        showSaved()
-      } catch (err: unknown) {
-        setRowError((err as { message?: string })?.message ?? 'Error')
-      }
+  const handleValueChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSelfValue(e.target.value)
     },
-    [
-      skill.assessed,
-      skill.skill_id,
-      deleteCurrent,
-      upsertCurrent,
-      notes,
-      showSaved,
-    ]
+    []
   )
 
-  const handleNotesBlur = useCallback(async () => {
-    if (!skill.assessed) return
+  const handleValueBlur = useCallback(async () => {
     setRowError(null)
+    const parsed = parseFloat(selfValue)
+    if (selfValue === '' || isNaN(parsed)) {
+      if (skill.assessed) {
+        await deleteCurrent
+          .mutateAsync(skill.skill_id)
+          .catch(err => setRowError(err?.message ?? 'Error'))
+      }
+      return
+    }
+    if (parsed <= 0) {
+      setRowError(
+        t(
+          'components.assessmentSkillRow.valueMustBePositive',
+          'Value must be greater than 0'
+        )
+      )
+      return
+    }
     try {
       await upsertCurrent.mutateAsync({
         skillId: skill.skill_id,
-        dto: {
-          skill_level_id: skill.assessed.skill_level_id,
-          notes: notes || null,
-        },
+        dto: { self_assessment_value: parsed, notes: notes || null },
       })
       showSaved()
-    } catch {
-      /* ignore */
+    } catch (err: unknown) {
+      setRowError((err as { message?: string })?.message ?? 'Error')
     }
-  }, [skill.assessed, skill.skill_id, notes, upsertCurrent, showSaved])
+  }, [
+    selfValue,
+    skill.assessed,
+    skill.skill_id,
+    deleteCurrent,
+    upsertCurrent,
+    notes,
+    showSaved,
+    t,
+  ])
 
   const handleNotesChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,6 +119,28 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
     },
     []
   )
+
+  const handleNotesBlur = useCallback(async () => {
+    const parsed = parseFloat(selfValue)
+    if (!skill.assessed || isNaN(parsed) || parsed <= 0) return
+    setRowError(null)
+    try {
+      await upsertCurrent.mutateAsync({
+        skillId: skill.skill_id,
+        dto: { self_assessment_value: parsed, notes: notes || null },
+      })
+      showSaved()
+    } catch {
+      /* ignore */
+    }
+  }, [
+    skill.assessed,
+    skill.skill_id,
+    selfValue,
+    notes,
+    upsertCurrent,
+    showSaved,
+  ])
 
   const handleRemoveEvidence = useCallback(
     async (feedbackId: string) => {
@@ -165,35 +187,27 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
           )}
         </TableCell>
 
-        {/* My Weight (current assessed level) */}
+        {/* Self assessment value */}
         <TableCell sx={styles.topCell}>
           {readOnly ? (
             <Typography variant='body2'>
-              {skill.assessed?.skill_level_title ??
-                t('components.assessmentSkillRow.notAssessed', 'Not assessed')}
+              {skill.assessed?.self_assessment_value ?? '—'}
             </Typography>
           ) : (
-            <Select
+            <TextField
               size='small'
-              value={skill.assessed?.skill_level_id ?? NOT_ASSESSED}
-              onChange={e => handleLevelChange(e.target.value)}
-              displayEmpty
-              sx={{ minWidth: 140 }}
-            >
-              <MenuItem value={NOT_ASSESSED}>
-                <em>
-                  {t(
-                    'components.assessmentSkillRow.notAssessed',
-                    'Not assessed'
-                  )}
-                </em>
-              </MenuItem>
-              {availableLevels.map(l => (
-                <MenuItem key={l.id} value={l.id}>
-                  {l.title}
-                </MenuItem>
-              ))}
-            </Select>
+              type='number'
+              value={selfValue}
+              onChange={handleValueChange}
+              onBlur={handleValueBlur}
+              inputProps={{ min: 0, step: 0.1 }}
+              placeholder={t(
+                'components.assessmentSkillRow.notAssessed',
+                'Not assessed'
+              )}
+              sx={{ width: 120 }}
+              error={Boolean(rowError)}
+            />
           )}
         </TableCell>
 

@@ -205,7 +205,6 @@ export const taxonomyHandlers = [
           skill_level_title: 'Intermediate',
           skill_level_value: 2,
           is_mandatory: (body['is_mandatory'] as boolean) ?? false,
-          weight: (body['weight'] as number | null) ?? null,
           rationale: (body['rationale'] as string | null) ?? null,
           position_id: positionId,
         },
@@ -229,10 +228,6 @@ export const taxonomyHandlers = [
           (body['skill_level_id'] as string) ?? existing.skill_level_id,
         is_mandatory:
           (body['is_mandatory'] as boolean) ?? existing.is_mandatory,
-        weight:
-          body['weight'] !== undefined
-            ? (body['weight'] as number | null)
-            : existing.weight,
         rationale:
           body['rationale'] !== undefined
             ? (body['rationale'] as string | null)

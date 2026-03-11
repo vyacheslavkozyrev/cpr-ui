@@ -1135,17 +1135,16 @@
     "assessmentSkillRow": {
       "skill": "Skill",
       "required": "Required",
-      "currentLevel": "Current Level",
-      "targetLevel": "Target Level",
+      "selfAssessment": "Self Assessment",
+      "managerAssessment": "Manager Assessment",
       "notes": "Notes",
       "notAssessed": "Not assessed",
-      "noTarget": "No target set",
-      "clearTarget": "Clear target",
+      "notRequired": "Not required",
+      "valueMustBePositive": "Value must be greater than 0",
       "saved": "Saved ✓",
       "saving": "Saving...",
       "linkFeedback": "Link feedback",
-      "targetConflict": "Target level must be higher than your current level. Clear or raise the target first.",
-      "targetTooLow": "Target level must be strictly greater than your current level."
+      "notesPlaceholder": "Add notes..."
     },
     "evidenceModal": {
       "title": "Link Evidence",
@@ -1211,7 +1210,6 @@
       "level": "Required Level",
       "mandatory": "Mandatory",
       "optional": "Optional",
-      "weight": "Weight",
       "rationale": "Rationale",
       "detail": "Skill Detail",
       "proficiencyLevels": "Proficiency Levels",

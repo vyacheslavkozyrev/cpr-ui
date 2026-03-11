@@ -39,17 +39,9 @@ export const mockSkillAssessmentResponse: ISkillAssessmentResponse = {
           assessed: {
             id: 'assess-001',
             skill_id: 'skill-001',
-            skill_level_id: 'level-002',
-            skill_level_title: 'Intermediate',
-            skill_level_value: 2,
+            self_assessment_value: 2,
+            manager_assessment_value: null,
             notes: 'Led API migration in Q3',
-          },
-          target: {
-            id: 'target-001',
-            skill_id: 'skill-001',
-            skill_level_id: 'level-003',
-            skill_level_title: 'Advanced',
-            skill_level_value: 3,
           },
           evidence: [
             {
@@ -73,7 +65,6 @@ export const mockSkillAssessmentResponse: ISkillAssessmentResponse = {
             value: 4,
           },
           assessed: null,
-          target: null,
           evidence: [],
         },
         {
@@ -89,12 +80,10 @@ export const mockSkillAssessmentResponse: ISkillAssessmentResponse = {
           assessed: {
             id: 'assess-002',
             skill_id: 'skill-003',
-            skill_level_id: 'level-003',
-            skill_level_title: 'Advanced',
-            skill_level_value: 3,
+            self_assessment_value: 3,
+            manager_assessment_value: 3.5,
             notes: null,
           },
-          target: null,
           evidence: [],
         },
       ],
@@ -116,12 +105,10 @@ export const mockSkillAssessmentResponse: ISkillAssessmentResponse = {
           assessed: {
             id: 'assess-003',
             skill_id: 'skill-004',
-            skill_level_id: 'level-002',
-            skill_level_title: 'Intermediate',
-            skill_level_value: 2,
+            self_assessment_value: 2,
+            manager_assessment_value: null,
             notes: null,
           },
-          target: null,
           evidence: [],
         },
         {
@@ -131,7 +118,6 @@ export const mockSkillAssessmentResponse: ISkillAssessmentResponse = {
           required_level: { id: 'level-001', title: 'Beginner', value: 1 },
           next_position_required_level: null,
           assessed: null,
-          target: null,
           evidence: [],
         },
       ],

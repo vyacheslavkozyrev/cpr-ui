@@ -15,11 +15,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { IPositionSkillRequirement } from '@/types/taxonomy.types'
 
-type TSortField =
-  | 'skill_title'
-  | 'skill_level_value'
-  | 'is_mandatory'
-  | 'weight'
+type TSortField = 'skill_title' | 'skill_level_value' | 'is_mandatory'
 type TSortDir = 'asc' | 'desc'
 
 interface ISkillRequirementsTableProps {
@@ -52,7 +48,7 @@ const getStyles = () => ({
 // B2: extracted sub-component so the click handler is a stable useCallback
 const SkillRow: React.FC<ISkillRowProps> = React.memo(
   ({ skill, onSkillClick }) => {
-    const { t, i18n } = useTranslation()
+    const { t } = useTranslation()
     const styles = useMemo(() => getStyles(), [])
 
     const handleClick = useCallback(
@@ -83,14 +79,6 @@ const SkillRow: React.FC<ISkillRowProps> = React.memo(
             color={skill.is_mandatory ? 'primary' : 'default'}
             size='small'
           />
-        </TableCell>
-        <TableCell>
-          <Typography variant='body2'>
-            {/* S3: locale-aware number formatting */}
-            {skill.weight !== null
-              ? new Intl.NumberFormat(i18n.language).format(skill.weight)
-              : '—'}
-          </Typography>
         </TableCell>
         <TableCell>
           <Typography variant='body2' color='text.secondary'>
@@ -136,11 +124,6 @@ const SkillRequirementsTable: React.FC<ISkillRequirementsTableProps> =
       () => handleSort('is_mandatory'),
       [handleSort]
     )
-    const handleSortWeight = useCallback(
-      () => handleSort('weight'),
-      [handleSort]
-    )
-
     const sorted = useMemo(() => {
       const dir = sortDir === 'asc' ? 1 : -1
       return [...skills].sort((a, b) => {
@@ -199,15 +182,6 @@ const SkillRequirementsTable: React.FC<ISkillRequirementsTableProps> =
                   onClick={handleSortMandatory}
                 >
                   {t('taxonomy.skill.mandatory')}
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <TableSortLabel
-                  active={sortField === 'weight'}
-                  direction={sortField === 'weight' ? sortDir : 'asc'}
-                  onClick={handleSortWeight}
-                >
-                  {t('taxonomy.skill.weight')}
                 </TableSortLabel>
               </TableCell>
               <TableCell>{t('taxonomy.skill.rationale')}</TableCell>

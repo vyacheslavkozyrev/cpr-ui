@@ -69,7 +69,6 @@ const makeSkill = (
   skill_level_title: `Level ${levelValue}`,
   skill_level_value: levelValue,
   is_mandatory: isMandatory,
-  weight: 1.0,
   rationale: null,
 })
 

@@ -228,7 +228,6 @@ export const mockPositionJuniorBE: IPositionDetail = {
       skill_level_title: 'Beginner',
       skill_level_value: 1,
       is_mandatory: true,
-      weight: 1.5,
       rationale: 'Core language for frontend/fullstack work',
     },
     {
@@ -241,7 +240,6 @@ export const mockPositionJuniorBE: IPositionDetail = {
       skill_level_title: 'Beginner',
       skill_level_value: 1,
       is_mandatory: true,
-      weight: 2.0,
       rationale: 'Primary backend framework',
     },
     {
@@ -254,7 +252,6 @@ export const mockPositionJuniorBE: IPositionDetail = {
       skill_level_title: 'Beginner',
       skill_level_value: 1,
       is_mandatory: false,
-      weight: 0.5,
       rationale: null,
     },
   ],
@@ -282,7 +279,6 @@ export const mockPositionMidBE: IPositionDetail = {
       skill_level_title: 'Intermediate',
       skill_level_value: 2,
       is_mandatory: true,
-      weight: 1.5,
       rationale: 'Core language for frontend/fullstack work',
     },
     {
@@ -295,7 +291,6 @@ export const mockPositionMidBE: IPositionDetail = {
       skill_level_title: 'Beginner',
       skill_level_value: 1,
       is_mandatory: true,
-      weight: 1.5,
       rationale: null,
     },
     {
@@ -308,7 +303,6 @@ export const mockPositionMidBE: IPositionDetail = {
       skill_level_title: 'Intermediate',
       skill_level_value: 2,
       is_mandatory: true,
-      weight: 2.0,
       rationale: 'Primary backend framework',
     },
     {
@@ -321,7 +315,6 @@ export const mockPositionMidBE: IPositionDetail = {
       skill_level_title: 'Beginner',
       skill_level_value: 1,
       is_mandatory: false,
-      weight: 0.5,
       rationale: null,
     },
   ],
@@ -349,7 +342,6 @@ export const mockPositionSeniorBE: IPositionDetail = {
       skill_level_title: 'Advanced',
       skill_level_value: 3,
       is_mandatory: true,
-      weight: 2.0,
       rationale: 'Core language for frontend/fullstack work',
     },
     {
@@ -362,7 +354,6 @@ export const mockPositionSeniorBE: IPositionDetail = {
       skill_level_title: 'Advanced',
       skill_level_value: 3,
       is_mandatory: true,
-      weight: 2.0,
       rationale: null,
     },
     {
@@ -375,7 +366,6 @@ export const mockPositionSeniorBE: IPositionDetail = {
       skill_level_title: 'Intermediate',
       skill_level_value: 2,
       is_mandatory: false,
-      weight: 1.0,
       rationale: null,
     },
     {
@@ -388,7 +378,6 @@ export const mockPositionSeniorBE: IPositionDetail = {
       skill_level_title: 'Expert',
       skill_level_value: 4,
       is_mandatory: true,
-      weight: 2.5,
       rationale: 'Primary backend framework',
     },
   ],

@@ -57,22 +57,13 @@ export const skillAssessmentHandlers = [
     async ({ request, params }) => {
       const body = (await request.json()) as Record<string, unknown>
       const skillId = params['skillId'] as string
-      const skillLevelId = body['skill_level_id'] as string
-
-      // Simulate 422 target_conflict: if level-004 (Expert) is used and target exists at level-004
-      if (skillLevelId === 'target-conflict-level') {
-        return HttpResponse.json(
-          { data: null, success: false, message: 'target_conflict' },
-          { status: 422 }
-        )
-      }
+      const selfAssessmentValue = body['self_assessment_value'] as number
 
       return ok({
         id: `assess-${skillId}`,
         skill_id: skillId,
-        skill_level_id: skillLevelId,
-        skill_level_title: 'Intermediate',
-        skill_level_value: 2,
+        self_assessment_value: selfAssessmentValue,
+        manager_assessment_value: null,
         notes: (body['notes'] as string | null) ?? null,
       })
     }
@@ -84,35 +75,48 @@ export const skillAssessmentHandlers = [
     () => new HttpResponse(null, { status: 204 })
   ),
 
-  // PUT /api/me/skill-assessment/skills/:skillId/target
+  // PUT /api/me/skill-assessment/skills/:skillId/target — removed, returns 404
   http.put(
     `${DEFAULT_API_BASE_URL}/me/skill-assessment/skills/:skillId/target`,
+    () =>
+      HttpResponse.json(
+        {
+          title: 'Not Found',
+          detail: 'Target level endpoints have been removed.',
+        },
+        { status: 404 }
+      )
+  ),
+
+  // DELETE /api/me/skill-assessment/skills/:skillId/target — removed, returns 404
+  http.delete(
+    `${DEFAULT_API_BASE_URL}/me/skill-assessment/skills/:skillId/target`,
+    () =>
+      HttpResponse.json(
+        {
+          title: 'Not Found',
+          detail: 'Target level endpoints have been removed.',
+        },
+        { status: 404 }
+      )
+  ),
+
+  // PUT /api/employees/:employeeId/skill-assessment/skills/:skillId/manager-assessment
+  http.put(
+    `${DEFAULT_API_BASE_URL}/employees/:employeeId/skill-assessment/skills/:skillId/manager-assessment`,
     async ({ request, params }) => {
       const body = (await request.json()) as Record<string, unknown>
       const skillId = params['skillId'] as string
-      const skillLevelId = body['skill_level_id'] as string
-
-      if (skillLevelId === 'target-too-low-level') {
-        return HttpResponse.json(
-          { data: null, success: false, message: 'target_too_low' },
-          { status: 422 }
-        )
-      }
+      const managerAssessmentValue = body['manager_assessment_value'] as number
 
       return ok({
-        id: `target-${skillId}`,
+        id: `assess-${skillId}`,
         skill_id: skillId,
-        skill_level_id: skillLevelId,
-        skill_level_title: 'Advanced',
-        skill_level_value: 3,
+        self_assessment_value: 2,
+        manager_assessment_value: managerAssessmentValue,
+        notes: null,
       })
     }
-  ),
-
-  // DELETE /api/me/skill-assessment/skills/:skillId/target
-  http.delete(
-    `${DEFAULT_API_BASE_URL}/me/skill-assessment/skills/:skillId/target`,
-    () => new HttpResponse(null, { status: 204 })
   ),
 
   // POST /api/me/skill-assessment/skills/:skillId/evidence

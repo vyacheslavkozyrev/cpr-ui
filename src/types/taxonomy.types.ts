@@ -82,7 +82,6 @@ export interface IPositionSkillRequirement {
   skill_level_title: string
   skill_level_value: number
   is_mandatory: boolean
-  weight: number | null
   rationale: string | null
 }
 
@@ -207,13 +206,11 @@ export interface IAddPositionSkillDto {
   skill_id: string
   skill_level_id: string
   is_mandatory: boolean
-  weight?: number | null
   rationale?: string | null
 }
 
 export interface IUpdatePositionSkillDto {
   skill_level_id?: string
   is_mandatory?: boolean
-  weight?: number | null
   rationale?: string | null
 }

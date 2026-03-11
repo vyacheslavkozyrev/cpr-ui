@@ -57,7 +57,6 @@ const makeSchema = (t: (key: string) => string) =>
       .string()
       .min(1, t('taxonomy.admin.validation.levelRequired')),
     is_mandatory: z.boolean(),
-    weight: z.coerce.number().nullable().optional(),
     rationale: z.string().max(500).nullable().optional(),
   })
 
@@ -116,7 +115,6 @@ const PositionSkillsPanel: React.FC<IPositionSkillsPanelProps> = React.memo(
         skill_id: '',
         skill_level_id: '',
         is_mandatory: false,
-        weight: null,
         rationale: '',
       },
     })
@@ -140,7 +138,6 @@ const PositionSkillsPanel: React.FC<IPositionSkillsPanelProps> = React.memo(
         skill_id: '',
         skill_level_id: '',
         is_mandatory: false,
-        weight: null,
         rationale: '',
       })
       setFormOpen(true)
@@ -153,7 +150,6 @@ const PositionSkillsPanel: React.FC<IPositionSkillsPanelProps> = React.memo(
           skill_id: req.skill_id,
           skill_level_id: req.skill_level_id,
           is_mandatory: req.is_mandatory,
-          weight: req.weight,
           rationale: req.rationale ?? '',
         })
         setFormOpen(true)
@@ -197,7 +193,6 @@ const PositionSkillsPanel: React.FC<IPositionSkillsPanelProps> = React.memo(
               dto: {
                 skill_level_id: data.skill_level_id,
                 is_mandatory: data.is_mandatory,
-                weight: data.weight ?? null,
                 rationale: data.rationale ?? null,
               },
             })
@@ -208,7 +203,6 @@ const PositionSkillsPanel: React.FC<IPositionSkillsPanelProps> = React.memo(
                 skill_id: data.skill_id,
                 skill_level_id: data.skill_level_id,
                 is_mandatory: data.is_mandatory,
-                weight: data.weight ?? null,
                 rationale: data.rationale ?? null,
               },
             })
@@ -414,16 +408,6 @@ const PositionSkillsPanel: React.FC<IPositionSkillsPanelProps> = React.memo(
                 />
               </Box>
 
-              <TextField
-                label={t('taxonomy.skill.weight', 'Weight')}
-                type='number'
-                fullWidth
-                error={Boolean(errors.weight)}
-                helperText={errors.weight?.message}
-                disabled={isPending}
-                inputProps={{ step: 0.1, min: 0 }}
-                {...register('weight')}
-              />
               <TextField
                 label={t('taxonomy.skill.rationale', 'Rationale')}
                 fullWidth

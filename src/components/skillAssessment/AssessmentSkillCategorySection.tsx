@@ -10,22 +10,18 @@ import {
 } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import type {
-  ISkillCategoryGroup,
-  ISkillLevelBrief,
-} from '@/types/skillAssessment.types'
+import type { ISkillCategoryGroup } from '@/types/skillAssessment.types'
 import AssessmentSkillRow from './AssessmentSkillRow'
 
 interface AssessmentSkillCategorySectionProps {
   category: ISkillCategoryGroup
-  availableLevels: ISkillLevelBrief[]
   readOnly?: boolean
   showTitle?: boolean
 }
 
 const AssessmentSkillCategorySection: React.FC<
   AssessmentSkillCategorySectionProps
-> = ({ category, availableLevels, readOnly = false, showTitle = false }) => {
+> = ({ category, readOnly = false, showTitle = false }) => {
   const { t } = useTranslation()
 
   return (
@@ -49,7 +45,10 @@ const AssessmentSkillCategorySection: React.FC<
               {t('components.assessmentSkillRow.required', 'Required')}
             </TableCell>
             <TableCell>
-              {t('components.assessmentSkillRow.myWeight', 'My Weight')}
+              {t(
+                'components.assessmentSkillRow.selfAssessment',
+                'Self Assessment'
+              )}
             </TableCell>
             <TableCell>
               {t('components.assessmentSkillRow.notes', 'Notes')}
@@ -62,7 +61,6 @@ const AssessmentSkillCategorySection: React.FC<
             <AssessmentSkillRow
               key={skill.skill_id}
               skill={skill}
-              availableLevels={availableLevels}
               readOnly={readOnly}
             />
           ))}

@@ -6,40 +6,18 @@ import {
   Skeleton,
   Typography,
 } from '@mui/material'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import AssessmentSkillsRadarChart from '@/components/skillAssessment/AssessmentSkillsRadarChart'
 import AssessmentSkillCategorySection from '@/components/skillAssessment/AssessmentSkillCategorySection'
 import { useEmployeeSkillAssessment } from '@/services/skillAssessmentQueryService'
-import type { ISkillLevelBrief } from '@/types/skillAssessment.types'
 
 const EmployeeAssessmentPage: React.FC = () => {
   const { t } = useTranslation()
   const { employeeId } = useParams<{ employeeId: string }>()
   const { data, isLoading, isError, error, refetch } =
     useEmployeeSkillAssessment(employeeId ?? '')
-
-  const availableLevels = useMemo<ISkillLevelBrief[]>(() => {
-    if (!data) return []
-    const levelMap = new Map<string, ISkillLevelBrief>()
-    for (const cat of data.skill_categories) {
-      for (const skill of cat.skills) {
-        const addLevel = (l: ISkillLevelBrief | null | undefined) => {
-          if (l) levelMap.set(l.id, l)
-        }
-        addLevel(skill.required_level)
-        addLevel(skill.next_position_required_level)
-        if (skill.assessed)
-          addLevel({
-            id: skill.assessed.skill_level_id,
-            title: skill.assessed.skill_level_title,
-            value: skill.assessed.skill_level_value,
-          })
-      }
-    }
-    return Array.from(levelMap.values()).sort((a, b) => a.value - b.value)
-  }, [data])
 
   if (isLoading) {
     return (
@@ -138,7 +116,6 @@ const EmployeeAssessmentPage: React.FC = () => {
             <AssessmentSkillCategorySection
               key={category.id}
               category={category}
-              availableLevels={availableLevels}
               readOnly
               showTitle
             />

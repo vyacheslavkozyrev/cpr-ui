@@ -44,7 +44,7 @@ const AssessmentSkillsRadarChart: React.FC<IAssessmentSkillsRadarChartProps> =
       () =>
         allSkills.map(s => ({
           skill: s.skill_title,
-          current: s.assessed?.skill_level_value ?? 0,
+          current: s.assessed?.self_assessment_value ?? 0,
           nextRequired: s.next_position_required_level?.value ?? 0,
         })),
       [allSkills]

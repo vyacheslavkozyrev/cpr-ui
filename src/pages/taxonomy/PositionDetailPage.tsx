@@ -170,7 +170,7 @@ const PositionDetailPage: React.FC = React.memo(() => {
         <Alert
           severity='error'
           action={
-            <Button color='inherit' size='small' onClick={refetch}>
+            <Button color='inherit' size='small' onClick={() => void refetch()}>
               {t('common.retry')}
             </Button>
           }

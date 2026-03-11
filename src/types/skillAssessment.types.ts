@@ -42,18 +42,9 @@ export interface IEvidenceItem {
 export interface IAssessedLevel {
   id: string
   skill_id: string
-  skill_level_id: string
-  skill_level_title: string
-  skill_level_value: number
+  self_assessment_value: number
+  manager_assessment_value: number | null
   notes: string | null
-}
-
-export interface ITargetLevel {
-  id: string
-  skill_id: string
-  skill_level_id: string
-  skill_level_title: string
-  skill_level_value: number
 }
 
 export interface ISkillItem {
@@ -63,7 +54,6 @@ export interface ISkillItem {
   required_level: ISkillLevelBrief
   next_position_required_level: ISkillLevelBrief | null
   assessed: IAssessedLevel | null
-  target: ITargetLevel | null
   evidence: IEvidenceItem[]
 }
 
@@ -105,12 +95,12 @@ export interface ITeamSkillSummaryResponse {
 // Request interfaces
 
 export interface IUpsertSkillAssessmentRequest {
-  skill_level_id: string
+  self_assessment_value: number
   notes?: string | null
 }
 
-export interface IUpsertSkillTargetRequest {
-  skill_level_id: string
+export interface IUpsertManagerAssessmentRequest {
+  manager_assessment_value: number
 }
 
 export interface ILinkEvidenceRequest {

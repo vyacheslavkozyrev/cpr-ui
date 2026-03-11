@@ -12,7 +12,6 @@ import { useTranslation } from 'react-i18next'
 import AssessmentSkillsRadarChart from '@/components/skillAssessment/AssessmentSkillsRadarChart'
 import AssessmentSkillCategorySection from '@/components/skillAssessment/AssessmentSkillCategorySection'
 import { useMySkillAssessment } from '@/services/skillAssessmentQueryService'
-import type { ISkillLevelBrief } from '@/types/skillAssessment.types'
 
 const getStyles = () => ({
   tabs: { mb: 3, borderBottom: 1, borderColor: 'divider' },
@@ -23,27 +22,6 @@ const SkillAssessmentPage: React.FC = () => {
   const { data, isLoading, isError, refetch } = useMySkillAssessment()
   const [selectedTab, setSelectedTab] = useState(0)
   const styles = useMemo(() => getStyles(), [])
-
-  const availableLevels = useMemo<ISkillLevelBrief[]>(() => {
-    if (!data) return []
-    const levelMap = new Map<string, ISkillLevelBrief>()
-    for (const cat of data.skill_categories) {
-      for (const skill of cat.skills) {
-        const addLevel = (l: ISkillLevelBrief | null | undefined) => {
-          if (l) levelMap.set(l.id, l)
-        }
-        addLevel(skill.required_level)
-        addLevel(skill.next_position_required_level)
-        if (skill.assessed)
-          addLevel({
-            id: skill.assessed.skill_level_id,
-            title: skill.assessed.skill_level_title,
-            value: skill.assessed.skill_level_value,
-          })
-      }
-    }
-    return Array.from(levelMap.values()).sort((a, b) => a.value - b.value)
-  }, [data])
 
   const handleTabChange = useCallback(
     (_: React.SyntheticEvent, newValue: number) => {
@@ -133,10 +111,7 @@ const SkillAssessmentPage: React.FC = () => {
 
           {/* Skills table for selected category */}
           {selectedCategory && (
-            <AssessmentSkillCategorySection
-              category={selectedCategory}
-              availableLevels={availableLevels}
-            />
+            <AssessmentSkillCategorySection category={selectedCategory} />
           )}
         </>
       )}
