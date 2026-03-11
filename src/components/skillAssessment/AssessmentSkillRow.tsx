@@ -191,7 +191,8 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
         <TableCell sx={styles.topCell}>
           {readOnly ? (
             <Typography variant='body2'>
-              {skill.assessed?.self_assessment_value ?? '—'}
+              {skill.assessed?.self_assessment_value ??
+                t('components.assessmentSkillRow.notAssessed', 'Not assessed')}
             </Typography>
           ) : (
             <TextField
@@ -200,7 +201,7 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
               value={selfValue}
               onChange={handleValueChange}
               onBlur={handleValueBlur}
-              inputProps={{ min: 0, step: 0.1 }}
+              inputProps={{ min: 0.1, step: 0.1 }}
               placeholder={t(
                 'components.assessmentSkillRow.notAssessed',
                 'Not assessed'
