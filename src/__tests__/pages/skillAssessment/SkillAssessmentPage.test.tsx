@@ -55,4 +55,21 @@ describe('SkillAssessmentPage', () => {
       expect(screen.queryByText(/Backend Engineering/)).not.toBeNull()
     })
   })
+
+  // AC-004: Target Level column must not appear
+  it('does not render a Target Level column header', async () => {
+    renderPage()
+    await waitFor(() => {
+      expect(screen.queryByText('TypeScript')).not.toBeNull()
+    })
+    expect(screen.queryByText(/target level/i)).toBeNull()
+  })
+
+  // AC-005: "My Weight" column header is present (no dropdown)
+  it('renders My Weight column header', async () => {
+    renderPage()
+    await waitFor(() => {
+      expect(screen.queryByText(/my weight/i)).not.toBeNull()
+    })
+  })
 })
