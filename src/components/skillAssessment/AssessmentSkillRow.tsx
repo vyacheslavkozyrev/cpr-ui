@@ -23,6 +23,8 @@ import EvidenceModal from './EvidenceModal'
 interface AssessmentSkillRowProps {
   skill: ISkillItem
   readOnly?: boolean
+  /** True when there is a next position — shows Next Level Required column */
+  showNextLevel?: boolean
   /** Present when rendering the employee assessment page — enables manager assessment column */
   employeeId?: string
   /** True when the viewer can set manager assessments (People Manager, Director, Administrator) */
@@ -40,13 +42,14 @@ const getStyles = () => ({
 const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
   skill,
   readOnly = false,
+  showNextLevel = false,
   employeeId,
   isManager = false,
 }) => {
   const { t } = useTranslation()
   const styles = useMemo(() => getStyles(), [])
   const showManagerColumn = Boolean(employeeId)
-  const colSpan = showManagerColumn ? 6 : 5
+  const colSpan = 5 + (showNextLevel ? 1 : 0) + (showManagerColumn ? 1 : 0)
 
   // Self-assessment state
   const [selfValue, setSelfValue] = useState<string>(
@@ -260,6 +263,24 @@ const AssessmentSkillRow: React.FC<AssessmentSkillRowProps> = ({
             </Typography>
           )}
         </TableCell>
+
+        {/* Next level required */}
+        {showNextLevel && (
+          <TableCell sx={styles.topCell}>
+            {skill.next_position_required_level ? (
+              <Chip
+                label={skill.next_position_required_level.title}
+                size='small'
+                color='secondary'
+                variant='outlined'
+              />
+            ) : (
+              <Typography variant='body2' color='text.secondary'>
+                —
+              </Typography>
+            )}
+          </TableCell>
+        )}
 
         {/* Self assessment value */}
         <TableCell sx={styles.topCell}>

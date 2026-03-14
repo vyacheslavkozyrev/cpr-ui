@@ -173,6 +173,135 @@
       "microsoftNote": "Connectez-vous avec votre compte Microsoft"
     }
   },
+  "pages": {
+    "skillAssessment": {
+      "title": "Auto-évaluation des Compétences",
+      "loadError": "Échec du chargement de l'évaluation des compétences.",
+      "emptyState": "Aucune compétence requise pour votre poste actuel.",
+      "position": "Poste",
+      "careerTrack": "Filière de Carrière",
+      "careerPath": "Parcours de Carrière",
+      "nextPosition": "Poste Suivant",
+      "noSkills": "Aucune compétence à afficher",
+      "barChartAriaLabel": "Graphique à barres d'évaluation des compétences",
+      "myCurrentLevel": "Mon Niveau Actuel",
+      "nextLevelRequired": "Niveau Suivant Requis",
+      "radarChartAriaLabel": "Graphique radar d'évaluation des compétences",
+      "highestPosition": "Vous êtes au poste le plus élevé de votre filière de carrière."
+    },
+    "employeeAssessment": {
+      "title": "Évaluation des Compétences",
+      "readOnlyBanner": "Consultation de l'évaluation pour :",
+      "forbidden": "Vous n'avez pas accès à l'évaluation de cet employé.",
+      "notFound": "Employé introuvable.",
+      "loadError": "Échec du chargement de l'évaluation."
+    },
+    "teamSkillOverview": {
+      "title": "Aperçu des Compétences de l'Équipe",
+      "columnName": "Nom",
+      "columnPosition": "Poste",
+      "columnAssessed": "Évalué",
+      "columnMeeting": "Conforme aux Exigences",
+      "emptyState": "Aucun rapport direct trouvé."
+    },
+    "reviewCycles": {
+      "title": "Cycles d'Évaluation",
+      "createButton": "Créer un Cycle d'Évaluation",
+      "titleColumn": "Titre",
+      "subjectColumn": "Sujet",
+      "statusColumn": "Statut",
+      "nomineesColumn": "Candidats",
+      "responsesColumn": "Réponses",
+      "createdColumn": "Créé",
+      "emptyState": "Aucun cycle d'évaluation pour l'instant",
+      "titleRequired": "Le titre est obligatoire",
+      "subjectLabel": "ID du Sujet-Employé",
+      "descriptionColumn": "Description"
+    },
+    "myReviews": {
+      "title": "Mes Évaluations",
+      "emptyState": "Vous n'avez aucun cycle d'évaluation"
+    },
+    "reviewCycleDetail": {
+      "subject": "Sujet",
+      "opened": "Ouvert",
+      "started": "Commencé",
+      "closed": "Fermé",
+      "accessDenied": "Vous n'avez pas accès à ce cycle d'évaluation",
+      "notFound": "Cycle d'évaluation non trouvé"
+    },
+    "reviewRequests": {
+      "title": "Mes Demandes d'Évaluation en Attente",
+      "emptyState": "Aucune demande en attente",
+      "emptyStateSubtext": "Vous n'avez pas de retours 360 en attente à soumettre",
+      "submitButton": "Soumettre un Retour"
+    }
+  },
+  "components": {
+    "assessmentSkillRow": {
+      "skill": "Compétence",
+      "required": "Requis",
+      "nextLevelRequired": "Niveau Suivant Requis",
+      "selfAssessment": "Mon Poids",
+      "managerAssessment": "Évaluation du Manager",
+      "notes": "Notes",
+      "notAssessed": "Non évalué",
+      "notRequired": "Non requis",
+      "valueMustBePositive": "La valeur doit être supérieure à 0",
+      "saved": "Enregistré ✓",
+      "saving": "Enregistrement...",
+      "linkFeedback": "Lier un retour",
+      "notesPlaceholder": "Ajouter des notes..."
+    },
+    "evidenceModal": {
+      "title": "Lier une Preuve",
+      "searchPlaceholder": "Rechercher un retour...",
+      "emptyState": "Aucun retour reçu pour l'instant.",
+      "save": "Enregistrer",
+      "cancel": "Annuler"
+    },
+    "resultsView": {
+      "aggregatedTitle": "Vos Résultats de Retour 360",
+      "detailedTitle": "Résultats de Retour 360",
+      "averageRatingLabel": "Note Moyenne",
+      "responseCountLabel": "réponses",
+      "anonymizedCommentsHeading": "Commentaires de Retour",
+      "noResults": "Aucune réponse reçue"
+    },
+    "nomineePanel": {
+      "sectionTitle": "Candidats",
+      "reviewerColumn": "Évaluateur",
+      "nominatedByColumn": "Nominé par",
+      "statusColumn": "Statut",
+      "reviewerIdPlaceholder": "ID de l'Évaluateur",
+      "nominateButton": "Nominer",
+      "addNomineeLabel": "Ajouter un Candidat",
+      "removeTooltip": "Supprimer le candidat",
+      "transitionButtons": {
+        "openForNominations": "Ouvrir pour Nominations",
+        "startReview": "Commencer l'Évaluation",
+        "closeCycle": "Fermer le Cycle"
+      },
+      "confirmDialog": {
+        "title": "Confirmer le Changement de Statut",
+        "body": "Êtes-vous sûr de vouloir changer le statut du cycle ?",
+        "confirm": "Confirmer",
+        "cancel": "Annuler"
+      },
+      "minNomineesHint": "≥2 candidats requis pour commencer"
+    },
+    "reviewResponseForm": {
+      "title": "Soumettre votre évaluation",
+      "reviewingLabel": "Vous évaluez",
+      "ratingLabel": "Votre Évaluation",
+      "commentsLabel": "Commentaires",
+      "commentsHint": "10–2000 caractères",
+      "submitButton": "Soumettre un Retour",
+      "alreadySubmittedTitle": "Retour Soumis",
+      "notNominated": "Vous n'êtes pas nominé pour ce cycle d'évaluation.",
+      "notAccepting": "Ce cycle n'accepte pas actuellement de réponses."
+    }
+  },
   "taxonomy": {
     "careerFramework": {
       "title": "Cadre de Carrière",
@@ -359,48 +488,60 @@
       }
     },
     "list": {
-      "sent": {
-        "title": "Demandes Envoyées",
-        "empty": "Commencez à collecter des commentaires",
-        "emptyDescription": "Vous n'avez encore envoyé aucune demande de commentaires.",
-        "filters": {
-          "all": "Toutes",
-          "pending": "En Attente",
-          "partial": "Partiel",
-          "complete": "Terminées",
-          "overdue": "En Retard"
-        },
-        "sort": {
-          "newest": "Plus Récentes",
-          "oldest": "Plus Anciennes",
-          "dueDate": "Date Limite"
-        },
-        "summary": "Affichage de {{showing}} sur {{total}} demandes ({{pending}} en attente, {{partial}} partiellement terminées, {{complete}} entièrement terminées)"
+      "title": "Mes Commentaires",
+      "empty_state": {
+        "title": "Aucun Commentaire Pour L'instant",
+        "description": "Vous n'avez pas encore reçu de commentaires. Demandez des avis à vos collègues sur vos objectifs.",
+        "action": "Demander des Commentaires"
       },
-      "todo": {
-        "title": "Demandes à Faire",
-        "empty": "Aucune demande en attente",
-        "emptyDescription": "Vous n'avez aucune demande de commentaires en attente à compléter.",
-        "filters": {
-          "all": "Toutes",
-          "pending": "En Attente",
-          "overdue": "En Retard"
-        }
+      "tabs": {
+        "list": "Liste des Commentaires",
+        "analytics": "Analytique"
       },
-      "team": {
-        "sent": {
-          "title": "Demandes Envoyées par l'Équipe",
-          "empty": "Votre équipe n'a encore envoyé aucune demande de commentaires"
-        },
-        "received": {
-          "title": "Demandes Reçues par l'Équipe",
-          "empty": "Votre équipe n'a encore reçu aucune demande de commentaires"
-        },
-        "filters": {
-          "allTeam": "Tous les Membres de l'Équipe",
-          "byMember": "Par Membre de l'Équipe"
-        },
-        "summary": "L'équipe a {{active}} demandes actives ({{pending}} en attente, {{overdue}} en retard)"
+      "filters": {
+        "search": "Rechercher des commentaires...",
+        "date_range": "Plage de Dates",
+        "rating": "Évaluation",
+        "all_ratings": "Toutes les Évaluations",
+        "goal": "Objectif",
+        "all_goals": "Tous les Objectifs",
+        "project": "Projet",
+        "all_projects": "Tous les Projets",
+        "from_employee": "De l'Employé",
+        "all_employees": "Tous les Employés",
+        "clear_all": "Effacer Tous les Filtres",
+        "active_filters": "{{count}} filtre actif",
+        "active_filters_other": "{{count}} filtres actifs"
+      },
+      "stats": {
+        "total": "Total des Commentaires",
+        "average_rating": "Évaluation Moyenne",
+        "recent": "Récent (7 jours)"
+      },
+      "sort": {
+        "label": "Trier Par",
+        "created_at": "Date de Réception",
+        "rating": "Évaluation",
+        "from_employee": "Fournisseur de Commentaires",
+        "goal": "Objectif",
+        "project": "Projet",
+        "asc": "Ascendant",
+        "desc": "Descendant",
+        "date_newest": "Date (Plus Récent d'Abord)",
+        "date_oldest": "Date (Plus Ancien d'Abord)",
+        "rating_highest": "Évaluation (Plus Élevée d'Abord)",
+        "rating_lowest": "Évaluation (Plus Basse d'Abord)",
+        "provider_name": "Nom du Fournisseur (A-Z)",
+        "goal_title": "Titre de l'Objectif (A-Z)"
+      },
+      "pagination": {
+        "label": "Pagination des commentaires"
+      },
+      "summary": "Affichage de {{showing}} sur {{total}} éléments de commentaires",
+      "no_results": {
+        "title": "Aucun Commentaire Trouvé",
+        "description": "Aucun commentaire ne correspond à vos filtres actuels. Essayez d'ajuster vos critères de recherche.",
+        "action": "Effacer les Filtres"
       }
     },
     "card": {
@@ -438,17 +579,15 @@
       }
     },
     "detail": {
-      "title": "Détails de la Demande",
-      "from": "De:",
-      "project": "Projet:",
-      "goal": "Objectif:",
-      "message": "Message:",
-      "dueDate": "Date Limite:",
-      "created": "Créée:",
-      "recipients": "Destinataires ({{count}}):",
-      "noMessage": "Aucun message fourni",
-      "noProject": "Aucun projet associé",
-      "noGoal": "Aucun objectif associé"
+      "title": "Détails du Commentaire",
+      "from": "De :",
+      "goal": "Objectif :",
+      "project": "Projet :",
+      "rating": "Évaluation :",
+      "received": "Reçu :",
+      "content": "Commentaire :",
+      "no_project": "Aucun projet associé",
+      "back": "Retour à la Liste"
     },
     "toasts": {
       "createSuccess": "Demande de commentaires envoyée à {{count}} employés",
@@ -534,74 +673,72 @@
       "cancelRequest": "Annuler la demande de commentaires",
       "expandCard": "Développer les détails de la demande",
       "collapseCard": "Réduire les détails de la demande"
+    }
+  },
+  "enums": {
+    "reviewCycleStatus": {
+      "draft": "Brouillon",
+      "open": "Ouvert",
+      "in_progress": "En Cours",
+      "closed": "Fermé"
     },
-    "list": {
-      "title": "Mes Commentaires",
-      "empty_state": {
-        "title": "Aucun Commentaire Pour L'instant",
-        "description": "Vous n'avez pas encore reçu de commentaires. Demandez des avis à vos collègues sur vos objectifs.",
-        "action": "Demander des Commentaires"
+    "reviewNomineeStatus": {
+      "pending": "En Attente",
+      "invited": "Invité",
+      "submitted": "Soumis"
+    }
+  },
+  "feedback": {
+    "rating": {
+      "tooltip": "Évaluez ce commentaire sur une échelle de 1 à 5",
+      "aria_label": "Saisie de note"
+    },
+    "analytics": {
+      "title": "Analyses des commentaires",
+      "noData": "Aucune donnée disponible",
+      "percentage": "Pourcentage",
+      "count": "Nombre",
+      "avgRating": "Note moy.",
+      "feedbackCount": "Nombre de commentaires",
+      "viewChart": "Voir le graphique",
+      "viewTable": "Voir en tableau",
+      "timeRange": {
+        "label": "Période",
+        "last30Days": "30 derniers jours",
+        "last90Days": "90 derniers jours",
+        "last6Months": "6 derniers mois",
+        "yearToDate": "Depuis le début de l'année",
+        "allTime": "Tout le temps",
+        "custom": "Période personnalisée"
       },
-      "tabs": {
-        "list": "Liste des Commentaires",
-        "analytics": "Analytique"
+      "comparison": {
+        "toggle": "Comparer les périodes"
       },
-      "filters": {
-        "search": "Rechercher des commentaires...",
-        "date_range": "Plage de Dates",
-        "rating": "Évaluation",
-        "all_ratings": "Toutes les Évaluations",
-        "goal": "Objectif",
-        "all_goals": "Tous les Objectifs",
-        "project": "Projet",
-        "all_projects": "Tous les Projets",
-        "from_employee": "De l'Employé",
-        "all_employees": "Tous les Employés",
-        "clear_all": "Effacer Tous les Filtres",
-        "active_filters": "{{count}} filtre actif",
-        "active_filters_other": "{{count}} filtres actifs"
+      "metrics": {
+        "totalFeedback": "Total des commentaires",
+        "avgRating": "Note moyenne",
+        "topRating": "Note la plus fréquente",
+        "recentActivity": "Cette période",
+        "items": "éléments",
+        "distributionNote": "{{count}} commentaires",
+        "trend": "Moy. {{avgRating}}★"
       },
-      "stats": {
-        "total": "Total des Commentaires",
-        "average_rating": "Évaluation Moyenne",
-        "recent": "Récent (7 jours)"
+      "rating": {
+        "1star": "1★ À améliorer",
+        "2star": "2★ En dessous des attentes",
+        "3star": "3★ Répond aux attentes",
+        "4star": "4★ Dépasse les attentes",
+        "5star": "5★ Exceptionnel"
       },
-      "sort": {
-        "label": "Trier Par",
-        "created_at": "Date de Réception",
-        "rating": "Évaluation",
-        "from_employee": "Fournisseur de Commentaires",
-        "goal": "Objectif",
-        "project": "Projet",
-        "asc": "Ascendant",
-        "desc": "Descendant",
-        "date_newest": "Date (Plus Récent d'Abord)",
-        "date_oldest": "Date (Plus Ancien d'Abord)",
-        "rating_highest": "Évaluation (Plus Élevée d'Abord)",
-        "rating_lowest": "Évaluation (Plus Basse d'Abord)",
-        "provider_name": "Nom du Fournisseur (A-Z)",
-        "goal_title": "Titre de l'Objectif (A-Z)"
+      "charts": {
+        "ratingDistribution": "Répartition des notes",
+        "monthlyTrend": "Tendance mensuelle"
       },
-      "pagination": {
-        "label": "Pagination des commentaires"
-      },
-      "summary": "Affichage de {{showing}} sur {{total}} éléments de commentaires",
-      "no_results": {
-        "title": "Aucun Commentaire Trouvé",
-        "description": "Aucun commentaire ne correspond à vos filtres actuels. Essayez d'ajuster vos critères de recherche.",
-        "action": "Effacer les Filtres"
+      "topLists": {
+        "providers": "Principaux fournisseurs de commentaires",
+        "goals": "Objectifs avec le plus de commentaires",
+        "projects": "Projets avec le plus de commentaires"
       }
-    },
-    "detail": {
-      "title": "Détails du Commentaire",
-      "from": "De :",
-      "goal": "Objectif :",
-      "project": "Projet :",
-      "rating": "Évaluation :",
-      "received": "Reçu :",
-      "content": "Commentaire :",
-      "no_project": "Aucun projet associé",
-      "back": "Retour à la Liste"
     }
   }
 }

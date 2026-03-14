@@ -16,19 +16,10 @@ const DEFAULT_API_BASE_URL =
     ? import.meta.env['VITE_API_BASE_URL'] || 'http://localhost:3000/api'
     : 'http://localhost:3000/api'
 
-const ok = (data: unknown, status = 200) =>
-  HttpResponse.json(
-    {
-      data,
-      success: true,
-      message: 'OK',
-      timestamp: new Date().toISOString(),
-    },
-    { status }
-  )
+const ok = (data: unknown, status = 200) => HttpResponse.json(data, { status })
 
 const notFound = (message = 'Not found') =>
-  HttpResponse.json({ data: null, success: false, message }, { status: 404 })
+  HttpResponse.json({ message }, { status: 404 })
 
 export const taxonomyHandlers = [
   // --- Career Paths ---

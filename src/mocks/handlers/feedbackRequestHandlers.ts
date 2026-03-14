@@ -1,4 +1,5 @@
 import { http, HttpResponse } from 'msw'
+import type { MyFeedback } from '../../types/feedback'
 import type {
   CreateFeedbackRequestDto,
   FeedbackRequestDto,
@@ -8,6 +9,63 @@ import type {
   UpdateFeedbackRequestDto,
 } from '../../types/feedbackRequest'
 import { logger } from '../../utils/logger'
+
+const mockMyFeedback: MyFeedback[] = [
+  {
+    id: 'fb-0001',
+    goal_id: 'goal-0001',
+    project_id: 'proj-0001',
+    from_employee_id: 'emp-0002',
+    content:
+      'Great job leading the sprint planning session. Your communication was clear and the team felt well-prepared going into the sprint.',
+    rating: 5,
+    created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    goal: { id: 'goal-0001', title: 'Improve Team Communication' },
+    project: { id: 'proj-0001', name: 'Platform Redesign' },
+    from_employee: {
+      id: 'emp-0002',
+      display_name: 'Bob Jones',
+      job_title: 'Senior Engineer',
+      department: 'Engineering',
+    },
+  },
+  {
+    id: 'fb-0002',
+    goal_id: 'goal-0002',
+    project_id: null,
+    from_employee_id: 'emp-0003',
+    content:
+      'Your code reviews are thorough and always constructive. The team appreciates the detailed explanations you provide.',
+    rating: 4,
+    created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    goal: { id: 'goal-0002', title: 'Strengthen Code Quality Practices' },
+    project: null,
+    from_employee: {
+      id: 'emp-0003',
+      display_name: 'Carol White',
+      job_title: 'Product Manager',
+      department: 'Product',
+    },
+  },
+  {
+    id: 'fb-0003',
+    goal_id: 'goal-0001',
+    project_id: 'proj-0002',
+    from_employee_id: 'emp-0004',
+    content:
+      'You handled the incident well under pressure. A bit more documentation in post-mortems would help the wider team learn from it.',
+    rating: 3,
+    created_at: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+    goal: { id: 'goal-0001', title: 'Improve Team Communication' },
+    project: { id: 'proj-0002', name: 'Infrastructure Upgrade' },
+    from_employee: {
+      id: 'emp-0004',
+      display_name: 'Dave Brown',
+      job_title: 'Engineering Manager',
+      department: 'Engineering',
+    },
+  },
+]
 
 // Mock data store
 let feedbackRequests: FeedbackRequestDto[] = []
@@ -284,12 +342,7 @@ export const feedbackRequestHandlers = [
       },
     }
 
-    return HttpResponse.json({
-      data: response,
-      success: true,
-      message: 'Feedback requests retrieved successfully',
-      timestamp: new Date().toISOString(),
-    })
+    return HttpResponse.json(response)
   }),
 
   // GET /api/feedback/request/:id - Get single request
@@ -313,12 +366,7 @@ export const feedbackRequestHandlers = [
       )
     }
 
-    return HttpResponse.json({
-      data: request,
-      success: true,
-      message: 'Feedback request retrieved successfully',
-      timestamp: new Date().toISOString(),
-    })
+    return HttpResponse.json(request)
   }),
 
   // PUT /api/feedback/request/:id - Update request
@@ -353,12 +401,7 @@ export const feedbackRequestHandlers = [
       updated_at: new Date().toISOString(),
     }
 
-    return HttpResponse.json({
-      data: feedbackRequests[requestIndex],
-      success: true,
-      message: 'Feedback request updated successfully',
-      timestamp: new Date().toISOString(),
-    })
+    return HttpResponse.json(feedbackRequests[requestIndex])
   }),
 
   // DELETE /api/feedback/request/:id - Cancel request
@@ -386,12 +429,7 @@ export const feedbackRequestHandlers = [
     feedbackRequests[requestIndex].status = 'cancelled'
     feedbackRequests[requestIndex].updated_at = new Date().toISOString()
 
-    return HttpResponse.json({
-      data: feedbackRequests[requestIndex],
-      success: true,
-      message: 'Feedback request cancelled successfully',
-      timestamp: new Date().toISOString(),
-    })
+    return HttpResponse.json(feedbackRequests[requestIndex])
   }),
 
   // POST /api/feedback/request/:id/reminder - Send reminder
@@ -521,6 +559,20 @@ export const feedbackRequestHandlers = [
     return HttpResponse.json(response)
   }),
 
+  // GET /api/me/feedback - Get feedback received by current user
+  http.get('*/api/me/feedback', () => {
+    return HttpResponse.json(mockMyFeedback)
+  }),
+
+  // GET /api/me/projects - Get projects for current user
+  http.get('*/api/me/projects', () => {
+    return HttpResponse.json([
+      { id: 'proj-0001', name: 'Platform Redesign' },
+      { id: 'proj-0002', name: 'Infrastructure Upgrade' },
+      { id: 'proj-0003', name: 'Mobile App v2' },
+    ])
+  }),
+
   // GET /api/me/feedback/request/todo - Get todo requests for current user (as recipient)
   http.get('*/api/me/feedback/request/todo', ({ request }) => {
     const url = new URL(request.url)
@@ -589,5 +641,77 @@ export const feedbackRequestHandlers = [
     }
 
     return HttpResponse.json(response)
+  }),
+
+  // GET /api/me/feedback/analytics
+  http.get('*/api/me/feedback/analytics', () => {
+    return HttpResponse.json({
+      total_count: 3,
+      average_rating: 4.0,
+      rating_distribution: {
+        one_star: 0,
+        two_star: 0,
+        three_star: 1,
+        four_star: 1,
+        five_star: 1,
+      },
+      monthly_trend: [
+        { month: '2026-01', count: 1, average_rating: 5.0 },
+        { month: '2026-02', count: 1, average_rating: 4.0 },
+        { month: '2026-03', count: 1, average_rating: 3.0 },
+      ],
+      top_providers: [
+        {
+          employee: {
+            id: 'emp-0002',
+            display_name: 'Bob Jones',
+            job_title: 'Senior Engineer',
+          },
+          count: 1,
+          average_rating: 5.0,
+        },
+      ],
+      top_goals: [
+        {
+          goal: { id: 'goal-0001', title: 'Improve Team Communication' },
+          count: 2,
+          average_rating: 4.0,
+        },
+      ],
+      top_projects: [
+        {
+          project: { id: 'proj-0001', name: 'Platform Redesign' },
+          count: 1,
+          average_rating: 5.0,
+        },
+      ],
+      comparison: null,
+    })
+  }),
+
+  // POST /api/feedback - Submit feedback
+  http.post('*/api/feedback', async ({ request }) => {
+    const body = (await request.json()) as Record<string, unknown>
+    return HttpResponse.json(
+      {
+        id: `fb-new-${Date.now()}`,
+        goal_id: body['goal_id'] as string,
+        project_id: (body['project_id'] as string | null) ?? null,
+        from_employee_id: 'current-employee-id',
+        to_employee_id: body['to_employee_id'] as string,
+        content: body['content'] as string,
+        rating: body['rating'] as number,
+        created_at: new Date().toISOString(),
+      },
+      { status: 201 }
+    )
+  }),
+
+  // GET /api/feedback/:id - Get feedback detail
+  http.get('*/api/feedback/:id', ({ params }) => {
+    const item = mockMyFeedback.find(f => f.id === params['id'])
+    if (!item)
+      return HttpResponse.json({ message: 'Not found' }, { status: 404 })
+    return HttpResponse.json(item)
   }),
 ]

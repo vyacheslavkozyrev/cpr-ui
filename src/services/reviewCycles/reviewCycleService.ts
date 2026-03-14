@@ -28,13 +28,13 @@ class ReviewCycleApiService {
     if (params?.status) search.set('status', params.status)
     if (params?.sort_dir) search.set('sort_dir', params.sort_dir)
     const qs = search.toString()
-    return apiClient.get<{ data: IPaginatedResponse<IReviewCycleSummary> }>(
+    return apiClient.get<IPaginatedResponse<IReviewCycleSummary>>(
       `/review-cycles${qs ? `?${qs}` : ''}`
     )
   }
 
   async getCycle(id: string) {
-    return apiClient.get<{ data: IReviewCycleDetail }>(`/review-cycles/${id}`)
+    return apiClient.get<IReviewCycleDetail>(`/review-cycles/${id}`)
   }
 
   async transitionStatus(id: string, dto: ITransitionStatusRequest) {
@@ -69,7 +69,7 @@ class ReviewCycleApiService {
   }
 
   async getResults(cycleId: string) {
-    return apiClient.get<{ data: IAggregatedResults | IDetailedResults }>(
+    return apiClient.get<IAggregatedResults | IDetailedResults>(
       `/review-cycles/${cycleId}/results`
     )
   }

@@ -10,13 +10,7 @@ const DEFAULT_API_BASE_URL =
     ? import.meta.env['VITE_API_BASE_URL'] || 'http://localhost:3000/api'
     : 'http://localhost:3000/api'
 
-const ok = (data: unknown) =>
-  HttpResponse.json({
-    data,
-    success: true,
-    message: 'OK',
-    timestamp: new Date().toISOString(),
-  })
+const ok = (data: unknown) => HttpResponse.json(data)
 
 export const skillAssessmentHandlers = [
   // GET /api/me/feedback — returns received feedback items for the evidence linking modal
@@ -136,17 +130,11 @@ export const skillAssessmentHandlers = [
 
       return HttpResponse.json(
         {
-          data: {
-            id: `evid-${skillId}-${feedbackId}`,
-            feedback_id: feedbackId,
-            sender_display_name: 'Test Sender',
-            rating: 4,
-            feedback_content:
-              'Excellent technical contribution to the project.',
-          },
-          success: true,
-          message: 'Created',
-          timestamp: new Date().toISOString(),
+          id: `evid-${skillId}-${feedbackId}`,
+          feedback_id: feedbackId,
+          sender_display_name: 'Test Sender',
+          rating: 4,
+          feedback_content: 'Excellent technical contribution to the project.',
         },
         { status: 201 }
       )

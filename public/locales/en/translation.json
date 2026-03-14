@@ -761,6 +761,12 @@
         "title": "Submit Feedback",
         "form": {
           "recipient": "To",
+          "employee": "Recipient",
+          "employee_placeholder": "Search by name, email, or job title...",
+          "employee_required": "Please select a recipient",
+          "employee_self_error": "You cannot submit feedback to yourself",
+          "goal_optional_label": "Goal (Optional)",
+          "goal_optional_help": "Select a goal to provide context, or leave blank for general feedback",
           "goal": {
             "label": "Goal",
             "placeholder": "Select a goal...",
@@ -852,6 +858,7 @@
           "analytics": "Analytics"
         },
         "filters": {
+          "label": "Filters",
           "search": "Search feedback...",
           "date_range": "Date Range",
           "rating": "Rating",
@@ -969,6 +976,18 @@
           "goals": "Goals with Most Feedback",
           "projects": "Projects with Most Feedback"
         }
+      },
+      "form": {
+        "no_employees_found": "No employees found",
+        "no_options": "No options available"
+      },
+      "rating": {
+        "label_1": "Needs Improvement",
+        "label_2": "Below Expectations",
+        "label_3": "Meets Expectations",
+        "label_4": "Exceeds Expectations",
+        "label_5": "Outstanding",
+        "select_rating": "Select a rating"
       }
     },
     "goals": {
@@ -1130,6 +1149,8 @@
       "minNomineesHint": "Need ≥2 nominees to start"
     },
     "reviewResponseForm": {
+      "title": "Submit Your Review",
+      "reviewingLabel": "You are reviewing",
       "ratingLabel": "Your Rating",
       "commentsLabel": "Comments",
       "commentsHint": "10–2000 characters",
@@ -1141,6 +1162,7 @@
     "assessmentSkillRow": {
       "skill": "Skill",
       "required": "Required",
+      "nextLevelRequired": "Next Level Required",
       "selfAssessment": "My Weight",
       "managerAssessment": "Manager Assessment",
       "notes": "Notes",
@@ -1312,6 +1334,78 @@
       "goHome": "Go Home",
       "goBack": "Go Back",
       "reloadPage": "Reload Page"
+    }
+  },
+  "feedback": {
+    "rating": {
+      "tooltip": "Rate this feedback on a 1-5 scale",
+      "aria_label": "Rating input"
+    },
+    "analytics": {
+      "title": "Feedback Analytics",
+      "noData": "No data available",
+      "percentage": "Percentage",
+      "count": "Count",
+      "avgRating": "Avg Rating",
+      "feedbackCount": "Feedback Count",
+      "viewChart": "View Chart",
+      "viewTable": "View as Table",
+      "error": {
+        "title": "Failed to load analytics",
+        "message": "An error occurred while loading analytics data. Please try again."
+      },
+      "timeRange": {
+        "label": "Time Range",
+        "last30Days": "Last 30 Days",
+        "last90Days": "Last 90 Days",
+        "last6Months": "Last 6 Months",
+        "yearToDate": "Year to Date",
+        "allTime": "All Time",
+        "custom": "Custom Range"
+      },
+      "customRange": {
+        "startDate": "Start Date",
+        "endDate": "End Date"
+      },
+      "comparison": {
+        "toggle": "Compare Periods",
+        "note": "Comparing {{current}} vs {{previous}}",
+        "deltaUp": "+{{percent}}% vs previous period",
+        "deltaDown": "{{percent}}% vs previous period",
+        "deltaNeutral": "No change vs previous period"
+      },
+      "metrics": {
+        "totalFeedback": "Total Feedback",
+        "avgRating": "Average Rating",
+        "topRating": "Most Common Rating",
+        "recentActivity": "This Period",
+        "items": "items",
+        "distributionNote": "{{count}} feedback items",
+        "trend": "Avg {{avgRating}}★"
+      },
+      "rating": {
+        "1star": "1★ Needs Improvement",
+        "2star": "2★ Below Expectations",
+        "3star": "3★ Meets Expectations",
+        "4star": "4★ Exceeds Expectations",
+        "5star": "5★ Outstanding"
+      },
+      "charts": {
+        "ratingDistribution": "Rating Distribution",
+        "monthlyTrend": "Monthly Trend"
+      },
+      "table": {
+        "rating": "Rating",
+        "count": "Count",
+        "percentage": "Percentage",
+        "month": "Month",
+        "avgRating": "Avg Rating"
+      },
+      "topLists": {
+        "providers": "Top Feedback Providers",
+        "goals": "Goals with Most Feedback",
+        "projects": "Projects with Most Feedback"
+      }
     }
   }
 }

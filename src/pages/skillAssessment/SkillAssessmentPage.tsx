@@ -59,6 +59,7 @@ const SkillAssessmentPage: React.FC = () => {
   const categories = data?.skill_categories ?? []
   const hasSkills = categories.length > 0
   const selectedCategory = categories[selectedTab] ?? categories[0]
+  const showNextLevel = data?.next_position != null
 
   return (
     <Container maxWidth='lg' sx={{ py: 3 }}>
@@ -76,6 +77,13 @@ const SkillAssessmentPage: React.FC = () => {
               {data.position.career_path && (
                 <> &bull; {data.position.career_path.title}</>
               )}
+            </Typography>
+          )}
+          {data.next_position && (
+            <Typography variant='body2' color='text.secondary'>
+              {t('pages.skillAssessment.nextPosition', 'Next Position')}
+              {': '}
+              {data.next_position.title}
             </Typography>
           )}
         </Box>
@@ -111,7 +119,10 @@ const SkillAssessmentPage: React.FC = () => {
 
           {/* Skills table for selected category */}
           {selectedCategory && (
-            <AssessmentSkillCategorySection category={selectedCategory} />
+            <AssessmentSkillCategorySection
+              category={selectedCategory}
+              showNextLevel={showNextLevel}
+            />
           )}
         </>
       )}

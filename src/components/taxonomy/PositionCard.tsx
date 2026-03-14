@@ -111,7 +111,9 @@ const PositionCard: React.FC<IPositionCardProps> = React.memo(
     return (
       <Card sx={styles.card}>
         {onClick ? (
-          <CardActionArea onClick={onClick}>{inner}</CardActionArea>
+          <CardActionArea component='span' onClick={onClick}>
+            {inner}
+          </CardActionArea>
         ) : (
           inner
         )}

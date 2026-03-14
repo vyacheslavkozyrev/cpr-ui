@@ -28,15 +28,7 @@ export const reviewCyclesHandlers = [
       title: (body['title'] as string) || 'New Review Cycle',
       created_at: new Date().toISOString(),
     }
-    return HttpResponse.json(
-      {
-        data: newCycle,
-        success: true,
-        message: 'Created',
-        timestamp: new Date().toISOString(),
-      },
-      { status: 201 }
-    )
+    return HttpResponse.json(newCycle, { status: 201 })
   }),
 
   // GET /api/review-cycles — list cycles
@@ -50,18 +42,13 @@ export const reviewCyclesHandlers = [
     const total = filtered.length
     const data = filtered.slice((page - 1) * pageSize, page * pageSize)
     return HttpResponse.json({
-      data: {
-        data,
-        pagination: {
-          page,
-          page_size: pageSize,
-          total_items: total,
-          total_pages: Math.ceil(total / pageSize),
-        },
+      data,
+      pagination: {
+        page,
+        page_size: pageSize,
+        total_items: total,
+        total_pages: Math.ceil(total / pageSize),
       },
-      success: true,
-      message: 'OK',
-      timestamp: new Date().toISOString(),
     })
   }),
 
@@ -71,12 +58,7 @@ export const reviewCyclesHandlers = [
     if (!cycle) {
       return HttpResponse.json({ error: 'Not found' }, { status: 404 })
     }
-    return HttpResponse.json({
-      data: cycle,
-      success: true,
-      message: 'OK',
-      timestamp: new Date().toISOString(),
-    })
+    return HttpResponse.json(cycle)
   }),
 
   // PATCH /api/review-cycles/:id/status — transition status
@@ -101,12 +83,7 @@ export const reviewCyclesHandlers = [
         )
       }
       const updated = { ...cycle, status: newStatus as EReviewCycleStatus }
-      return HttpResponse.json({
-        data: updated,
-        success: true,
-        message: 'OK',
-        timestamp: new Date().toISOString(),
-      })
+      return HttpResponse.json(updated)
     }
   ),
 
@@ -144,15 +121,7 @@ export const reviewCyclesHandlers = [
         status: EReviewNomineeStatus.PENDING,
         created_at: new Date().toISOString(),
       }
-      return HttpResponse.json(
-        {
-          data: newNominee,
-          success: true,
-          message: 'Created',
-          timestamp: new Date().toISOString(),
-        },
-        { status: 201 }
-      )
+      return HttpResponse.json(newNominee, { status: 201 })
     }
   ),
 
@@ -203,15 +172,7 @@ export const reviewCyclesHandlers = [
         comments: body['comments'] as string,
         created_at: new Date().toISOString(),
       }
-      return HttpResponse.json(
-        {
-          data: response,
-          success: true,
-          message: 'Created',
-          timestamp: new Date().toISOString(),
-        },
-        { status: 201 }
-      )
+      return HttpResponse.json(response, { status: 201 })
     }
   ),
 
@@ -225,19 +186,9 @@ export const reviewCyclesHandlers = [
         url.searchParams.get('role') ||
         'Employee'
       if (roleHeader === 'Employee') {
-        return HttpResponse.json({
-          data: mockAggregatedResults,
-          success: true,
-          message: 'OK',
-          timestamp: new Date().toISOString(),
-        })
+        return HttpResponse.json(mockAggregatedResults)
       }
-      return HttpResponse.json({
-        data: mockDetailedResults,
-        success: true,
-        message: 'OK',
-        timestamp: new Date().toISOString(),
-      })
+      return HttpResponse.json(mockDetailedResults)
     }
   ),
 

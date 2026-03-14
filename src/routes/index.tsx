@@ -148,6 +148,10 @@ export const routes: RouteObject[] = [
             element: <NewFeedbackPage />,
           },
           {
+            path: 'give',
+            element: <NewFeedbackPage />,
+          },
+          {
             path: ':id',
             element: <FeedbackDetailPage />,
           },

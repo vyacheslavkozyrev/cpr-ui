@@ -79,6 +79,13 @@ const ReviewResponseForm: React.FC<ReviewResponseFormProps> = ({
   return (
     <Box component='form' onSubmit={handleSubmit(onSubmit)}>
       <Typography variant='h6' gutterBottom>
+        {t('components.reviewResponseForm.title')}
+      </Typography>
+      <Typography variant='body2' color='text.secondary' gutterBottom>
+        {t('components.reviewResponseForm.reviewingLabel')}:{' '}
+        <strong>{cycle.subject_display_name}</strong>
+      </Typography>
+      <Typography variant='h6' gutterBottom sx={{ mt: 2 }}>
         {t('components.reviewResponseForm.ratingLabel')}
       </Typography>
       <Controller

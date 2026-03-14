@@ -17,6 +17,8 @@ interface AssessmentSkillCategorySectionProps {
   category: ISkillCategoryGroup
   readOnly?: boolean
   showTitle?: boolean
+  /** True when there is a next position — adds Next Level Required column */
+  showNextLevel?: boolean
   /** Present when rendering the employee assessment page — adds Manager Assessment column */
   employeeId?: string
   /** True when the viewer can set manager assessments */
@@ -29,11 +31,13 @@ const AssessmentSkillCategorySection: React.FC<
   category,
   readOnly = false,
   showTitle = false,
+  showNextLevel = false,
   employeeId,
   isManager = false,
 }) => {
   const { t } = useTranslation()
   const showManagerColumn = Boolean(employeeId)
+  const colSpan = 5 + (showNextLevel ? 1 : 0) + (showManagerColumn ? 1 : 0)
 
   return (
     <TableContainer component={Paper} sx={{ mb: 3 }}>
@@ -41,7 +45,7 @@ const AssessmentSkillCategorySection: React.FC<
         <TableHead>
           {showTitle && (
             <TableRow>
-              <TableCell colSpan={showManagerColumn ? 6 : 5}>
+              <TableCell colSpan={colSpan}>
                 <Typography variant='subtitle1' fontWeight='medium'>
                   {category.title}
                 </Typography>
@@ -55,6 +59,14 @@ const AssessmentSkillCategorySection: React.FC<
             <TableCell>
               {t('components.assessmentSkillRow.required', 'Required')}
             </TableCell>
+            {showNextLevel && (
+              <TableCell>
+                {t(
+                  'components.assessmentSkillRow.nextLevelRequired',
+                  'Next Level Required'
+                )}
+              </TableCell>
+            )}
             <TableCell>
               {t('components.assessmentSkillRow.selfAssessment', 'My Weight')}
             </TableCell>
@@ -78,6 +90,7 @@ const AssessmentSkillCategorySection: React.FC<
               key={skill.skill_id}
               skill={skill}
               readOnly={readOnly}
+              showNextLevel={showNextLevel}
               {...(employeeId !== undefined ? { employeeId, isManager } : {})}
             />
           ))}

@@ -43,10 +43,10 @@ const MyCyclesPage: React.FC = () => {
             <TableHead>
               <TableRow>
                 <TableCell>{t('pages.reviewCycles.titleColumn')}</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Nominees</TableCell>
-                <TableCell>Responses</TableCell>
-                <TableCell>Created</TableCell>
+                <TableCell>{t('pages.reviewCycles.statusColumn')}</TableCell>
+                <TableCell>{t('pages.reviewCycles.nomineesColumn')}</TableCell>
+                <TableCell>{t('pages.reviewCycles.responsesColumn')}</TableCell>
+                <TableCell>{t('pages.reviewCycles.createdColumn')}</TableCell>
                 <TableCell />
               </TableRow>
             </TableHead>

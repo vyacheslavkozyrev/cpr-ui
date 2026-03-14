@@ -300,7 +300,7 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
             startIcon={<AddIcon />}
             onClick={() => navigate('/feedback/new')}
           >
-            {t('feedback.new.button')}
+            {t('pages.feedback.new.button')}
           </Button>
           <Tabs value={tabValue} onChange={handleTabChange} sx={styles.tabs}>
             <Tab label={t('dashboard.tabs.chart')} sx={styles.tab} />
