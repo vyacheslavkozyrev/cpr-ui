@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw'
+import { http, HttpResponse, type JsonBodyType } from 'msw'
 import {
   mockCareerPathDetailsMap,
   mockCareerPathsResponse,
@@ -16,7 +16,8 @@ const DEFAULT_API_BASE_URL =
     ? import.meta.env['VITE_API_BASE_URL'] || 'http://localhost:3000/api'
     : 'http://localhost:3000/api'
 
-const ok = (data: unknown, status = 200) => HttpResponse.json(data, { status })
+const ok = (data: JsonBodyType, status = 200) =>
+  HttpResponse.json(data, { status })
 
 const notFound = (message = 'Not found') =>
   HttpResponse.json({ message }, { status: 404 })

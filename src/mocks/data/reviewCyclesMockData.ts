@@ -165,7 +165,7 @@ export const mockDetailedResults: IDetailedResults = {
     },
     {
       reviewer_employee_id: REVIEWER_EMPLOYEE_ID_2,
-      reviewer_display_name: 'Carol White',
+      reviewer_display_name: 'Eve Adams',
       overall_rating: 3,
       comments: 'Great collaboration — always willing to help teammates.',
       submitted_at: '2025-09-21T11:00:00Z',
@@ -184,7 +184,7 @@ export const mockReviewRequests: IReviewRequest[] = [
   {
     cycle_id: 'cycle-0002-0000-0000-000000000002',
     cycle_title: 'Mid-Year Review — Alice Smith',
-    subject_display_name: 'Alice',
+    subject_display_name: 'Alice Smith',
     nominee_status: EReviewNomineeStatus.INVITED,
     cycle_started_at: '2026-02-10T09:00:00Z',
   },

@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw'
+import { http, HttpResponse, type JsonBodyType } from 'msw'
 import {
   mockEmployeeSkillAssessmentResponse,
   mockSkillAssessmentResponse,
@@ -10,7 +10,7 @@ const DEFAULT_API_BASE_URL =
     ? import.meta.env['VITE_API_BASE_URL'] || 'http://localhost:3000/api'
     : 'http://localhost:3000/api'
 
-const ok = (data: unknown) => HttpResponse.json(data)
+const ok = (data: JsonBodyType) => HttpResponse.json(data)
 
 export const skillAssessmentHandlers = [
   // GET /api/me/feedback — returns received feedback items for the evidence linking modal

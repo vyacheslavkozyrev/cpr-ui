@@ -11,6 +11,7 @@ import { DashboardPage } from '../pages/dashboard'
 import {
   FeedbackDetailPage,
   FeedbackPage,
+  GiveFeedbackPage,
   NewFeedbackPage,
 } from '../pages/feedback'
 import { GoalDetailPage, GoalFormPage, GoalsPage } from '../pages/goals'
@@ -148,8 +149,10 @@ export const routes: RouteObject[] = [
             element: <NewFeedbackPage />,
           },
           {
+            // Entry point from FeedbackRequestCard — reads employee_id,
+            // feedback_request_id query params to pre-fill the form
             path: 'give',
-            element: <NewFeedbackPage />,
+            element: <GiveFeedbackPage />,
           },
           {
             path: ':id',
