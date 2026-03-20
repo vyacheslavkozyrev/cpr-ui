@@ -329,6 +329,7 @@
       "emptyState": "You have no review cycles"
     },
     "reviewCycleDetail": {
+      "title": "Review Details",
       "subject": "Subject",
       "opened": "Opened",
       "started": "Started",

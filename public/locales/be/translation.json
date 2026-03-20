@@ -857,6 +857,7 @@
       "emptyState": "У вас няма цыклаў агляду"
     },
     "reviewCycleDetail": {
+      "title": "Дэталі Агляду",
       "subject": "Суб'ект",
       "opened": "Адкрыта",
       "started": "Пачата",

@@ -38,28 +38,55 @@ export const BreadcrumbNavigation: React.FC = () => {
   const { t } = useTranslation()
   const location = useLocation()
 
+  // UUID/ULID-like segment — treat as a detail page ID
+  const isIdSegment = useCallback(
+    (segment: string): boolean => /^[0-9a-f-]{8,}$/i.test(segment),
+    []
+  )
+
   // Helper function to get human-readable labels for path segments
   const getBreadcrumbLabel = useCallback(
-    (segment: string): string => {
+    (segment: string, parentSegment?: string): string => {
+      if (isIdSegment(segment)) {
+        // Map known parent routes to their detail-page titles
+        const detailTitleMap: Record<string, string> = {
+          reviews: t('pages.reviewCycleDetail.title'),
+          goals: t('navigation.goals'),
+        }
+        return detailTitleMap[parentSegment ?? ''] ?? t('common.view')
+      }
+
       const labelMap: Record<string, string> = {
         dashboard: t('navigation.dashboard'),
         goals: t('navigation.goals'),
         skills: t('navigation.skills'),
         'career-framework': t('navigation.careerFramework'),
         feedback: t('navigation.feedback'),
+        reviews: t('pages.feedback.tabs.reviews360'),
         team: t('navigation.team'),
         admin: t('navigation.admin'),
         profile: t('navigation.profile'),
         settings: t('navigation.settings'),
         request: t('pages.feedback.request.form.title'),
         new: t('common.create'),
+        give: t('pages.feedback.new.title'),
       }
 
       return (
         labelMap[segment] || segment.charAt(0).toUpperCase() + segment.slice(1)
       )
     },
-    [t]
+    [t, isIdSegment]
+  )
+
+  // Override path for segments that belong to a different nav section
+  const getSegmentPath = useCallback(
+    (segment: string, builtPath: string): string => {
+      // Review cycle detail pages are reached from /feedback (360 Reviews tab)
+      if (segment === 'reviews') return '/feedback'
+      return builtPath
+    },
+    []
   )
 
   // Generate breadcrumb items based on current path
@@ -77,22 +104,22 @@ export const BreadcrumbNavigation: React.FC = () => {
 
     pathSegments.forEach((segment, index) => {
       currentPath += `/${segment}`
+      const parentSegment = index > 0 ? pathSegments[index - 1] : undefined
+      const label = getBreadcrumbLabel(segment, parentSegment)
 
       // Don't create breadcrumb for the current page
       if (index === pathSegments.length - 1) {
-        items.push({
-          label: getBreadcrumbLabel(segment),
-        })
+        items.push({ label })
       } else {
         items.push({
-          label: getBreadcrumbLabel(segment),
-          path: currentPath,
+          label,
+          path: getSegmentPath(segment, currentPath),
         })
       }
     })
 
     return items
-  }, [location.pathname, getBreadcrumbLabel])
+  }, [location.pathname, getBreadcrumbLabel, getSegmentPath])
 
   // Don't show breadcrumbs on root dashboard
   if (breadcrumbItems.length === 0 || location.pathname === '/dashboard') {

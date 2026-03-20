@@ -223,6 +223,7 @@
       "emptyState": "Vous n'avez aucun cycle d'évaluation"
     },
     "reviewCycleDetail": {
+      "title": "Détails de l'évaluation",
       "subject": "Sujet",
       "opened": "Ouvert",
       "started": "Commencé",
