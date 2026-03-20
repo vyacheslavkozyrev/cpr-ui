@@ -1276,5 +1276,43 @@
       "invited": "Запрошаны",
       "submitted": "Адпраўлены"
     }
+  },
+  "gap_analysis": {
+    "page_title": "Аналіз разрываў навыкаў",
+    "current_position": "Бягучая пасада",
+    "next_position": "Наступная пасада",
+    "career_track": "Кар'ерны трэк",
+    "no_position_assigned": "Вашаму профілю не прысвоена пасада. Звярніцеся да свайго кіраўніка або аддзела кадраў, каб устаноўць бягучую пасаду.",
+    "at_highest_level": "Вы ўжо знаходзіцеся на найвышэйшым узроўні ў сваім кар'ерным трэку. Няма больш высокіх пасад для параўнання.",
+    "radar_chart_title": "Агляд навыкаў",
+    "radar_required": "Патрэбны",
+    "radar_actual": "Фактычны",
+    "table": {
+      "skill_name": "Навык",
+      "category": "Катэгорыя",
+      "required_level": "Патрэбны ўзровень",
+      "actual_level": "Фактычны ўзровень",
+      "gap": "Разрыў",
+      "mandatory": "Абавязкова",
+      "linked_goals": "Звязаныя мэты",
+      "gap_met": "Дасягнута",
+      "default_suffix": "(па змаўчанні)",
+      "create_goal": "Стварыць мэту"
+    },
+    "summary": {
+      "total_skills": "Усяго навыкаў",
+      "skills_met": "Навыкі дасягнуты",
+      "skills_with_gap": "Навыкі з разрывам",
+      "mandatory_gaps": "Абавязковыя разрывы"
+    },
+    "create_goal_modal": {
+      "title": "Стварыць мэту з разрыву",
+      "submit": "Стварыць мэту"
+    },
+    "linked_goals_label": "Звязаныя мэты",
+    "progress_label": "Прагрэс",
+    "loading": "Загрузка аналізу разрываў...",
+    "error_loading": "Не ўдалося загрузіць аналіз разрываў.",
+    "mandatory_badge": "Абавязкова"
   }
 }

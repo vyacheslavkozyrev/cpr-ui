@@ -746,5 +746,43 @@
         "projects": "Projets avec le plus de commentaires"
       }
     }
+  },
+  "gap_analysis": {
+    "page_title": "Analyse des écarts de compétences",
+    "current_position": "Poste actuel",
+    "next_position": "Poste suivant",
+    "career_track": "Parcours professionnel",
+    "no_position_assigned": "Aucun poste n'est assigné à votre profil. Veuillez contacter votre responsable ou les RH pour définir votre poste actuel.",
+    "at_highest_level": "Vous êtes déjà au niveau le plus élevé de votre parcours professionnel. Il n'y a pas de postes supérieurs à comparer.",
+    "radar_chart_title": "Aperçu des compétences",
+    "radar_required": "Requis",
+    "radar_actual": "Actuel",
+    "table": {
+      "skill_name": "Compétence",
+      "category": "Catégorie",
+      "required_level": "Niveau requis",
+      "actual_level": "Niveau actuel",
+      "gap": "Écart",
+      "mandatory": "Obligatoire",
+      "linked_goals": "Objectifs liés",
+      "gap_met": "Atteint",
+      "default_suffix": "(défaut)",
+      "create_goal": "Créer un objectif"
+    },
+    "summary": {
+      "total_skills": "Total des compétences",
+      "skills_met": "Compétences atteintes",
+      "skills_with_gap": "Compétences avec écart",
+      "mandatory_gaps": "Écarts obligatoires"
+    },
+    "create_goal_modal": {
+      "title": "Créer un objectif à partir de l'écart",
+      "submit": "Créer l'objectif"
+    },
+    "linked_goals_label": "Objectifs liés",
+    "progress_label": "Progression",
+    "loading": "Chargement de l'analyse des écarts...",
+    "error_loading": "Échec du chargement de l'analyse des écarts.",
+    "mandatory_badge": "Obligatoire"
   }
 }

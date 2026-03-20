@@ -1413,5 +1413,43 @@
         "projects": "Projects with Most Feedback"
       }
     }
+  },
+  "gap_analysis": {
+    "page_title": "Skills Gap Analysis",
+    "current_position": "Current Position",
+    "next_position": "Next Position",
+    "career_track": "Career Track",
+    "no_position_assigned": "No position is assigned to your profile. Please contact your manager or HR to set your current position before viewing gap analysis.",
+    "at_highest_level": "You are already at the highest level in your career track. There are no further positions to compare against.",
+    "radar_chart_title": "Skills Overview",
+    "radar_required": "Required",
+    "radar_actual": "Actual",
+    "table": {
+      "skill_name": "Skill",
+      "category": "Category",
+      "required_level": "Required Level",
+      "actual_level": "Actual Level",
+      "gap": "Gap",
+      "mandatory": "Mandatory",
+      "linked_goals": "Linked Goals",
+      "gap_met": "Met",
+      "default_suffix": "(default)",
+      "create_goal": "Create Goal"
+    },
+    "summary": {
+      "total_skills": "Total Skills",
+      "skills_met": "Skills Met",
+      "skills_with_gap": "Skills with Gap",
+      "mandatory_gaps": "Mandatory Gaps"
+    },
+    "create_goal_modal": {
+      "title": "Create Goal from Gap",
+      "submit": "Create Goal"
+    },
+    "linked_goals_label": "Linked Goals",
+    "progress_label": "Progress",
+    "loading": "Loading gap analysis...",
+    "error_loading": "Failed to load gap analysis.",
+    "mandatory_badge": "Mandatory"
   }
 }

@@ -1,5 +1,6 @@
 import { dashboardHandlers } from './dashboardHandlers'
 import { feedbackRequestHandlers } from './feedbackRequestHandlers'
+import { gapAnalysisHandlers } from './gapAnalysisHandlers'
 import goalsHandlers from './goalsHandlers'
 import reviewCyclesHandlers from './reviewCyclesHandlers'
 import skillAssessmentHandlers from './skillAssessmentHandlers'
@@ -9,6 +10,7 @@ import { userHandlers } from './userHandlers'
 export {
   dashboardHandlers,
   feedbackRequestHandlers,
+  gapAnalysisHandlers,
   goalsHandlers,
   reviewCyclesHandlers,
   skillAssessmentHandlers,
@@ -24,4 +26,5 @@ export const allHandlers = [
   ...feedbackRequestHandlers,
   ...skillAssessmentHandlers,
   ...taxonomyHandlers,
+  ...gapAnalysisHandlers,
 ]
