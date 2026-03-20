@@ -79,10 +79,10 @@ const CreateGoalFromGapModal: React.FC<ICreateGoalFromGapModalProps> =
       try {
         await createGoal.mutateAsync({
           title: title.trim(),
-          deadline: deadline || undefined,
+          ...(deadline ? { deadline } : {}),
           relatedSkillId: skillGap.skill.id,
           relatedSkillLevelId: skillGap.requiredLevel.id,
-          employeeId: targetEmployeeId,
+          ...(targetEmployeeId ? { employeeId: targetEmployeeId } : {}),
         })
         onClose()
       } catch (err: unknown) {
