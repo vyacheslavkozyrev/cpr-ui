@@ -9,6 +9,7 @@ import {
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ISkillGap } from '@/models/GapAnalysis'
+import { EUserRole } from '@/models'
 import { useMyGapAnalysis } from '@/services/gapAnalysisQueryService'
 import { useAuth } from '@/stores/authStore'
 import CreateGoalFromGapModal from './components/CreateGoalFromGapModal'
@@ -32,7 +33,7 @@ const GapAnalysisPage: React.FC = () => {
 
   // Employees and People Managers viewing own gap can create goals.
   // Directors / Administrators see read-only. For own-profile page, always allow Employee self.
-  const canCreateGoal = !hasAnyRole(['Director', 'Administrator'])
+  const canCreateGoal = !hasAnyRole([EUserRole.DIRECTOR, EUserRole.ADMINISTRATOR])
 
   const handleCreateGoal = useCallback((skillGap: ISkillGap) => {
     setSelectedGap(skillGap)
@@ -85,7 +86,7 @@ const GapAnalysisPage: React.FC = () => {
     return (
       <Container maxWidth='lg' sx={{ py: 3 }}>
         <Alert severity='error' sx={{ mb: 2 }}>
-          {t('gap_analysis.load_error', 'Failed to load gap analysis.')}
+          {t('gap_analysis.error_loading', 'Failed to load gap analysis.')}
         </Alert>
         <Button onClick={() => refetch()}>
           {t('errors.actions.reloadPage', 'Retry')}
@@ -127,7 +128,7 @@ const GapAnalysisPage: React.FC = () => {
         </Typography>
         <Typography variant='subtitle1' sx={styles.subtitle}>
           {t(
-            'gap_analysis.position_subtitle',
+            'gap_analysis.position_progress',
             'Current: {{current}} → Next: {{next}}',
             {
               current: data.currentPosition.title,

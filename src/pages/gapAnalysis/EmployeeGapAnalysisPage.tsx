@@ -12,6 +12,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 import type { ISkillGap } from '@/models/GapAnalysis'
+import { EUserRole } from '@/models'
 import { useEmployeeGapAnalysis } from '@/services/gapAnalysisQueryService'
 import { useAuth } from '@/stores/authStore'
 import CreateGoalFromGapModal from './components/CreateGoalFromGapModal'
@@ -40,7 +41,8 @@ const EmployeeGapAnalysisPage: React.FC = () => {
 
   // Only People Managers may create goals for employees; Directors and Admins are read-only.
   const canCreateGoal =
-    hasAnyRole(['People Manager']) && !hasAnyRole(['Director', 'Administrator'])
+    hasAnyRole([EUserRole.PEOPLE_MANAGER]) &&
+    !hasAnyRole([EUserRole.DIRECTOR, EUserRole.ADMINISTRATOR])
 
   const handleCreateGoal = useCallback((skillGap: ISkillGap) => {
     setSelectedGap(skillGap)
@@ -83,7 +85,7 @@ const EmployeeGapAnalysisPage: React.FC = () => {
         <Container maxWidth='lg' sx={{ py: 3 }}>
           <Alert severity='error'>
             {t(
-              'gap_analysis.forbidden',
+              'gap_analysis.employee.forbidden',
               "You do not have access to this employee's gap analysis."
             )}
           </Alert>
@@ -94,7 +96,7 @@ const EmployeeGapAnalysisPage: React.FC = () => {
       return (
         <Container maxWidth='lg' sx={{ py: 3 }}>
           <Alert severity='warning'>
-            {t('gap_analysis.not_found', 'Employee not found.')}
+            {t('gap_analysis.employee.not_found', 'Employee not found.')}
           </Alert>
         </Container>
       )
@@ -117,7 +119,7 @@ const EmployeeGapAnalysisPage: React.FC = () => {
     return (
       <Container maxWidth='lg' sx={{ py: 3 }}>
         <Alert severity='error' sx={{ mb: 2 }}>
-          {t('gap_analysis.load_error', 'Failed to load gap analysis.')}
+          {t('gap_analysis.error_loading', 'Failed to load gap analysis.')}
         </Alert>
         <Button onClick={() => refetch()}>
           {t('errors.actions.reloadPage', 'Retry')}
@@ -135,12 +137,12 @@ const EmployeeGapAnalysisPage: React.FC = () => {
         <IconButton
           onClick={handleBack}
           size='small'
-          aria-label={t('gap_analysis.back_btn', 'Back')}
+          aria-label={t('gap_analysis.employee.back_btn', 'Back')}
         >
           <ArrowBackIcon />
         </IconButton>
         <Typography variant='body2' color='text.secondary' sx={{ ml: 1 }}>
-          {t('gap_analysis.back_label', 'Back')}
+          {t('gap_analysis.employee.back_label', 'Back')}
         </Typography>
       </Box>
 
@@ -151,7 +153,7 @@ const EmployeeGapAnalysisPage: React.FC = () => {
         {data.nextPosition ? (
           <Typography variant='subtitle1' sx={styles.subtitle}>
             {t(
-              'gap_analysis.position_subtitle',
+              'gap_analysis.position_progress',
               'Current: {{current}} → Next: {{next}}',
               {
                 current: data.currentPosition.title,

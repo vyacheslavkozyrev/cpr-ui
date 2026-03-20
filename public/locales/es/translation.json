@@ -755,8 +755,10 @@
     "no_position_assigned": "No tiene una posición asignada en su perfil. Contacte a su gerente o a RRHH para establecer su posición actual.",
     "at_highest_level": "Ya está en el nivel más alto de su trayectoria profesional. No hay posiciones superiores con las que comparar.",
     "radar_chart_title": "Resumen de habilidades",
+    "bar_chart_title": "Gráfico de barras de brecha de habilidades",
     "radar_required": "Requerido",
     "radar_actual": "Real",
+    "position_progress": "Actual: {{current}} → Siguiente: {{next}}",
     "table": {
       "skill_name": "Habilidad",
       "category": "Categoría",
@@ -764,10 +766,15 @@
       "actual_level": "Nivel actual",
       "gap": "Brecha",
       "mandatory": "Obligatorio",
-      "linked_goals": "Objetivos vinculados",
+      "linked_goals": "Objetivos",
       "gap_met": "Cumplido",
       "default_suffix": "(predeterminado)",
-      "create_goal": "Crear objetivo"
+      "default_tooltip": "No se encontró evaluación aprobada por el gerente. Se usa el nivel mínimo de la posición.",
+      "create_goal": "Crear objetivo",
+      "mandatory_yes": "Sí",
+      "mandatory_no": "No",
+      "no_skills": "No hay habilidades para mostrar.",
+      "aria_label": "Tabla de brecha de habilidades"
     },
     "summary": {
       "total_skills": "Total de habilidades",
@@ -777,7 +784,20 @@
     },
     "create_goal_modal": {
       "title": "Crear objetivo desde brecha",
-      "submit": "Crear objetivo"
+      "title_prefix": "Mejorar {{skill}} a {{level}}",
+      "goal_title_label": "Título",
+      "deadline_label": "Fecha límite (opcional)",
+      "title_required": "El título es obligatorio.",
+      "create_error": "Error al crear el objetivo.",
+      "cancel": "Cancelar",
+      "submit": "Crear objetivo",
+      "saving": "Guardando…"
+    },
+    "employee": {
+      "forbidden": "No tiene acceso al análisis de brechas de este empleado.",
+      "not_found": "Empleado no encontrado.",
+      "back_btn": "Atrás",
+      "back_label": "Atrás"
     },
     "linked_goals_label": "Objetivos vinculados",
     "progress_label": "Progreso",

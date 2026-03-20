@@ -44,7 +44,7 @@ const SkillGapRow: React.FC<ISkillGapRowProps> = React.memo(
     const hasGap = skillGap.gap > 0
     const gapLabel = hasGap
       ? `+${skillGap.gap}`
-      : t('gap_analysis.gap_met', 'Met')
+      : t('gap_analysis.table.gap_met', 'Met')
 
     const handleCreateGoal = useCallback(() => {
       onCreateGoal?.(skillGap)
@@ -52,13 +52,13 @@ const SkillGapRow: React.FC<ISkillGapRowProps> = React.memo(
 
     const actualLevelLabel =
       skillGap.assessmentSource === 'default'
-        ? `${skillGap.actualLevel.title} (${t('gap_analysis.default_label', 'default')})`
+        ? `${skillGap.actualLevel.title} (${t('gap_analysis.table.default_suffix', 'default')})`
         : skillGap.actualLevel.title
 
     const actualLevelTooltip =
       skillGap.assessmentSource === 'default'
         ? t(
-            'gap_analysis.default_tooltip',
+            'gap_analysis.table.default_tooltip',
             "No manager-approved assessment found. Using your position's minimum skill level."
           )
         : ''
@@ -124,8 +124,8 @@ const SkillGapRow: React.FC<ISkillGapRowProps> = React.memo(
         <TableCell sx={styles.topCell}>
           <Typography variant='body2'>
             {skillGap.isMandatory
-              ? t('gap_analysis.mandatory_yes', 'Yes')
-              : t('gap_analysis.mandatory_no', 'No')}
+              ? t('gap_analysis.table.mandatory_yes', 'Yes')
+              : t('gap_analysis.table.mandatory_no', 'No')}
           </Typography>
         </TableCell>
 
@@ -153,7 +153,7 @@ const SkillGapRow: React.FC<ISkillGapRowProps> = React.memo(
               onClick={handleCreateGoal}
               sx={styles.createGoalBtn}
             >
-              {t('gap_analysis.create_goal_btn', 'Create Goal')}
+              {t('gap_analysis.table.create_goal', 'Create Goal')}
             </Button>
           )}
         </TableCell>

@@ -1422,8 +1422,10 @@
     "no_position_assigned": "No position is assigned to your profile. Please contact your manager or HR to set your current position before viewing gap analysis.",
     "at_highest_level": "You are already at the highest level in your career track. There are no further positions to compare against.",
     "radar_chart_title": "Skills Overview",
+    "bar_chart_title": "Skills Gap Bar Chart",
     "radar_required": "Required",
     "radar_actual": "Actual",
+    "position_progress": "Current: {{current}} → Next: {{next}}",
     "table": {
       "skill_name": "Skill",
       "category": "Category",
@@ -1431,10 +1433,15 @@
       "actual_level": "Actual Level",
       "gap": "Gap",
       "mandatory": "Mandatory",
-      "linked_goals": "Linked Goals",
+      "linked_goals": "Goals",
       "gap_met": "Met",
       "default_suffix": "(default)",
-      "create_goal": "Create Goal"
+      "default_tooltip": "No manager-approved assessment found. Using your position's minimum skill level.",
+      "create_goal": "Create Goal",
+      "mandatory_yes": "Yes",
+      "mandatory_no": "No",
+      "no_skills": "No skills to display.",
+      "aria_label": "Skills gap table"
     },
     "summary": {
       "total_skills": "Total Skills",
@@ -1444,7 +1451,20 @@
     },
     "create_goal_modal": {
       "title": "Create Goal from Gap",
-      "submit": "Create Goal"
+      "title_prefix": "Improve {{skill}} to {{level}}",
+      "goal_title_label": "Title",
+      "deadline_label": "Deadline (optional)",
+      "title_required": "Title is required.",
+      "create_error": "Failed to create goal.",
+      "cancel": "Cancel",
+      "submit": "Create Goal",
+      "saving": "Saving…"
+    },
+    "employee": {
+      "forbidden": "You do not have access to this employee's gap analysis.",
+      "not_found": "Employee not found.",
+      "back_btn": "Back",
+      "back_label": "Back"
     },
     "linked_goals_label": "Linked Goals",
     "progress_label": "Progress",

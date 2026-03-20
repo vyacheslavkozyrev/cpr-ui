@@ -47,7 +47,7 @@ const GapRadarChart: React.FC<IGapRadarChartProps> = React.memo(
       return (
         <Box sx={styles.emptyState}>
           <Typography variant='body1'>
-            {t('gap_analysis.no_skills', 'No skills to display')}
+            {t('gap_analysis.table.no_skills', 'No skills to display')}
           </Typography>
         </Box>
       )
@@ -62,7 +62,7 @@ const GapRadarChart: React.FC<IGapRadarChartProps> = React.memo(
           sx={styles.container}
           role='img'
           aria-label={t(
-            'gap_analysis.radar_chart_title',
+            'gap_analysis.bar_chart_title',
             'Skills gap bar chart'
           )}
         >

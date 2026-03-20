@@ -28,6 +28,7 @@ const getStyles = () => ({
     color: 'text.secondary',
   } as const,
   headerCell: { fontWeight: 600 } as const,
+  categoryHeaderCell: { backgroundColor: 'action.hover', fontWeight: 600 } as const,
 })
 
 /** Groups skill gaps by category title. */
@@ -59,7 +60,7 @@ const SkillGapTable: React.FC<ISkillGapTableProps> = React.memo(
       return (
         <Box sx={styles.emptyState}>
           <Typography variant='body1'>
-            {t('gap_analysis.no_gaps', 'No skills to display.')}
+            {t('gap_analysis.table.no_skills', 'No skills to display.')}
           </Typography>
         </Box>
       )
@@ -69,27 +70,27 @@ const SkillGapTable: React.FC<ISkillGapTableProps> = React.memo(
       <TableContainer component={Paper} sx={styles.container}>
         <Table
           size='small'
-          aria-label={t('gap_analysis.table_aria_label', 'Skills gap table')}
+          aria-label={t('gap_analysis.table.aria_label', 'Skills gap table')}
         >
           <TableHead>
             <TableRow>
               <TableCell sx={styles.headerCell}>
-                {t('gap_analysis.col_skill', 'Skill')}
+                {t('gap_analysis.table.skill_name', 'Skill')}
               </TableCell>
               <TableCell sx={styles.headerCell}>
-                {t('gap_analysis.col_required', 'Required')}
+                {t('gap_analysis.table.required_level', 'Required')}
               </TableCell>
               <TableCell sx={styles.headerCell}>
-                {t('gap_analysis.col_actual', 'Actual')}
+                {t('gap_analysis.table.actual_level', 'Actual')}
               </TableCell>
               <TableCell sx={styles.headerCell}>
-                {t('gap_analysis.col_gap', 'Gap')}
+                {t('gap_analysis.table.gap', 'Gap')}
               </TableCell>
               <TableCell sx={styles.headerCell}>
-                {t('gap_analysis.col_mandatory', 'Mandatory')}
+                {t('gap_analysis.table.mandatory', 'Mandatory')}
               </TableCell>
               <TableCell sx={styles.headerCell}>
-                {t('gap_analysis.col_goals', 'Goals')}
+                {t('gap_analysis.table.linked_goals', 'Goals')}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -99,7 +100,7 @@ const SkillGapTable: React.FC<ISkillGapTableProps> = React.memo(
                 <TableRow>
                   <TableCell
                     colSpan={6}
-                    sx={{ backgroundColor: 'action.hover', fontWeight: 600 }}
+                    sx={styles.categoryHeaderCell}
                   >
                     <Typography variant='subtitle2'>{category}</Typography>
                   </TableCell>

@@ -755,8 +755,10 @@
     "no_position_assigned": "Aucun poste n'est assigné à votre profil. Veuillez contacter votre responsable ou les RH pour définir votre poste actuel.",
     "at_highest_level": "Vous êtes déjà au niveau le plus élevé de votre parcours professionnel. Il n'y a pas de postes supérieurs à comparer.",
     "radar_chart_title": "Aperçu des compétences",
+    "bar_chart_title": "Graphique à barres des écarts de compétences",
     "radar_required": "Requis",
     "radar_actual": "Actuel",
+    "position_progress": "Actuel : {{current}} → Suivant : {{next}}",
     "table": {
       "skill_name": "Compétence",
       "category": "Catégorie",
@@ -764,10 +766,15 @@
       "actual_level": "Niveau actuel",
       "gap": "Écart",
       "mandatory": "Obligatoire",
-      "linked_goals": "Objectifs liés",
+      "linked_goals": "Objectifs",
       "gap_met": "Atteint",
       "default_suffix": "(défaut)",
-      "create_goal": "Créer un objectif"
+      "default_tooltip": "Aucune évaluation approuvée par le responsable. Utilisation du niveau minimum du poste.",
+      "create_goal": "Créer un objectif",
+      "mandatory_yes": "Oui",
+      "mandatory_no": "Non",
+      "no_skills": "Aucune compétence à afficher.",
+      "aria_label": "Tableau des écarts de compétences"
     },
     "summary": {
       "total_skills": "Total des compétences",
@@ -777,7 +784,20 @@
     },
     "create_goal_modal": {
       "title": "Créer un objectif à partir de l'écart",
-      "submit": "Créer l'objectif"
+      "title_prefix": "Améliorer {{skill}} à {{level}}",
+      "goal_title_label": "Titre",
+      "deadline_label": "Date limite (facultative)",
+      "title_required": "Le titre est obligatoire.",
+      "create_error": "Échec de la création de l'objectif.",
+      "cancel": "Annuler",
+      "submit": "Créer l'objectif",
+      "saving": "Enregistrement…"
+    },
+    "employee": {
+      "forbidden": "Vous n'avez pas accès à l'analyse des écarts de cet employé.",
+      "not_found": "Employé introuvable.",
+      "back_btn": "Retour",
+      "back_label": "Retour"
     },
     "linked_goals_label": "Objectifs liés",
     "progress_label": "Progression",

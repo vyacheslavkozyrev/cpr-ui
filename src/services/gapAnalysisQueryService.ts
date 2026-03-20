@@ -8,7 +8,7 @@ import { queryKeys } from '../config/queryClient'
 import type { TCreateGoalDto } from '../dtos/GoalDto'
 import { mapGapAnalysis } from '../mappers/gapAnalysisMapper'
 import { gapAnalysisApiService } from './api/gapAnalysisApiService'
-import { apiClient } from './apiClient'
+import { goalsApiService } from './goalsService'
 
 /**
  * Returns the authenticated user's own gap analysis.
@@ -62,7 +62,7 @@ export const useCreateGoalFromGap = (targetEmployeeId?: string) => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (dto: TCreateGoalDto) => apiClient.post<unknown>('/goals', dto),
+    mutationFn: (dto: TCreateGoalDto) => goalsApiService.createGoal(dto),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.gapAnalysis.own() })
       queryClient.invalidateQueries({ queryKey: queryKeys.goals.lists() })
