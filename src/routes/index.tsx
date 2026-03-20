@@ -21,6 +21,8 @@ import ReviewCyclesPage from '../pages/reviews/ReviewCyclesPage'
 import MyCyclesPage from '../pages/reviews/MyCyclesPage'
 import ReviewRequestsPage from '../pages/reviews/ReviewRequestsPage'
 import { SettingsPage } from '../pages/settings'
+import EmployeeGapAnalysisPage from '../pages/gapAnalysis/EmployeeGapAnalysisPage'
+import GapAnalysisPage from '../pages/gapAnalysis/GapAnalysisPage'
 import EmployeeAssessmentPage from '../pages/skillAssessment/EmployeeAssessmentPage'
 import SkillAssessmentPage from '../pages/skillAssessment/SkillAssessmentPage'
 import TeamSkillOverviewPage from '../pages/skillAssessment/TeamSkillOverviewPage'
@@ -133,6 +135,30 @@ export const routes: RouteObject[] = [
             ),
           },
         ],
+      },
+
+      // Gap Analysis - accessible to all authenticated users
+      {
+        path: 'gap-analysis',
+        element: <GapAnalysisPage />,
+        errorElement: <RouteErrorBoundary />,
+      },
+
+      // Employee Gap Analysis - Manager/Director/Admin only
+      {
+        path: 'employees/:id/gap-analysis',
+        element: (
+          <RoleGuard
+            allowedRoles={[
+              EUserRole.PEOPLE_MANAGER,
+              EUserRole.DIRECTOR,
+              EUserRole.ADMINISTRATOR,
+            ]}
+          >
+            <EmployeeGapAnalysisPage />
+          </RoleGuard>
+        ),
+        errorElement: <RouteErrorBoundary />,
       },
 
       // Feedback - accessible to all authenticated users
