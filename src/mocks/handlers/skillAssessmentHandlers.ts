@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw'
+import { http, HttpResponse, type JsonBodyType } from 'msw'
 import {
   mockEmployeeSkillAssessmentResponse,
   mockSkillAssessmentResponse,
@@ -10,13 +10,7 @@ const DEFAULT_API_BASE_URL =
     ? import.meta.env['VITE_API_BASE_URL'] || 'http://localhost:3000/api'
     : 'http://localhost:3000/api'
 
-const ok = (data: unknown) =>
-  HttpResponse.json({
-    data,
-    success: true,
-    message: 'OK',
-    timestamp: new Date().toISOString(),
-  })
+const ok = (data: JsonBodyType) => HttpResponse.json(data)
 
 export const skillAssessmentHandlers = [
   // GET /api/me/feedback — returns received feedback items for the evidence linking modal
@@ -48,7 +42,7 @@ export const skillAssessmentHandlers = [
 
   // GET /api/me/skill-assessment
   http.get(`${DEFAULT_API_BASE_URL}/me/skill-assessment`, () =>
-    ok(mockSkillAssessmentResponse)
+    HttpResponse.json(mockSkillAssessmentResponse)
   ),
 
   // PUT /api/me/skill-assessment/skills/:skillId
@@ -57,22 +51,13 @@ export const skillAssessmentHandlers = [
     async ({ request, params }) => {
       const body = (await request.json()) as Record<string, unknown>
       const skillId = params['skillId'] as string
-      const skillLevelId = body['skill_level_id'] as string
-
-      // Simulate 422 target_conflict: if level-004 (Expert) is used and target exists at level-004
-      if (skillLevelId === 'target-conflict-level') {
-        return HttpResponse.json(
-          { data: null, success: false, message: 'target_conflict' },
-          { status: 422 }
-        )
-      }
+      const selfAssessmentValue = body['self_assessment_value'] as number
 
       return ok({
         id: `assess-${skillId}`,
         skill_id: skillId,
-        skill_level_id: skillLevelId,
-        skill_level_title: 'Intermediate',
-        skill_level_value: 2,
+        self_assessment_value: selfAssessmentValue,
+        manager_assessment_value: null,
         notes: (body['notes'] as string | null) ?? null,
       })
     }
@@ -84,35 +69,48 @@ export const skillAssessmentHandlers = [
     () => new HttpResponse(null, { status: 204 })
   ),
 
-  // PUT /api/me/skill-assessment/skills/:skillId/target
+  // PUT /api/me/skill-assessment/skills/:skillId/target — removed, returns 404
   http.put(
     `${DEFAULT_API_BASE_URL}/me/skill-assessment/skills/:skillId/target`,
+    () =>
+      HttpResponse.json(
+        {
+          title: 'Not Found',
+          detail: 'Target level endpoints have been removed.',
+        },
+        { status: 404 }
+      )
+  ),
+
+  // DELETE /api/me/skill-assessment/skills/:skillId/target — removed, returns 404
+  http.delete(
+    `${DEFAULT_API_BASE_URL}/me/skill-assessment/skills/:skillId/target`,
+    () =>
+      HttpResponse.json(
+        {
+          title: 'Not Found',
+          detail: 'Target level endpoints have been removed.',
+        },
+        { status: 404 }
+      )
+  ),
+
+  // PUT /api/employees/:employeeId/skill-assessment/skills/:skillId/manager-assessment
+  http.put(
+    `${DEFAULT_API_BASE_URL}/employees/:employeeId/skill-assessment/skills/:skillId/manager-assessment`,
     async ({ request, params }) => {
       const body = (await request.json()) as Record<string, unknown>
       const skillId = params['skillId'] as string
-      const skillLevelId = body['skill_level_id'] as string
-
-      if (skillLevelId === 'target-too-low-level') {
-        return HttpResponse.json(
-          { data: null, success: false, message: 'target_too_low' },
-          { status: 422 }
-        )
-      }
+      const managerAssessmentValue = body['manager_assessment_value'] as number
 
       return ok({
-        id: `target-${skillId}`,
+        id: `assess-${skillId}`,
         skill_id: skillId,
-        skill_level_id: skillLevelId,
-        skill_level_title: 'Advanced',
-        skill_level_value: 3,
+        self_assessment_value: 2,
+        manager_assessment_value: managerAssessmentValue,
+        notes: null,
       })
     }
-  ),
-
-  // DELETE /api/me/skill-assessment/skills/:skillId/target
-  http.delete(
-    `${DEFAULT_API_BASE_URL}/me/skill-assessment/skills/:skillId/target`,
-    () => new HttpResponse(null, { status: 204 })
   ),
 
   // POST /api/me/skill-assessment/skills/:skillId/evidence
@@ -132,16 +130,11 @@ export const skillAssessmentHandlers = [
 
       return HttpResponse.json(
         {
-          data: {
-            id: `evid-${skillId}-${feedbackId}`,
-            feedback_id: feedbackId,
-            sender_display_name: 'Test Sender',
-            rating: 4,
-            content_excerpt: 'Excellent technical contribution to the project.',
-          },
-          success: true,
-          message: 'Created',
-          timestamp: new Date().toISOString(),
+          id: `evid-${skillId}-${feedbackId}`,
+          feedback_id: feedbackId,
+          sender_display_name: 'Test Sender',
+          rating: 4,
+          feedback_content: 'Excellent technical contribution to the project.',
         },
         { status: 201 }
       )
@@ -156,13 +149,13 @@ export const skillAssessmentHandlers = [
 
   // GET /api/me/team/skill-assessment-summary
   http.get(`${DEFAULT_API_BASE_URL}/me/team/skill-assessment-summary`, () =>
-    ok(mockTeamSkillSummaryResponse)
+    HttpResponse.json(mockTeamSkillSummaryResponse)
   ),
 
   // GET /api/employees/:employeeId/skill-assessment
   http.get(
     `${DEFAULT_API_BASE_URL}/employees/:employeeId/skill-assessment`,
-    () => ok(mockEmployeeSkillAssessmentResponse)
+    () => HttpResponse.json(mockEmployeeSkillAssessmentResponse)
   ),
 ]
 

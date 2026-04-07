@@ -25,7 +25,7 @@ export const useReviewCycles = (params?: IListReviewCyclesParams) =>
     queryKey: REVIEW_CYCLE_KEYS.list(params),
     queryFn: async () => {
       const res = await reviewCycleApiService.listCycles(params)
-      return res.data.data
+      return res.data
     },
     staleTime: 2 * 60 * 1000,
   })
@@ -35,7 +35,7 @@ export const useReviewCycle = (id: string) =>
     queryKey: REVIEW_CYCLE_KEYS.detail(id),
     queryFn: async () => {
       const res = await reviewCycleApiService.getCycle(id)
-      return res.data.data
+      return res.data
     },
     enabled: Boolean(id),
     staleTime: 60 * 1000,
@@ -59,7 +59,7 @@ export const useReviewCycleResults = (
     queryKey: REVIEW_CYCLE_KEYS.results(cycleId),
     queryFn: async () => {
       const res = await reviewCycleApiService.getResults(cycleId)
-      return res.data.data
+      return res.data
     },
     enabled: options?.enabled !== false && Boolean(cycleId),
     staleTime: 5 * 60 * 1000,

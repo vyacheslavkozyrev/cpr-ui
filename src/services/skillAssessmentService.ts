@@ -1,28 +1,24 @@
 import { apiClient } from './apiClient'
 import type {
-  IAssessedLevel,
   IEvidenceItem,
   IEmployeeSkillAssessmentResponse,
   ILinkEvidenceRequest,
   ISkillAssessmentResponse,
-  ITargetLevel,
   ITeamSkillSummaryResponse,
+  IUpsertManagerAssessmentRequest,
   IUpsertSkillAssessmentRequest,
-  IUpsertSkillTargetRequest,
 } from '../types/skillAssessment.types'
 
 class SkillAssessmentApiService {
   async getMyAssessment() {
-    return apiClient.get<{ data: ISkillAssessmentResponse }>(
-      '/me/skill-assessment'
-    )
+    return apiClient.get<ISkillAssessmentResponse>('/me/skill-assessment')
   }
 
   async upsertCurrentLevel(
     skillId: string,
     dto: IUpsertSkillAssessmentRequest
   ) {
-    return apiClient.put<IAssessedLevel>(
+    return apiClient.put<ISkillAssessmentResponse>(
       `/me/skill-assessment/skills/${skillId}`,
       dto
     )
@@ -32,16 +28,14 @@ class SkillAssessmentApiService {
     return apiClient.delete<void>(`/me/skill-assessment/skills/${skillId}`)
   }
 
-  async upsertTarget(skillId: string, dto: IUpsertSkillTargetRequest) {
-    return apiClient.put<ITargetLevel>(
-      `/me/skill-assessment/skills/${skillId}/target`,
+  async upsertManagerAssessment(
+    employeeId: string,
+    skillId: string,
+    dto: IUpsertManagerAssessmentRequest
+  ) {
+    return apiClient.put<IEmployeeSkillAssessmentResponse>(
+      `/employees/${employeeId}/skill-assessment/skills/${skillId}/manager-assessment`,
       dto
-    )
-  }
-
-  async deleteTarget(skillId: string) {
-    return apiClient.delete<void>(
-      `/me/skill-assessment/skills/${skillId}/target`
     )
   }
 
@@ -59,13 +53,13 @@ class SkillAssessmentApiService {
   }
 
   async getEmployeeAssessment(employeeId: string) {
-    return apiClient.get<{ data: IEmployeeSkillAssessmentResponse }>(
+    return apiClient.get<IEmployeeSkillAssessmentResponse>(
       `/employees/${employeeId}/skill-assessment`
     )
   }
 
   async getTeamSummary() {
-    return apiClient.get<{ data: ITeamSkillSummaryResponse }>(
+    return apiClient.get<ITeamSkillSummaryResponse>(
       '/me/team/skill-assessment-summary'
     )
   }

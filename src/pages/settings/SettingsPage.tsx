@@ -283,8 +283,8 @@ export const SettingsPage: React.FC = () => {
       {/* Notifications Settings */}
       <Card sx={styles.settingsCard}>
         <CardHeader
-          title='Notifications'
-          subheader='Configure how you receive notifications'
+          title={t('settings.notifications.title')}
+          subheader={t('settings.notifications.subtitle')}
         />
         <Divider />
         <CardContent>
@@ -293,10 +293,10 @@ export const SettingsPage: React.FC = () => {
             <Box sx={styles.settingItem}>
               <Box>
                 <Typography variant='subtitle1' gutterBottom>
-                  Email Notifications
+                  {t('settings.notifications.email')}
                 </Typography>
                 <Typography variant='body2' color='textSecondary'>
-                  Receive email updates for important activities (coming soon)
+                  {t('settings.notifications.emailDescription')}
                 </Typography>
               </Box>
               <Switch disabled />
@@ -308,10 +308,10 @@ export const SettingsPage: React.FC = () => {
             <Box sx={styles.settingItem}>
               <Box>
                 <Typography variant='subtitle1' gutterBottom>
-                  Browser Notifications
+                  {t('settings.notifications.browser')}
                 </Typography>
                 <Typography variant='body2' color='textSecondary'>
-                  Show desktop notifications (coming soon)
+                  {t('settings.notifications.browserDescription')}
                 </Typography>
               </Box>
               <Switch disabled />
@@ -323,17 +323,23 @@ export const SettingsPage: React.FC = () => {
             <Box sx={styles.settingItem}>
               <Box>
                 <Typography variant='subtitle1' gutterBottom>
-                  Toast Duration
+                  {t('settings.notifications.toastDuration')}
                 </Typography>
                 <Typography variant='body2' color='textSecondary'>
-                  How long success/error messages are shown (coming soon)
+                  {t('settings.notifications.toastDurationDescription')}
                 </Typography>
               </Box>
               <FormControl sx={styles.settingControl} disabled>
                 <Select value='6000' size='small'>
-                  <MenuItem value='3000'>3 seconds</MenuItem>
-                  <MenuItem value='6000'>6 seconds</MenuItem>
-                  <MenuItem value='10000'>10 seconds</MenuItem>
+                  <MenuItem value='3000'>
+                    {t('settings.notifications.duration3s')}
+                  </MenuItem>
+                  <MenuItem value='6000'>
+                    {t('settings.notifications.duration6s')}
+                  </MenuItem>
+                  <MenuItem value='10000'>
+                    {t('settings.notifications.duration10s')}
+                  </MenuItem>
                 </Select>
               </FormControl>
             </Box>
@@ -344,8 +350,8 @@ export const SettingsPage: React.FC = () => {
       {/* Privacy & Data Settings */}
       <Card sx={styles.settingsCard}>
         <CardHeader
-          title='Privacy & Data'
-          subheader='Manage your data and privacy preferences'
+          title={t('settings.privacy.title')}
+          subheader={t('settings.privacy.subtitle')}
         />
         <Divider />
         <CardContent>
@@ -354,11 +360,10 @@ export const SettingsPage: React.FC = () => {
             <Box sx={styles.settingItem}>
               <Box>
                 <Typography variant='subtitle1' gutterBottom>
-                  Usage Analytics
+                  {t('settings.privacy.analytics')}
                 </Typography>
                 <Typography variant='body2' color='textSecondary'>
-                  Help improve the app by sharing anonymous usage data (coming
-                  soon)
+                  {t('settings.privacy.analyticsDescription')}
                 </Typography>
               </Box>
               <Switch disabled />
@@ -370,10 +375,10 @@ export const SettingsPage: React.FC = () => {
             <Box sx={styles.settingItem}>
               <Box>
                 <Typography variant='subtitle1' gutterBottom>
-                  Data Export
+                  {t('settings.privacy.dataExport')}
                 </Typography>
                 <Typography variant='body2' color='textSecondary'>
-                  Download your data in portable format (coming soon)
+                  {t('settings.privacy.dataExportDescription')}
                 </Typography>
               </Box>
               <Typography
@@ -381,7 +386,7 @@ export const SettingsPage: React.FC = () => {
                 color='primary'
                 sx={styles.languageFlag}
               >
-                Export Data
+                {t('settings.privacy.exportData')}
               </Typography>
             </Box>
           </Stack>

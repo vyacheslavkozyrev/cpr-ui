@@ -1,12 +1,15 @@
 ﻿import { Add as AddIcon } from '@mui/icons-material'
 import { Box, Button, Tab, Tabs, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { MyFeedbackList } from '../../components/Feedback/MyFeedbackList'
 import { SentRequestsList } from '../../components/FeedbackRequest/lists/SentRequestsList'
 import { TodoRequestsList } from '../../components/FeedbackRequest/lists/TodoRequestsList'
-import { UserRole } from '../../models'
+import { EUserRole } from '../../models'
+import MyCyclesPage from '../../pages/reviews/MyCyclesPage'
+import ReviewCyclesPage from '../../pages/reviews/ReviewCyclesPage'
+import ReviewRequestsPage from '../../pages/reviews/ReviewRequestsPage'
 import { useAuthStore } from '../../stores/authStore'
 import { FeedbackAnalyticsPage } from './FeedbackAnalyticsPage'
 import { ManagerTeamRequests } from './ManagerTeamRequests'
@@ -40,9 +43,13 @@ function a11yProps(index: number) {
   }
 }
 
+const getStyles = () => ({
+  reviews360TabPanel: { pt: 1 },
+})
+
 /**
  * Feedback Page with Tabs
- * Contains two tabs: Feedback (giving/receiving feedback) and Requests (feedback requests management)
+ * Contains tabs: Feedback, Analytics, Requests, 360 Reviews, Team Requests (managers)
  */
 export const FeedbackPage: React.FC = () => {
   const { t } = useTranslation()
@@ -50,16 +57,23 @@ export const FeedbackPage: React.FC = () => {
   const location = useLocation()
   const [tabValue, setTabValue] = useState(0)
   const [requestsSubTab, setRequestsSubTab] = useState(0)
+  const [reviews360SubTab, setReviews360SubTab] = useState(0)
   const { user } = useAuthStore()
+  const styles = useMemo(() => getStyles(), [])
 
   // Check if user has manager-level roles (People Manager, Solution Owner, Director, Administrator)
   // These roles typically have direct reports and can view team requests
   const isManager = user?.roles?.some(
     role =>
-      role === UserRole.PEOPLE_MANAGER ||
-      role === UserRole.SOLUTION_OWNER ||
-      role === UserRole.DIRECTOR ||
-      role === UserRole.ADMINISTRATOR
+      role === EUserRole.PEOPLE_MANAGER ||
+      role === EUserRole.SOLUTION_OWNER ||
+      role === EUserRole.DIRECTOR ||
+      role === EUserRole.ADMINISTRATOR
+  )
+
+  // Check if user can manage 360 cycles (Director or Administrator)
+  const canManageCycles = user?.roles?.some(
+    role => role === EUserRole.DIRECTOR || role === EUserRole.ADMINISTRATOR
   )
 
   // Handle navigation state to set active tab
@@ -75,20 +89,30 @@ export const FeedbackPage: React.FC = () => {
     }
   }, [location.state])
 
-  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue)
-  }
+  const handleTabChange = useCallback(
+    (_event: React.SyntheticEvent, newValue: number) => {
+      setTabValue(newValue)
+    },
+    []
+  )
 
-  const handleRequestsSubTabChange = (
-    _event: React.SyntheticEvent,
-    newValue: number
-  ) => {
-    setRequestsSubTab(newValue)
-  }
+  const handleRequestsSubTabChange = useCallback(
+    (_event: React.SyntheticEvent, newValue: number) => {
+      setRequestsSubTab(newValue)
+    },
+    []
+  )
 
-  const handleCreateRequest = () => {
+  const handleReviews360SubTabChange = useCallback(
+    (_event: React.SyntheticEvent, newValue: number) => {
+      setReviews360SubTab(newValue)
+    },
+    []
+  )
+
+  const handleCreateRequest = useCallback(() => {
     navigate('/feedback/request/new')
-  }
+  }, [navigate])
 
   return (
     <Box>
@@ -109,10 +133,14 @@ export const FeedbackPage: React.FC = () => {
           <Tab label={t('pages.feedback.tabs.feedback')} {...a11yProps(0)} />
           <Tab label={t('pages.feedback.tabs.analytics')} {...a11yProps(1)} />
           <Tab label={t('pages.feedback.tabs.requests')} {...a11yProps(2)} />
+          <Tab
+            label={t('pages.feedback.tabs.reviews360', '360 Reviews')}
+            {...a11yProps(3)}
+          />
           {isManager && (
             <Tab
               label={t('pages.feedback.tabs.teamRequests')}
-              {...a11yProps(3)}
+              {...a11yProps(4)}
             />
           )}
         </Tabs>
@@ -192,9 +220,33 @@ export const FeedbackPage: React.FC = () => {
         {requestsSubTab === 1 && <SentRequestsList />}
       </TabPanel>
 
+      {/* 360 Reviews Tab */}
+      <TabPanel value={tabValue} index={3}>
+        <Box sx={styles.reviews360TabPanel}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
+            <Tabs
+              value={reviews360SubTab}
+              onChange={handleReviews360SubTabChange}
+              aria-label='360 reviews sub-tabs'
+            >
+              <Tab label={t('pages.myReviews.title', 'My Reviews')} />
+              <Tab
+                label={t('pages.reviewRequests.title', 'Pending Requests')}
+              />
+              {canManageCycles && (
+                <Tab label={t('pages.reviewCycles.title', 'Manage Cycles')} />
+              )}
+            </Tabs>
+          </Box>
+          {reviews360SubTab === 0 && <MyCyclesPage />}
+          {reviews360SubTab === 1 && <ReviewRequestsPage />}
+          {reviews360SubTab === 2 && canManageCycles && <ReviewCyclesPage />}
+        </Box>
+      </TabPanel>
+
       {/* Team Requests Tab - US-002B (Managers only) */}
       {isManager && (
-        <TabPanel value={tabValue} index={3}>
+        <TabPanel value={tabValue} index={4}>
           <ManagerTeamRequests />
         </TabPanel>
       )}

@@ -3,13 +3,15 @@ import { ProtectedRoute, RoleGuard } from '../components/auth'
 import { NotFoundPage, RouteErrorBoundary } from '../components/errors'
 import { FeedbackRequestForm } from '../components/FeedbackRequest/form'
 import { AppLayout } from '../components/layout'
-import { UserRole } from '../models'
+import TaxonomyAdminTabs from '../components/taxonomy/admin/TaxonomyAdminTabs'
+import { EUserRole } from '../models'
 import { AdminPage } from '../pages/admin'
 import { LoginPage } from '../pages/auth'
 import { DashboardPage } from '../pages/dashboard'
 import {
   FeedbackDetailPage,
   FeedbackPage,
+  GiveFeedbackPage,
   NewFeedbackPage,
 } from '../pages/feedback'
 import { GoalDetailPage, GoalFormPage, GoalsPage } from '../pages/goals'
@@ -22,7 +24,10 @@ import { SettingsPage } from '../pages/settings'
 import EmployeeAssessmentPage from '../pages/skillAssessment/EmployeeAssessmentPage'
 import SkillAssessmentPage from '../pages/skillAssessment/SkillAssessmentPage'
 import TeamSkillOverviewPage from '../pages/skillAssessment/TeamSkillOverviewPage'
-import { SkillsPage } from '../pages/skills'
+import CareerFrameworkPage from '../pages/taxonomy/CareerFrameworkPage'
+import CareerPathDetailPage from '../pages/taxonomy/CareerPathDetailPage'
+import CareerTrackDetailPage from '../pages/taxonomy/CareerTrackDetailPage'
+import PositionDetailPage from '../pages/taxonomy/PositionDetailPage'
 import { TeamPage } from '../pages/team'
 import { TestErrorsPage } from '../pages/test-errors'
 
@@ -99,7 +104,7 @@ export const routes: RouteObject[] = [
         children: [
           {
             index: true,
-            element: <SkillsPage />,
+            element: <SkillAssessmentPage />,
           },
           {
             path: 'assessment',
@@ -108,7 +113,7 @@ export const routes: RouteObject[] = [
           {
             path: 'team',
             element: (
-              <RoleGuard allowedRoles={[UserRole.PEOPLE_MANAGER]}>
+              <RoleGuard allowedRoles={[EUserRole.PEOPLE_MANAGER]}>
                 <TeamSkillOverviewPage />
               </RoleGuard>
             ),
@@ -118,9 +123,9 @@ export const routes: RouteObject[] = [
             element: (
               <RoleGuard
                 allowedRoles={[
-                  UserRole.PEOPLE_MANAGER,
-                  UserRole.DIRECTOR,
-                  UserRole.ADMINISTRATOR,
+                  EUserRole.PEOPLE_MANAGER,
+                  EUserRole.DIRECTOR,
+                  EUserRole.ADMINISTRATOR,
                 ]}
               >
                 <EmployeeAssessmentPage />
@@ -144,6 +149,12 @@ export const routes: RouteObject[] = [
             element: <NewFeedbackPage />,
           },
           {
+            // Entry point from FeedbackRequestCard — reads employee_id,
+            // feedback_request_id query params to pre-fill the form
+            path: 'give',
+            element: <GiveFeedbackPage />,
+          },
+          {
             path: ':id',
             element: <FeedbackDetailPage />,
           },
@@ -163,7 +174,7 @@ export const routes: RouteObject[] = [
             index: true,
             element: (
               <RoleGuard
-                allowedRoles={[UserRole.DIRECTOR, UserRole.ADMINISTRATOR]}
+                allowedRoles={[EUserRole.DIRECTOR, EUserRole.ADMINISTRATOR]}
               >
                 <ReviewCyclesPage />
               </RoleGuard>
@@ -203,13 +214,48 @@ export const routes: RouteObject[] = [
         element: (
           <RoleGuard
             allowedRoles={[
-              UserRole.PEOPLE_MANAGER,
-              UserRole.SOLUTION_OWNER,
-              UserRole.DIRECTOR,
-              UserRole.ADMINISTRATOR,
+              EUserRole.PEOPLE_MANAGER,
+              EUserRole.SOLUTION_OWNER,
+              EUserRole.DIRECTOR,
+              EUserRole.ADMINISTRATOR,
             ]}
           >
             <TeamPage />
+          </RoleGuard>
+        ),
+        errorElement: <RouteErrorBoundary />,
+      },
+
+      // Career Framework - accessible to all authenticated users
+      {
+        path: 'career-framework',
+        errorElement: <RouteErrorBoundary />,
+        children: [
+          {
+            index: true,
+            element: <CareerFrameworkPage />,
+          },
+          {
+            path: ':pathId',
+            element: <CareerPathDetailPage />,
+          },
+          {
+            path: ':pathId/tracks/:trackId',
+            element: <CareerTrackDetailPage />,
+          },
+          {
+            path: ':pathId/tracks/:trackId/positions/:positionId',
+            element: <PositionDetailPage />,
+          },
+        ],
+      },
+
+      // Career Framework Admin - Administrator only
+      {
+        path: 'settings/career-framework',
+        element: (
+          <RoleGuard allowedRoles={[EUserRole.ADMINISTRATOR]}>
+            <TaxonomyAdminTabs />
           </RoleGuard>
         ),
         errorElement: <RouteErrorBoundary />,
@@ -219,7 +265,7 @@ export const routes: RouteObject[] = [
       {
         path: 'admin',
         element: (
-          <RoleGuard allowedRoles={[UserRole.ADMINISTRATOR]}>
+          <RoleGuard allowedRoles={[EUserRole.ADMINISTRATOR]}>
             <AdminPage />
           </RoleGuard>
         ),

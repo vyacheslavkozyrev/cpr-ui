@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type {
   ILinkEvidenceRequest,
+  IUpsertManagerAssessmentRequest,
   IUpsertSkillAssessmentRequest,
-  IUpsertSkillTargetRequest,
 } from '../types/skillAssessment.types'
 import { skillAssessmentApiService } from './skillAssessmentService'
 
@@ -18,7 +18,7 @@ export const useMySkillAssessment = () =>
     queryKey: SKILL_ASSESSMENT_KEYS.myAssessment,
     queryFn: async () => {
       const res = await skillAssessmentApiService.getMyAssessment()
-      return res.data.data
+      return res.data
     },
     staleTime: 2 * 60 * 1000,
   })
@@ -29,7 +29,7 @@ export const useEmployeeSkillAssessment = (employeeId: string) =>
     queryFn: async () => {
       const res =
         await skillAssessmentApiService.getEmployeeAssessment(employeeId)
-      return res.data.data
+      return res.data
     },
     enabled: Boolean(employeeId),
     staleTime: 2 * 60 * 1000,
@@ -40,7 +40,7 @@ export const useTeamSkillSummary = () =>
     queryKey: SKILL_ASSESSMENT_KEYS.teamSummary,
     queryFn: async () => {
       const res = await skillAssessmentApiService.getTeamSummary()
-      return res.data.data
+      return res.data
     },
     staleTime: 2 * 60 * 1000,
   })
@@ -76,32 +76,29 @@ export const useDeleteCurrentLevel = () => {
   })
 }
 
-export const useUpsertTarget = () => {
+export const useUpsertManagerAssessment = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({
+      employeeId,
       skillId,
       dto,
     }: {
+      employeeId: string
       skillId: string
-      dto: IUpsertSkillTargetRequest
-    }) => skillAssessmentApiService.upsertTarget(skillId, dto),
-    onSuccess: () => {
+      dto: IUpsertManagerAssessmentRequest
+    }) =>
+      skillAssessmentApiService.upsertManagerAssessment(
+        employeeId,
+        skillId,
+        dto
+      ),
+    onSuccess: (_data, { employeeId }) => {
       queryClient.invalidateQueries({
-        queryKey: SKILL_ASSESSMENT_KEYS.myAssessment,
+        queryKey: SKILL_ASSESSMENT_KEYS.employeeAssessment(employeeId),
       })
-    },
-  })
-}
-
-export const useDeleteTarget = () => {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: (skillId: string) =>
-      skillAssessmentApiService.deleteTarget(skillId),
-    onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: SKILL_ASSESSMENT_KEYS.myAssessment,
+        queryKey: SKILL_ASSESSMENT_KEYS.teamSummary,
       })
     },
   })

@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { RoleGuard } from '../../components/auth/RoleGuard'
 import { server } from '../../mocks/server'
-import { UserRole } from '../../models'
+import { EUserRole } from '../../models'
 import { renderWithUser } from '../utils'
 
 // Mock the auth store to prevent any hanging async operations
@@ -11,7 +11,7 @@ vi.mock('../../stores/authStore', () => ({
   useAuthStore: vi.fn(() => ({
     isAuthenticated: true,
     isLoading: false,
-    user: { roles: [UserRole.EMPLOYEE] },
+    user: { roles: [EUserRole.EMPLOYEE] },
     error: null,
   })),
 }))
@@ -20,7 +20,7 @@ vi.mock('../../stores/authStore', () => ({
 import { useAuthStore as mockUseAuthStore } from '../../stores/authStore'
 
 // Helper to set mock user roles for specific tests
-const setMockUserRoles = (roles: UserRole[]) => {
+const setMockUserRoles = (roles: EUserRole[]) => {
   vi.mocked(mockUseAuthStore).mockReturnValue({
     isAuthenticated: true,
     isLoading: false,
@@ -62,10 +62,10 @@ describe('Authentication System Tests', () => {
 
   describe('RoleGuard Component', () => {
     it('allows access for users with required role', () => {
-      setMockUserRoles([UserRole.EMPLOYEE])
+      setMockUserRoles([EUserRole.EMPLOYEE])
 
       const { container } = renderWithUser(
-        <RoleGuard allowedRoles={[UserRole.EMPLOYEE]}>
+        <RoleGuard allowedRoles={[EUserRole.EMPLOYEE]}>
           <MockProtectedComponent />
         </RoleGuard>,
         'employee'
@@ -77,10 +77,12 @@ describe('Authentication System Tests', () => {
     })
 
     it('allows access for users with multiple roles', () => {
-      setMockUserRoles([UserRole.PEOPLE_MANAGER])
+      setMockUserRoles([EUserRole.PEOPLE_MANAGER])
 
       const { container } = renderWithUser(
-        <RoleGuard allowedRoles={[UserRole.EMPLOYEE, UserRole.PEOPLE_MANAGER]}>
+        <RoleGuard
+          allowedRoles={[EUserRole.EMPLOYEE, EUserRole.PEOPLE_MANAGER]}
+        >
           <MockProtectedComponent />
         </RoleGuard>,
         'manager'
@@ -92,11 +94,11 @@ describe('Authentication System Tests', () => {
     })
 
     it('denies access for users without required role', () => {
-      setMockUserRoles([UserRole.EMPLOYEE])
+      setMockUserRoles([EUserRole.EMPLOYEE])
 
       const { container } = renderWithUser(
         <RoleGuard
-          allowedRoles={[UserRole.ADMINISTRATOR]}
+          allowedRoles={[EUserRole.ADMINISTRATOR]}
           fallback={<MockUnauthorizedComponent />}
         >
           <MockProtectedComponent />
@@ -113,10 +115,10 @@ describe('Authentication System Tests', () => {
     })
 
     it('allows admin users to access all content', () => {
-      setMockUserRoles([UserRole.ADMINISTRATOR])
+      setMockUserRoles([EUserRole.ADMINISTRATOR])
 
       const { container } = renderWithUser(
-        <RoleGuard allowedRoles={[UserRole.ADMINISTRATOR]}>
+        <RoleGuard allowedRoles={[EUserRole.ADMINISTRATOR]}>
           <MockProtectedComponent />
         </RoleGuard>,
         'admin'
@@ -130,11 +132,11 @@ describe('Authentication System Tests', () => {
 
   describe('Authentication Flow Integration', () => {
     it('handles role access correctly for employees', () => {
-      setMockUserRoles([UserRole.EMPLOYEE])
+      setMockUserRoles([EUserRole.EMPLOYEE])
 
       const { container } = renderWithUser(
         <RoleGuard
-          allowedRoles={[UserRole.EMPLOYEE]}
+          allowedRoles={[EUserRole.EMPLOYEE]}
           fallback={<MockUnauthorizedComponent />}
         >
           <MockProtectedComponent />
@@ -152,11 +154,11 @@ describe('Authentication System Tests', () => {
     })
 
     it('handles role access correctly for managers', () => {
-      setMockUserRoles([UserRole.PEOPLE_MANAGER])
+      setMockUserRoles([EUserRole.PEOPLE_MANAGER])
 
       const { container } = renderWithUser(
         <RoleGuard
-          allowedRoles={[UserRole.PEOPLE_MANAGER]}
+          allowedRoles={[EUserRole.PEOPLE_MANAGER]}
           fallback={<MockUnauthorizedComponent />}
         >
           <MockProtectedComponent />
@@ -174,11 +176,11 @@ describe('Authentication System Tests', () => {
     })
 
     it('denies access when roles do not match', () => {
-      setMockUserRoles([UserRole.EMPLOYEE])
+      setMockUserRoles([EUserRole.EMPLOYEE])
 
       const { container } = renderWithUser(
         <RoleGuard
-          allowedRoles={[UserRole.PEOPLE_MANAGER]}
+          allowedRoles={[EUserRole.PEOPLE_MANAGER]}
           fallback={<MockUnauthorizedComponent />}
         >
           <MockProtectedComponent />
@@ -196,12 +198,12 @@ describe('Authentication System Tests', () => {
     })
 
     it('renders protected content correctly with proper wrapper', () => {
-      setMockUserRoles([UserRole.ADMINISTRATOR])
+      setMockUserRoles([EUserRole.ADMINISTRATOR])
 
       const TestComponent = () => (
         <MemoryRouter>
           <RoleGuard
-            allowedRoles={[UserRole.ADMINISTRATOR]}
+            allowedRoles={[EUserRole.ADMINISTRATOR]}
             fallback={<MockUnauthorizedComponent />}
           >
             <MockProtectedComponent />

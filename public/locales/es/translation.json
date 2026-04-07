@@ -173,6 +173,212 @@
       "microsoftNote": "Inicie sesión con su cuenta de Microsoft"
     }
   },
+  "pages": {
+    "skillAssessment": {
+      "title": "Autoevaluación de Habilidades",
+      "loadError": "Error al cargar la evaluación de habilidades.",
+      "emptyState": "No se requieren habilidades para su puesto actual.",
+      "position": "Puesto",
+      "careerTrack": "Trayectoria Profesional",
+      "careerPath": "Ruta Profesional",
+      "nextPosition": "Siguiente Puesto",
+      "noSkills": "No hay habilidades para mostrar",
+      "barChartAriaLabel": "Gráfico de barras de evaluación de habilidades",
+      "myCurrentLevel": "Mi Nivel Actual",
+      "nextLevelRequired": "Nivel Siguiente Requerido",
+      "radarChartAriaLabel": "Gráfico de radar de evaluación de habilidades",
+      "highestPosition": "Estás en el puesto más alto en tu trayectoria profesional."
+    },
+    "employeeAssessment": {
+      "title": "Evaluación de Habilidades",
+      "readOnlyBanner": "Viendo evaluación para:",
+      "forbidden": "No tienes acceso a la evaluación de este empleado.",
+      "notFound": "Empleado no encontrado.",
+      "loadError": "Error al cargar la evaluación."
+    },
+    "teamSkillOverview": {
+      "title": "Resumen de Habilidades del Equipo",
+      "columnName": "Nombre",
+      "columnPosition": "Puesto",
+      "columnAssessed": "Evaluado",
+      "columnMeeting": "Cumple con los Requisitos",
+      "emptyState": "No se encontraron reportes directos."
+    },
+    "reviewCycles": {
+      "title": "Ciclos de Evaluación",
+      "createButton": "Crear Ciclo de Evaluación",
+      "titleColumn": "Título",
+      "subjectColumn": "Sujeto",
+      "statusColumn": "Estado",
+      "nomineesColumn": "Nominados",
+      "responsesColumn": "Respuestas",
+      "createdColumn": "Creado",
+      "emptyState": "No hay ciclos de evaluación por el momento",
+      "titleRequired": "El título es obligatorio",
+      "subjectLabel": "ID del Sujeto-Empleado",
+      "descriptionColumn": "Descripción"
+    },
+    "myReviews": {
+      "title": "Mis Evaluaciones",
+      "emptyState": "No tiene ciclos de evaluación"
+    },
+    "reviewCycleDetail": {
+      "title": "Detalles de la evaluación",
+      "subject": "Sujeto",
+      "opened": "Abierto",
+      "started": "Iniciado",
+      "closed": "Cerrado",
+      "accessDenied": "No tiene acceso a este ciclo de evaluación",
+      "notFound": "Ciclo de evaluación no encontrado"
+    },
+    "reviewRequests": {
+      "title": "Mis Solicitudes de Revisión Pendientes",
+      "emptyState": "No hay solicitudes pendientes",
+      "emptyStateSubtext": "No tiene comentarios 360 pendientes por enviar",
+      "submitButton": "Enviar Comentario"
+    }
+  },
+  "components": {
+    "assessmentSkillRow": {
+      "skill": "Habilidad",
+      "required": "Requerido",
+      "nextLevelRequired": "Nivel Siguiente Requerido",
+      "selfAssessment": "Mi Peso",
+      "managerAssessment": "Evaluación del Manager",
+      "notes": "Notas",
+      "notAssessed": "No evaluado",
+      "notRequired": "No requerido",
+      "valueMustBePositive": "El valor debe ser mayor que 0",
+      "saved": "Guardado ✓",
+      "saving": "Guardando...",
+      "linkFeedback": "Vincular retroalimentación",
+      "notesPlaceholder": "Agregar notas..."
+    },
+    "evidenceModal": {
+      "title": "Vincular Evidencia",
+      "searchPlaceholder": "Buscar retroalimentación...",
+      "emptyState": "No se ha recibido retroalimentación aún.",
+      "save": "Guardar",
+      "cancel": "Cancelar"
+    },
+    "resultsView": {
+      "aggregatedTitle": "Sus Resultados de Retroalimentación 360",
+      "detailedTitle": "Resultados de Retroalimentación 360",
+      "averageRatingLabel": "Calificación Promedio",
+      "responseCountLabel": "respuestas",
+      "anonymizedCommentsHeading": "Comentarios de Retroalimentación",
+      "noResults": "No se recibieron respuestas"
+    },
+    "nomineePanel": {
+      "sectionTitle": "Nominados",
+      "reviewerColumn": "Evaluador",
+      "nominatedByColumn": "Nominado por",
+      "statusColumn": "Estado",
+      "reviewerIdPlaceholder": "ID del Evaluador",
+      "nominateButton": "Nominar",
+      "addNomineeLabel": "Agregar Nominado",
+      "removeTooltip": "Eliminar nominado",
+      "transitionButtons": {
+        "openForNominations": "Abrir para Nominaciones",
+        "startReview": "Iniciar Evaluación",
+        "closeCycle": "Cerrar Ciclo"
+      },
+      "confirmDialog": {
+        "title": "Confirmar Cambio de Estado",
+        "body": "¿Está seguro de que desea cambiar el estado del ciclo?",
+        "confirm": "Confirmar",
+        "cancel": "Cancelar"
+      },
+      "minNomineesHint": "≥2 nominados requeridos para iniciar"
+    },
+    "reviewResponseForm": {
+      "title": "Enviar su evaluación",
+      "reviewingLabel": "Está evaluando a",
+      "ratingLabel": "Su Calificación",
+      "ratingRequired": "Por favor proporcione una calificación",
+      "commentsLabel": "Comentarios",
+      "commentsHint": "10–2000 caracteres",
+      "commentsRequired": "Los comentarios son obligatorios",
+      "minLength": "Mínimo 10 caracteres",
+      "maxLength": "Máximo 2000 caracteres",
+      "submitError": "Error al enviar. Por favor, inténtelo de nuevo.",
+      "submitButton": "Enviar Comentario",
+      "alreadySubmittedTitle": "Comentario Enviado",
+      "notNominated": "No está nominado para este ciclo de evaluación.",
+      "notAccepting": "Este ciclo no acepta respuestas actualmente."
+    }
+  },
+  "taxonomy": {
+    "careerFramework": {
+      "title": "Marco de Carrera",
+      "addCareerPath": "Agregar Ruta de Carrera",
+      "emptyState": "No se encontraron rutas de carrera."
+    },
+    "careerPath": {
+      "edit": "Editar Ruta de Carrera",
+      "addTrack": "Agregar Pista de Carrera",
+      "tracks": "Pistas de Carrera",
+      "noTracks": "No hay pistas de carrera disponibles."
+    },
+    "careerTrack": {
+      "edit": "Editar Pista",
+      "addPosition": "Agregar Posición",
+      "positions": "Posiciones",
+      "noPositions": "No hay posiciones disponibles."
+    },
+    "position": {
+      "edit": "Editar Posición",
+      "manageSkills": "Gestionar Habilidades",
+      "skillProfile": "Perfil de Habilidades",
+      "skillRequirements": "Requisitos de Habilidades",
+      "noSkills": "No hay requisitos de habilidades definidos.",
+      "expectations": "Expectativas",
+      "skills": "Habilidades Requeridas",
+      "skillRadarChartAriaLabel": "Gráfico de radar que muestra los niveles de habilidad requeridos",
+      "skillBarChartAriaLabel": "Gráfico de barras que muestra los niveles de habilidad requeridos"
+    },
+    "skill": {
+      "category": "Categoría",
+      "skillName": "Habilidad",
+      "level": "Nivel Requerido",
+      "mandatory": "Obligatorio",
+      "optional": "Opcional",
+      "weight": "Peso",
+      "rationale": "Justificación",
+      "detail": "Detalle de Habilidad",
+      "proficiencyLevels": "Niveles de Competencia",
+      "requiredLevel": "Nivel Requerido"
+    },
+    "admin": {
+      "addSkillRequirement": "Agregar Requisito de Habilidad",
+      "editSkillRequirement": "Editar Requisito de Habilidad",
+      "allCategories": "Todas las Categorías",
+      "skills": "Habilidades",
+      "addSkill": "Agregar Habilidad",
+      "noSkills": "No se encontraron habilidades.",
+      "careerPaths": "Rutas de Carrera",
+      "addCareerPath": "Agregar Ruta de Carrera",
+      "noCareerPaths": "No se encontraron rutas de carrera.",
+      "careerTracks": "Pistas de Carrera",
+      "addCareerTrack": "Agregar Pista de Carrera",
+      "noCareerTracks": "No se encontraron pistas de carrera.",
+      "positions": "Posiciones",
+      "positionsNote": "Seleccione una página de detalle de pista de carrera para gestionar posiciones.",
+      "addPosition": "Agregar Posición",
+      "skillCategories": "Categorías de Habilidades",
+      "addSkillCategory": "Agregar Categoría de Habilidad",
+      "noSkillCategories": "No se encontraron categorías de habilidades.",
+      "confirmDelete": "¿Está seguro de que desea eliminar esto?",
+      "levels": {
+        "addLevel": "Agregar Nivel"
+      }
+    },
+    "errors": {
+      "loadFailed": "Error al cargar datos. Por favor, inténtelo de nuevo.",
+      "saveFailed": "Error al guardar. Por favor, inténtelo de nuevo.",
+      "deleteFailed": "Error al eliminar. Por favor, inténtelo de nuevo."
+    }
+  },
   "errors": {
     "404": {
       "title": "Página No Encontrada",
@@ -288,48 +494,60 @@
       }
     },
     "list": {
-      "sent": {
-        "title": "Solicitudes Enviadas",
-        "empty": "Comience a recopilar retroalimentación",
-        "emptyDescription": "Aún no ha enviado ninguna solicitud de retroalimentación.",
-        "filters": {
-          "all": "Todas",
-          "pending": "Pendientes",
-          "partial": "Parcial",
-          "complete": "Completas",
-          "overdue": "Atrasadas"
-        },
-        "sort": {
-          "newest": "Más Recientes",
-          "oldest": "Más Antiguas",
-          "dueDate": "Fecha de Vencimiento"
-        },
-        "summary": "Mostrando {{showing}} de {{total}} solicitudes ({{pending}} pendientes, {{partial}} parcialmente completas, {{complete}} completamente completas)"
+      "title": "Mi Retroalimentación",
+      "empty_state": {
+        "title": "Sin Retroalimentación Aún",
+        "description": "No has recibido retroalimentación. Pide opiniones a tus colegas sobre tus objetivos.",
+        "action": "Solicitar Retroalimentación"
       },
-      "todo": {
-        "title": "Solicitudes Por Hacer",
-        "empty": "No hay solicitudes pendientes",
-        "emptyDescription": "No tiene solicitudes de retroalimentación pendientes por completar.",
-        "filters": {
-          "all": "Todas",
-          "pending": "Pendientes",
-          "overdue": "Atrasadas"
-        }
+      "tabs": {
+        "list": "Lista de Retroalimentación",
+        "analytics": "Analíticas"
       },
-      "team": {
-        "sent": {
-          "title": "Solicitudes Enviadas por el Equipo",
-          "empty": "Su equipo aún no ha enviado ninguna solicitud de retroalimentación"
-        },
-        "received": {
-          "title": "Solicitudes Recibidas por el Equipo",
-          "empty": "Su equipo aún no ha recibido ninguna solicitud de retroalimentación"
-        },
-        "filters": {
-          "allTeam": "Todos los Miembros del Equipo",
-          "byMember": "Por Miembro del Equipo"
-        },
-        "summary": "El equipo tiene {{active}} solicitudes activas ({{pending}} pendientes, {{overdue}} atrasadas)"
+      "filters": {
+        "search": "Buscar retroalimentación...",
+        "date_range": "Rango de Fechas",
+        "rating": "Calificación",
+        "all_ratings": "Todas las Calificaciones",
+        "goal": "Objetivo",
+        "all_goals": "Todos los Objetivos",
+        "project": "Proyecto",
+        "all_projects": "Todos los Proyectos",
+        "from_employee": "De Empleado",
+        "all_employees": "Todos los Empleados",
+        "clear_all": "Limpiar Todos los Filtros",
+        "active_filters": "{{count}} filtro activo",
+        "active_filters_other": "{{count}} filtros activos"
+      },
+      "stats": {
+        "total": "Retroalimentación Total",
+        "average_rating": "Calificación Promedio",
+        "recent": "Reciente (7 días)"
+      },
+      "sort": {
+        "label": "Ordenar Por",
+        "created_at": "Fecha de Recepción",
+        "rating": "Calificación",
+        "from_employee": "Proveedor de Retroalimentación",
+        "goal": "Objetivo",
+        "project": "Proyecto",
+        "asc": "Ascendente",
+        "desc": "Descendente",
+        "date_newest": "Fecha (Más Reciente Primero)",
+        "date_oldest": "Fecha (Más Antigua Primero)",
+        "rating_highest": "Calificación (Más Alta Primero)",
+        "rating_lowest": "Calificación (Más Baja Primero)",
+        "provider_name": "Nombre del Proveedor (A-Z)",
+        "goal_title": "Título del Objetivo (A-Z)"
+      },
+      "pagination": {
+        "label": "Paginación de retroalimentación"
+      },
+      "summary": "Mostrando {{showing}} de {{total}} elementos de retroalimentación",
+      "no_results": {
+        "title": "No se Encontró Retroalimentación",
+        "description": "Ninguna retroalimentación coincide con tus filtros actuales. Intenta ajustar tus criterios de búsqueda.",
+        "action": "Limpiar Filtros"
       }
     },
     "card": {
@@ -367,17 +585,15 @@
       }
     },
     "detail": {
-      "title": "Detalles de la Solicitud",
+      "title": "Detalles de Retroalimentación",
       "from": "De:",
+      "goal": "Objetivo:",
       "project": "Proyecto:",
-      "goal": "Meta:",
-      "message": "Mensaje:",
-      "dueDate": "Fecha de Vencimiento:",
-      "created": "Creada:",
-      "recipients": "Destinatarios ({{count}}):",
-      "noMessage": "No se proporcionó mensaje",
-      "noProject": "Sin proyecto asociado",
-      "noGoal": "Sin meta asociada"
+      "rating": "Calificación:",
+      "received": "Recibido:",
+      "content": "Retroalimentación:",
+      "no_project": "Sin proyecto asociado",
+      "back": "Volver a la Lista"
     },
     "toasts": {
       "createSuccess": "Solicitud de retroalimentación enviada a {{count}} empleados",
@@ -463,74 +679,72 @@
       "cancelRequest": "Cancelar solicitud de retroalimentación",
       "expandCard": "Expandir detalles de la solicitud",
       "collapseCard": "Contraer detalles de la solicitud"
+    }
+  },
+  "enums": {
+    "reviewCycleStatus": {
+      "draft": "Borrador",
+      "open": "Abierto",
+      "in_progress": "En Progreso",
+      "closed": "Cerrado"
     },
-    "list": {
-      "title": "Mi Retroalimentación",
-      "empty_state": {
-        "title": "Sin Retroalimentación Aún",
-        "description": "No has recibido retroalimentación. Pide opiniones a tus colegas sobre tus objetivos.",
-        "action": "Solicitar Retroalimentación"
+    "reviewNomineeStatus": {
+      "pending": "Pendiente",
+      "invited": "Invitado",
+      "submitted": "Enviado"
+    }
+  },
+  "feedback": {
+    "rating": {
+      "tooltip": "Califica este comentario en una escala del 1 al 5",
+      "aria_label": "Entrada de calificación"
+    },
+    "analytics": {
+      "title": "Análisis de comentarios",
+      "noData": "No hay datos disponibles",
+      "percentage": "Porcentaje",
+      "count": "Cantidad",
+      "avgRating": "Calif. prom.",
+      "feedbackCount": "Cantidad de comentarios",
+      "viewChart": "Ver gráfico",
+      "viewTable": "Ver como tabla",
+      "timeRange": {
+        "label": "Período",
+        "last30Days": "Últimos 30 días",
+        "last90Days": "Últimos 90 días",
+        "last6Months": "Últimos 6 meses",
+        "yearToDate": "Año hasta la fecha",
+        "allTime": "Todo el tiempo",
+        "custom": "Período personalizado"
       },
-      "tabs": {
-        "list": "Lista de Retroalimentación",
-        "analytics": "Analíticas"
+      "comparison": {
+        "toggle": "Comparar períodos"
       },
-      "filters": {
-        "search": "Buscar retroalimentación...",
-        "date_range": "Rango de Fechas",
-        "rating": "Calificación",
-        "all_ratings": "Todas las Calificaciones",
-        "goal": "Objetivo",
-        "all_goals": "Todos los Objetivos",
-        "project": "Proyecto",
-        "all_projects": "Todos los Proyectos",
-        "from_employee": "De Empleado",
-        "all_employees": "Todos los Empleados",
-        "clear_all": "Limpiar Todos los Filtros",
-        "active_filters": "{{count}} filtro activo",
-        "active_filters_other": "{{count}} filtros activos"
+      "metrics": {
+        "totalFeedback": "Total de comentarios",
+        "avgRating": "Calificación promedio",
+        "topRating": "Calificación más común",
+        "recentActivity": "Este período",
+        "items": "elementos",
+        "distributionNote": "{{count}} comentarios",
+        "trend": "Prom. {{avgRating}}★"
       },
-      "stats": {
-        "total": "Retroalimentación Total",
-        "average_rating": "Calificación Promedio",
-        "recent": "Reciente (7 días)"
+      "rating": {
+        "1star": "1★ Necesita mejorar",
+        "2star": "2★ Por debajo de las expectativas",
+        "3star": "3★ Cumple las expectativas",
+        "4star": "4★ Supera las expectativas",
+        "5star": "5★ Sobresaliente"
       },
-      "sort": {
-        "label": "Ordenar Por",
-        "created_at": "Fecha de Recepción",
-        "rating": "Calificación",
-        "from_employee": "Proveedor de Retroalimentación",
-        "goal": "Objetivo",
-        "project": "Proyecto",
-        "asc": "Ascendente",
-        "desc": "Descendente",
-        "date_newest": "Fecha (Más Reciente Primero)",
-        "date_oldest": "Fecha (Más Antigua Primero)",
-        "rating_highest": "Calificación (Más Alta Primero)",
-        "rating_lowest": "Calificación (Más Baja Primero)",
-        "provider_name": "Nombre del Proveedor (A-Z)",
-        "goal_title": "Título del Objetivo (A-Z)"
+      "charts": {
+        "ratingDistribution": "Distribución de calificaciones",
+        "monthlyTrend": "Tendencia mensual"
       },
-      "pagination": {
-        "label": "Paginación de retroalimentación"
-      },
-      "summary": "Mostrando {{showing}} de {{total}} elementos de retroalimentación",
-      "no_results": {
-        "title": "No se Encontró Retroalimentación",
-        "description": "Ninguna retroalimentación coincide con tus filtros actuales. Intenta ajustar tus criterios de búsqueda.",
-        "action": "Limpiar Filtros"
+      "topLists": {
+        "providers": "Principales proveedores de comentarios",
+        "goals": "Objetivos con más comentarios",
+        "projects": "Proyectos con más comentarios"
       }
-    },
-    "detail": {
-      "title": "Detalles de Retroalimentación",
-      "from": "De:",
-      "goal": "Objetivo:",
-      "project": "Proyecto:",
-      "rating": "Calificación:",
-      "received": "Recibido:",
-      "content": "Retroalimentación:",
-      "no_project": "Sin proyecto asociado",
-      "back": "Volver a la Lista"
     }
   }
 }

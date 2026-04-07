@@ -6,6 +6,7 @@ import { server } from '../../mocks/server'
 import ReviewCycleDetailPage from '../../pages/reviews/ReviewCycleDetailPage'
 import { mockReviewCycles } from '../../mocks/data/reviewCyclesMockData'
 import { renderWithProviders } from '../../tests/utils'
+import { useAuthStore } from '../../stores/authStore'
 
 // Use the in-progress cycle from mock data (index 1) which has nominees
 const IN_PROGRESS_CYCLE = mockReviewCycles[1]
@@ -81,10 +82,18 @@ describe('NomineePanel status transitions (Director view)', () => {
   afterEach(() => {
     server.resetHandlers()
     server.close()
+    useAuthStore.getState().setUser(null)
   })
 
   it('shows Open for Nominations button for Draft cycle', async () => {
     const DRAFT_CYCLE = mockReviewCycles[0]
+    useAuthStore.getState().setUser({
+      id: 'director-001',
+      name: 'Director Dan',
+      email: 'director@example.com',
+      roles: ['Director'],
+      tenantId: 'tenant-001',
+    })
     renderDetailPage(DRAFT_CYCLE.id)
     await waitFor(() => {
       expect(screen.queryByText(/open for nominations/i)).not.toBeNull()
@@ -92,13 +101,20 @@ describe('NomineePanel status transitions (Director view)', () => {
   })
 
   it('shows Start Review button for Open cycle', async () => {
+    useAuthStore.getState().setUser({
+      id: 'director-001',
+      name: 'Director Dan',
+      email: 'director@example.com',
+      roles: ['Director'],
+      tenantId: 'tenant-001',
+    })
     // Temporarily override the cycle to be OPEN status via MSW override
     server.use(
       http.get('*/api/review-cycles/:id', () =>
         HttpResponse.json({
-          data: { ...IN_PROGRESS_CYCLE, status: 'open', started_at: null },
-          success: true,
-          message: 'OK',
+          ...IN_PROGRESS_CYCLE,
+          status: 'open',
+          started_at: null,
         })
       )
     )

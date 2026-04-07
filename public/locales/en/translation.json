@@ -27,7 +27,11 @@
     "info": "Information",
     "offline": "You are currently offline. Some features may be limited.",
     "notProvided": "Not provided",
-    "stars": "stars"
+    "stars": "stars",
+    "or": "or",
+    "status": "Status",
+    "sortBy": "Sort By",
+    "dateRange": "Date Range"
   },
   "navigation": {
     "dashboard": "Dashboard",
@@ -38,7 +42,14 @@
     "settings": "Settings",
     "team": "Team",
     "admin": "Admin",
-    "logout": "Logout"
+    "logout": "Logout",
+    "careerFramework": "Career Framework",
+    "career": "Career"
+  },
+  "auth": {
+    "roleGuard": {
+      "noPermission": "You don't have permission to access this content. Required role: {{roles}}"
+    }
   },
   "header": {
     "brand": "CPR Performance",
@@ -308,13 +319,17 @@
       "nomineesColumn": "Nominees",
       "responsesColumn": "Responses",
       "createdColumn": "Created",
-      "emptyState": "No review cycles yet"
+      "emptyState": "No review cycles yet",
+      "titleRequired": "Title is required",
+      "subjectLabel": "Subject Employee ID",
+      "descriptionColumn": "Description"
     },
     "myReviews": {
       "title": "My Reviews",
       "emptyState": "You have no review cycles"
     },
     "reviewCycleDetail": {
+      "title": "Review Details",
       "subject": "Subject",
       "opened": "Opened",
       "started": "Started",
@@ -348,6 +363,7 @@
         "feedback": "Feedback",
         "analytics": "Analytics",
         "requests": "Requests",
+        "reviews360": "360 Reviews",
         "teamRequests": "Team Requests"
       },
       "list": {
@@ -746,6 +762,12 @@
         "title": "Submit Feedback",
         "form": {
           "recipient": "To",
+          "employee": "Recipient",
+          "employee_placeholder": "Search by name, email, or job title...",
+          "employee_required": "Please select a recipient",
+          "employee_self_error": "You cannot submit feedback to yourself",
+          "goal_optional_label": "Goal (Optional)",
+          "goal_optional_help": "Select a goal to provide context, or leave blank for general feedback",
           "goal": {
             "label": "Goal",
             "placeholder": "Select a goal...",
@@ -837,6 +859,7 @@
           "analytics": "Analytics"
         },
         "filters": {
+          "label": "Filters",
           "search": "Search feedback...",
           "date_range": "Date Range",
           "rating": "Rating",
@@ -954,6 +977,18 @@
           "goals": "Goals with Most Feedback",
           "projects": "Projects with Most Feedback"
         }
+      },
+      "form": {
+        "no_employees_found": "No employees found",
+        "no_options": "No options available"
+      },
+      "rating": {
+        "label_1": "Needs Improvement",
+        "label_2": "Below Expectations",
+        "label_3": "Meets Expectations",
+        "label_4": "Exceeds Expectations",
+        "label_5": "Outstanding",
+        "select_rating": "Select a rating"
       }
     },
     "goals": {
@@ -1067,7 +1102,13 @@
       "position": "Position",
       "careerTrack": "Career Track",
       "careerPath": "Career Path",
-      "nextPosition": "Next Position"
+      "nextPosition": "Next Position",
+      "noSkills": "No skills to display",
+      "barChartAriaLabel": "Skill assessment bar chart",
+      "myCurrentLevel": "My Current Level",
+      "nextLevelRequired": "Next Level Required",
+      "radarChartAriaLabel": "Skill assessment radar chart",
+      "highestPosition": "You are at the highest position in your career track."
     },
     "employeeAssessment": {
       "title": "Skill Assessment",
@@ -1109,9 +1150,16 @@
       "minNomineesHint": "Need ≥2 nominees to start"
     },
     "reviewResponseForm": {
+      "title": "Submit Your Review",
+      "reviewingLabel": "You are reviewing",
       "ratingLabel": "Your Rating",
+      "ratingRequired": "Please provide a rating",
       "commentsLabel": "Comments",
       "commentsHint": "10–2000 characters",
+      "commentsRequired": "Comments are required",
+      "minLength": "Minimum 10 characters",
+      "maxLength": "Maximum 2000 characters",
+      "submitError": "Submission failed. Please try again.",
       "submitButton": "Submit Feedback",
       "alreadySubmittedTitle": "Feedback Submitted",
       "notNominated": "You are not nominated to review this cycle.",
@@ -1120,17 +1168,17 @@
     "assessmentSkillRow": {
       "skill": "Skill",
       "required": "Required",
-      "currentLevel": "Current Level",
-      "targetLevel": "Target Level",
+      "nextLevelRequired": "Next Level Required",
+      "selfAssessment": "My Weight",
+      "managerAssessment": "Manager Assessment",
       "notes": "Notes",
       "notAssessed": "Not assessed",
-      "noTarget": "No target set",
-      "clearTarget": "Clear target",
+      "notRequired": "Not required",
+      "valueMustBePositive": "Value must be greater than 0",
       "saved": "Saved ✓",
       "saving": "Saving...",
       "linkFeedback": "Link feedback",
-      "targetConflict": "Target level must be higher than your current level. Clear or raise the target first.",
-      "targetTooLow": "Target level must be strictly greater than your current level."
+      "notesPlaceholder": "Add notes..."
     },
     "evidenceModal": {
       "title": "Link Evidence",
@@ -1159,6 +1207,98 @@
       "pending": "Pending",
       "invited": "Invited",
       "submitted": "Submitted"
+    }
+  },
+  "taxonomy": {
+    "careerFramework": {
+      "title": "Career Framework",
+      "addCareerPath": "Add Career Path",
+      "emptyState": "No career paths found."
+    },
+    "careerPath": {
+      "edit": "Edit Career Path",
+      "addTrack": "Add Career Track",
+      "tracks": "Career Tracks",
+      "noTracks": "No career tracks available."
+    },
+    "careerTrack": {
+      "edit": "Edit Track",
+      "addPosition": "Add Position",
+      "positions": "Positions",
+      "noPositions": "No positions available."
+    },
+    "position": {
+      "edit": "Edit Position",
+      "manageSkills": "Manage Skills",
+      "skillProfile": "Skill Profile",
+      "skillRequirements": "Skill Requirements",
+      "noSkills": "No skill requirements defined.",
+      "expectations": "Expectations",
+      "skills": "Required Skills",
+      "skillRadarChartAriaLabel": "Radar chart showing required skill levels",
+      "skillBarChartAriaLabel": "Bar chart showing required skill levels"
+    },
+    "skill": {
+      "category": "Category",
+      "skillName": "Skill",
+      "level": "Required Level",
+      "mandatory": "Mandatory",
+      "optional": "Optional",
+      "rationale": "Rationale",
+      "detail": "Skill Detail",
+      "proficiencyLevels": "Proficiency Levels",
+      "requiredLevel": "Required Level"
+    },
+    "admin": {
+      "titleField": "Title",
+      "descriptionField": "Description",
+      "cancel": "Cancel",
+      "save": "Save",
+      "editCareerTrack": "Edit Career Track",
+      "noTracks": "No career tracks found.",
+      "careerPathField": "Career Path",
+      "careerTrackField": "Career Track",
+      "sortOrderField": "Sort Order",
+      "addSkillRequirement": "Add Skill Requirement",
+      "editSkillRequirement": "Edit Skill Requirement",
+      "allCategories": "All Categories",
+      "skills": "Skills",
+      "addSkill": "Add Skill",
+      "noSkills": "No skills found.",
+      "careerPaths": "Career Paths",
+      "addCareerPath": "Add Career Path",
+      "noCareerPaths": "No career paths found.",
+      "careerTracks": "Career Tracks",
+      "addCareerTrack": "Add Career Track",
+      "noCareerTracks": "No career tracks found.",
+      "positions": "Positions",
+      "positionsNote": "Select a career track detail page to manage positions inline.",
+      "addPosition": "Add Position",
+      "skillCategories": "Skill Categories",
+      "addSkillCategory": "Add Skill Category",
+      "noSkillCategories": "No skill categories found.",
+      "confirmDelete": "Are you sure you want to delete this?",
+      "levels": {
+        "addLevel": "Add Level"
+      },
+      "validation": {
+        "titleRequired": "Title is required",
+        "titleMax200": "Title must be at most 200 characters",
+        "titleMax100": "Title must be at most 100 characters",
+        "descMax1000": "Description must be at most 1000 characters",
+        "expectationsMax2000": "Expectations must be at most 2000 characters",
+        "careerPathRequired": "Career path is required",
+        "careerTrackRequired": "Career track is required",
+        "categoryRequired": "Category is required",
+        "levelRange": "Value must be between 1 and 5",
+        "skillRequired": "Skill is required",
+        "levelRequired": "Level is required"
+      }
+    },
+    "errors": {
+      "loadFailed": "Failed to load data. Please try again.",
+      "saveFailed": "Failed to save. Please try again.",
+      "deleteFailed": "Failed to delete. Please try again."
     }
   },
   "errors": {
@@ -1200,6 +1340,78 @@
       "goHome": "Go Home",
       "goBack": "Go Back",
       "reloadPage": "Reload Page"
+    }
+  },
+  "feedback": {
+    "rating": {
+      "tooltip": "Rate this feedback on a 1-5 scale",
+      "aria_label": "Rating input"
+    },
+    "analytics": {
+      "title": "Feedback Analytics",
+      "noData": "No data available",
+      "percentage": "Percentage",
+      "count": "Count",
+      "avgRating": "Avg Rating",
+      "feedbackCount": "Feedback Count",
+      "viewChart": "View Chart",
+      "viewTable": "View as Table",
+      "error": {
+        "title": "Failed to load analytics",
+        "message": "An error occurred while loading analytics data. Please try again."
+      },
+      "timeRange": {
+        "label": "Time Range",
+        "last30Days": "Last 30 Days",
+        "last90Days": "Last 90 Days",
+        "last6Months": "Last 6 Months",
+        "yearToDate": "Year to Date",
+        "allTime": "All Time",
+        "custom": "Custom Range"
+      },
+      "customRange": {
+        "startDate": "Start Date",
+        "endDate": "End Date"
+      },
+      "comparison": {
+        "toggle": "Compare Periods",
+        "note": "Comparing {{current}} vs {{previous}}",
+        "deltaUp": "+{{percent}}% vs previous period",
+        "deltaDown": "{{percent}}% vs previous period",
+        "deltaNeutral": "No change vs previous period"
+      },
+      "metrics": {
+        "totalFeedback": "Total Feedback",
+        "avgRating": "Average Rating",
+        "topRating": "Most Common Rating",
+        "recentActivity": "This Period",
+        "items": "items",
+        "distributionNote": "{{count}} feedback items",
+        "trend": "Avg {{avgRating}}★"
+      },
+      "rating": {
+        "1star": "1★ Needs Improvement",
+        "2star": "2★ Below Expectations",
+        "3star": "3★ Meets Expectations",
+        "4star": "4★ Exceeds Expectations",
+        "5star": "5★ Outstanding"
+      },
+      "charts": {
+        "ratingDistribution": "Rating Distribution",
+        "monthlyTrend": "Monthly Trend"
+      },
+      "table": {
+        "rating": "Rating",
+        "count": "Count",
+        "percentage": "Percentage",
+        "month": "Month",
+        "avgRating": "Avg Rating"
+      },
+      "topLists": {
+        "providers": "Top Feedback Providers",
+        "goals": "Goals with Most Feedback",
+        "projects": "Projects with Most Feedback"
+      }
     }
   }
 }

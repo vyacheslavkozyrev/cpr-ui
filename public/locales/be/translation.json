@@ -38,7 +38,9 @@
     "settings": "Налады",
     "team": "Каманда",
     "admin": "Адміністрацыя",
-    "logout": "Выхад"
+    "logout": "Выхад",
+    "careerFramework": "Кар'ерная структура",
+    "career": "Кар'ера"
   },
   "header": {
     "brand": "CPR Прадукцыйнасць",
@@ -166,6 +168,10 @@
       },
       "viewChart": "Паказаць Дыяграму",
       "viewTable": "Паказаць як Табліцу",
+      "percentage": "Працэнт",
+      "count": "Колькасць",
+      "avgRating": "Сярэдні Рэйтынг",
+      "feedbackCount": "Колькасць Водгукаў",
       "table": {
         "rating": "Рэйтынг",
         "count": "Колькасць",
@@ -321,6 +327,7 @@
         "feedback": "Водгукі",
         "analytics": "Аналітыка",
         "requests": "Запыты",
+        "reviews360": "360 Агляды",
         "teamRequests": "Камандныя Запыты"
       },
       "list": {
@@ -821,11 +828,148 @@
           "goals": "Мэты з Найбольшай Колькасцю Водгукаў",
           "projects": "Праекты з Найбольшай Колькасцю Водгукаў"
         }
+      },
+      "rating": {
+        "tooltip": "Ацаніце водгук па шкале ад 1 да 5",
+        "aria_label": "Поле ацэнкі"
       }
     },
     "admin": {
       "title": "Адміністрацыя",
       "comingSoon": "Функцыі адміністрацыі будуць хутка..."
+    },
+    "reviewCycles": {
+      "title": "Цыклы Агляду",
+      "createButton": "Стварыць Цыкл Агляду",
+      "titleColumn": "Назва",
+      "subjectColumn": "Суб'ект",
+      "statusColumn": "Статус",
+      "nomineesColumn": "Намінаваныя",
+      "responsesColumn": "Адказы",
+      "createdColumn": "Створана",
+      "emptyState": "Цыклаў агляду пакуль няма",
+      "titleRequired": "Назва абавязковая",
+      "subjectLabel": "ID Суб'екта-Супрацоўніка",
+      "descriptionColumn": "Апісанне"
+    },
+    "myReviews": {
+      "title": "Мае Агляды",
+      "emptyState": "У вас няма цыклаў агляду"
+    },
+    "reviewCycleDetail": {
+      "title": "Дэталі Агляду",
+      "subject": "Суб'ект",
+      "opened": "Адкрыта",
+      "started": "Пачата",
+      "closed": "Закрыта",
+      "accessDenied": "У вас няма доступу да гэтага цыкла агляду",
+      "notFound": "Цыкл агляду не знойдзены"
+    },
+    "reviewRequests": {
+      "title": "Мае Чакаючыя Запыты на Агляд",
+      "emptyState": "Няма чакаючых запытаў на агляд",
+      "emptyStateSubtext": "У вас няма чакаючых 360 водгукаў для адпраўкі",
+      "submitButton": "Адправіць Водгук"
+    },
+    "skillAssessment": {
+      "title": "Самаацэнка Навыкаў",
+      "loadError": "Не ўдалося загрузіць ацэнку навыкаў.",
+      "emptyState": "Для вашай бягучай пасады не патрабуюцца навыкі.",
+      "position": "Пасада",
+      "careerTrack": "Кар'ерны Трэк",
+      "careerPath": "Кар'ерны Шлях",
+      "nextPosition": "Наступная Пасада",
+      "noSkills": "Навыкаў для адлюстравання няма",
+      "barChartAriaLabel": "Слупкавая дыяграма ацэнкі навыкаў",
+      "myCurrentLevel": "Мой Бягучы Ўзровень",
+      "nextLevelRequired": "Патрабуецца Наступны Ўзровень",
+      "radarChartAriaLabel": "Радарная дыяграма ацэнкі навыкаў",
+      "highestPosition": "Вы знаходзіцеся на найвышэйшай пасадзе ў вашым кар'ерным трэку."
+    },
+    "employeeAssessment": {
+      "title": "Ацэнка Навыкаў",
+      "readOnlyBanner": "Прагляд ацэнкі для:",
+      "forbidden": "У вас няма доступу да ацэнкі гэтага супрацоўніка.",
+      "notFound": "Супрацоўнік не знойдзены.",
+      "loadError": "Не ўдалося загрузіць ацэнку."
+    },
+    "teamSkillOverview": {
+      "title": "Агляд Навыкаў Каманды",
+      "columnName": "Імя",
+      "columnPosition": "Пасада",
+      "columnAssessed": "Ацэнены",
+      "columnMeeting": "Адпавядае Патрабаванням",
+      "emptyState": "Прамых падначаленых не знойдзена."
+    }
+  },
+  "components": {
+    "nomineePanel": {
+      "sectionTitle": "Намінаваныя",
+      "reviewerColumn": "Рэцэнзент",
+      "nominatedByColumn": "Намінаваны кім",
+      "statusColumn": "Статус",
+      "reviewerIdPlaceholder": "ID Рэцэнзента",
+      "nominateButton": "Намінаваць",
+      "addNomineeLabel": "Дадаць Намінанта",
+      "removeTooltip": "Выдаліць намінанта",
+      "transitionButtons": {
+        "openForNominations": "Адкрыць для Намінацый",
+        "startReview": "Пачаць Агляд",
+        "closeCycle": "Закрыць Цыкл"
+      },
+      "confirmDialog": {
+        "title": "Пацвердзіць Змену Статусу",
+        "body": "Вы ўпэўнены, што хочаце змяніць статус цыкла?",
+        "confirm": "Пацвердзіць",
+        "cancel": "Адмяніць"
+      },
+      "minNomineesHint": "Патрабуецца ≥2 намінантаў для пачатку"
+    },
+    "reviewResponseForm": {
+      "title": "Адправіць Ваш Агляд",
+      "reviewingLabel": "Вы рэцэнзуеце",
+      "ratingLabel": "Ваш Рэйтынг",
+      "ratingRequired": "Калі ласка, пастаўце ацэнку",
+      "commentsLabel": "Каментары",
+      "commentsHint": "10–2000 сімвалаў",
+      "commentsRequired": "Каментары абавязковыя",
+      "minLength": "Мінімум 10 сімвалаў",
+      "maxLength": "Максімум 2000 сімвалаў",
+      "submitError": "Памылка адпраўкі. Калі ласка, паспрабуйце яшчэ раз.",
+      "submitButton": "Адправіць Водгук",
+      "alreadySubmittedTitle": "Водгук Адпраўлены",
+      "notNominated": "Вы не намінаваны для гэтага цыкла агляду.",
+      "notAccepting": "Гэты цыкл у цяперашні час не прымае адказы."
+    },
+    "assessmentSkillRow": {
+      "skill": "Навык",
+      "required": "Патрабуецца",
+      "nextLevelRequired": "Патрабуецца Наступны Ўзровень",
+      "selfAssessment": "Мой Вага",
+      "managerAssessment": "Ацэнка Менеджара",
+      "notes": "Нататкі",
+      "notAssessed": "Не ацэнены",
+      "notRequired": "Не патрабуецца",
+      "valueMustBePositive": "Значэнне павінна быць большым за 0",
+      "saved": "Захавана ✓",
+      "saving": "Захаванне...",
+      "linkFeedback": "Прывязаць водгук",
+      "notesPlaceholder": "Дадаць нататкі..."
+    },
+    "evidenceModal": {
+      "title": "Прывязаць Доказ",
+      "searchPlaceholder": "Пошук водгукаў...",
+      "emptyState": "Водгукаў пакуль не атрымана.",
+      "save": "Захаваць",
+      "cancel": "Адмяніць"
+    },
+    "resultsView": {
+      "aggregatedTitle": "Вашы Вынікі 360 Водгукаў",
+      "detailedTitle": "Вынікі 360 Водгукаў",
+      "averageRatingLabel": "Сярэдняя Ацэнка",
+      "responseCountLabel": "адказы",
+      "anonymizedCommentsHeading": "Каментары Водгукаў",
+      "noResults": "Адказаў не атрымана"
     }
   },
   "profile": {
@@ -1022,6 +1166,77 @@
     "deadline": "Тэрмін",
     "deadlineHelp": "Дата завяршэння (неабавязкова, павінна быць у будучыні)"
   },
+  "taxonomy": {
+    "careerFramework": {
+      "title": "Кар'ерная Структура",
+      "addCareerPath": "Дадаць Кар'ерны Шлях",
+      "emptyState": "Кар'ерных шляхоў не знойдзена."
+    },
+    "careerPath": {
+      "edit": "Рэдагаваць Кар'ерны Шлях",
+      "addTrack": "Дадаць Кар'ерны Трэк",
+      "tracks": "Кар'ерныя Трэкі",
+      "noTracks": "Кар'ерных трэкаў няма."
+    },
+    "careerTrack": {
+      "edit": "Рэдагаваць Трэк",
+      "addPosition": "Дадаць Пасаду",
+      "positions": "Пасады",
+      "noPositions": "Пасад няма."
+    },
+    "position": {
+      "edit": "Рэдагаваць Пасаду",
+      "manageSkills": "Кіраваць Навыкамі",
+      "skillProfile": "Профіль Навыкаў",
+      "skillRequirements": "Патрабаванні да Навыкаў",
+      "noSkills": "Патрабаванні да навыкаў не вызначаны.",
+      "expectations": "Чаканні",
+      "skills": "Неабходныя Навыкі",
+      "skillRadarChartAriaLabel": "Радарная дыяграма, якая паказвае неабходныя ўзроўні навыкаў",
+      "skillBarChartAriaLabel": "Слупковая дыяграма, якая паказвае неабходныя ўзроўні навыкаў"
+    },
+    "skill": {
+      "category": "Катэгорыя",
+      "skillName": "Навык",
+      "level": "Патрабуемы Узровень",
+      "mandatory": "Абавязкова",
+      "optional": "Неабавязкова",
+      "weight": "Вага",
+      "rationale": "Абгрунтаванне",
+      "detail": "Дэталі Навыку",
+      "proficiencyLevels": "Узроўні Кампетэнцыі",
+      "requiredLevel": "Патрабуемы Узровень"
+    },
+    "admin": {
+      "addSkillRequirement": "Дадаць Патрабаванне да Навыку",
+      "editSkillRequirement": "Рэдагаваць Патрабаванне да Навыку",
+      "allCategories": "Усе Катэгорыі",
+      "skills": "Навыкі",
+      "addSkill": "Дадаць Навык",
+      "noSkills": "Навыкаў не знойдзена.",
+      "careerPaths": "Кар'ерныя Шляхі",
+      "addCareerPath": "Дадаць Кар'ерны Шлях",
+      "noCareerPaths": "Кар'ерных шляхоў не знойдзена.",
+      "careerTracks": "Кар'ерныя Трэкі",
+      "addCareerTrack": "Дадаць Кар'ерны Трэк",
+      "noCareerTracks": "Кар'ерных трэкаў не знойдзена.",
+      "positions": "Пасады",
+      "positionsNote": "Выберыце старонку дэталяў трэка для кіравання пасадамі.",
+      "addPosition": "Дадаць Пасаду",
+      "skillCategories": "Катэгорыі Навыкаў",
+      "addSkillCategory": "Дадаць Катэгорыю Навыкаў",
+      "noSkillCategories": "Катэгорый навыкаў не знойдзена.",
+      "confirmDelete": "Вы ўпэўнены, што хочаце выдаліць гэта?",
+      "levels": {
+        "addLevel": "Дадаць Узровень"
+      }
+    },
+    "errors": {
+      "loadFailed": "Памылка загрузкі дадзеных. Паўтарыце спробу.",
+      "saveFailed": "Памылка захавання. Паўтарыце спробу.",
+      "deleteFailed": "Памылка выдалення. Паўтарыце спробу."
+    }
+  },
   "errors": {
     "404": {
       "title": "Старонка Не Знойдзена",
@@ -1047,6 +1262,19 @@
       "goHome": "На Галоўную",
       "goBack": "Вярнуцца",
       "reloadPage": "Перазагрузіць Старонку"
+    }
+  },
+  "enums": {
+    "reviewCycleStatus": {
+      "draft": "Чарнавік",
+      "open": "Адкрыты",
+      "in_progress": "У Прагрэсе",
+      "closed": "Закрыты"
+    },
+    "reviewNomineeStatus": {
+      "pending": "У Чаканні",
+      "invited": "Запрошаны",
+      "submitted": "Адпраўлены"
     }
   }
 }

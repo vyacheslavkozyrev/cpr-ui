@@ -38,7 +38,9 @@ const AssessmentRadarChart: React.FC<AssessmentRadarChartProps> = ({
   const labels = allSkills.map(s => s.skill_title)
 
   const requiredData = allSkills.map(s => s.required_level.value)
-  const assessedData = allSkills.map(s => s.assessed?.skill_level_value ?? 0)
+  const assessedData = allSkills.map(
+    s => s.assessed?.self_assessment_value ?? 0
+  )
   const nextRequiredData = allSkills.map(
     s => s.next_position_required_level?.value ?? null
   )

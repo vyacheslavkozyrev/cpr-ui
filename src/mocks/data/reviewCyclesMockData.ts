@@ -12,7 +12,8 @@ import {
 // Reuse stable UUIDs consistent with other mock data
 const SUBJECT_EMPLOYEE_ID = 'aaaaaaaa-0001-0000-0000-000000000001'
 const REVIEWER_EMPLOYEE_ID_1 = 'aaaaaaaa-0002-0000-0000-000000000002'
-const REVIEWER_EMPLOYEE_ID_2 = 'aaaaaaaa-0003-0000-0000-000000000003'
+// Matches mock employee user (Eve Adams) so the review response form shows when logged in as employee
+const REVIEWER_EMPLOYEE_ID_2 = 'c7746e91-a5e8-4f8b-9f22-f48374ffa2a4'
 const REVIEWER_EMPLOYEE_ID_3 = 'aaaaaaaa-0004-0000-0000-000000000004'
 const DEPARTMENT_ID = 'dddddddd-0001-0000-0000-000000000001'
 const DIRECTOR_EMPLOYEE_ID = 'aaaaaaaa-0099-0000-0000-000000000099'
@@ -83,7 +84,7 @@ export const mockReviewNominees: IReviewNominee[] = [
     id: 'nominee-0002-0000-0000-000000000002',
     cycle_id: 'cycle-0002-0000-0000-000000000002',
     reviewer_employee_id: REVIEWER_EMPLOYEE_ID_2,
-    reviewer_display_name: 'Carol White',
+    reviewer_display_name: 'Eve Adams',
     nominated_by: DIRECTOR_EMPLOYEE_ID,
     nominated_by_display_name: 'Director Dan',
     status: EReviewNomineeStatus.INVITED,
@@ -164,7 +165,7 @@ export const mockDetailedResults: IDetailedResults = {
     },
     {
       reviewer_employee_id: REVIEWER_EMPLOYEE_ID_2,
-      reviewer_display_name: 'Carol White',
+      reviewer_display_name: 'Eve Adams',
       overall_rating: 3,
       comments: 'Great collaboration — always willing to help teammates.',
       submitted_at: '2025-09-21T11:00:00Z',
@@ -183,7 +184,7 @@ export const mockReviewRequests: IReviewRequest[] = [
   {
     cycle_id: 'cycle-0002-0000-0000-000000000002',
     cycle_title: 'Mid-Year Review — Alice Smith',
-    subject_display_name: 'Alice',
+    subject_display_name: 'Alice Smith',
     nominee_status: EReviewNomineeStatus.INVITED,
     cycle_started_at: '2026-02-10T09:00:00Z',
   },

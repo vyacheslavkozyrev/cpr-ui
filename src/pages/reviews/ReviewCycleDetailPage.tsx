@@ -20,6 +20,7 @@ import {
   useReviewCycleResults,
   useReviewNominees,
 } from '../../hooks/useReviewCycles'
+import { useAuth } from '../../stores/authStore'
 import {
   EReviewCycleStatus,
   EReviewNomineeStatus,
@@ -27,13 +28,12 @@ import {
   type IDetailedResults,
 } from '../../types/reviewCycle.types'
 
-// Simplified actor context — in a real app this would come from auth store
-const ACTOR_EMPLOYEE_ID = 'actor-employee-id'
-const ACTOR_ROLE = 'Director'
-
 const ReviewCycleDetailPage: React.FC = () => {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
+  const { user } = useAuth()
+  const actorEmployeeId = user?.id ?? ''
+  const actorRole = user?.roles[0] ?? ''
 
   const {
     data: cycle,
@@ -78,7 +78,7 @@ const ReviewCycleDetailPage: React.FC = () => {
   }
 
   const actorNominee =
-    nominees.find(n => n.reviewer_employee_id === ACTOR_EMPLOYEE_ID) ?? null
+    nominees.find(n => n.reviewer_employee_id === actorEmployeeId) ?? null
   const isInvitedReviewer =
     actorNominee?.status === EReviewNomineeStatus.INVITED &&
     cycle.status === EReviewCycleStatus.IN_PROGRESS
@@ -122,8 +122,8 @@ const ReviewCycleDetailPage: React.FC = () => {
       <NomineePanel
         cycle={cycle}
         nominees={nominees}
-        actorRole={ACTOR_ROLE}
-        actorEmployeeId={ACTOR_EMPLOYEE_ID}
+        actorRole={actorRole}
+        actorEmployeeId={actorEmployeeId}
       />
 
       {/* Review response form */}

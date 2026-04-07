@@ -8,7 +8,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import React from 'react'
+import { useCallback, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useSubmitReviewResponse } from '../../hooks/useReviewCycles'
@@ -25,11 +25,18 @@ interface ReviewResponseFormProps {
   nominee: IReviewNominee | null
 }
 
+const getStyles = () => ({
+  ratingHeading: { mt: 2 },
+  errorAlert: { mb: 1 },
+  submitButton: { mt: 1 },
+})
+
 const ReviewResponseForm: React.FC<ReviewResponseFormProps> = ({
   cycle,
   nominee,
 }) => {
   const { t } = useTranslation()
+  const styles = useMemo(() => getStyles(), [])
   const submitMutation = useSubmitReviewResponse(cycle.id)
 
   const {
@@ -43,6 +50,13 @@ const ReviewResponseForm: React.FC<ReviewResponseFormProps> = ({
   })
 
   const commentsValue = watch('comments', '')
+
+  const onSubmit = useCallback(
+    async (data: ISubmitResponseRequest) => {
+      await submitMutation.mutateAsync(data)
+    },
+    [submitMutation]
+  )
 
   if (cycle.status !== EReviewCycleStatus.IN_PROGRESS) {
     return (
@@ -72,19 +86,27 @@ const ReviewResponseForm: React.FC<ReviewResponseFormProps> = ({
     )
   }
 
-  const onSubmit = async (data: ISubmitResponseRequest) => {
-    await submitMutation.mutateAsync(data)
-  }
-
   return (
     <Box component='form' onSubmit={handleSubmit(onSubmit)}>
       <Typography variant='h6' gutterBottom>
+        {t('components.reviewResponseForm.title')}
+      </Typography>
+      <Typography variant='body2' color='text.secondary' gutterBottom>
+        {t('components.reviewResponseForm.reviewingLabel')}:{' '}
+        <strong>{cycle.subject_display_name}</strong>
+      </Typography>
+      <Typography variant='h6' gutterBottom sx={styles.ratingHeading}>
         {t('components.reviewResponseForm.ratingLabel')}
       </Typography>
       <Controller
         name='overall_rating'
         control={control}
-        rules={{ min: { value: 1, message: 'Rating required' } }}
+        rules={{
+          min: {
+            value: 1,
+            message: t('components.reviewResponseForm.ratingRequired'),
+          },
+        }}
         render={({ field }) => (
           <Rating
             size='large'
@@ -109,21 +131,27 @@ const ReviewResponseForm: React.FC<ReviewResponseFormProps> = ({
         helperText={`${commentsValue.length}/2000 — ${t('components.reviewResponseForm.commentsHint')}`}
         error={Boolean(errors.comments)}
         {...register('comments', {
-          required: 'Comments are required',
-          minLength: { value: 10, message: 'Minimum 10 characters' },
-          maxLength: { value: 2000, message: 'Maximum 2000 characters' },
+          required: t('components.reviewResponseForm.commentsRequired'),
+          minLength: {
+            value: 10,
+            message: t('components.reviewResponseForm.minLength'),
+          },
+          maxLength: {
+            value: 2000,
+            message: t('components.reviewResponseForm.maxLength'),
+          },
         })}
       />
       {submitMutation.isError && (
-        <Alert severity='error' sx={{ mb: 1 }}>
-          Submission failed. Please try again.
+        <Alert severity='error' sx={styles.errorAlert}>
+          {t('components.reviewResponseForm.submitError')}
         </Alert>
       )}
       <Button
         type='submit'
         variant='contained'
         disabled={submitMutation.isPending}
-        sx={{ mt: 1 }}
+        sx={styles.submitButton}
       >
         {t('components.reviewResponseForm.submitButton')}
       </Button>
