@@ -84,8 +84,7 @@ export interface IEmployeeBrief {
   display_name: string
 }
 
-export interface IEmployeeSkillAssessmentResponse
-  extends ISkillAssessmentResponse {
+export interface IEmployeeSkillAssessmentResponse extends ISkillAssessmentResponse {
   employee: IEmployeeBrief
 }
 
