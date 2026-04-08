@@ -28,7 +28,10 @@ const getStyles = () => ({
     color: 'text.secondary',
   } as const,
   headerCell: { fontWeight: 600 } as const,
-  categoryHeaderCell: { backgroundColor: 'action.hover', fontWeight: 600 } as const,
+  categoryHeaderCell: {
+    backgroundColor: 'action.hover',
+    fontWeight: 600,
+  } as const,
 })
 
 /** Groups skill gaps by category title. */
@@ -98,10 +101,7 @@ const SkillGapTable: React.FC<ISkillGapTableProps> = React.memo(
             {Array.from(groups.entries()).map(([category, gaps]) => (
               <React.Fragment key={category}>
                 <TableRow>
-                  <TableCell
-                    colSpan={6}
-                    sx={styles.categoryHeaderCell}
-                  >
+                  <TableCell colSpan={6} sx={styles.categoryHeaderCell}>
                     <Typography variant='subtitle2'>{category}</Typography>
                   </TableCell>
                 </TableRow>

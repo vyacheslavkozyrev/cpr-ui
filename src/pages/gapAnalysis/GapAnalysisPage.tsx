@@ -33,7 +33,10 @@ const GapAnalysisPage: React.FC = () => {
 
   // Employees and People Managers viewing own gap can create goals.
   // Directors / Administrators see read-only. For own-profile page, always allow Employee self.
-  const canCreateGoal = !hasAnyRole([EUserRole.DIRECTOR, EUserRole.ADMINISTRATOR])
+  const canCreateGoal = !hasAnyRole([
+    EUserRole.DIRECTOR,
+    EUserRole.ADMINISTRATOR,
+  ])
 
   const handleCreateGoal = useCallback((skillGap: ISkillGap) => {
     setSelectedGap(skillGap)

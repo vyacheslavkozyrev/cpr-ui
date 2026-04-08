@@ -72,7 +72,12 @@ const CreateGoalFromGapModal: React.FC<ICreateGoalFromGapModalProps> =
       setError(null)
 
       if (!title.trim()) {
-        setError(t('gap_analysis.create_goal_modal.title_required', 'Title is required.'))
+        setError(
+          t(
+            'gap_analysis.create_goal_modal.title_required',
+            'Title is required.'
+          )
+        )
         return
       }
 
@@ -88,7 +93,10 @@ const CreateGoalFromGapModal: React.FC<ICreateGoalFromGapModalProps> =
       } catch (err: unknown) {
         setError(
           (err as { message?: string })?.message ??
-            t('gap_analysis.create_goal_modal.create_error', 'Failed to create goal.')
+            t(
+              'gap_analysis.create_goal_modal.create_error',
+              'Failed to create goal.'
+            )
         )
       }
     }, [skillGap, title, deadline, targetEmployeeId, createGoal, onClose, t])
@@ -111,7 +119,10 @@ const CreateGoalFromGapModal: React.FC<ICreateGoalFromGapModalProps> =
             </Alert>
           )}
           <TextField
-            label={t('gap_analysis.create_goal_modal.goal_title_label', 'Title')}
+            label={t(
+              'gap_analysis.create_goal_modal.goal_title_label',
+              'Title'
+            )}
             value={title}
             onChange={handleTitleChange}
             fullWidth
@@ -121,7 +132,10 @@ const CreateGoalFromGapModal: React.FC<ICreateGoalFromGapModalProps> =
             autoFocus
           />
           <TextField
-            label={t('gap_analysis.create_goal_modal.deadline_label', 'Deadline (optional)')}
+            label={t(
+              'gap_analysis.create_goal_modal.deadline_label',
+              'Deadline (optional)'
+            )}
             type='date'
             value={deadline}
             onChange={handleDeadlineChange}

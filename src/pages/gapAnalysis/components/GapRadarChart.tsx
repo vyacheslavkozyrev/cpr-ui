@@ -61,10 +61,7 @@ const GapRadarChart: React.FC<IGapRadarChartProps> = React.memo(
         <Box
           sx={styles.container}
           role='img'
-          aria-label={t(
-            'gap_analysis.bar_chart_title',
-            'Skills gap bar chart'
-          )}
+          aria-label={t('gap_analysis.bar_chart_title', 'Skills gap bar chart')}
         >
           <ResponsiveContainer width='100%' height={250}>
             <BarChart data={chartData}>

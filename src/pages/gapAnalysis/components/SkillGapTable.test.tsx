@@ -106,8 +106,14 @@ describe('SkillGapTable', () => {
         gapMet, // Soft Skills
       ]
       renderWithProviders(<SkillGapTable skillGaps={gaps} />)
-      expect(screen.getByText('Engineering')).toBeInTheDocument()
-      expect(screen.getByText('Soft Skills')).toBeInTheDocument()
+      // Category header spans 6 columns; category chip in row also shows the title
+      // Use querySelectorAll to find only the header cells (colspan=6)
+      const headerCells = document.querySelectorAll('td[colspan="6"]')
+      const categoryTitles = Array.from(headerCells).map(td =>
+        td.textContent?.trim()
+      )
+      expect(categoryTitles).toContain('Engineering')
+      expect(categoryTitles).toContain('Soft Skills')
     })
 
     it('groups multiple skills under the same category header', () => {
@@ -116,8 +122,12 @@ describe('SkillGapTable', () => {
         gapWithDefault, // Engineering (same category)
       ]
       renderWithProviders(<SkillGapTable skillGaps={gaps} />)
-      // Only one category header
-      expect(screen.getAllByText('Engineering')).toHaveLength(1)
+      // Only one category header cell (colspan=6) for Engineering
+      const headerCells = document.querySelectorAll('td[colspan="6"]')
+      const engineeringHeaders = Array.from(headerCells).filter(
+        td => td.textContent?.trim() === 'Engineering'
+      )
+      expect(engineeringHeaders).toHaveLength(1)
       // Both skills appear
       expect(screen.getByText('Python')).toBeInTheDocument()
       expect(screen.getByText('TypeScript')).toBeInTheDocument()

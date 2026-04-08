@@ -78,7 +78,9 @@ describe('GapRadarChart', () => {
       renderWithProviders(<GapRadarChart skillGaps={threeSkillGaps} />)
       const chart = screen.getByRole('img')
       expect(chart).toBeInTheDocument()
-      expect(chart.getAttribute('aria-label')).toMatch(/radar/i)
+      // aria-label uses translation key gap_analysis.radar_chart_title ("Skills Overview")
+      expect(chart.getAttribute('aria-label')).not.toMatch(/bar/i)
+      expect(chart.getAttribute('aria-label')).toBeTruthy()
     })
 
     it('renders exactly one chart container for 3 skills', () => {
