@@ -98,6 +98,14 @@ export const queryKeys = {
     members: () => [...queryKeys.team.all, 'members'] as const,
     member: (userId: string) => [...queryKeys.team.members(), userId] as const,
   },
+
+  // Gap analysis queries (Feature 0009)
+  gapAnalysis: {
+    all: ['gap-analysis'] as const,
+    own: () => [...queryKeys.gapAnalysis.all, 'own'] as const,
+    employee: (employeeId: string) =>
+      [...queryKeys.gapAnalysis.all, 'employee', employeeId] as const,
+  },
 } as const
 
 /**
