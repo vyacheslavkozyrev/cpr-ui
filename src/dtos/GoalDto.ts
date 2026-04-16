@@ -9,7 +9,14 @@
 export type TGoalVisibility = 'private' | 'team' | 'org'
 
 // Goal status options (matching API enum)
-export type TGoalStatus = 'open' | 'in_progress' | 'completed'
+export type TGoalStatus =
+  | 'open'
+  | 'in_progress'
+  | 'completed'
+  | 'suggested'
+  | 'not_started'
+  | 'on_hold'
+  | 'cancelled'
 
 /**
  * Create Goal Data Transfer Object
@@ -42,6 +49,25 @@ export interface TUpdateGoalDto {
 }
 
 /**
+ * Slim task DTO used in manager goal view (slim_tasks array).
+ */
+export interface TGoalSlimTaskDto {
+  id: string
+  name: string
+  is_completed: boolean
+}
+
+/**
+ * Goal Deletion Request DTO (API Response)
+ */
+export interface TGoalDeletionRequestDto {
+  id: string
+  goal_id: string
+  status: 'pending' | 'approved' | 'rejected'
+  created_at: string
+}
+
+/**
  * Goal Data Transfer Object (API Response)
  * Complete goal object from API with tasks and metadata
  */
@@ -49,9 +75,14 @@ export interface TGoalDto {
   id: string // UUID format
   employeeId: string // UUID format
   title: string // Goal title
+  /** Alias for title used in manager view responses */
+  name?: string
   description?: string // Goal description
   status: TGoalStatus // Current status
   deadline?: string // ISO datetime format
+  /** Alias for deadline used in some API responses */
+  due_date?: string
+  timeframe?: string // e.g. 'week' | 'month' | 'quarter' | 'year'
   relatedSkillId?: string // UUID format
   relatedSkillLevelId?: string // UUID format
   priority?: number // 0-100 integer
@@ -59,9 +90,21 @@ export interface TGoalDto {
   isCompleted: boolean // Completion status
   completedAt?: string // ISO datetime format
   progressPercent: number // Progress percentage (0.00-100.00)
+  /** Alias for progressPercent used in some API responses */
+  progress_percentage?: number
   createdAt: string // ISO datetime format
   modifiedAt?: string // ISO datetime format (Constitutional Principle 11)
   tasks?: TGoalTaskDto[] // Array of associated tasks (optional in list responses)
+  /** Slim task list included in manager view */
+  slim_tasks?: TGoalSlimTaskDto[]
+  /** True when a deletion request is pending manager approval */
+  has_pending_deletion_request?: boolean
+  /** UUID of the user who suggested this goal */
+  suggested_by_id?: string
+  /** Display name of the user who suggested this goal */
+  suggested_by_name?: string
+  skill_category_id?: string
+  skill_category_name?: string
 }
 
 // Goal Task DTOs

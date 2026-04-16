@@ -283,6 +283,40 @@ export const useUpdateTask = () => {
 }
 
 /**
+ * Hook for a manager to approve or reject a pending deletion request.
+ * PATCH /api/goals/{goalId}/deletion-request
+ * @param employeeId - Used to invalidate the manager goal list on success.
+ */
+export const useGoalDeletionAction = (employeeId: string) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      goalId,
+      action,
+    }: {
+      goalId: string
+      action: 'approve' | 'reject'
+    }) => {
+      const response = await goalsApiService.actOnDeletionRequest(
+        goalId,
+        action
+      )
+      if (!response.success)
+        throw new Error('Failed to act on deletion request')
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: ['team', 'employee-goals', employeeId],
+      })
+    },
+    onError: error => {
+      logger.error('Failed to act on deletion request', { error })
+    },
+  })
+}
+
+/**
  * Hook to delete a goal task
  * DELETE /api/Goals/{id}/tasks/{taskId}
  */

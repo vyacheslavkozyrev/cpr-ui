@@ -262,6 +262,19 @@ export class GoalsApiService {
   }
 
   /**
+   * Act on a pending deletion request (approve or reject).
+   * PATCH /api/goals/{goalId}/deletion-request
+   */
+  async actOnDeletionRequest(
+    goalId: string,
+    action: 'approve' | 'reject'
+  ): Promise<TApiResponse<void>> {
+    return apiClient.patch<void>(`/goals/${goalId}/deletion-request`, {
+      action,
+    })
+  }
+
+  /**
    * Bulk delete multiple goals
    * POST /api/Goals/bulk-delete (when implemented)
    */
