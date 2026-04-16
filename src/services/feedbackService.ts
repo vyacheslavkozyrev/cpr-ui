@@ -19,7 +19,8 @@ import { apiClient } from './apiClient'
  * Frontend implements client-side filtering as fallback
  */
 export interface MyFeedbackQueryParams
-  extends FeedbackFilters, Partial<FeedbackSortOptions> {
+  extends FeedbackFilters,
+    Partial<FeedbackSortOptions> {
   /** Page number (1-based) */
   page?: number
   /** Items per page */
