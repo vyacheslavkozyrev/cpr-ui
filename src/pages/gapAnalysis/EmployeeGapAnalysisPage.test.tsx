@@ -7,7 +7,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { screen, waitFor } from '@testing-library/react'
 import { http, HttpResponse } from 'msw'
-import React from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { render, within } from '@testing-library/react'
@@ -197,7 +196,9 @@ describe('EmployeeGapAnalysisPage', () => {
         isFetching: false,
         isSuccess: false,
         status: 'error' as const,
-      } as ReturnType<typeof gapAnalysisQueryService.useEmployeeGapAnalysis>)
+      } as unknown as ReturnType<
+        typeof gapAnalysisQueryService.useEmployeeGapAnalysis
+      >)
       renderEmployeePage('emp-error-test')
       await waitFor(() => {
         expect(

@@ -316,42 +316,29 @@ const generateMockSkillsSummary = () => ({
     },
   ],
   recentAssessments: [
-    // Real API uses 'recentAssessments' instead of 'recent_assessments'
     {
-      skillId: '550e8400-e29b-41d4-a716-446655440040', // Real API uses skillId
-      skillName: 'React', // Real API uses skillName
+      skillId: '550e8400-e29b-41d4-a716-446655440040',
+      skillName: 'React',
       level: 4,
-      assessedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), // Real API uses assessedAt
-      assessorName: 'John Smith', // Real API uses camelCase
-      category: 'Technical Skills',
-      categoryId: '550e8400-e29b-41d4-a716-446655440050',
+      assessedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
     },
     {
       skillId: '550e8400-e29b-41d4-a716-446655440041',
       skillName: 'Node.js',
       level: 4,
       assessedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
-      assessorName: 'Sarah Johnson',
-      category: 'Technical Skills',
-      categoryId: '550e8400-e29b-41d4-a716-446655440050',
     },
     {
       skillId: '550e8400-e29b-41d4-a716-446655440042',
       skillName: 'TypeScript',
       level: 3,
       assessedAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
-      assessorName: 'Mike Wilson',
-      category: 'Technical Skills',
-      categoryId: '550e8400-e29b-41d4-a716-446655440050',
     },
     {
       skillId: '550e8400-e29b-41d4-a716-446655440043',
       skillName: 'Team Leadership',
       level: 3,
       assessedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
-      assessorName: 'Lisa Brown',
-      category: 'Leadership',
-      categoryId: '550e8400-e29b-41d4-a716-446655440051',
     },
   ],
 })

@@ -290,7 +290,9 @@ describe('GapAnalysisPage', () => {
         isFetching: false,
         isSuccess: false,
         status: 'error' as const,
-      }) as ReturnType<typeof gapAnalysisQueryService.useMyGapAnalysis>
+      }) as unknown as ReturnType<
+        typeof gapAnalysisQueryService.useMyGapAnalysis
+      >
 
     it('shows no-position-assigned warning for 422 error', async () => {
       mockUseMyGapAnalysis.mockReturnValue(makeErrorReturn(422))
