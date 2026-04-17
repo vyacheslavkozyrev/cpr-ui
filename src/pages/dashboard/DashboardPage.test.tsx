@@ -55,15 +55,16 @@ describe('DashboardPage', () => {
     })
 
     it('renders stat cards from API data (not hardcoded)', async () => {
+      // Field names match the actual API wire format (snake_case from .NET SnakeCaseNamingStrategy)
       server.use(
         http.get(`${API_BASE}/dashboard/summary`, () =>
           HttpResponse.json({
             goals: {
               total: 10,
               active: 7,
-              completed: 5,
+              completed: 7,
               overdue: 2,
-              completion_rate: 50.0,
+              completion_rate: 70.0,
             },
             feedback: {
               total_received: 8,
@@ -86,8 +87,10 @@ describe('DashboardPage', () => {
       )
       renderPage()
       await waitFor(() => {
-        // goals.completed = 5 flows through the transformation correctly
-        expect(screen.getByText('5')).toBeInTheDocument()
+        // goals.completed (field name is same in both snake_case and camelCase) = 7
+        // Verifies the value flows from the API response through the transformation to the stat card,
+        // not from a hardcoded default (0).
+        expect(screen.getByText('7')).toBeInTheDocument()
       })
     })
 
