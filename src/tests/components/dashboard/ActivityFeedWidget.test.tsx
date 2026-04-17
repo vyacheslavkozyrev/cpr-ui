@@ -270,4 +270,44 @@ describe('ActivityFeedWidget', () => {
     expect(screen.getByRole('tab', { name: /summary/i })).toBeInTheDocument()
     expect(screen.getByRole('tab', { name: /activities/i })).toBeInTheDocument()
   })
+
+  it('renders widget title from i18n key (dashboard.widgets.activityFeed), not hardcoded', async () => {
+    renderWithRouter(<ActivityFeedWidget />)
+
+    // Wait for data to load
+    await waitFor(() => {
+      expect(screen.getByText('Activity Overview')).toBeInTheDocument()
+    })
+
+    // The widget header title must come from the i18n key — "Activity Feed"
+    expect(
+      screen.getByRole('heading', { name: /activity feed/i })
+    ).toBeInTheDocument()
+  })
+
+  it('renders empty-state message when the activity feed has no items', async () => {
+    server.use(
+      http.get('*/api/dashboard/activity', () =>
+        HttpResponse.json({ items: [], total: 0, page: 1, per_page: 10 })
+      )
+    )
+
+    const user = userEvent.setup()
+    renderWithRouter(<ActivityFeedWidget />)
+
+    // Wait for data to load (widget renders with 0 items)
+    await waitFor(() => {
+      // 0 total activities stat is rendered
+      expect(screen.getByText('0')).toBeInTheDocument()
+    })
+
+    // Switch to Activities tab to see the empty list state
+    const activitiesTab = screen.getByRole('tab', { name: /activities/i })
+    await user.click(activitiesTab)
+
+    await waitFor(() => {
+      // Empty state message should appear when there are no activity items
+      expect(screen.getByText(/no activities in the last/i)).toBeInTheDocument()
+    })
+  })
 })

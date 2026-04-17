@@ -165,4 +165,50 @@ describe('FeedbackSummaryWidget', () => {
     expect(screen.getByRole('tab', { name: /chart/i })).toBeInTheDocument()
     expect(screen.getByRole('tab', { name: /feedback/i })).toBeInTheDocument()
   })
+
+  it('renders feedback items with null goal_title — shows label not blank or excluded', async () => {
+    const user = userEvent.setup()
+
+    // Override handler with one feedback item having goalTitle: null
+    server.use(
+      http.get('*/api/dashboard/feedback-summary', () =>
+        HttpResponse.json({
+          statistics: {
+            totalReceived: 1,
+            pendingRequests: 0,
+            averageRating: 4.0,
+          },
+          recentFeedback: [
+            {
+              id: '550e8400-e29b-41d4-a716-000000000099',
+              fromEmployeeId: '550e8400-e29b-41d4-a716-000000000088',
+              fromEmployeeName: 'Alex Smith',
+              goalTitle: null,
+              rating: 4,
+              createdAt: new Date().toISOString(),
+            },
+          ],
+          ratingTrend: [],
+        })
+      )
+    )
+
+    renderWithRouter(<FeedbackSummaryWidget />)
+
+    await waitFor(() => {
+      expect(screen.getByText('1')).toBeInTheDocument()
+    })
+
+    // Switch to Feedback tab to see the feedback item
+    const feedbackTab = screen.getByRole('tab', { name: /feedback/i })
+    await user.click(feedbackTab)
+
+    await waitFor(() => {
+      expect(screen.getByText('Alex Smith')).toBeInTheDocument()
+    })
+
+    // A non-blank placeholder label should be shown (not empty, not a raw "null")
+    expect(screen.queryByText('null')).not.toBeInTheDocument()
+    expect(screen.getByText(/general feedback/i)).toBeInTheDocument()
+  })
 })
