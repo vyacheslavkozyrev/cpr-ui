@@ -22,6 +22,8 @@ export interface TCurrentUserDto {
   display_name: string
   email: string | null
   position: TUserPositionDto
+  /** System roles assigned to the user (e.g. "Employee", "People Manager") */
+  roles?: string[]
 }
 
 /**

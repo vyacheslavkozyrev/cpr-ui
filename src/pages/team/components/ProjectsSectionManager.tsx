@@ -7,6 +7,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
+
 import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
@@ -14,11 +15,9 @@ import { apiClient } from '../../../services/apiClient'
 
 interface ProjectAssignment {
   id: string
-  project_name: string
-  role?: string
-  start_date?: string
-  end_date?: string
-  is_current: boolean
+  code: string
+  title: string
+  description?: string
 }
 
 interface ProjectsSectionManagerProps {
@@ -38,10 +37,10 @@ const getStyles = () => ({
 
 const useEmployeeProjects = (employeeId: string) =>
   useQuery<ProjectAssignment[], Error>({
-    queryKey: ['employees', employeeId, 'project-assignments'],
+    queryKey: ['employees', employeeId, 'projects'],
     queryFn: async () => {
       const response = await apiClient.get<ProjectAssignment[]>(
-        `/employees/${employeeId}/project-assignments`
+        `/employees/${employeeId}/projects`
       )
       if (!response.success)
         throw new Error(response.message || 'Failed to load projects')
@@ -51,9 +50,8 @@ const useEmployeeProjects = (employeeId: string) =>
   })
 
 /**
- * Manager view of a direct report's project assignments.
- * Displays current/past badge, project name, role, and date range.
- * Calls GET /api/employees/{id}/project-assignments (F011 prerequisite).
+ * Manager view of a direct report's projects.
+ * Calls GET /api/employees/{id}/projects.
  */
 export const ProjectsSectionManager: React.FC<ProjectsSectionManagerProps> =
   memo(({ employeeId }) => {
@@ -103,33 +101,12 @@ export const ProjectsSectionManager: React.FC<ProjectsSectionManagerProps> =
             <Paper key={project.id} variant='outlined' sx={styles.paper}>
               <Stack spacing={0.5}>
                 <Box sx={styles.metaRow}>
-                  <Chip
-                    label={
-                      project.is_current
-                        ? t(
-                            'team_dashboard.projects_section.current',
-                            'Current'
-                          )
-                        : t('team_dashboard.projects_section.past', 'Past')
-                    }
-                    color={project.is_current ? 'primary' : 'default'}
-                    size='small'
-                  />
-                  <Typography variant='subtitle2'>
-                    {project.project_name}
-                  </Typography>
+                  <Chip label={project.code} size='small' variant='outlined' />
+                  <Typography variant='subtitle2'>{project.title}</Typography>
                 </Box>
-
-                {project.role && (
+                {project.description && (
                   <Typography variant='body2' color='text.secondary'>
-                    {project.role}
-                  </Typography>
-                )}
-
-                {(project.start_date || project.end_date) && (
-                  <Typography variant='caption' color='text.secondary'>
-                    {project.start_date}
-                    {project.end_date ? ` — ${project.end_date}` : ''}
+                    {project.description}
                   </Typography>
                 )}
               </Stack>

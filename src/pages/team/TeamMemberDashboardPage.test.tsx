@@ -57,7 +57,8 @@ describe('TeamMemberDashboardPage', () => {
     renderWithEmployeeId('emp-001')
 
     await waitFor(() => {
-      expect(screen.getByText('Feedback Received')).toBeInTheDocument()
+      // Translation key 'team_dashboard.feedback_section.title' = 'Feedback'
+      expect(screen.getByText('Feedback')).toBeInTheDocument()
     })
   })
 

@@ -262,6 +262,35 @@ export class GoalsApiService {
   }
 
   /**
+   * Accept or reject a suggested goal (employee action).
+   * PATCH /api/goals/{goalId}/suggestion
+   */
+  async actOnSuggestion(
+    goalId: string,
+    action: 'accept' | 'reject'
+  ): Promise<TApiResponse<TGoalDto | void>> {
+    return apiClient.patch<TGoalDto | void>(`/goals/${goalId}/suggestion`, {
+      action,
+    })
+  }
+
+  /**
+   * Request deletion of a goal (employee action).
+   * POST /api/goals/{goalId}/deletion-request
+   */
+  async requestDeletion(goalId: string): Promise<TApiResponse<void>> {
+    return apiClient.post<void>(`/goals/${goalId}/deletion-request`, {})
+  }
+
+  /**
+   * Cancel a pending deletion request (employee action).
+   * DELETE /api/goals/{goalId}/deletion-request
+   */
+  async cancelDeletionRequest(goalId: string): Promise<TApiResponse<void>> {
+    return apiClient.delete<void>(`/goals/${goalId}/deletion-request`)
+  }
+
+  /**
    * Act on a pending deletion request (approve or reject).
    * PATCH /api/goals/{goalId}/deletion-request
    */

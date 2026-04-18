@@ -95,7 +95,7 @@ export interface TGoalDto {
   createdAt: string // ISO datetime format
   modifiedAt?: string // ISO datetime format (Constitutional Principle 11)
   tasks?: TGoalTaskDto[] // Array of associated tasks (optional in list responses)
-  /** Slim task list included in manager view */
+  /** Slim task list included in manager view (id, name, is_completed). */
   slim_tasks?: TGoalSlimTaskDto[]
   /** True when a deletion request is pending manager approval */
   has_pending_deletion_request?: boolean

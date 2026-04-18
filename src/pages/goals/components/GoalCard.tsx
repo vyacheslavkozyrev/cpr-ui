@@ -19,6 +19,11 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import type { TGoalDto } from '../../../dtos/GoalDto'
 import { useDateFormat } from '../../../hooks'
+import {
+  useCancelGoalDeletionRequest,
+  useGoalDeletionRequest,
+  useGoalSuggestionAction,
+} from '../../../services/goalsQueryService'
 
 interface GoalCardProps {
   goal: TGoalDto
@@ -87,6 +92,30 @@ export const GoalCard: React.FC<GoalCardProps> = memo(({ goal }) => {
   const handleMenuClose = useCallback(() => {
     setAnchorEl(null)
   }, [])
+
+  const suggestionAction = useGoalSuggestionAction()
+  const deletionRequest = useGoalDeletionRequest()
+  const cancelDeletion = useCancelGoalDeletionRequest()
+
+  const handleAcceptSuggestion = useCallback(() => {
+    handleMenuClose()
+    suggestionAction.mutate({ goalId: goal.id, action: 'accept' })
+  }, [handleMenuClose, suggestionAction, goal.id])
+
+  const handleRejectSuggestion = useCallback(() => {
+    handleMenuClose()
+    suggestionAction.mutate({ goalId: goal.id, action: 'reject' })
+  }, [handleMenuClose, suggestionAction, goal.id])
+
+  const handleRequestDeletion = useCallback(() => {
+    handleMenuClose()
+    deletionRequest.mutate(goal.id)
+  }, [handleMenuClose, deletionRequest, goal.id])
+
+  const handleCancelDeletion = useCallback(() => {
+    handleMenuClose()
+    cancelDeletion.mutate(goal.id)
+  }, [handleMenuClose, cancelDeletion, goal.id])
 
   const handleEdit = useCallback(() => {
     handleMenuClose()
@@ -173,6 +202,7 @@ export const GoalCard: React.FC<GoalCardProps> = memo(({ goal }) => {
               size='small'
               onClick={handleMenuOpen}
               sx={styles.menuButton}
+              aria-label={t('pages.goals.actions.open_menu', 'Open goal menu')}
             >
               <MoreVertIcon />
             </IconButton>
@@ -265,6 +295,30 @@ export const GoalCard: React.FC<GoalCardProps> = memo(({ goal }) => {
         onClose={handleMenuClose}
         onClick={e => e.stopPropagation()}
       >
+        {/* Suggested goal actions — employee only (AC-020) */}
+        {goal.status === 'suggested' && (
+          <MenuItem onClick={handleAcceptSuggestion}>
+            {t('pages.goals.actions.accept_suggestion', 'Accept')}
+          </MenuItem>
+        )}
+        {goal.status === 'suggested' && (
+          <MenuItem onClick={handleRejectSuggestion}>
+            {t('pages.goals.actions.reject_suggestion', 'Reject')}
+          </MenuItem>
+        )}
+
+        {/* Deletion request actions — employee only (AC-026) */}
+        {goal.status !== 'suggested' && goal.has_pending_deletion_request && (
+          <MenuItem onClick={handleCancelDeletion}>
+            {t('pages.goals.actions.cancel_deletion_request', 'Cancel Request')}
+          </MenuItem>
+        )}
+        {goal.status !== 'suggested' && !goal.has_pending_deletion_request && (
+          <MenuItem onClick={handleRequestDeletion}>
+            {t('pages.goals.actions.request_deletion', 'Request Deletion')}
+          </MenuItem>
+        )}
+
         <MenuItem onClick={handleEdit}>{t('common.edit', 'Edit')}</MenuItem>
         <MenuItem onClick={() => navigate(`/goals/${goal.id}`)}>
           {t('common.view', 'View Details')}

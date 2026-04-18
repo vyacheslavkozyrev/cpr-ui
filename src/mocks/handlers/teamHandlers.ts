@@ -200,6 +200,33 @@ export const teamHandlers = [
       return HttpResponse.json(goal ?? {})
     }
   ),
+
+  // DELETE /api/goals/:id — manager direct delete
+  http.delete(`${API_BASE_URL}/goals/:goalId`, () => {
+    return new HttpResponse(null, { status: 204 })
+  }),
+
+  // GET /api/employees/:id/project-assignments — employee projects (F0011 dependency)
+  http.get(`${API_BASE_URL}/employees/:employeeId/project-assignments`, () => {
+    return HttpResponse.json([
+      {
+        id: 'pa-001',
+        project_name: 'Alpha Project',
+        role: 'Developer',
+        start_date: '2025-01-01',
+        end_date: '2025-06-30',
+        is_current: false,
+      },
+      {
+        id: 'pa-002',
+        project_name: 'Beta Initiative',
+        role: 'Tech Lead',
+        start_date: '2025-07-01',
+        end_date: null,
+        is_current: true,
+      },
+    ])
+  }),
 ]
 
 export default teamHandlers

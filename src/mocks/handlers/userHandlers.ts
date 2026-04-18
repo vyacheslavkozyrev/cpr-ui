@@ -27,10 +27,8 @@ export const mockUsers = {
     user_name: 'jane.employee@company.com',
     display_name: 'Jane Test Employee',
     email: 'jane.employee@company.com',
-    position: {
-      id: 'pos-001',
-      title: 'Software Developer',
-    },
+    position: { id: 'pos-001', title: 'Software Developer' },
+    roles: ['Employee'],
   } as TCurrentUserDto,
 
   manager: {
@@ -39,10 +37,8 @@ export const mockUsers = {
     user_name: 'peter.manager@company.com',
     display_name: 'Peter Test Manager',
     email: 'peter.manager@company.com',
-    position: {
-      id: 'pos-002',
-      title: 'Principal Software Engineer',
-    },
+    position: { id: 'pos-002', title: 'Principal Software Engineer' },
+    roles: ['Employee', 'People Manager'],
   } as TCurrentUserDto,
 
   admin: {
@@ -51,10 +47,8 @@ export const mockUsers = {
     user_name: 'admin@company.com',
     display_name: 'Admin Test User',
     email: 'admin@company.com',
-    position: {
-      id: 'pos-003',
-      title: 'System Administrator',
-    },
+    position: { id: 'pos-003', title: 'System Administrator' },
+    roles: ['Employee', 'Administrator'],
   } as TCurrentUserDto,
 }
 

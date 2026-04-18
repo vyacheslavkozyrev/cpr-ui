@@ -1,5 +1,6 @@
 import AddIcon from '@mui/icons-material/Add'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -23,7 +24,11 @@ import {
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { TGoalDto } from '../../../dtos/GoalDto'
-import { useGoalDeletionAction } from '../../../services/goalsQueryService'
+import {
+  useDeleteGoalByManager,
+  useGoalDeletionAction,
+  useMarkGoalCompletedByManager,
+} from '../../../services/goalsQueryService'
 import { useSuggestGoal } from '../../../services/teamQueryService'
 import type { ISuggestGoalDto } from '../../../dtos/TeamMemberDto'
 import { SuggestGoalModal } from './SuggestGoalModal'
@@ -72,6 +77,8 @@ export const GoalsSectionManager: React.FC<GoalsSectionManagerProps> = memo(
     const [suggestModalOpen, setSuggestModalOpen] = useState(false)
 
     const deletionAction = useGoalDeletionAction(employeeId)
+    const markCompleted = useMarkGoalCompletedByManager(employeeId)
+    const deleteGoal = useDeleteGoalByManager(employeeId)
     const suggestGoalMutation = useSuggestGoal(employeeId)
 
     const toggleExpanded = useCallback((goalId: string) => {
@@ -90,6 +97,20 @@ export const GoalsSectionManager: React.FC<GoalsSectionManagerProps> = memo(
         deletionAction.mutate({ goalId, action: 'reject' })
       },
       [deletionAction]
+    )
+
+    const handleMarkCompleted = useCallback(
+      (goalId: string) => {
+        markCompleted.mutate(goalId)
+      },
+      [markCompleted]
+    )
+
+    const handleDeleteGoal = useCallback(
+      (goalId: string) => {
+        deleteGoal.mutate(goalId)
+      },
+      [deleteGoal]
     )
 
     const handleSuggestSubmit = useCallback(
@@ -171,6 +192,10 @@ export const GoalsSectionManager: React.FC<GoalsSectionManagerProps> = memo(
                         <IconButton
                           size='small'
                           color='error'
+                          aria-label={t(
+                            'team_dashboard.goals_section.approve_deletion',
+                            'Approve deletion'
+                          )}
                           onClick={() => handleApproveDelete(goal.id)}
                           disabled={deletionAction.isPending}
                         >
@@ -185,6 +210,10 @@ export const GoalsSectionManager: React.FC<GoalsSectionManagerProps> = memo(
                       >
                         <IconButton
                           size='small'
+                          aria-label={t(
+                            'team_dashboard.goals_section.reject_deletion',
+                            'Reject deletion'
+                          )}
                           onClick={() => handleRejectDelete(goal.id)}
                           disabled={deletionAction.isPending}
                         >
@@ -193,6 +222,51 @@ export const GoalsSectionManager: React.FC<GoalsSectionManagerProps> = memo(
                       </Tooltip>
                     </>
                   )}
+
+                  {/* Mark as Completed — available for not_started / in_progress goals */}
+                  {(goal.status === 'not_started' ||
+                    goal.status === 'in_progress') && (
+                    <Tooltip
+                      title={t(
+                        'team_dashboard.goals_section.mark_completed',
+                        'Mark as Completed'
+                      )}
+                    >
+                      <IconButton
+                        size='small'
+                        color='success'
+                        aria-label={t(
+                          'team_dashboard.goals_section.mark_completed',
+                          'Mark as Completed'
+                        )}
+                        onClick={() => handleMarkCompleted(goal.id)}
+                        disabled={markCompleted.isPending}
+                      >
+                        <CheckCircleOutlineIcon fontSize='small' />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+
+                  {/* Direct delete by manager (AC-031) */}
+                  <Tooltip
+                    title={t(
+                      'team_dashboard.goals_section.delete_goal',
+                      'Delete goal'
+                    )}
+                  >
+                    <IconButton
+                      size='small'
+                      color='error'
+                      aria-label={t(
+                        'team_dashboard.goals_section.delete_goal',
+                        'Delete goal'
+                      )}
+                      onClick={() => handleDeleteGoal(goal.id)}
+                      disabled={deleteGoal.isPending}
+                    >
+                      <DeleteIcon fontSize='small' />
+                    </IconButton>
+                  </Tooltip>
 
                   {/* Task expand toggle */}
                   {(goal.slim_tasks?.length ?? 0) > 0 && (

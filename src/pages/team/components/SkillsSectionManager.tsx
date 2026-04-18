@@ -12,6 +12,7 @@ import {
 } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import type { IEmployeeSkillAssessmentResponse } from '../../../types/skillAssessment.types'
 import { useEmployeeGapAnalysis } from '../../../services/gapAnalysisQueryService'
 import { useEmployeeSkillAssessment } from '../../../services/skillAssessmentQueryService'
 
@@ -94,25 +95,22 @@ export const SkillsSectionManager: React.FC<SkillsSectionManagerProps> = memo(
                 </TableRow>
               </TableHead>
               <TableBody>
-                {/* Render rows from skillAssessment data — shape depends on F007 response */}
-                {Array.isArray(skillAssessment) &&
-                  (
-                    skillAssessment as Array<{
-                      skill_name?: string
-                      self_rating?: number
-                      manager_rating?: number
-                      id?: string
-                    }>
-                  ).map(item => (
-                    <TableRow key={item.id ?? item.skill_name}>
+                {(
+                  skillAssessment as IEmployeeSkillAssessmentResponse
+                ).skill_categories
+                  ?.flatMap(cat => cat.skills)
+                  .map(skill => (
+                    <TableRow key={skill.skill_id}>
                       <TableCell sx={styles.tableCell}>
-                        {item.skill_name}
+                        {skill.skill_title}
                       </TableCell>
                       <TableCell sx={styles.tableCell} align='center'>
-                        {item.self_rating ?? '—'}
+                        {skill.assessed?.self_assessment_value ??
+                          t('team_dashboard.skills_section.not_assessed', '—')}
                       </TableCell>
                       <TableCell sx={styles.tableCell} align='center'>
-                        {item.manager_rating ?? '—'}
+                        {skill.assessed?.manager_assessment_value ??
+                          t('team_dashboard.skills_section.not_assessed', '—')}
                       </TableCell>
                     </TableRow>
                   ))}

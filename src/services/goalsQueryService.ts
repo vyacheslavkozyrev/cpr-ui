@@ -283,6 +283,76 @@ export const useUpdateTask = () => {
 }
 
 /**
+ * Hook for an employee to accept or reject a suggested goal.
+ * PATCH /api/goals/{goalId}/suggestion
+ */
+export const useGoalSuggestionAction = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      goalId,
+      action,
+    }: {
+      goalId: string
+      action: 'accept' | 'reject'
+    }) => {
+      const response = await goalsApiService.actOnSuggestion(goalId, action)
+      if (!response.success) throw new Error('Failed to act on suggestion')
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.goals.lists() })
+    },
+    onError: error => {
+      logger.error('Failed to act on goal suggestion', { error })
+    },
+  })
+}
+
+/**
+ * Hook for an employee to request deletion of their own goal.
+ * POST /api/goals/{goalId}/deletion-request
+ */
+export const useGoalDeletionRequest = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (goalId: string) => {
+      const response = await goalsApiService.requestDeletion(goalId)
+      if (!response.success) throw new Error('Failed to request deletion')
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.goals.lists() })
+    },
+    onError: error => {
+      logger.error('Failed to request goal deletion', { error })
+    },
+  })
+}
+
+/**
+ * Hook for an employee to cancel a pending deletion request.
+ * DELETE /api/goals/{goalId}/deletion-request
+ */
+export const useCancelGoalDeletionRequest = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (goalId: string) => {
+      const response = await goalsApiService.cancelDeletionRequest(goalId)
+      if (!response.success)
+        throw new Error('Failed to cancel deletion request')
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.goals.lists() })
+    },
+    onError: error => {
+      logger.error('Failed to cancel deletion request', { error })
+    },
+  })
+}
+
+/**
  * Hook for a manager to approve or reject a pending deletion request.
  * PATCH /api/goals/{goalId}/deletion-request
  * @param employeeId - Used to invalidate the manager goal list on success.
@@ -312,6 +382,56 @@ export const useGoalDeletionAction = (employeeId: string) => {
     },
     onError: error => {
       logger.error('Failed to act on deletion request', { error })
+    },
+  })
+}
+
+/**
+ * Hook for a manager to mark a direct report's goal as completed.
+ * PATCH /api/goals/{goalId} with { status: 'completed' }
+ * @param employeeId - Used to invalidate the manager goal list on success.
+ */
+export const useMarkGoalCompletedByManager = (employeeId: string) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (goalId: string) => {
+      const response = await goalsApiService.updateGoal(goalId, {
+        status: 'completed',
+      })
+      if (!response.success) throw new Error('Failed to mark goal as completed')
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: ['team', 'employee-goals', employeeId],
+      })
+    },
+    onError: error => {
+      logger.error('Failed to mark goal as completed', { error })
+    },
+  })
+}
+
+/**
+ * Hook for a manager to directly delete a direct report's goal.
+ * DELETE /api/goals/{goalId}
+ * @param employeeId - Used to invalidate the manager goal list on success.
+ */
+export const useDeleteGoalByManager = (employeeId: string) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (goalId: string) => {
+      const response = await goalsApiService.deleteGoal(goalId)
+      if (!response.success) throw new Error('Failed to delete goal')
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: ['team', 'employee-goals', employeeId],
+      })
+    },
+    onError: error => {
+      logger.error('Failed to delete goal by manager', { error })
     },
   })
 }

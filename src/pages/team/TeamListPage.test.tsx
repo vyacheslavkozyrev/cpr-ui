@@ -9,6 +9,7 @@
  */
 
 import { screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { teamHandlers } from '../../mocks/handlers/teamHandlers'
@@ -54,6 +55,21 @@ describe('TeamListPage', () => {
     await waitFor(() => {
       expect(screen.getByText('No direct reports found.')).toBeInTheDocument()
     })
+  })
+
+  // AC-004: Clicking a team member card navigates to their dashboard
+  it('navigates to team member dashboard when card is clicked', async () => {
+    const user = userEvent.setup()
+    renderWithRouter(<TeamListPage />)
+
+    await waitFor(() => {
+      expect(screen.getByText('Alice Johnson')).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByText('Alice Johnson'))
+
+    // After click, URL should include the employee id
+    expect(window.location.pathname).toContain('/team/')
   })
 
   it('renders error alert when API call fails', async () => {

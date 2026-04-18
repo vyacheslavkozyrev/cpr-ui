@@ -1,6 +1,7 @@
 import { authConfig } from '../config/auth'
 import { initializeMsal } from '../services'
 import { useAuthStore } from '../stores/authStore'
+import type { TCurrentUserDto } from '../dtos/UserDto'
 import { logger } from './logger'
 
 // Initialize authentication system
@@ -68,6 +69,21 @@ export const checkExistingAuth = async (): Promise<void> => {
         authStore.setUser(user)
         authStore.setAccount(account)
         authStore.setTokens(accessToken, account.idToken || null)
+
+        // Fetch roles from the API (roles are in DB, not in the Azure token)
+        try {
+          const meRes = await fetch(`${authConfig.apiBaseUrl}/me`, {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          })
+          if (meRes.ok) {
+            const meData = (await meRes.json()) as TCurrentUserDto
+            if (meData.roles && meData.roles.length > 0) {
+              authStore.setUser({ ...user, roles: meData.roles })
+            }
+          }
+        } catch (err) {
+          logger.warn('Failed to fetch roles from /api/me on restore', { err })
+        }
 
         logger.auth('Existing authentication restored')
       } catch (tokenError) {

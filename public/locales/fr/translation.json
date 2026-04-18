@@ -804,5 +804,61 @@
     "loading": "Chargement de l'analyse des écarts...",
     "error_loading": "Échec du chargement de l'analyse des écarts.",
     "mandatory_badge": "Obligatoire"
+  },
+  "team_list": {
+    "title": "Mon Équipe",
+    "load_error": "Impossible de charger les membres de l'équipe.",
+    "empty": "Aucun subordonné direct trouvé."
+  },
+  "team_dashboard": {
+    "invalid_id": "Identifiant de membre d'équipe invalide.",
+    "goals_section": {
+      "title": "Objectifs",
+      "suggest_goal": "Suggérer un Objectif",
+      "empty": "Aucun objectif pour l'instant.",
+      "deletion_requested": "Suppression Demandée",
+      "approve_deletion": "Approuver la suppression",
+      "reject_deletion": "Rejeter la suppression",
+      "suggested_by": "Suggéré par",
+      "mark_completed": "Marquer comme Terminé",
+      "delete_goal": "Supprimer l'objectif"
+    },
+    "feedback_section": {
+      "title": "Retours",
+      "empty": "Aucun retour reçu pour l'instant.",
+      "from": "De"
+    },
+    "skills_section": {
+      "title": "Compétences",
+      "skill": "Compétence",
+      "self": "Auto",
+      "manager": "Manager",
+      "assessments": "Évaluations",
+      "assessment_error": "Impossible de charger les évaluations de compétences.",
+      "gap_analysis": "Analyse des Écarts",
+      "gap_error": "Impossible de charger l'analyse des écarts.",
+      "gap_description": "Compétences en dessous du niveau requis pour le poste actuel ou cible."
+    },
+    "projects_section": {
+      "title": "Projets",
+      "current": "En cours",
+      "past": "Passé",
+      "empty": "Aucune affectation de projet.",
+      "error": "Impossible de charger les affectations de projet."
+    },
+    "suggest_goal": {
+      "title": "Suggérer un Objectif",
+      "name": "Nom de l'Objectif",
+      "description": "Description",
+      "timeframe": "Délai",
+      "due_date": "Date d'Échéance",
+      "submit": "Suggérer"
+    },
+    "timeframe": {
+      "week": "Semaine",
+      "month": "Mois",
+      "quarter": "Trimestre",
+      "year": "Année"
+    }
   }
 }

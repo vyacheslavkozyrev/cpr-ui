@@ -184,7 +184,8 @@ describe('GoalCard Component Tests', () => {
         has_pending_deletion_request: false,
       }
       renderWithProviders(<GoalCard goal={suggestedGoal} />, renderOptions)
-      expect(screen.getByText('suggested')).toBeInTheDocument()
+      // Translation maps 'suggested' → 'Suggested'
+      expect(screen.getByText('Suggested')).toBeInTheDocument()
     })
 
     it('should render not_started status chip', () => {
@@ -194,7 +195,8 @@ describe('GoalCard Component Tests', () => {
         has_pending_deletion_request: false,
       }
       renderWithProviders(<GoalCard goal={notStartedGoal} />, renderOptions)
-      expect(screen.getByText('not_started')).toBeInTheDocument()
+      // Translation maps 'not_started' → 'Not Started'
+      expect(screen.getByText('Not Started')).toBeInTheDocument()
     })
 
     it('should render goal with has_pending_deletion_request true without errors', () => {

@@ -30,7 +30,8 @@ import CareerFrameworkPage from '../pages/taxonomy/CareerFrameworkPage'
 import CareerPathDetailPage from '../pages/taxonomy/CareerPathDetailPage'
 import CareerTrackDetailPage from '../pages/taxonomy/CareerTrackDetailPage'
 import PositionDetailPage from '../pages/taxonomy/PositionDetailPage'
-import { TeamPage } from '../pages/team'
+import TeamListPage from '../pages/team/TeamListPage'
+import TeamMemberDashboardPage from '../pages/team/TeamMemberDashboardPage'
 import { TestErrorsPage } from '../pages/test-errors'
 
 /**
@@ -237,19 +238,38 @@ export const routes: RouteObject[] = [
       // Team management - Manager+ only
       {
         path: 'team',
-        element: (
-          <RoleGuard
-            allowedRoles={[
-              EUserRole.PEOPLE_MANAGER,
-              EUserRole.SOLUTION_OWNER,
-              EUserRole.DIRECTOR,
-              EUserRole.ADMINISTRATOR,
-            ]}
-          >
-            <TeamPage />
-          </RoleGuard>
-        ),
         errorElement: <RouteErrorBoundary />,
+        children: [
+          {
+            index: true,
+            element: (
+              <RoleGuard
+                allowedRoles={[
+                  EUserRole.PEOPLE_MANAGER,
+                  EUserRole.SOLUTION_OWNER,
+                  EUserRole.DIRECTOR,
+                  EUserRole.ADMINISTRATOR,
+                ]}
+              >
+                <TeamListPage />
+              </RoleGuard>
+            ),
+          },
+          {
+            path: ':employeeId',
+            element: (
+              <RoleGuard
+                allowedRoles={[
+                  EUserRole.PEOPLE_MANAGER,
+                  EUserRole.DIRECTOR,
+                  EUserRole.ADMINISTRATOR,
+                ]}
+              >
+                <TeamMemberDashboardPage />
+              </RoleGuard>
+            ),
+          },
+        ],
       },
 
       // Career Framework - accessible to all authenticated users
