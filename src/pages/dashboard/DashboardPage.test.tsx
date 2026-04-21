@@ -104,7 +104,8 @@ describe('DashboardPage', () => {
     it('renders the Feedback Received stat card label', async () => {
       renderPage()
       await waitFor(() => {
-        expect(screen.getByText(/feedback received/i)).toBeInTheDocument()
+        // Exact match avoids conflicting with activity titles like "New Feedback Received"
+        expect(screen.getByText('Feedback Received')).toBeInTheDocument()
       })
     })
 
@@ -112,6 +113,42 @@ describe('DashboardPage', () => {
       renderPage()
       await waitFor(() => {
         expect(screen.getByText(/skills assessed/i)).toBeInTheDocument()
+      })
+    })
+  })
+
+  describe('AC-039 — service reads API response fields correctly', () => {
+    it('maps camelCase API fields to stat card values (verifies DTO type params)', async () => {
+      server.use(
+        http.get(`${API_BASE}/dashboard/summary`, () =>
+          HttpResponse.json({
+            goals: {
+              total: 5,
+              active: 3,
+              completed: 42,
+              overdue: 1,
+              completionRate: 40.0,
+            },
+            feedback: {
+              totalReceived: 17,
+              pendingRequests: 2,
+              averageRating: 3.8,
+              recentCount: 4,
+            },
+            skills: {
+              totalSkills: 20,
+              assessedSkills: 13,
+              assessmentProgress: 65.0,
+              averageLevel: 2.9,
+            },
+            activity: { totalActivities: 15, recentActivities: 4 },
+          })
+        )
+      )
+      renderPage()
+      await waitFor(() => {
+        // goals.completed = 42 — unique value proves the service reads API fields and passes to stat card
+        expect(screen.getByText('42')).toBeInTheDocument()
       })
     })
   })
@@ -126,9 +163,9 @@ describe('DashboardPage', () => {
       renderPage()
       await waitFor(() => {
         expect(screen.getByText(/dashboard/i)).toBeInTheDocument()
+        // Stat cards fall back to 0 on error — wait for isLoading=false so labels render
+        expect(screen.getByText('Goals Completed')).toBeInTheDocument()
       })
-      // Stat cards fall back to 0 on error — labels still present
-      expect(screen.getByText(/goals completed/i)).toBeInTheDocument()
     })
   })
 })

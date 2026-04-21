@@ -223,7 +223,16 @@
       "thirtyDays": "30 days",
       "thisMonth": "this month",
       "sameAsLastMonth": "same as last month",
-      "thisQuarter": "this quarter"
+      "thisQuarter": "this quarter",
+      "noGoals": "No goals yet. Create your first goal to get started.",
+      "createGoal": "Create Goal",
+      "period": "Period"
+    },
+    "period": {
+      "week": "Week",
+      "month": "Month",
+      "quarter": "Quarter",
+      "year": "Year"
     },
     "skillLevels": {
       "expert": "Expert",
