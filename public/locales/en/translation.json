@@ -1013,7 +1013,17 @@
       "status": {
         "open": "Open",
         "in_progress": "In Progress",
-        "completed": "Completed"
+        "completed": "Completed",
+        "suggested": "Suggested",
+        "not_started": "Not Started",
+        "on_hold": "On Hold",
+        "cancelled": "Cancelled"
+      },
+      "actions": {
+        "accept_suggestion": "Accept",
+        "reject_suggestion": "Reject",
+        "request_deletion": "Request Deletion",
+        "cancel_deletion_request": "Cancel Request"
       },
       "visibility": {
         "private": "Private",
@@ -1412,6 +1422,62 @@
         "goals": "Goals with Most Feedback",
         "projects": "Projects with Most Feedback"
       }
+    }
+  },
+  "team_list": {
+    "title": "My Team",
+    "load_error": "Failed to load team members.",
+    "empty": "No direct reports found."
+  },
+  "team_dashboard": {
+    "invalid_id": "Invalid team member ID.",
+    "goals_section": {
+      "title": "Goals",
+      "suggest_goal": "Suggest Goal",
+      "empty": "No goals yet.",
+      "deletion_requested": "Deletion Requested",
+      "approve_deletion": "Approve deletion",
+      "reject_deletion": "Reject deletion",
+      "suggested_by": "Suggested by",
+      "mark_completed": "Mark as Completed",
+      "delete_goal": "Delete goal"
+    },
+    "feedback_section": {
+      "title": "Feedback",
+      "empty": "No feedback received yet.",
+      "from": "From"
+    },
+    "skills_section": {
+      "title": "Skills",
+      "skill": "Skill",
+      "self": "Self",
+      "manager": "Manager",
+      "assessments": "Assessments",
+      "assessment_error": "Failed to load skill assessments.",
+      "gap_analysis": "Gap Analysis",
+      "gap_error": "Failed to load gap analysis.",
+      "gap_description": "Skills below the required level for the current or target position."
+    },
+    "projects_section": {
+      "title": "Projects",
+      "current": "Current",
+      "past": "Past",
+      "empty": "No project assignments.",
+      "error": "Failed to load project assignments."
+    },
+    "suggest_goal": {
+      "title": "Suggest a Goal",
+      "name": "Goal Name",
+      "description": "Description",
+      "timeframe": "Timeframe",
+      "due_date": "Due Date",
+      "submit": "Suggest"
+    },
+    "timeframe": {
+      "week": "Week",
+      "month": "Month",
+      "quarter": "Quarter",
+      "year": "Year"
     }
   },
   "gap_analysis": {

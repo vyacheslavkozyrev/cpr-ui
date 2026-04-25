@@ -28,6 +28,21 @@ interface IIdTokenClaims {
   [key: string]: unknown
 }
 
+/**
+ * Maps Azure App Registration role claim values to EUserRole display names.
+ * Azure returns roles like 'CPR.PeopleManager'; the UI uses 'People Manager'.
+ * If a claim already matches an EUserRole value it is passed through unchanged.
+ */
+const AZURE_ROLE_MAP: Record<string, string> = {
+  'CPR.Employee': 'Employee',
+  'CPR.User': 'Employee',
+  'CPR.PeopleManager': 'People Manager',
+  'CPR.SolutionOwner': 'Solution Owner',
+  'CPR.Director': 'Director',
+  'CPR.Admin': 'Administrator',
+  'CPR.Administrator': 'Administrator',
+}
+
 // Create the MSAL instance
 export const msalInstance = new PublicClientApplication(msalConfig)
 
@@ -173,21 +188,21 @@ export class AuthService {
     }
   }
 
-  // Extract roles from account claims
+  // Extract roles from account claims, mapping Azure claim values to EUserRole names
   private extractRoles(account: AccountInfo): string[] {
     try {
       // Check for roles in the account's id token claims
       const claims = account.idTokenClaims as IIdTokenClaims
 
       if (claims?.roles && Array.isArray(claims.roles)) {
-        return claims.roles
+        return claims.roles.map(r => AZURE_ROLE_MAP[r] ?? r)
       }
 
       // Fallback to default user role
-      return ['CPR.User']
+      return ['Employee']
     } catch (error) {
       logger.warn('Failed to extract roles from account', { error })
-      return ['CPR.User']
+      return ['Employee']
     }
   }
 

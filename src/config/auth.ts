@@ -100,7 +100,7 @@ export const authConfig = {
       id: 'c7746e91-a5e8-4f8b-9f22-f48374ffa2a4', // Eve Adams (Software Engineer) - Employee ID: ...0007
       name: 'Eve Adams',
       email: 'eve.adams@cpr.com',
-      roles: ['CPR.Employee'],
+      roles: ['Employee'],
       tenantId: 'mock-tenant-001',
       department: 'Engineering',
       position: 'Software Engineer',
@@ -109,7 +109,7 @@ export const authConfig = {
       id: '977f4f1f-b3ce-4244-98fc-2c0d0248de88', // Henry Wilson (Director of Technical Support) - Employee ID: ...000a
       name: 'Henry Wilson',
       email: 'henry.wilson@cpr.com',
-      roles: ['CPR.Employee', 'CPR.PeopleManager'],
+      roles: ['Employee', 'People Manager'],
       tenantId: 'mock-tenant-001',
       department: 'Support',
       position: 'Director of Technical Support',

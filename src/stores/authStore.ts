@@ -5,6 +5,7 @@ import { authConfig } from '../config/auth'
 import { authService } from '../services'
 import { logger } from '../utils/logger'
 import { generateStubToken, getSigningKey } from '../utils/stubToken'
+import type { TCurrentUserDto } from '../dtos/UserDto'
 
 // Authentication types following T/I/E conventions
 export interface IAuthUser {
@@ -170,6 +171,26 @@ export const useAuthStore = create<IAuthState>()(
               accessToken,
               idToken: result.idToken,
             })
+
+            // Fetch roles from the API (roles are stored in DB, not in the Azure token)
+            try {
+              const apiBase = authConfig.apiBaseUrl
+              const meRes = await fetch(`${apiBase}/me`, {
+                headers: { Authorization: `Bearer ${accessToken}` },
+              })
+              if (meRes.ok) {
+                const meData = (await meRes.json()) as TCurrentUserDto
+                if (meData.roles && meData.roles.length > 0) {
+                  set(state => ({
+                    user: state.user
+                      ? { ...state.user, roles: meData.roles! }
+                      : state.user,
+                  }))
+                }
+              }
+            } catch (err) {
+              logger.warn('Failed to fetch roles from /api/me', { err })
+            }
           }
         }
       } catch (error) {

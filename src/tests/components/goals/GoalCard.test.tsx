@@ -176,6 +176,39 @@ describe('GoalCard Component Tests', () => {
     })
   })
 
+  describe('F0010a — Suggested and Deletion States', () => {
+    it('should render suggested status chip', () => {
+      const suggestedGoal: TGoalDto = {
+        ...mockGoal,
+        status: 'suggested',
+        has_pending_deletion_request: false,
+      }
+      renderWithProviders(<GoalCard goal={suggestedGoal} />, renderOptions)
+      // Translation maps 'suggested' → 'Suggested'
+      expect(screen.getByText('Suggested')).toBeInTheDocument()
+    })
+
+    it('should render not_started status chip', () => {
+      const notStartedGoal: TGoalDto = {
+        ...mockGoal,
+        status: 'not_started',
+        has_pending_deletion_request: false,
+      }
+      renderWithProviders(<GoalCard goal={notStartedGoal} />, renderOptions)
+      // Translation maps 'not_started' → 'Not Started'
+      expect(screen.getByText('Not Started')).toBeInTheDocument()
+    })
+
+    it('should render goal with has_pending_deletion_request true without errors', () => {
+      const pendingGoal: TGoalDto = {
+        ...mockGoal,
+        has_pending_deletion_request: true,
+      }
+      renderWithProviders(<GoalCard goal={pendingGoal} />, renderOptions)
+      expect(screen.getByText('Learn React Query')).toBeInTheDocument()
+    })
+  })
+
   describe('Data Structure Validation', () => {
     it('should have valid goal DTO structure', () => {
       expect(mockGoal.id).toBeTruthy()
