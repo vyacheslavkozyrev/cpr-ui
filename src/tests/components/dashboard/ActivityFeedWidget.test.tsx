@@ -1,17 +1,9 @@
 ﻿import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
-import { setupServer } from 'msw/node'
-import {
-  afterAll,
-  afterEach,
-  beforeAll,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { ActivityFeedWidget } from '../../../components/dashboard/widgets/ActivityFeedWidget'
+import { server } from '../../../mocks/server'
 import { renderWithRouter } from '../../utils'
 
 // Mock react-chartjs-2 with proper types
@@ -42,72 +34,7 @@ vi.mock('react-chartjs-2', () => ({
   ),
 }))
 
-// Mock data matching IActivityFeed interface structure with recent timestamps
-const mockActivityFeed = {
-  items: [
-    {
-      id: '1',
-      type: 'goal_completed',
-      title: 'Completed React Advanced Course',
-      description: 'Successfully finished the advanced React patterns course',
-      timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
-      metadata: {
-        goalId: 'goal-1',
-        fromUserId: 'user-1',
-      },
-    },
-    {
-      id: '2',
-      type: 'feedback_received',
-      title: 'Received Positive Feedback',
-      description: 'Great collaboration on the project delivery',
-      timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days ago
-      metadata: {
-        feedbackId: 'feedback-1',
-        fromUserId: 'user-2',
-        rating: 4,
-      },
-    },
-    {
-      id: '3',
-      type: 'skill_assessed',
-      title: 'Updated TypeScript Skills',
-      description: 'Improved proficiency level from intermediate to advanced',
-      timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days ago
-      metadata: {
-        skillId: 'skill-1',
-        fromUserId: 'user-1',
-      },
-    },
-    {
-      id: '4',
-      type: 'goal_created',
-      title: 'Created New Goal',
-      description: 'Set up a new learning objective for Q4',
-      timestamp: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(), // 4 days ago
-      metadata: {
-        goalId: 'goal-2',
-        fromUserId: 'user-1',
-      },
-    },
-  ],
-  total: 42,
-  page: 1,
-  per_page: 10,
-}
-
-// MSW server setup
-const server = setupServer(
-  http.get('*/api/dashboard/activity', () => {
-    return HttpResponse.json(mockActivityFeed)
-  })
-)
-
 describe('ActivityFeedWidget', () => {
-  beforeAll(() => server.listen())
-  afterEach(() => server.resetHandlers())
-  afterAll(() => server.close())
-
   it('renders loading state initially', async () => {
     renderWithRouter(<ActivityFeedWidget />)
 
@@ -269,5 +196,44 @@ describe('ActivityFeedWidget', () => {
     // Check both tabs are present
     expect(screen.getByRole('tab', { name: /summary/i })).toBeInTheDocument()
     expect(screen.getByRole('tab', { name: /activities/i })).toBeInTheDocument()
+  })
+
+  it('renders widget title from i18n key (dashboard.widgets.activityFeed), not hardcoded', async () => {
+    renderWithRouter(<ActivityFeedWidget />)
+
+    // Wait for data to load
+    await waitFor(() => {
+      expect(screen.getByText('Activity Overview')).toBeInTheDocument()
+    })
+
+    // The widget header title must come from the i18n key — "Activity Feed"
+    expect(
+      screen.getByRole('heading', { name: /activity feed/i })
+    ).toBeInTheDocument()
+  })
+
+  it('renders empty-state message when the activity feed has no items', async () => {
+    server.use(
+      http.get('*/api/dashboard/activity', () =>
+        HttpResponse.json({ items: [], total: 0, page: 1, per_page: 10 })
+      )
+    )
+
+    const user = userEvent.setup()
+    renderWithRouter(<ActivityFeedWidget />)
+
+    // When total=0 the stats box is not rendered; wait for the summary-tab empty state message
+    await waitFor(() => {
+      expect(screen.getByText(/no activities in the last/i)).toBeInTheDocument()
+    })
+
+    // Switch to Activities tab to see the empty list state
+    const activitiesTab = screen.getByRole('tab', { name: /activities/i })
+    await user.click(activitiesTab)
+
+    await waitFor(() => {
+      // Empty state message should appear when there are no activity items
+      expect(screen.getByText(/no activities in the last/i)).toBeInTheDocument()
+    })
   })
 })

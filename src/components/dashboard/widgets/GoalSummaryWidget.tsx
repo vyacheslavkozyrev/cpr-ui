@@ -83,6 +83,10 @@ const getStyles = () => ({
   viewMoreButton: {
     alignSelf: 'flex-start',
   },
+  emptyState: {
+    textAlign: 'center',
+    py: 4,
+  },
   widgetHeaderRow: {
     display: 'flex',
     alignItems: 'center',
@@ -249,68 +253,81 @@ export const GoalSummaryWidget: React.FC<IGoalSummaryWidgetProps> = ({
   // Goals List Tab Content
   const goalsListContent = goalsSummary && (
     <Box sx={styles.goalsContainer}>
-      {/* All Recent Goals List */}
-      <List dense sx={styles.goalsList}>
-        {goalsSummary.recentGoals.map(goal => (
-          <ListItem key={goal.id} disablePadding sx={styles.listItem}>
-            <ListItemText
-              primary={
-                <Box sx={styles.goalTitleRow}>
-                  <Typography variant='body2' sx={styles.goalTitleText}>
-                    {goal.title}
-                  </Typography>
-                  <Chip
-                    label={goal.status.replace('_', ' ')}
-                    size='small'
-                    color={getStatusColor(goal.status)}
-                    variant='outlined'
-                  />
-                </Box>
-              }
-              secondary={
-                <Box sx={styles.goalSecondary}>
-                  <Typography variant='caption'>
-                    {goal.progress}
-                    {t('dashboard.labels.percentComplete')}
-                  </Typography>
-                  {goal.isOverdue && (
-                    <Chip
-                      label={t('dashboard.labels.overdue')}
-                      size='small'
-                      color='error'
-                      variant='filled'
-                    />
-                  )}
-                  <Box sx={styles.goalActions}>
-                    {goal.createdDate && (
-                      <Typography variant='caption' color='text.secondary'>
-                        {t('dashboard.labels.createdLabel')}{' '}
-                        {new Date(goal.createdDate).toLocaleDateString()}
+      {goalsSummary.recentGoals.length === 0 ? (
+        <Box sx={styles.emptyState}>
+          <Typography variant='body2' color='text.secondary' gutterBottom>
+            {t('dashboard.labels.noGoals')}
+          </Typography>
+          <Button variant='contained' size='small' onClick={handleViewAllGoals}>
+            {t('dashboard.labels.createGoal')}
+          </Button>
+        </Box>
+      ) : (
+        <>
+          {/* All Recent Goals List */}
+          <List dense sx={styles.goalsList}>
+            {goalsSummary.recentGoals.map(goal => (
+              <ListItem key={goal.id} disablePadding sx={styles.listItem}>
+                <ListItemText
+                  primary={
+                    <Box sx={styles.goalTitleRow}>
+                      <Typography variant='body2' sx={styles.goalTitleText}>
+                        {goal.title}
                       </Typography>
-                    )}
-                    {goal.dueDate && (
-                      <Typography variant='caption' color='text.secondary'>
-                        {t('dashboard.labels.dueLabel')}{' '}
-                        {new Date(goal.dueDate).toLocaleDateString()}
+                      <Chip
+                        label={goal.status.replace('_', ' ')}
+                        size='small'
+                        color={getStatusColor(goal.status)}
+                        variant='outlined'
+                      />
+                    </Box>
+                  }
+                  secondary={
+                    <Box sx={styles.goalSecondary}>
+                      <Typography variant='caption'>
+                        {goal.progress}
+                        {t('dashboard.labels.percentComplete')}
                       </Typography>
-                    )}
-                  </Box>
-                </Box>
-              }
-            />
-          </ListItem>
-        ))}
-      </List>
+                      {goal.isOverdue && (
+                        <Chip
+                          label={t('dashboard.labels.overdue')}
+                          size='small'
+                          color='error'
+                          variant='filled'
+                        />
+                      )}
+                      <Box sx={styles.goalActions}>
+                        {goal.createdDate && (
+                          <Typography variant='caption' color='text.secondary'>
+                            {t('dashboard.labels.createdLabel')}{' '}
+                            {new Date(goal.createdDate).toLocaleDateString()}
+                          </Typography>
+                        )}
+                        {goal.dueDate && (
+                          <Typography variant='caption' color='text.secondary'>
+                            {t('dashboard.labels.dueLabel')}{' '}
+                            {new Date(goal.dueDate).toLocaleDateString()}
+                          </Typography>
+                        )}
+                      </Box>
+                    </Box>
+                  }
+                />
+              </ListItem>
+            ))}
+          </List>
 
-      {/* View All Button */}
-      <Button
-        variant='outlined'
-        size='small'
-        onClick={handleViewAllGoals}
-        sx={styles.viewMoreButton}
-      >
-        {t('dashboard.labels.viewAllGoals')}
-      </Button>
+          {/* View All Button */}
+          <Button
+            variant='outlined'
+            size='small'
+            onClick={handleViewAllGoals}
+            sx={styles.viewMoreButton}
+          >
+            {t('dashboard.labels.viewAllGoals')}
+          </Button>
+        </>
+      )}
     </Box>
   )
 

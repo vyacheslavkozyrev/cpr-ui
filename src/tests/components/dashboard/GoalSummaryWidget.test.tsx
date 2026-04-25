@@ -148,4 +148,93 @@ describe('GoalSummaryWidget', () => {
 
     expect(screen.getByRole('tab', { name: 'Goals' })).toBeInTheDocument()
   })
+
+  it('AC-012 — overdue goals are visually distinguished with an Overdue chip', async () => {
+    server.use(
+      http.get('*/api/dashboard/goals-summary', () =>
+        HttpResponse.json({
+          statistics: {
+            total: 2,
+            active: 1,
+            completed: 0,
+            overdue: 1,
+            completionRate: 0,
+            averageProgress: 0,
+          },
+          recentGoals: [
+            {
+              id: 'goal-overdue-1',
+              title: 'Overdue Goal',
+              status: 'active',
+              progress: 0.3,
+              isOverdue: true,
+              deadline: new Date(Date.now() - 86400000).toISOString(),
+            },
+            {
+              id: 'goal-active-1',
+              title: 'On Track Goal',
+              status: 'active',
+              progress: 0.6,
+              isOverdue: false,
+              deadline: null,
+            },
+          ],
+          progressTrend: [],
+        })
+      )
+    )
+
+    renderWithRouter(<GoalSummaryWidget />)
+
+    await waitFor(() => {
+      expect(screen.getByRole('tab', { name: 'Goals' })).toBeInTheDocument()
+    })
+    fireEvent.click(screen.getByRole('tab', { name: 'Goals' }))
+
+    await waitFor(() => {
+      expect(screen.getByText('Overdue Goal')).toBeInTheDocument()
+      // Overdue goal should show the "Overdue" chip as visual distinction
+      expect(screen.getByText('Overdue')).toBeInTheDocument()
+    })
+
+    // Non-overdue goal should NOT have the overdue chip
+    expect(screen.getByText('On Track Goal')).toBeInTheDocument()
+    const overdueChips = screen.queryAllByText('Overdue')
+    expect(overdueChips).toHaveLength(1) // Only the overdue goal has the chip
+  })
+
+  it('AC-013 — shows empty state with Create Goal CTA when user has no goals', async () => {
+    server.use(
+      http.get('*/api/dashboard/goals-summary', () =>
+        HttpResponse.json({
+          statistics: {
+            total: 0,
+            active: 0,
+            completed: 0,
+            overdue: 0,
+            completionRate: 0,
+            averageProgress: 0,
+          },
+          recentGoals: [],
+          progressTrend: [],
+        })
+      )
+    )
+
+    renderWithRouter(<GoalSummaryWidget />)
+
+    // Switch to Goals tab
+    await waitFor(() => {
+      expect(screen.getByRole('tab', { name: 'Goals' })).toBeInTheDocument()
+    })
+    fireEvent.click(screen.getByRole('tab', { name: 'Goals' }))
+
+    // Empty state message and CTA should appear
+    await waitFor(() => {
+      expect(screen.getByText(/no goals yet/i)).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /create goal/i })
+      ).toBeInTheDocument()
+    })
+  })
 })

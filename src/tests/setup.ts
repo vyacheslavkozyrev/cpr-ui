@@ -101,4 +101,4 @@ console.error = (...args: unknown[]) => {
 }
 
 // Setup timezone for consistent date testing
-process.env.TZ = 'UTC'
+process.env['TZ'] = 'UTC'

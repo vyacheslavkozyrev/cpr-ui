@@ -1145,7 +1145,16 @@
       "thirtyDays": "30 дзён",
       "thisMonth": "у гэтым месяцы",
       "sameAsLastMonth": "як у мінулым месяцы",
-      "thisQuarter": "у гэтым квартале"
+      "thisQuarter": "у гэтым квартале",
+      "noGoals": "Мэт яшчэ няма. Стварыце сваю першую мэту, каб пачаць.",
+      "createGoal": "Стварыць Мэту",
+      "period": "Перыяд"
+    },
+    "period": {
+      "week": "Тыдзень",
+      "month": "Месяц",
+      "quarter": "Квартал",
+      "year": "Год"
     },
     "skillLevels": {
       "expert": "Эксперт",
