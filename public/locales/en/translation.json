@@ -1553,35 +1553,29 @@
   },
   "analytics": {
     "page_title": "Performance Analytics",
-    "time_range_selector": {
-      "label": "Time Range"
-    },
+    "time_range_selector": "Time Range",
     "period": {
       "last_30_days": "Last 30 Days",
       "last_90_days": "Last 90 Days",
+      "last_180_days": "Last 180 Days",
       "last_quarter": "Last Quarter",
       "last_year": "Last Year",
       "all_time": "All Time"
     },
     "goals": {
       "section_title": "Goal Analytics",
-      "stats": {
-        "total": "Total Goals",
-        "created": "Created",
-        "completed": "Completed",
-        "avg_days_to_complete": "Avg. Days to Complete",
-        "overdue": "Overdue",
+      "empty": "No goal data for this period.",
+      "stat": {
+        "total_goals": "Total Goals",
+        "created_in_period": "Created in Period",
+        "completed_in_period": "Completed in Period",
+        "avg_days": "Avg Days to Complete",
+        "overdue": "Overdue Goals",
         "completion_rate": "Completion Rate"
       },
-      "trend_chart": {
-        "title": "Goal Completion Trend",
-        "series_created": "Created",
-        "series_completed": "Completed",
-        "empty": "No trend data for this period."
-      },
-      "status_chart": {
-        "title": "Goals by Status",
-        "empty": "No goal data for this period."
+      "trend": {
+        "created": "Created",
+        "completed": "Completed"
       },
       "status": {
         "open": "Open",
@@ -1591,29 +1585,24 @@
     },
     "skills": {
       "section_title": "Skill Analytics",
-      "gap_summary": {
-        "title": "Gap Closure Summary",
-        "total_skills": "Total Skills",
-        "fully_closed": "Fully Closed",
-        "partially_closed": "Partially Closed",
-        "no_progress": "No Progress",
-        "avg_gap": "Average Gap",
-        "avg_improvement": "Average Improvement"
+      "empty": "No skill assessment data available.",
+      "col": {
+        "skill": "Skill",
+        "category": "Category",
+        "self": "Self",
+        "manager": "Manager",
+        "required": "Required",
+        "gap": "Gap",
+        "history": "History"
       },
-      "table": {
-        "title": "Skill Progression",
-        "columns": {
-          "skill": "Skill",
-          "category": "Category",
-          "self": "Self",
-          "manager": "Manager",
-          "required": "Required",
-          "gap": "Gap",
-          "history": "History"
-        },
-        "empty": "No skill data available for this period.",
-        "gap_none": "Met",
-        "no_manager": "—"
+      "summary": {
+        "title": "Gap Closure Summary",
+        "skills_assessed": "Skills Assessed",
+        "skills_with_gaps": "With Gaps",
+        "gaps_closed": "Closed",
+        "gaps_worsened": "Worsened",
+        "avg_gap_start": "Avg Gap Start",
+        "avg_gap_end": "Avg Gap End"
       }
     },
     "tab": {
