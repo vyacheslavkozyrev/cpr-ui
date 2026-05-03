@@ -1,18 +1,9 @@
-﻿import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
-import { setupServer } from 'msw/node'
-import {
-  afterAll,
-  afterEach,
-  beforeAll,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { SkillProgressWidget } from '../../../components/dashboard/widgets/SkillProgressWidget'
-import { dashboardHandlers } from '../../../mocks/handlers/dashboardHandlers'
+import { server } from '../../../mocks/server'
 import { renderWithRouter } from '../../utils'
 
 // Mock react-chartjs-2 with proper types
@@ -48,14 +39,7 @@ vi.mock('react-chartjs-2', () => ({
   ),
 }))
 
-// MSW server setup
-const server = setupServer(...dashboardHandlers)
-
 describe('SkillProgressWidget', () => {
-  beforeAll(() => server.listen())
-  afterEach(() => server.resetHandlers())
-  afterAll(() => server.close())
-
   it('renders loading state initially', async () => {
     renderWithRouter(<SkillProgressWidget />)
 
@@ -194,5 +178,55 @@ describe('SkillProgressWidget', () => {
     // Check both tabs are present
     expect(screen.getByRole('tab', { name: /chart/i })).toBeInTheDocument()
     expect(screen.getByRole('tab', { name: /skills/i })).toBeInTheDocument()
+  })
+
+  it('AC-025 — skills list renders only API fields, no phantom fields (assessor_name, category, category_id)', async () => {
+    const user = userEvent.setup()
+
+    // Override with minimal assessment data that has no phantom fields
+    server.use(
+      http.get('*/api/dashboard/skill-progress', () =>
+        HttpResponse.json({
+          summary: {
+            total_skills: 20,
+            assessed_skills: 16,
+            skill_gaps: 4,
+            average_level: 3.2,
+            assessment_progress: 80.0,
+          },
+          recent_assessments: [
+            {
+              skill_id: '550e8400-e29b-41d4-a716-000000000001',
+              skill_name: 'React',
+              level: 4,
+              assessed_at: new Date().toISOString(),
+            },
+          ],
+          improvement_areas: [],
+          skill_distribution: {},
+        })
+      )
+    )
+
+    renderWithRouter(<SkillProgressWidget />)
+
+    await waitFor(() => {
+      expect(screen.getByText('16')).toBeInTheDocument()
+    })
+
+    // Switch to Skills tab
+    const skillsTab = screen.getByRole('tab', { name: /skills/i })
+    await user.click(skillsTab)
+
+    await waitFor(() => {
+      expect(screen.getByText('React')).toBeInTheDocument()
+    })
+
+    // Phantom fields must NOT appear in the rendered output
+    expect(screen.queryByText('assessor_name')).not.toBeInTheDocument()
+    expect(screen.queryByText('category')).not.toBeInTheDocument()
+    expect(screen.queryByText('category_id')).not.toBeInTheDocument()
+    expect(screen.queryByText('assessorName')).not.toBeInTheDocument()
+    expect(screen.queryByText('categoryId')).not.toBeInTheDocument()
   })
 })

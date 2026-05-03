@@ -7,11 +7,14 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  MenuItem,
   Rating,
+  Select,
   Tab,
   Tabs,
   Typography,
 } from '@mui/material'
+import type { SelectChangeEvent } from '@mui/material'
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -22,7 +25,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js'
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Line } from 'react-chartjs-2'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -106,6 +109,7 @@ const getStyles = () => ({
   },
   feedbackText: { flex: 1 },
   viewButton: { alignSelf: 'flex-start' },
+  periodSelect: { fontSize: '0.75rem', height: 28 },
   headerContainer: {
     display: 'flex',
     alignItems: 'center',
@@ -126,11 +130,12 @@ const getStyles = () => ({
  * Displays feedback statistics, recent feedback, and rating trends
  */
 export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
-  period = 'month',
+  period: initialPeriod = 'month',
 }) => {
   const { t } = useTranslation()
   const { formatDate } = useDateFormat()
   const navigate = useNavigate()
+  const [period, setPeriod] = useState<DashboardPeriod>(initialPeriod)
   const {
     data: feedbackSummary,
     isLoading,
@@ -138,6 +143,10 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
   } = useFeedbackSummary({ period })
   const [tabValue, setTabValue] = useState(0)
   const styles = useMemo(() => getStyles(), [])
+
+  const handlePeriodChange = useCallback((event: SelectChangeEvent) => {
+    setPeriod(event.target.value as DashboardPeriod)
+  }, [])
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue)
@@ -294,6 +303,18 @@ export const FeedbackSummaryWidget: React.FC<IFeedbackSummaryWidgetProps> = ({
           {t('dashboard.widgets.feedbackSummary')}
         </Typography>
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          <Select
+            value={period}
+            onChange={handlePeriodChange}
+            size='small'
+            sx={styles.periodSelect}
+            inputProps={{ 'aria-label': t('dashboard.labels.period') }}
+          >
+            <MenuItem value='week'>{t('dashboard.period.week')}</MenuItem>
+            <MenuItem value='month'>{t('dashboard.period.month')}</MenuItem>
+            <MenuItem value='quarter'>{t('dashboard.period.quarter')}</MenuItem>
+            <MenuItem value='year'>{t('dashboard.period.year')}</MenuItem>
+          </Select>
           <Button
             size='small'
             variant='contained'

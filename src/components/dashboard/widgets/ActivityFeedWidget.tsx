@@ -402,7 +402,7 @@ export const ActivityFeedWidget: React.FC = () => {
       {/* Header with Title and Tabs */}
       <Box sx={styles.widgetHeaderRow}>
         <Typography variant='h6' component='h3'>
-          Activity Feed
+          {t('dashboard.widgets.activityFeed')}
         </Typography>
         <Tabs value={tabValue} onChange={handleTabChange} sx={styles.tabs}>
           <Tab label={t('dashboard.tabs.summary')} sx={styles.tab} />

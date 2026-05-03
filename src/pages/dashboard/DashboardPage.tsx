@@ -14,6 +14,7 @@ import {
   GoalSummaryWidget,
   SkillProgressWidget,
 } from '../../components/dashboard/widgets'
+import { useDashboardSummary } from '../../services/api/dashboardService'
 
 /**
  * DashboardPage Component
@@ -25,15 +26,16 @@ export const DashboardPage: React.FC = () => {
   const { widgets, toggleWidget, resetLayout, getVisibleWidgets } =
     useDashboardCustomization()
 
-  // Mock statistics data - in real app, this would come from API
+  const { data: summaryData, isLoading: summaryLoading } = useDashboardSummary()
+
   const userStats = useMemo(
     () => ({
-      goalsCompleted: 12,
-      feedbackReceived: 8,
-      skillsAssessed: 16,
-      isLoading: false,
+      goalsCompleted: summaryData?.goals.completed ?? 0,
+      feedbackReceived: summaryData?.feedback.totalReceived ?? 0,
+      skillsAssessed: summaryData?.skills.assessedSkills ?? 0,
+      isLoading: summaryLoading,
     }),
-    []
+    [summaryData, summaryLoading]
   )
 
   const visibleWidgets = getVisibleWidgets()

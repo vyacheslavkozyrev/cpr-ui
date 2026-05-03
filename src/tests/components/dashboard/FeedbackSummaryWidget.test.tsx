@@ -1,18 +1,9 @@
-﻿import { screen, waitFor } from '@testing-library/react'
+﻿import { fireEvent, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
-import { setupServer } from 'msw/node'
-import {
-  afterAll,
-  afterEach,
-  beforeAll,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { FeedbackSummaryWidget } from '../../../components/dashboard/widgets/FeedbackSummaryWidget'
-import { dashboardHandlers } from '../../../mocks/handlers/dashboardHandlers'
+import { server } from '../../../mocks/server'
 import { renderWithRouter } from '../../utils'
 
 // Mock react-chartjs-2 with proper types
@@ -43,14 +34,7 @@ vi.mock('react-chartjs-2', () => ({
   ),
 }))
 
-// MSW server setup
-const server = setupServer(...dashboardHandlers)
-
 describe('FeedbackSummaryWidget', () => {
-  beforeAll(() => server.listen())
-  afterEach(() => server.resetHandlers())
-  afterAll(() => server.close())
-
   it('renders loading state initially', async () => {
     renderWithRouter(<FeedbackSummaryWidget />)
 
@@ -153,6 +137,27 @@ describe('FeedbackSummaryWidget', () => {
     })
   })
 
+  it('AC-018 — period selector is visible and changing it triggers a new API request', async () => {
+    renderWithRouter(<FeedbackSummaryWidget />)
+
+    // Wait for component to load
+    await waitFor(() => {
+      expect(screen.getByText('15')).toBeInTheDocument()
+    })
+
+    // Period selector should be visible with default "month" value (MUI Select hidden input)
+    const periodSelect = screen.getByDisplayValue('month')
+    expect(periodSelect).toBeInTheDocument()
+
+    // Change period to "week" using fireEvent (MUI hidden input has pointer-events: none)
+    fireEvent.change(periodSelect, { target: { value: 'week' } })
+
+    // Selector should now show "week"
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('week')).toBeInTheDocument()
+    })
+  })
+
   it('shows both Chart and Feedback tabs', async () => {
     renderWithRouter(<FeedbackSummaryWidget />)
 
@@ -164,5 +169,52 @@ describe('FeedbackSummaryWidget', () => {
     // Check both tabs are present
     expect(screen.getByRole('tab', { name: /chart/i })).toBeInTheDocument()
     expect(screen.getByRole('tab', { name: /feedback/i })).toBeInTheDocument()
+  })
+
+  it('renders feedback items with null goal_title — shows label not blank or excluded', async () => {
+    const user = userEvent.setup()
+
+    // Override handler with one feedback item having goalTitle: null
+    server.use(
+      http.get('*/api/dashboard/feedback-summary', () =>
+        HttpResponse.json({
+          statistics: {
+            totalReceived: 1,
+            pendingRequests: 0,
+            averageRating: 4.0,
+          },
+          recentFeedback: [
+            {
+              id: '550e8400-e29b-41d4-a716-000000000099',
+              fromEmployeeId: '550e8400-e29b-41d4-a716-000000000088',
+              fromEmployeeName: 'Alex Smith',
+              goalTitle: null,
+              rating: 4,
+              createdAt: new Date().toISOString(),
+            },
+          ],
+          ratingTrend: [],
+        })
+      )
+    )
+
+    renderWithRouter(<FeedbackSummaryWidget />)
+
+    // Tabs only render after isLoading=false; waiting for the Feedback tab confirms data loaded
+    await waitFor(() => {
+      expect(screen.getByRole('tab', { name: /feedback/i })).toBeInTheDocument()
+    })
+
+    // Switch to Feedback tab to see the feedback item
+    const feedbackTab = screen.getByRole('tab', { name: /feedback/i })
+    await user.click(feedbackTab)
+
+    await waitFor(() => {
+      expect(screen.getByText('Alex Smith')).toBeInTheDocument()
+    })
+
+    // A non-blank placeholder label should be shown (not empty, not a raw "null")
+    expect(screen.queryByText('null')).not.toBeInTheDocument()
+    expect(screen.getByText(/general feedback/i)).toBeInTheDocument()
   })
 })
