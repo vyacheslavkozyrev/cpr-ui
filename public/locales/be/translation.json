@@ -218,16 +218,16 @@
         "open": "Адкрыта",
         "in_progress": "У працэсе",
         "completed": "Завершана",
-        "suggested": "Suggested",
-        "not_started": "Not Started",
-        "on_hold": "On Hold",
-        "cancelled": "Cancelled"
+        "suggested": "Прапанавана",
+        "not_started": "Не пачата",
+        "on_hold": "Прыпынена",
+        "cancelled": "Адменена"
       },
       "actions": {
-        "accept_suggestion": "Accept",
-        "reject_suggestion": "Reject",
-        "request_deletion": "Request Deletion",
-        "cancel_deletion_request": "Cancel Request"
+        "accept_suggestion": "Прыняць",
+        "reject_suggestion": "Адхіліць",
+        "request_deletion": "Запытаць выдаленне",
+        "cancel_deletion_request": "Скасаваць запыт"
       },
       "visibility": {
         "private": "Прыватная",
@@ -323,14 +323,8 @@
         "no_options": "Няма даступных варыянтаў"
       },
       "rating": {
-        "label_1": "Патрабуе паляпшэння",
-        "label_2": "Ніжэй чаканняў",
-        "label_3": "Адпавядае чаканням",
-        "label_4": "Перавышае чаканні",
-        "label_5": "Выдатна",
-        "select_rating": "Выберыце рэйтынг",
-        "tooltip": "Рэйтынг",
-        "aria_label": "Выбраць рэйтынг"
+        "tooltip": "Ацаніце водгук па шкале ад 1 да 5",
+        "aria_label": "Поле ацэнкі"
       },
       "comingSoon": "Функцыі водгукаў будуць хутка...",
       "tabs": {
@@ -838,10 +832,6 @@
           "goals": "Мэты з Найбольшай Колькасцю Водгукаў",
           "projects": "Праекты з Найбольшай Колькасцю Водгукаў"
         }
-      },
-      "rating": {
-        "tooltip": "Ацаніце водгук па шкале ад 1 да 5",
-        "aria_label": "Поле ацэнкі"
       }
     },
     "admin": {
@@ -1355,59 +1345,59 @@
     "mandatory_badge": "Абавязкова"
   },
   "team_list": {
-    "title": "My Team",
-    "load_error": "Failed to load team members.",
-    "empty": "No direct reports found."
+    "title": "Мая каманда",
+    "load_error": "Не ўдалося загрузіць членаў каманды.",
+    "empty": "Прамых падначаленых не знойдзена."
   },
   "team_dashboard": {
-    "invalid_id": "Invalid team member ID.",
+    "invalid_id": "Няслушны ID члена каманды.",
     "goals_section": {
-      "title": "Goals",
-      "suggest_goal": "Suggest Goal",
-      "empty": "No goals yet.",
-      "deletion_requested": "Deletion Requested",
-      "approve_deletion": "Approve deletion",
-      "reject_deletion": "Reject deletion",
-      "suggested_by": "Suggested by",
-      "mark_completed": "Mark as Completed",
-      "delete_goal": "Delete goal"
+      "title": "Мэты",
+      "suggest_goal": "Прапанаваць мэту",
+      "empty": "Мэт пакуль няма.",
+      "deletion_requested": "Выдаленне запытана",
+      "approve_deletion": "Зацвердзіць выдаленне",
+      "reject_deletion": "Адхіліць выдаленне",
+      "suggested_by": "Прапанавана",
+      "mark_completed": "Адзначыць як завершана",
+      "delete_goal": "Выдаліць мэту"
     },
     "feedback_section": {
-      "title": "Feedback",
-      "empty": "No feedback received yet.",
-      "from": "From"
+      "title": "Водгукі",
+      "empty": "Водгукаў пакуль не атрымана.",
+      "from": "Ад"
     },
     "skills_section": {
-      "title": "Skills",
-      "skill": "Skill",
-      "self": "Self",
-      "manager": "Manager",
-      "assessments": "Assessments",
-      "assessment_error": "Failed to load skill assessments.",
-      "gap_analysis": "Gap Analysis",
-      "gap_error": "Failed to load gap analysis.",
-      "gap_description": "Skills below the required level for the current or target position."
+      "title": "Навыкі",
+      "skill": "Навык",
+      "self": "Уласнае",
+      "manager": "Кіраўнік",
+      "assessments": "Ацэнкі",
+      "assessment_error": "Не ўдалося загрузіць ацэнкі навыкаў.",
+      "gap_analysis": "Аналіз прабелаў",
+      "gap_error": "Не ўдалося загрузіць аналіз прабелаў.",
+      "gap_description": "Навыкі ніжэй патрабаванага ўзроўню для бягучай або мэтавай пасады."
     },
     "projects_section": {
-      "title": "Projects",
-      "current": "Current",
-      "past": "Past",
-      "empty": "No project assignments.",
-      "error": "Failed to load project assignments."
+      "title": "Праекты",
+      "current": "Бягучыя",
+      "past": "Мінулыя",
+      "empty": "Прызначэнняў да праектаў няма.",
+      "error": "Не ўдалося загрузіць прызначэнні да праектаў."
     },
     "suggest_goal": {
-      "title": "Suggest a Goal",
-      "name": "Goal Name",
-      "description": "Description",
-      "timeframe": "Timeframe",
-      "due_date": "Due Date",
-      "submit": "Suggest"
+      "title": "Прапанаваць мэту",
+      "name": "Назва мэты",
+      "description": "Апісанне",
+      "timeframe": "Часовыя рамкі",
+      "due_date": "Тэрмін выканання",
+      "submit": "Прапанаваць"
     },
     "timeframe": {
-      "week": "Week",
-      "month": "Month",
-      "quarter": "Quarter",
-      "year": "Year"
+      "week": "Тыдзень",
+      "month": "Месяц",
+      "quarter": "Квартал",
+      "year": "Год"
     }
   }
 }
