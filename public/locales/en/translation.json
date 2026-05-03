@@ -44,7 +44,8 @@
     "admin": "Admin",
     "logout": "Logout",
     "careerFramework": "Career Framework",
-    "career": "Career"
+    "career": "Career",
+    "analytics": "Analytics"
   },
   "auth": {
     "roleGuard": {
@@ -1359,6 +1360,9 @@
       "goHome": "Go Home",
       "goBack": "Go Back",
       "reloadPage": "Reload Page"
+    },
+    "analytics": {
+      "invalid_period": "Invalid analytics period. Allowed values: last_30_days, last_90_days, last_quarter, last_year, all_time."
     }
   },
   "feedback": {
@@ -1546,5 +1550,75 @@
     "loading": "Loading gap analysis...",
     "error_loading": "Failed to load gap analysis.",
     "mandatory_badge": "Mandatory"
+  },
+  "analytics": {
+    "page_title": "Performance Analytics",
+    "time_range_selector": {
+      "label": "Time Range"
+    },
+    "period": {
+      "last_30_days": "Last 30 Days",
+      "last_90_days": "Last 90 Days",
+      "last_quarter": "Last Quarter",
+      "last_year": "Last Year",
+      "all_time": "All Time"
+    },
+    "goals": {
+      "section_title": "Goal Analytics",
+      "stats": {
+        "total": "Total Goals",
+        "created": "Created",
+        "completed": "Completed",
+        "avg_days_to_complete": "Avg. Days to Complete",
+        "overdue": "Overdue",
+        "completion_rate": "Completion Rate"
+      },
+      "trend_chart": {
+        "title": "Goal Completion Trend",
+        "series_created": "Created",
+        "series_completed": "Completed",
+        "empty": "No trend data for this period."
+      },
+      "status_chart": {
+        "title": "Goals by Status",
+        "empty": "No goal data for this period."
+      },
+      "status": {
+        "open": "Open",
+        "in_progress": "In Progress",
+        "completed": "Completed"
+      }
+    },
+    "skills": {
+      "section_title": "Skill Analytics",
+      "gap_summary": {
+        "title": "Gap Closure Summary",
+        "total_skills": "Total Skills",
+        "fully_closed": "Fully Closed",
+        "partially_closed": "Partially Closed",
+        "no_progress": "No Progress",
+        "avg_gap": "Average Gap",
+        "avg_improvement": "Average Improvement"
+      },
+      "table": {
+        "title": "Skill Progression",
+        "columns": {
+          "skill": "Skill",
+          "category": "Category",
+          "self": "Self",
+          "manager": "Manager",
+          "required": "Required",
+          "gap": "Gap",
+          "history": "History"
+        },
+        "empty": "No skill data available for this period.",
+        "gap_none": "Met",
+        "no_manager": "—"
+      }
+    },
+    "tab": {
+      "title": "Analytics",
+      "forbidden": "You do not have permission to view analytics for this employee."
+    }
   }
 }

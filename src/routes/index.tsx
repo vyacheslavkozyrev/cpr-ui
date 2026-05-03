@@ -30,6 +30,7 @@ import CareerFrameworkPage from '../pages/taxonomy/CareerFrameworkPage'
 import CareerPathDetailPage from '../pages/taxonomy/CareerPathDetailPage'
 import CareerTrackDetailPage from '../pages/taxonomy/CareerTrackDetailPage'
 import PositionDetailPage from '../pages/taxonomy/PositionDetailPage'
+import AnalyticsPage from '../pages/analytics/AnalyticsPage'
 import TeamListPage from '../pages/team/TeamListPage'
 import TeamMemberDashboardPage from '../pages/team/TeamMemberDashboardPage'
 import { TestErrorsPage } from '../pages/test-errors'
@@ -136,6 +137,13 @@ export const routes: RouteObject[] = [
             ),
           },
         ],
+      },
+
+      // Analytics - accessible to all authenticated users (AC-001, AC-002)
+      {
+        path: 'analytics',
+        element: <AnalyticsPage />,
+        errorElement: <RouteErrorBoundary />,
       },
 
       // Gap Analysis - accessible to all authenticated users
