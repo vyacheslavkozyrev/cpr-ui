@@ -77,7 +77,7 @@ const EMPLOYEE_ID = 'emp-001'
 describe('AnalyticsTabSection', () => {
   // ---- Allowed roles: content renders ----
 
-  it('renders analytics content for PeopleManager (AC-015)', async () => {
+  it('AC-015: renders analytics content for PeopleManager', async () => {
     setRole(EUserRole.PEOPLE_MANAGER)
     renderWithRouter(<AnalyticsTabSection employeeId={EMPLOYEE_ID} />)
 
@@ -87,7 +87,20 @@ describe('AnalyticsTabSection', () => {
     })
   })
 
-  it('renders analytics content for Director (AC-019)', async () => {
+  it('AC-017: Analytics tab renders the time range selector with five presets', async () => {
+    setRole(EUserRole.PEOPLE_MANAGER)
+    renderWithRouter(<AnalyticsTabSection employeeId={EMPLOYEE_ID} />)
+
+    await waitFor(() => {
+      // The time range selector ToggleButtonGroup has role="group"
+      expect(screen.getByRole('group')).toBeInTheDocument()
+      // All five preset buttons must be present
+      const buttons = screen.getAllByRole('button')
+      expect(buttons.length).toBeGreaterThanOrEqual(5)
+    })
+  })
+
+  it('AC-019: renders analytics content for Director', async () => {
     setRole(EUserRole.DIRECTOR)
     renderWithRouter(<AnalyticsTabSection employeeId={EMPLOYEE_ID} />)
 
@@ -96,7 +109,7 @@ describe('AnalyticsTabSection', () => {
     })
   })
 
-  it('renders analytics content for Administrator (AC-019)', async () => {
+  it('AC-019: renders analytics content for Administrator', async () => {
     setRole(EUserRole.ADMINISTRATOR)
     renderWithRouter(<AnalyticsTabSection employeeId={EMPLOYEE_ID} />)
 
@@ -107,7 +120,7 @@ describe('AnalyticsTabSection', () => {
 
   // ---- Forbidden roles: error message shown (AC-020) ----
 
-  it('shows forbidden message for Employee (AC-020)', () => {
+  it('AC-020: shows forbidden message for Employee', () => {
     setRole(EUserRole.EMPLOYEE)
     renderWithRouter(<AnalyticsTabSection employeeId={EMPLOYEE_ID} />)
 
@@ -118,14 +131,14 @@ describe('AnalyticsTabSection', () => {
     ).toBeInTheDocument()
   })
 
-  it('does not render analytics content for Employee (AC-020)', () => {
+  it('AC-020: does not render analytics content for Employee', () => {
     setRole(EUserRole.EMPLOYEE)
     renderWithRouter(<AnalyticsTabSection employeeId={EMPLOYEE_ID} />)
 
     expect(screen.queryByRole('group')).not.toBeInTheDocument()
   })
 
-  it('shows forbidden message for SolutionOwner (AC-020)', () => {
+  it('AC-020: shows forbidden message for SolutionOwner', () => {
     setRole(EUserRole.SOLUTION_OWNER)
     renderWithRouter(<AnalyticsTabSection employeeId={EMPLOYEE_ID} />)
 
@@ -136,7 +149,7 @@ describe('AnalyticsTabSection', () => {
     ).toBeInTheDocument()
   })
 
-  it('does not render analytics content for SolutionOwner (AC-020)', () => {
+  it('AC-020: does not render analytics content for SolutionOwner', () => {
     setRole(EUserRole.SOLUTION_OWNER)
     renderWithRouter(<AnalyticsTabSection employeeId={EMPLOYEE_ID} />)
 
@@ -145,7 +158,7 @@ describe('AnalyticsTabSection', () => {
 
   // ---- API 403 — PeopleManager accessing a non-direct-report (AC-018) ----
 
-  it('shows an error state when employee analytics API returns 403 (AC-018)', async () => {
+  it('AC-018: shows an error state when employee analytics API returns 403', async () => {
     setRole(EUserRole.PEOPLE_MANAGER)
 
     // Override all employee analytics endpoints to return 403
@@ -196,7 +209,7 @@ describe('AnalyticsTabSection', () => {
 
   // ---- Uses employeeId prop (AC-016) ----
 
-  it('passes the employeeId to employee-scoped analytics (AC-016)', async () => {
+  it('AC-016: passes the employeeId to employee-scoped analytics', async () => {
     setRole(EUserRole.DIRECTOR)
 
     let requestedId: string | undefined

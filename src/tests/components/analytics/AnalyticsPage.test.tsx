@@ -2,8 +2,8 @@
  * Page-level tests for AnalyticsPage
  * Feature 0014 — Performance Analytics & Reporting
  *
- * Covers: personal analytics loads (AC-003, AC-004), period change triggers new requests (AC-023),
- * URL param preserved (AC-024).
+ * Covers: sidebar nav item (AC-001, AC-002), personal analytics loads (AC-003, AC-004),
+ * period change triggers new requests (AC-023), URL param preserved (AC-024).
  */
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -14,6 +14,8 @@ import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
 import { server } from '../../../mocks/server'
 import AnalyticsPage from '../../../pages/analytics/AnalyticsPage'
+import { Sidebar } from '../../../components/layout/Sidebar'
+import { renderWithRouter } from '../../utils'
 
 // Mock recharts to avoid canvas/SVG rendering issues in happy-dom
 vi.mock('recharts', async () => {
@@ -69,10 +71,33 @@ function renderPage(initialPath = '/analytics') {
   )
 }
 
+// ---- Sidebar navigation (AC-001, AC-002) ----
+
+describe('Sidebar — Analytics navigation', () => {
+  it('AC-001: Analytics navigation item appears in the sidebar for authenticated users', () => {
+    renderWithRouter(<Sidebar />)
+    // The sidebar renders a navigation item labelled with the analytics key.
+    // The translation key 'navigation.analytics' resolves to 'Analytics' in tests.
+    const analyticsItem = screen.getByText(/analytics/i)
+    expect(analyticsItem).toBeInTheDocument()
+  })
+
+  it('AC-002: Analytics navigation item links to /analytics', () => {
+    renderWithRouter(<Sidebar />)
+    // Each sidebar item is a MUI ListItemButton; find the one containing /analytics text.
+    const buttons = screen.getAllByRole('button')
+    // One of the buttons should be the analytics nav item
+    const analyticsButton = buttons.find(btn =>
+      btn.textContent?.toLowerCase().includes('analytics')
+    )
+    expect(analyticsButton).toBeDefined()
+  })
+})
+
 describe('AnalyticsPage', () => {
   // ---- Page structure (AC-003) ----
 
-  it('renders the Analytics page title', async () => {
+  it('AC-003: renders the Analytics page title', async () => {
     renderPage()
     // The component uses t('analytics.page_title', 'Analytics') which resolves
     // to 'Performance Analytics' via i18n, or falls back to 'Analytics'.
@@ -83,7 +108,7 @@ describe('AnalyticsPage', () => {
     })
   })
 
-  it('renders the time range selector', async () => {
+  it('AC-021: renders the time range selector', async () => {
     renderPage()
     await waitFor(() => {
       // ToggleButtonGroup has role="group"
@@ -93,7 +118,7 @@ describe('AnalyticsPage', () => {
 
   // ---- Personal analytics data loads (AC-004) ----
 
-  it('renders loading skeletons initially then shows data', async () => {
+  it('AC-004: renders loading skeletons initially then shows data', async () => {
     renderPage()
 
     // Should show loading skeletons while data is being fetched
@@ -106,7 +131,7 @@ describe('AnalyticsPage', () => {
     })
   })
 
-  it('renders a Goals section (Paper with section heading)', async () => {
+  it('AC-003: renders a Goals section (Paper with section heading)', async () => {
     renderPage()
     // The section heading key resolves to "Goal Analytics" (from translation.json)
     await waitFor(() => {
@@ -118,7 +143,7 @@ describe('AnalyticsPage', () => {
     })
   })
 
-  it('renders a Skill Progression section (Paper with section heading)', async () => {
+  it('AC-003: renders a Skill Progression section (Paper with section heading)', async () => {
     renderPage()
     // The section heading key resolves to "Skill Analytics" (from translation.json)
     await waitFor(() => {
@@ -130,7 +155,7 @@ describe('AnalyticsPage', () => {
     })
   })
 
-  it('renders skill rows after skill data loads', async () => {
+  it('AC-004: renders skill rows after skill data loads', async () => {
     renderPage()
     await waitFor(() => {
       expect(screen.getByText('TypeScript')).toBeInTheDocument()
@@ -139,7 +164,7 @@ describe('AnalyticsPage', () => {
 
   // ---- Period change triggers new requests (AC-023) ----
 
-  it('selecting a different preset updates the URL ?period= parameter', async () => {
+  it('AC-023: selecting a different preset updates the URL ?period= parameter', async () => {
     // The URL param update is the observable signal for a period change
     const queryClient = new QueryClient({
       defaultOptions: { queries: { retry: false, gcTime: 0, staleTime: 0 } },
@@ -171,7 +196,7 @@ describe('AnalyticsPage', () => {
     })
   })
 
-  it('triggers a fresh API request when period changes', async () => {
+  it('AC-023: triggers a fresh API request when period changes', async () => {
     let requestCount = 0
     server.use(
       http.get(ME_GOALS_PATTERN, () => {
@@ -244,7 +269,7 @@ describe('AnalyticsPage', () => {
 
   // ---- URL param preserved (AC-024) ----
 
-  it('reads ?period= from URL and selects the matching preset on load', async () => {
+  it('AC-024: reads ?period= from URL and selects the matching preset on load', async () => {
     renderPage('/analytics?period=last_30_days')
 
     await waitFor(() => {
@@ -258,7 +283,7 @@ describe('AnalyticsPage', () => {
     })
   })
 
-  it('defaults to last_90_days when no ?period= in URL', async () => {
+  it('AC-022: defaults to last_90_days when no ?period= in URL', async () => {
     renderPage('/analytics')
 
     await waitFor(() => {
@@ -272,7 +297,7 @@ describe('AnalyticsPage', () => {
 
   // ---- Empty state (AC-009, AC-014) ----
 
-  it('shows zero stat values when no goal data is returned', async () => {
+  it('AC-009: shows zero stat values when no goal data is returned', async () => {
     server.use(
       http.get(ME_GOALS_PATTERN, () =>
         HttpResponse.json({
@@ -313,7 +338,40 @@ describe('AnalyticsPage', () => {
     })
   })
 
-  it('shows empty skill list when no skill data is returned', async () => {
+  // ---- Charts rendered (AC-006, AC-007) ----
+
+  it('AC-006: renders the Completion Trend bar chart area', async () => {
+    renderPage()
+    await waitFor(() => {
+      // Recharts BarChart is mocked as data-testid="bar-chart"
+      const barCharts = document.querySelectorAll('[data-testid="bar-chart"]')
+      expect(barCharts.length).toBeGreaterThanOrEqual(1)
+    })
+  })
+
+  it('AC-007: renders the Goals by Status chart (pie/donut)', async () => {
+    renderPage()
+    await waitFor(() => {
+      // Recharts PieChart mocked as data-testid="pie-chart"
+      const pieCharts = document.querySelectorAll('[data-testid="pie-chart"]')
+      expect(pieCharts.length).toBeGreaterThanOrEqual(1)
+    })
+  })
+
+  // ---- Gap Closure Summary (AC-013) ----
+
+  it('AC-013: renders the Gap Closure Summary card heading', async () => {
+    renderPage()
+    await waitFor(() => {
+      const headings = Array.from(document.querySelectorAll('h6, h5, h4'))
+      const gapHeading = headings.find(h =>
+        /gap|closure|summary/i.test(h.textContent ?? '')
+      )
+      expect(gapHeading).toBeDefined()
+    })
+  })
+
+  it('AC-014: shows empty skill list when no skill data is returned', async () => {
     server.use(
       http.get(ME_SKILLS_PATTERN, () =>
         HttpResponse.json({

@@ -21,7 +21,7 @@ function renderInRouter(ui: React.ReactElement) {
 describe('TimeRangeSelector', () => {
   const noop = () => {}
 
-  it('renders all five preset options', () => {
+  it('AC-021: renders all five preset options', () => {
     renderWithRouter(
       <TimeRangeSelector
         value={EAnalyticsPeriod.LAST_90_DAYS}
@@ -34,7 +34,7 @@ describe('TimeRangeSelector', () => {
     expect(buttons.length).toBe(5)
   })
 
-  it('marks the current value as selected (aria-pressed)', () => {
+  it('AC-022: marks the current value as selected (aria-pressed)', () => {
     renderWithRouter(
       <TimeRangeSelector
         value={EAnalyticsPeriod.LAST_90_DAYS}
@@ -48,7 +48,7 @@ describe('TimeRangeSelector', () => {
     expect(selectedButtons).toHaveLength(1)
   })
 
-  it('calls onChange when a different preset is clicked', () => {
+  it('AC-023: calls onChange when a different preset is clicked', () => {
     const handleChange = vi.fn()
     renderWithRouter(
       <TimeRangeSelector
@@ -65,7 +65,7 @@ describe('TimeRangeSelector', () => {
     expect(handleChange).toHaveBeenCalledWith(EAnalyticsPeriod.LAST_30_DAYS)
   })
 
-  it('does not call onChange when the currently selected preset is re-clicked', () => {
+  it('AC-023: does not call onChange when the currently selected preset is re-clicked', () => {
     // MUI ToggleButtonGroup with exclusive does not fire when re-clicking the same value
     const handleChange = vi.fn()
     renderWithRouter(
@@ -84,7 +84,7 @@ describe('TimeRangeSelector', () => {
     expect(handleChange).not.toHaveBeenCalled()
   })
 
-  it('renders different values as selected when prop changes', () => {
+  it('AC-021: renders different values as selected when prop changes', () => {
     // Use renderInRouter (MemoryRouter only) so that rerender does not nest routers.
     const { rerender } = renderInRouter(
       <TimeRangeSelector
@@ -111,7 +111,7 @@ describe('TimeRangeSelector', () => {
     expect(selected).toHaveLength(1)
   })
 
-  it('onChange is called with the correct period value for each preset', () => {
+  it('AC-021: onChange is called with the correct period value for each preset', () => {
     const handleChange = vi.fn()
     renderWithRouter(
       <TimeRangeSelector
@@ -126,5 +126,20 @@ describe('TimeRangeSelector', () => {
     expect(handleChange).toHaveBeenLastCalledWith(
       EAnalyticsPeriod.LAST_180_DAYS
     )
+  })
+
+  it('AC-022: last_90_days button is selected when value prop is LAST_90_DAYS', () => {
+    renderWithRouter(
+      <TimeRangeSelector
+        value={EAnalyticsPeriod.LAST_90_DAYS}
+        onChange={noop}
+      />
+    )
+    const buttons = screen.getAllByRole('button')
+    const last90Btn = buttons.find(
+      btn => btn.getAttribute('value') === 'last_90_days'
+    )
+    expect(last90Btn).toBeDefined()
+    expect(last90Btn?.getAttribute('aria-pressed')).toBe('true')
   })
 })

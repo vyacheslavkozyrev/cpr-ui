@@ -24,19 +24,19 @@ const fullStats: IGoalStats = {
 }
 
 describe('GoalStatCards', () => {
-  it('renders loading skeletons when isLoading is true', () => {
+  it('AC-005: renders loading skeletons when isLoading is true', () => {
     renderWithProviders(<GoalStatCards stats={undefined} isLoading={true} />)
     const skeletons = document.querySelectorAll('.MuiSkeleton-root')
     expect(skeletons.length).toBeGreaterThan(0)
   })
 
-  it('does not render skeletons when isLoading is false', () => {
+  it('AC-005: does not render skeletons when isLoading is false', () => {
     renderWithProviders(<GoalStatCards stats={fullStats} isLoading={false} />)
     const skeletons = document.querySelectorAll('.MuiSkeleton-root')
     expect(skeletons.length).toBe(0)
   })
 
-  it('renders all six stat card values when data is present', () => {
+  it('AC-005: renders all six stat card values when data is present', () => {
     renderWithProviders(<GoalStatCards stats={fullStats} isLoading={false} />)
 
     // Total Goals
@@ -53,7 +53,7 @@ describe('GoalStatCards', () => {
     expect(screen.getByText('80%')).toBeInTheDocument()
   })
 
-  it('shows "—" for completion_rate when null', () => {
+  it('AC-008: shows "—" for completion_rate when null', () => {
     const stats: IGoalStats = { ...fullStats, completionRate: null }
     renderWithProviders(<GoalStatCards stats={stats} isLoading={false} />)
     // There should be at least one "—" displayed
@@ -61,7 +61,7 @@ describe('GoalStatCards', () => {
     expect(dashes.length).toBeGreaterThanOrEqual(1)
   })
 
-  it('shows "—" for avgDaysToComplete when null', () => {
+  it('AC-005: shows "—" for avgDaysToComplete when null', () => {
     const stats: IGoalStats = {
       ...fullStats,
       avgDaysToComplete: null,
@@ -72,7 +72,7 @@ describe('GoalStatCards', () => {
     expect(dashes.length).toBeGreaterThanOrEqual(2)
   })
 
-  it('shows "0" for all count cards when stats are all zero', () => {
+  it('AC-009: shows "0" for all count cards when stats are all zero', () => {
     const zeroStats: IGoalStats = {
       totalGoals: 0,
       createdInPeriod: 0,
@@ -93,13 +93,13 @@ describe('GoalStatCards', () => {
     expect(dashes.length).toBeGreaterThanOrEqual(1)
   })
 
-  it('shows "0" values when stats is undefined and not loading', () => {
+  it('AC-009: shows "0" values when stats is undefined and not loading', () => {
     renderWithProviders(<GoalStatCards stats={undefined} isLoading={false} />)
     const zeros = screen.getAllByText('0')
     expect(zeros.length).toBeGreaterThanOrEqual(4)
   })
 
-  it('renders stat card label text', () => {
+  it('AC-005: renders stat card label text', () => {
     renderWithProviders(<GoalStatCards stats={fullStats} isLoading={false} />)
     // Check a few label strings
     expect(screen.getByText(/Total Goals/i)).toBeInTheDocument()
