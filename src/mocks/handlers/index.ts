@@ -1,3 +1,4 @@
+import { analyticsHandlers } from './analyticsHandlers'
 import { dashboardHandlers } from './dashboardHandlers'
 import { feedbackRequestHandlers } from './feedbackRequestHandlers'
 import { gapAnalysisHandlers } from './gapAnalysisHandlers'
@@ -8,6 +9,7 @@ import taxonomyHandlers from './taxonomyHandlers'
 import { userHandlers } from './userHandlers'
 
 export {
+  analyticsHandlers,
   dashboardHandlers,
   feedbackRequestHandlers,
   gapAnalysisHandlers,
@@ -27,4 +29,5 @@ export const allHandlers = [
   ...skillAssessmentHandlers,
   ...taxonomyHandlers,
   ...gapAnalysisHandlers,
+  ...analyticsHandlers,
 ]

@@ -1,5 +1,6 @@
 ﻿import {
   AdminPanelSettings,
+  BarChart,
   BugReport,
   Dashboard,
   Feedback,
@@ -111,6 +112,11 @@ export const Sidebar: React.FC = () => {
       labelKey: 'navigation.feedback',
       path: '/feedback',
       icon: <Feedback />,
+    },
+    {
+      labelKey: 'navigation.analytics',
+      path: '/analytics',
+      icon: <BarChart />,
     },
     {
       labelKey: 'navigation.settings',
