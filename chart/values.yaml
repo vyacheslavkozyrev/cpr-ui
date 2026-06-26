@@ -1,0 +1,95 @@
+# cpr-ui chart values
+# All overrides go under the base-chart: key — see base-chart README for full reference
+
+base-chart:
+  fullnameOverride: cpr-ui
+
+  # ── Image ──────────────────────────────────────────────────────
+  image:
+    repository: ghcr.io/vyacheslavkozyrev/cpr-ui
+    pullPolicy: IfNotPresent
+    # tag defaults to .Chart.AppVersion — set explicitly in CI via sed on release
+    tag: ""
+
+  # GHCR is private — pull secret must exist in the target namespace
+  # Create with: kubectl create secret docker-registry ghcr-pull-secret \
+  #   --docker-server=ghcr.io \
+  #   --docker-username=vyacheslavkozyrev \
+  #   --docker-password=YOUR_PAT \
+  #   --namespace=<namespace>
+  imagePullSecrets:
+    - name: ghcr-pull-secret
+
+  # ── Service ────────────────────────────────────────────────────
+  service:
+    type: ClusterIP
+    port: 8080
+
+  # ── Security context ───────────────────────────────────────────
+  # nginx-unprivileged runs as UID 101
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 101
+    runAsGroup: 101
+    fsGroup: 101
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile:
+      type: RuntimeDefault
+
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false  # nginx writes tmp/cache files
+    runAsNonRoot: true
+    runAsUser: 101
+    runAsGroup: 101
+    privileged: false
+    capabilities:
+      drop:
+        - ALL
+    seccompProfile:
+      type: RuntimeDefault
+
+  # ── Probes ─────────────────────────────────────────────────────
+  livenessProbe:
+    enabled: false
+  readinessProbe:
+    enabled: false
+  startupProbe:
+    enabled: false
+
+  # ── Resources — sized for k3s ──────────────────────────────────
+  resources:
+    limits:
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+
+  # ── Gateway API (Cilium) ───────────────────────────────────────
+  httpRoute:
+    enabled: false
+    parentRefs:
+      - name: cilium-gateway
+        sectionName: https
+    hostnames:
+      - cpr.local
+    rules:
+      - matches:
+          - path:
+              type: PathPrefix
+              value: /
+
+  # ── Ingress — disabled, using Gateway API instead ─────────────
+  ingress:
+    enabled: false
+
+  # ── Environment variables ──────────────────────────────────────
+  extraEnv: []
+
+  # ── Autoscaling ────────────────────────────────────────────────
+  autoscaling:
+    enabled: false
+
+  # ── Pod disruption budget ──────────────────────────────────────
+  podDisruptionBudget:
+    enabled: false
